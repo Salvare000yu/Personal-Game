@@ -44,7 +44,7 @@ void EndScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/EndScene.png");
 
 	// スプライトの生成
-	sprite.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), {0,0}, {1, 1, 1, 1}, { 0, 0 }, false, false));
+	sprite.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 	//for (int i = 0; i < 1; i++)
 	//{
 	//    int texNumber = 1;

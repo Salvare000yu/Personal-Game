@@ -8,7 +8,7 @@ SpriteBase* Sprite::GetInstance()
     return nullptr;
 }
 
-Sprite* Sprite::Create(UINT texNumber, DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 size,  
+Sprite* Sprite::Create(UINT texNumber, DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 size,
     DirectX::XMFLOAT4 color, DirectX::XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
 {
     SpriteBase* spriteBase = SpriteBase::GetInstance();
@@ -35,7 +35,7 @@ Sprite::Sprite(UINT texNumber, DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 siz
     this->isInvisible = false;
 }
 
-void Sprite::Initialize(UINT texNumber, DirectX::XMFLOAT2 anchorpoint, bool isFlipX,bool isFlipY)
+void Sprite::Initialize(UINT texNumber, DirectX::XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
 {
 
     HRESULT result = S_FALSE;
@@ -55,7 +55,7 @@ void Sprite::Initialize(UINT texNumber, DirectX::XMFLOAT2 anchorpoint, bool isFl
 
     // 指定番号の画像が読み込み済みなら
     if (spriteBase->GetTexBuff(texNumber_)) {
-    // テクスチャ情報取得
+        // テクスチャ情報取得
         D3D12_RESOURCE_DESC resDesc = spriteBase->GetTexBuff(texNumber_)->GetDesc();
 
         // スプライトの大きさを画像の解像度に合わせる

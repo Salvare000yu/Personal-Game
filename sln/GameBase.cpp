@@ -1,5 +1,7 @@
 ﻿//フレームワーク旧
 #include "GameBase.h"
+#include "PostEffect.h"
+#include <memory>
 
 void GameBase::Run()
 {
@@ -63,7 +65,7 @@ void GameBase::Initialize()
 
 	//入力の初期化
 	input = Input::GetInstance();
-	input->Initialize(winApp);
+	//input->Initialize(winApp);
 
 	//オーディオの初期化
 	gameSound = GameSound::GetInstance();
@@ -77,6 +79,8 @@ void GameBase::Initialize()
 
 	//fbx　初期化
 	FbxLoader::GetInstance()->Initialize(dxBase->GetDevice());
+
+	PostEffect::GetInstance()->Initialize();
 }
 
 void GameBase::Finalize()
@@ -127,19 +131,23 @@ void GameBase::Update()
 	input->Update();
 
 	//シーン更新
-	sceneManager_->Update();
+	sceneManager_->Update();/*
+
+	PostEffect::GetInstance()->Update();*/
 }
 
 void GameBase::Draw()
 {
 #pragma region グラフィックスコマンド
 
+	//シーン描画
+	sceneManager_->Draw();
 	//描画前処理
 	dxBase->PreDraw();
 
-	//シーン描画
-	sceneManager_->Draw();
+	PostEffect::GetInstance()->Draw();
 
+	spriteBase->PreDraw();
 	// デバッグテキスト描画
 	debugText->DrawAll();
 

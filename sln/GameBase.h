@@ -10,7 +10,6 @@
 #include "GameSound.h"
 #include "SceneManager.h"
 #include "FbxLoader.h"
-
 #include "Camera.h"
 
 class GameBase

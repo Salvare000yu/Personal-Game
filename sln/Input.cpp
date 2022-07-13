@@ -9,6 +9,15 @@
 
 //using namespace Microsoft::WRL;
 
+Input::Input()
+{
+    Initialize(WinApp::GetInstance());
+}
+
+Input::~Input()
+{
+}
+
 Input* Input::GetInstance()
 {
     static Input instance;
@@ -28,9 +37,9 @@ void Input::Initialize(WinApp* winApp)
     // 
     //directinputインスタンス生成
     result = DirectInput8Create(
-       winApp->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);//hInstanceの前にw.
-   // ComPtr<IDirectInputDevice8> devkeyboard = nullptr;
-    //キーボードのデバイス生成
+        winApp->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&dinput, nullptr);//hInstanceの前にw.
+    // ComPtr<IDirectInputDevice8> devkeyboard = nullptr;
+     //キーボードのデバイス生成
     result = dinput->CreateDevice(GUID_SysKeyboard, &devkeyboard, NULL);
     //入力データ形式セット
     result = devkeyboard->SetDataFormat(&c_dfDIKeyboard); // 標準形式

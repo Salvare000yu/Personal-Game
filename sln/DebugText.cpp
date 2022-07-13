@@ -18,8 +18,9 @@ void DebugText::Initialize(SpriteBase* spriteBase, UINT texnumber)
     for (int i = 0; i < _countof(sprites_); i++)
     {
         // スプライトを生成する
-        sprites_[i] = Sprite::Create(texnumber, DirectX::XMFLOAT3(0,0,0), { 0,0 }, {1,1,1,1}, {0, 0});
+        sprites_[i] = Sprite::Create(texnumber, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 });
     }
+
 }
 
 void DebugText::Finalize()

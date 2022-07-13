@@ -1,5 +1,9 @@
 #include "SceneManager.h"
 
+#include "PostEffect.h"
+#include"DxBase.h"
+#include "DebugText.h"
+
 SceneManager::~SceneManager()
 {
 	//ÅŒã‚ÌƒV[ƒ“I—¹‚Æ‰ð•ú
@@ -31,5 +35,7 @@ void SceneManager::Update()
 
 void SceneManager::Draw()
 {
+	PostEffect::GetInstance()->PreDrawScene(DxBase::GetInstance()->GetCmdList());
 	scene_->Draw();
+	PostEffect::GetInstance()->PostDrawScene(DxBase::GetInstance()->GetCmdList());
 }

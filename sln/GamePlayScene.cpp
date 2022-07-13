@@ -33,24 +33,24 @@ void GamePlayScene::Initialize()
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
-	//mod_player.reset(Model::LoadFromOBJ("player_skystriker"));
+	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
-	//obj_player.reset(Object3d::Create());
+	obj_player.reset(Object3d::Create());
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
-	//obj_player->SetModel(mod_player.get());
+	obj_player->SetModel(mod_player.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 100.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
-	//obj_player->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj_player->SetScale({ 5.0f, 5.0f, 5.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-1,0 });
 	obj_worlddome->SetPosition({ 0,200,0 });
-	//obj_player->SetPosition({ 0,50,0 });
+	obj_player->SetPosition({ 0,30,-170 });
 
 	fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -178,31 +178,56 @@ void GamePlayScene::Update()
 			// カメラをバックさせる
 			camera->MoveEyeVector(XMFLOAT3(0, 0, -moveSpeed));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z - moveSpeed));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.z = position.z - moveSpeed;
+			obj_player->SetPosition(position);
+
 		}
 		if (inputW) {
 			// カメラを前進させる
 			camera->MoveEyeVector(XMFLOAT3(0, 0, +moveSpeed));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z + moveSpeed));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.z = position.z + moveSpeed;
+			obj_player->SetPosition(position);
 		}
 		if (inputA) {
 			// カメラを左進させる
 			camera->MoveEyeVector(XMFLOAT3(-moveSpeed, 0, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x - moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.x = position.x - moveSpeed;
+			obj_player->SetPosition(position);
 		}
 		if (inputD) {
 			// カメラを右進させる
 			camera->MoveEyeVector(XMFLOAT3(moveSpeed, 0, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x + moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.x = position.x + moveSpeed;
+			obj_player->SetPosition(position);
 		}
 		if (inputQ) {
 			// カメラを上昇させる
 			camera->MoveEyeVector(XMFLOAT3(0, moveSpeed, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y + moveSpeed, camera->GetTarget().z));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.y = position.y + moveSpeed;
+			obj_player->SetPosition(position);
 		}
 		if (inputZ) {
 			// カメラを下降させる
 			camera->MoveEyeVector(XMFLOAT3(0, -moveSpeed, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y - moveSpeed, camera->GetTarget().z));
+
+			XMFLOAT3 position = obj_player->GetPosition();
+			position.y = position.y - moveSpeed;
+			obj_player->SetPosition(position);
 		}
 	}
 
@@ -231,7 +256,7 @@ void GamePlayScene::Update()
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
-	//obj_player->Update();
+	obj_player->Update();
 
 	// FBX Update
 	fbxObject_1->Update();
@@ -257,7 +282,7 @@ void GamePlayScene::Draw()
 	//3dオブジェ描画
 	object3d_1->Draw();
 	obj_worlddome->Draw();
-	//obj_player->Draw();
+	obj_player->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);

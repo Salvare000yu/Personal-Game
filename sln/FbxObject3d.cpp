@@ -1,5 +1,6 @@
 #include "FbxObject3d.h"
 #include <d3dcompiler.h>
+#include "PostEffect.h"
 
 #include "FbxLoader.h"
 #pragma comment(lib, "d3dcompiler.lib")
@@ -154,6 +155,7 @@ void FbxObject3d::CreateGraphicsPipeline()
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
+	gpipeline.BlendState.RenderTarget[1] = blenddesc;
 
 	// 深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
@@ -165,8 +167,9 @@ void FbxObject3d::CreateGraphicsPipeline()
 	// 図形の形状設定（三角形）
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-	gpipeline.NumRenderTargets = 1;    // 描画対象は1つ
+	gpipeline.NumRenderTargets = PostEffect::texBuffNum;    // 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	gpipeline.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -179,7 +182,7 @@ void FbxObject3d::CreateGraphicsPipeline()
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
-	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, 
+	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV,
 		D3D12_SHADER_VISIBILITY_ALL);
 
 	//CBV　スキニング用
@@ -227,7 +230,7 @@ void FbxObject3d::Update()
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
 		// ビュープロダクション行列
-	const XMMATRIX& matViewProjection = 
+	const XMMATRIX& matViewProjection =
 		camera->GetViewProjectionMatrix();
 
 	// モデルのメッシュトランスフォーム
@@ -269,7 +272,7 @@ void FbxObject3d::Update()
 		//今の姿勢行列
 		XMMATRIX matCurrentPose;
 		//今の姿勢行列を取得
-		FbxAMatrix fbxCurrentPose = 
+		FbxAMatrix fbxCurrentPose =
 			bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(currentTime);
 		//XMMATRIXに変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
@@ -297,7 +300,7 @@ void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// 定数バッファビューをセット
-	cmdList->SetGraphicsRootConstantBufferView(0, 
+	cmdList->SetGraphicsRootConstantBufferView(0,
 		constBuffTransform->GetGPUVirtualAddress());
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(2, constBuffSkin->GetGPUVirtualAddress());

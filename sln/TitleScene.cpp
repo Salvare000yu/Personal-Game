@@ -49,7 +49,7 @@ void TitleScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/title_prac.png");
 
 	// スプライトの生成
-	sprite1.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, {1,1,1,1}, { 0, 0 }, false, false));
+	sprite1.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//for (int i = 0; i < 1; i++)
 	//{
 	//    int texNumber = 1;
@@ -66,13 +66,13 @@ void TitleScene::Initialize()
 	//}
 
 	//ポストエフェクト用テクスチャ読み込み
-	SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
+	//SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
 	//ポストエフェクト初期化
-	//postEffect = new PostEffect();
-	//postEffect->Initialize();//100, { 0.0f, 0.0f }, false, falseいちおう
-	//postEffect->SetSize({ 500.0f,500.0f });
-	//postEffect->SetPosition({ 10,10,0 });
-	//postEffect->TransferVertexBuffer();
+//	postEffect = new PostEffect();
+////	postEffect->Initialize();//100, { 0.0f, 0.0f }, false, falseいちおう
+//	postEffect->SetSize({ 500.0f,500.0f });
+//	postEffect->SetPosition({ 10,10,0 });
+//	postEffect->TransferVertexBuffer();
 #pragma endregion 描画初期化処理
 
 	int counter = 0; // アニメーションの経過時間カウンター
@@ -91,7 +91,7 @@ void TitleScene::Finalize()
 	//delete model_1;
 	//delete model_2;
 
-	//delete postEffect;
+//	delete postEffect;
 }
 
 void TitleScene::Update()

@@ -3,23 +3,19 @@
 #include "SpriteBase.h"
 #include "PipelineSet.h"
 
-// Microsoft::WRL::を省略
-template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-// DirectX::を省略
-using XMFLOAT2 = DirectX::XMFLOAT2;
-using XMFLOAT3 = DirectX::XMFLOAT3;
-using XMFLOAT4 = DirectX::XMFLOAT4;
-using XMMATRIX = DirectX::XMMATRIX;
 
-class PostEffect :
-	public Sprite
+
+class PostEffect
 {
 public:
-
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	PostEffect();
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+	static PostEffect* GetInstance();
 
 	/// <summary>
 	/// 描画コマンドの発行
@@ -27,25 +23,97 @@ public:
 	/// <param name="cmdList">コマンドリスト</param>
 	void Draw();
 
-		/// <summary>
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize();
 
+	// 頂点データ
+	struct VertexPosUv
+	{
+		DirectX::XMFLOAT3 pos; // xyz座標
+		DirectX::XMFLOAT2 uv;  // uv座標
+	};
+
+	// 定数バッファ用データ構造体
+	struct ConstBufferData {
+		float time;
+	};
+
+	void CreateGraphicsPipelineState();
+
+	void TransfarConstBuffer();
+
+	// パイプラインセット
+	PipelineSet pipelineSet;
+
+private:
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	PostEffect();
+
+public:
 	//ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 
-		//テクスチャバッファ
-	ComPtr<ID3D12Resource> texBuff_[2];
+	//シーン描画前処理
+	void PreDrawScene(ID3D12GraphicsCommandList* commandList);
+	//シーン描画後処理
+	void PostDrawScene(ID3D12GraphicsCommandList* commandList);
+
+	static void SetDevice(ID3D12Device* device);
+
+	//画面クリアカラー
+	static const float clearColor[4];
+
+	static const UINT texBuffNum = 2;
+
+private:
+
+	static ID3D12Device* device_;
+
+	//頂点バッファ;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
+
+	//頂点バッファビュー;
+	D3D12_VERTEX_BUFFER_VIEW vbView_{};
+	//定数バッファ;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
+
+	// テクスチャ番号
+	UINT texNumber_ = 0;
+	// 大きさ
+	DirectX::XMFLOAT2 size_ = { 100, 100 };
+
+	// テクスチャ切り出しサイズ
+	DirectX::XMFLOAT2 texSize_ = { 100, 100 };
+
+	//テクスチャバッファ
+
+	ComPtr<ID3D12Resource> texBuff_[texBuffNum];
 	//SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
-private:
+	//深度バッファ
+	ComPtr<ID3D12Resource>depthBuff;
+	//RTV用デスクリプタテーブル
+	ComPtr<ID3D12DescriptorHeap>descHeapRTV;
+	//DSV用デスクリプタヒープ
+	ComPtr<ID3D12DescriptorHeap>descHeapDSV;
+	//グラフィックスパイプライン
+	ComPtr<ID3D12PipelineState>piplineState;
+	//ルートシグネチャ
+	ComPtr<ID3D12RootSignature>rootSignature;
+
 	//借りるコマンドリスト
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	//ID3D12GraphicsCommandList* commandList_ = nullptr;
 
 	// テクスチャ用デスクリプタヒープの生成
 	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeap;
 
 	// パイプラインセット
-	PipelineSet pipelineSet;
+	//PipelineSet pipelineSet;
+
+	float frame = 0;
 };
