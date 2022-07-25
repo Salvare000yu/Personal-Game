@@ -4,6 +4,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
+#include "imgui/imgui.h"
 
 #pragma once
 
@@ -20,6 +21,12 @@ public://メンバ関数
 	static DxBase* GetInstance();
 
 	void Initialize(WinApp* winApp);
+
+	/// <summary>
+	/// imgui初期化
+	/// </summary>
+	/// <returns>成否</returns>
+	bool InitializeImgui();
 
 	//描画前
 	void PreDraw();
@@ -50,6 +57,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeaps;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heapforimgui;
 	UINT64 fenceVal = 0;
 	//------
 	//バックバッファ

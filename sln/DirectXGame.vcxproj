@@ -159,6 +159,12 @@
     <ClCompile Include="FbxModel.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -240,6 +246,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="imgui\imgui.vcxproj" />
+    <None Include="imgui\imgui.vcxproj.filters" />
+    <None Include="imgui\imgui.vcxproj.user" />
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
@@ -257,6 +266,14 @@
     <ClInclude Include="FbxModel.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GamePlayScene.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Model.h" />

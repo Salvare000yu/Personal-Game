@@ -20,7 +20,7 @@ void GamePlayScene::Initialize()
 	camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
 
 	camera->SetTarget({ 0,50,-200 });
-	camera->SetEye({ 0,50,-210 });
+	camera->SetEye({ 0,48,-210 });
 
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
@@ -29,6 +29,11 @@ void GamePlayScene::Initialize()
 	//グラフィックスパイプライン生成
 	FbxObject3d::CreateGraphicsPipeline();
 	FbxObject3d::SetCamera(camera.get());
+
+	//使う定義とか　仮おいとくね
+	time = frame / 60.f;	// 60fps想定
+
+	const float playerRotZ = 0.f;
 
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
@@ -46,11 +51,13 @@ void GamePlayScene::Initialize()
 	//------object3dスケール------//
 	object3d_1->SetScale({ 100.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
-	obj_player->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj_player->SetScale({ 2.0f, 2.0f, 2.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-1,0 });
 	obj_worlddome->SetPosition({ 0,200,0 });
-	obj_player->SetPosition({ 0,30,-170 });
+	obj_player->SetPosition({ 0,43,-170 });
+	//------object回転------//
+	//obj_player->SetRotation({ 0,0,40 });
 
 	fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -79,22 +86,27 @@ void GamePlayScene::Initialize()
 
 	//Object3d object3ds[OBJECT_NUM];
 
-	// スプライト共通テクスチャ読み込み
+	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
+	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_guide.reset(Sprite::Create(2, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	//XMFLOAT2 size = sprite_back->GetSize();
-
-	//size.x=10;
-	//スプライトサイズ
-	//sprite_back->SetSize({ 20, 0 });
 	sprite_back->TransferVertexBuffer();
+	//sp_guide->TransferVertexBuffer();
 
 	//sprite_back.push_back(sprite_back);
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
+	sp_guide->SetPosition({ 400,200,0 });
+
+	//スプライトサイズ
+	//XMFLOAT2 size = sp_guide->GetSize();
+	//sp_guide->GetSize();
+	//size.x=90;
+	//sp_guide->SetSize({200,0});
 
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -148,12 +160,6 @@ void GamePlayScene::Update()
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
 
-	// 座標操作
-	if (inputUp || inputDown || inputRight || inputLeft)
-	{
-
-	}
-
 	const bool inputW = input->PushKey(DIK_W);
 	const bool inputS = input->PushKey(DIK_S);
 	const bool inputA = input->PushKey(DIK_A);
@@ -161,7 +167,7 @@ void GamePlayScene::Update()
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
 	const bool inputT = input->PushKey(DIK_T);
-	//const bool inputE = input->PushKey(DIK_E);
+	const bool inputE = input->PushKey(DIK_E);
 
 	const bool TriggerJ = input->TriggerKey(DIK_J);
 	const bool TriggerM = input->TriggerKey(DIK_M);
@@ -173,7 +179,11 @@ void GamePlayScene::Update()
 
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ)
 	{
+
+		//------プレイヤーも同じ移動------//
+		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
+
 		if (inputS) {
 			// カメラをバックさせる
 			camera->MoveEyeVector(XMFLOAT3(0, 0, -moveSpeed));
@@ -182,6 +192,12 @@ void GamePlayScene::Update()
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z - moveSpeed;
 			obj_player->SetPosition(position);
+
+			XMFLOAT3 rotation = obj_player->GetRotation();
+			if (rotation.x <= 10) {
+				rotation.x += 1.f;
+			}
+			obj_player->SetRotation(rotation);
 
 		}
 		if (inputW) {
@@ -192,6 +208,13 @@ void GamePlayScene::Update()
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z + moveSpeed;
 			obj_player->SetPosition(position);
+
+			XMFLOAT3 rotation = obj_player->GetRotation();
+			if (rotation.x >= -10) {
+				rotation.x -= 1.f;
+			}
+			obj_player->SetRotation(rotation);
+
 		}
 		if (inputA) {
 			// カメラを左進させる
@@ -201,7 +224,24 @@ void GamePlayScene::Update()
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x - moveSpeed;
 			obj_player->SetPosition(position);
-		}
+
+			XMFLOAT3 rotation = obj_player->GetRotation();
+			if (rotation.z <= 10) {
+				rotation.z += 1.f;
+			}
+			obj_player->SetRotation(rotation);
+
+			OldInputFlag = TRUE;
+
+		}/*
+		if(!inputA&&OldInputFlag_A==TRUE) {
+			XMFLOAT3 rotation = obj_player->GetRotation();
+			rotation.z = 0;
+			obj_player->SetRotation(rotation);
+
+			OldInputFlag_A = FALSE;
+		}*/
+
 		if (inputD) {
 			// カメラを右進させる
 			camera->MoveEyeVector(XMFLOAT3(moveSpeed, 0, 0));
@@ -210,7 +250,27 @@ void GamePlayScene::Update()
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x + moveSpeed;
 			obj_player->SetPosition(position);
+
+			XMFLOAT3 rotation = obj_player->GetRotation();
+			if (rotation.z >= -10) {
+			rotation.z -= 1.f;
+			}
+			obj_player->SetRotation(rotation);
+
+			OldInputFlag = TRUE;
+
 		}
+		//else{ OldInputFlag = FALSE; }
+
+		//if (OldInputFlag == TRUE) {
+
+		//	XMFLOAT3 rotation = obj_player->GetRotation();
+		//	rotation.z = 0;
+		//	obj_player->SetRotation(rotation);
+
+		//	OldInputFlag = FALSE;
+		//}
+
 		if (inputQ) {
 			// カメラを上昇させる
 			camera->MoveEyeVector(XMFLOAT3(0, moveSpeed, 0));
@@ -231,11 +291,50 @@ void GamePlayScene::Update()
 		}
 	}
 
+	//タゲ移動
+	if (inputUp || inputDown || inputRight || inputLeft)
+	{
+		constexpr float tagmove = 5;
+		if (inputUp) {
+			XMFLOAT3 position = sp_guide->GetPosition();
+			position.y-=tagmove;
+			sp_guide->SetPosition({ position });
+		}
+		if (inputDown) {
+			XMFLOAT3 position = sp_guide->GetPosition();
+			position.y+= tagmove;
+			sp_guide->SetPosition({ position });
+		}
+		if (inputRight) {
+			XMFLOAT3 position = sp_guide->GetPosition();
+			position.x+= tagmove;
+			sp_guide->SetPosition({ position });
+		}
+		if (inputLeft) {
+			XMFLOAT3 position = sp_guide->GetPosition();
+			position.x-= tagmove;
+			sp_guide->SetPosition({ position });
+		}
+	}
+
+	for (int i = 0; i < 1; i++)
+	{
+		XMFLOAT3 rotation = obj_worlddome->GetRotation();
+		rotation.y+=0.3f;
+		obj_worlddome->SetRotation({ rotation });
+	}
+
 	if (Trigger0)     // スペースキーが押されていたら
 	{
 		//シーン切り替え
 		BaseScene* scene = new EndScene();
 		sceneManager_->SetNextScene(scene);
+	}
+	if (inputE)
+	{
+		XMFLOAT3 rotation = obj_player->GetRotation();
+		rotation.y++;
+		obj_player->SetRotation(rotation);
 	}
 
 	//バックスプライト動
@@ -263,6 +362,7 @@ void GamePlayScene::Update()
 
 	//スプライト更新
 	sprite_back->Update();
+	sp_guide->Update();
 }
 
 void GamePlayScene::Draw()
@@ -275,6 +375,7 @@ void GamePlayScene::Draw()
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
 	//sprite_back->Draw();
+	
 
 	//3dオブジェ描画前処理
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
@@ -303,7 +404,10 @@ void GamePlayScene::Draw()
 	//}
 
 	//// スプライト共通コマンド
-	SpriteBase::GetInstance()->PreDraw();
+	SpriteBase::GetInstance()->PreDraw(); 
+	
+	//------お手前スプライト描画
+	sp_guide->Draw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

@@ -11,7 +11,7 @@ SpriteBase* Sprite::GetInstance()
 Sprite* Sprite::Create(UINT texNumber, DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 size,
     DirectX::XMFLOAT4 color, DirectX::XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
 {
-    SpriteBase* spriteBase = SpriteBase::GetInstance();
+    //SpriteBase* spriteBase = SpriteBase::GetInstance();
 
     Sprite* instance = new Sprite(texNumber, position, size, color, anchorpoint, isFlipX, isFlipY);
     //インスタンス初期化

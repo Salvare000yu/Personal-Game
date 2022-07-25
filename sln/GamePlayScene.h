@@ -26,9 +26,12 @@ public:
 
 	std::unique_ptr<Camera> camera; //ÉJÉÅÉâ
 
+	float time;
+
 private:
 
 	std::unique_ptr < Sprite> sprite_back = nullptr;
+	std::unique_ptr < Sprite> sp_guide = nullptr;
 
 	std::unique_ptr < Model> model_1 = nullptr;//ínñ 
 	std::unique_ptr < Model> mod_worlddome = nullptr;//ìVãÖ
@@ -40,5 +43,7 @@ private:
 
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1=nullptr;
+
+	float frame = 0;
 };
 
