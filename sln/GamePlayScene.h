@@ -8,6 +8,7 @@
 #include "FbxObject3d.h"
 
 #include "Enemy.h"
+#include "Player.h"
 
 #include <memory>
 
@@ -32,6 +33,7 @@ public:
 
 	//“G
 	Enemy* enemy_ = nullptr;
+	Player* player_ = nullptr;
 
 private:
 
@@ -40,11 +42,9 @@ private:
 
 	std::unique_ptr < Model> model_1 = nullptr;//’n–Ê
 	std::unique_ptr < Model> mod_worlddome = nullptr;//“V‹…
-	std::unique_ptr < Model> mod_player = nullptr;//Ž©‹@
 
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
 	std::unique_ptr < Object3d> obj_worlddome = nullptr;
-	std::unique_ptr < Object3d> obj_player = nullptr;
 
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1=nullptr;
