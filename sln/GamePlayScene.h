@@ -7,7 +7,7 @@
 
 #include "FbxObject3d.h"
 
-#include "Player.h"
+#include "Enemy.h"
 
 #include <memory>
 
@@ -30,8 +30,8 @@ public:
 
 	float time;
 
-	//プレイ ヤー！
-	Player* player_ = nullptr;
+	//敵
+	Enemy* enemy_ = nullptr;
 
 private:
 

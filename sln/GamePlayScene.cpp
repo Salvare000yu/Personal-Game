@@ -30,7 +30,7 @@ void GamePlayScene::Initialize()
 	FbxObject3d::CreateGraphicsPipeline();
 	FbxObject3d::SetCamera(camera.get());
 
-	Player::GetInstance();
+	Enemy::GetInstance();
 	
 	//使う定義とか　仮おいとくね
 	time = frame / 60.f;	// 60fps想定
@@ -62,9 +62,9 @@ void GamePlayScene::Initialize()
 	//obj_player->SetRotation({ 0,0,40 });
 
 	//自キャラ生成
-	player_ = new Player();
+	enemy_ = new Enemy();
 	//自キャラ初期化
-	player_->Initialize();
+	enemy_->Initialize();
 
 	fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -146,7 +146,7 @@ void GamePlayScene::Finalize()
 	safe_delete(fbxModel_1);
 
 	//自キャラ解放
-	delete player_;
+	delete enemy_;
 }
 
 void GamePlayScene::Update()
@@ -375,7 +375,7 @@ void GamePlayScene::Update()
 	sprite_back->Update();
 	sp_guide->Update();
 
-	player_->Update();
+	enemy_->Update();
 }
 
 void GamePlayScene::Draw()
@@ -399,7 +399,7 @@ void GamePlayScene::Draw()
 	obj_player->Draw();
 
 	//自キャラ描画
-	player_->Draw();
+	enemy_->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);

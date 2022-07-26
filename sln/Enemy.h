@@ -5,7 +5,7 @@
 
 #include <memory>
 
-class Player
+class Enemy
 {
 public:
 	//èâä˙âª
@@ -17,10 +17,12 @@ public:
 	//ï`âÊ
 	void Draw();
 
-	static Player* GetInstance();
+	static Enemy* GetInstance();
 
 	std::unique_ptr<Camera> camera; //ÉJÉÅÉâ
 	
+	float time;
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//é©ã@
@@ -36,8 +38,10 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	std::unique_ptr < Model> mod_classplayer = nullptr;
+	std::unique_ptr < Model> mod_enemy = nullptr;
 
-	std::unique_ptr < Object3d> obj_classplayer = nullptr;
+	std::unique_ptr < Object3d> obj_enemy = nullptr;
+
+	float frame = 0;
 };
 
