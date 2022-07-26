@@ -18,10 +18,10 @@ void GamePlayScene::Initialize()
 #pragma region 描画初期化処理
 
 	camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
-
+	
 	camera->SetTarget({ 0,50,-200 });
 	camera->SetEye({ 0,48,-210 });
-
+	
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
 	// カメラセット
@@ -30,11 +30,13 @@ void GamePlayScene::Initialize()
 	FbxObject3d::CreateGraphicsPipeline();
 	FbxObject3d::SetCamera(camera.get());
 
+	Player::GetInstance();
+	
 	//使う定義とか　仮おいとくね
 	time = frame / 60.f;	// 60fps想定
 
 	const float playerRotZ = 0.f;
-
+	
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
@@ -58,6 +60,11 @@ void GamePlayScene::Initialize()
 	obj_player->SetPosition({ 0,43,-170 });
 	//------object回転------//
 	//obj_player->SetRotation({ 0,0,40 });
+
+	//自キャラ生成
+	player_ = new Player();
+	//自キャラ初期化
+	player_->Initialize();
 
 	fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -137,6 +144,9 @@ void GamePlayScene::Finalize()
 {
 	safe_delete(fbxObject_1);
 	safe_delete(fbxModel_1);
+
+	//自キャラ解放
+	delete player_;
 }
 
 void GamePlayScene::Update()
@@ -317,6 +327,7 @@ void GamePlayScene::Update()
 		}
 	}
 
+	//天球回転
 	for (int i = 0; i < 1; i++)
 	{
 		XMFLOAT3 rotation = obj_worlddome->GetRotation();
@@ -339,15 +350,15 @@ void GamePlayScene::Update()
 
 	//バックスプライト動
 	//SPmove SPbackmoveobj;
-	for (int i = 0; i < 1; i++)
-	{
-		XMFLOAT3 position = sprite_back->GetPosition();
+	//for (int i = 0; i < 1; i++)
+	//{
+	//	XMFLOAT3 position = sprite_back->GetPosition();
 
-		position.x += 5;
-		if (position.x == 0) { position.x = -11400; }
+	//	position.x += 5;
+	//	if (position.x == 0) { position.x = -11400; }
 
-		sprite_back->SetPosition(position);
-	}
+	//	sprite_back->SetPosition(position);
+	//}
 
 	DebugText::GetInstance()->Print("PLAY", 200, 100);
 	camera->Update();
@@ -363,6 +374,8 @@ void GamePlayScene::Update()
 	//スプライト更新
 	sprite_back->Update();
 	sp_guide->Update();
+
+	player_->Update();
 }
 
 void GamePlayScene::Draw()
@@ -384,6 +397,9 @@ void GamePlayScene::Draw()
 	object3d_1->Draw();
 	obj_worlddome->Draw();
 	obj_player->Draw();
+
+	//自キャラ描画
+	player_->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);

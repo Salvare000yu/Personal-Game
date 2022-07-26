@@ -24,8 +24,15 @@ void DxBase::Initialize(WinApp* winApp)
     //メンバ変数に記録
     this->winApp = winApp;
 
+    //デバッグレイヤー　デバイス生成より上
+    DebugLayer();
+
     //デバイス生成
     InitializeDevice();
+
+    //GPUValidation　デバイス生成より下
+    SetBreakOnSeverity();
+
     //コマンド系初期化
     InitializeCommand();
     //スワップチェーン初期化
@@ -314,6 +321,51 @@ bool DxBase::InitializeFence()
         return false;
     }
 
+
+    return true;
+}
+
+bool DxBase::DebugLayer()
+{
+#ifdef _DEBUG
+    //デバックレイヤーをオン
+    ComPtr<ID3D12Debug1> debugController;
+    if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+        debugController->EnableDebugLayer();
+        debugController->SetEnableGPUBasedValidation(TRUE);
+    }
+#endif
+
+    //GPUValidation
+    debugController->SetEnableGPUBasedValidation(TRUE);
+
+    return true;
+}
+
+bool DxBase::SetBreakOnSeverity()
+{
+#ifdef _DEBUG
+    ComPtr<ID3D12InfoQueue> infoQueue;
+    if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+        infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);//重要エラー止まる的な？
+        infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);//エラー止まる
+        //--comptr--infoQueue->Release();
+    }
+#endif
+    D3D12_MESSAGE_ID denyIds[] = {
+        //windows11でdxgiデバッグレイヤーとdx12デバッグレイヤーのそうごっさようばぐによるエラーメッセージ
+        D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+    };
+
+    //抑制表示レベル
+    D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+    D3D12_INFO_QUEUE_FILTER filter{};
+    filter.DenyList.NumIDs = _countof(denyIds);
+    filter.DenyList.pIDList = denyIds;
+    filter.DenyList.NumSeverities = _countof(severities);
+    filter.DenyList.pSeverityList = severities;
+    //指定したエラー表示抑制
+    infoQueue->PushStorageFilter(&filter);
 
     return true;
 }

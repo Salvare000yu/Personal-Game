@@ -74,5 +74,9 @@ private:
 	bool DxBase::InitializeDepthBuffer();
 
 	bool DxBase::InitializeFence();
+
+	bool DebugLayer();
+
+	bool SetBreakOnSeverity();
 };
 

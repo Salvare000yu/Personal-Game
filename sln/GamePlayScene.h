@@ -7,6 +7,8 @@
 
 #include "FbxObject3d.h"
 
+#include "Player.h"
+
 #include <memory>
 
 class GamePlayScene :public BaseScene
@@ -27,6 +29,9 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
+
+	//プレイ ヤー！
+	Player* player_ = nullptr;
 
 private:
 
