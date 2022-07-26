@@ -183,6 +183,34 @@ void GamePlayScene::Update()
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	const bool Trigger2 = input->TriggerKey(DIK_2);
 
+	//--------------------↓移動制限
+
+	const float CameraMoveLimX = 200;
+	const float CameraMoveLimY = 250;
+	const float CameraMoveLimZ = 100;
+
+			//------↓ターゲット
+	XMFLOAT3 target_moved=camera->GetTarget();
+	target_moved.x = max(target_moved.x, -CameraMoveLimX);
+	target_moved.x = min(target_moved.x, +CameraMoveLimX);
+	target_moved.y = max(target_moved.y, -CameraMoveLimY);
+	target_moved.y = min(target_moved.y, +CameraMoveLimY);
+	target_moved.z = max(target_moved.z, -CameraMoveLimZ);
+	target_moved.z = min(target_moved.z, +CameraMoveLimZ);
+	camera->SetTarget(target_moved);
+			//------↑ターゲット
+			//------↓め！
+	XMFLOAT3 eye_moved = camera->GetEye();
+	eye_moved.x = max(eye_moved.x, -CameraMoveLimX);
+	eye_moved.x = min(eye_moved.x, +CameraMoveLimX);
+	//eye_moved.y = max(eye_moved.y, -CameraMoveLimY);
+	//eye_moved.y = min(eye_moved.y, +CameraMoveLimY);
+	//eye_moved.z = max(eye_moved.z, -CameraMoveLimZ);
+	//eye_moved.z = min(eye_moved.z, +CameraMoveLimZ);
+	camera->SetEye(eye_moved);
+			//------↑め！
+	//--------------------↑移動制限
+
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ)
 	{
 

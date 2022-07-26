@@ -13,6 +13,8 @@ Player* Player::GetInstance()
 
 void Player::Initialize()
 {
+	//定義とか仮おいておこう
+
 
 	//もでる読み込み
 	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
@@ -39,6 +41,21 @@ void Player::Update()
 	const bool inputZ = input->PushKey(DIK_Z);
 
 	time = frame / 60.f;
+
+	//----------↓移動制限 カメラと同じにする
+	const float PlayerMoveLimX = 200;
+	const float PlayerMoveLimY = 200;
+	const float PlayerMoveLimZ = 300;
+
+	XMFLOAT3 position = obj_player->GetPosition();
+	position.x = max(position.x, -PlayerMoveLimX);
+	position.x = min(position.x, +PlayerMoveLimX);
+	position.y = max(position.y, -PlayerMoveLimY);
+	position.y = min(position.y, +PlayerMoveLimY);
+	position.z = max(position.z, -PlayerMoveLimZ);
+	position.z = min(position.z, +PlayerMoveLimZ);
+	obj_player->SetPosition(position);
+	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ)
