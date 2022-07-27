@@ -40,6 +40,8 @@ void Player::Update()
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
 
+	const bool TriggerR = input->TriggerKey(DIK_R);
+
 	time = frame / 60.f;
 
 	//----------↓移動制限 カメラと同じにする
@@ -137,6 +139,11 @@ void Player::Update()
 		}
 
 	}
+	if(TriggerR){//リセット
+		obj_player->SetPosition({ 0,40,-170 });
+		obj_player->SetRotation({ 0,0,0 });
+	}
+
 	//------------------↑プレイヤー移動＆姿勢
 
 	//自分回転
