@@ -46,11 +46,11 @@ void GamePlayScene::Initialize()
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
 	//------object3dスケール------//
-	object3d_1->SetScale({ 100.0f, 20.0f, 500.0f });
+	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
 	//------object3d位置------//
-	object3d_1->SetPosition({ 0,-1,0 });
-	obj_worlddome->SetPosition({ 0,200,0 });
+	object3d_1->SetPosition({ 0,-150,0 });
+	obj_worlddome->SetPosition({ 0,200,150 });
 	//------object回転------//
 	//obj_player->SetRotation({ 0,0,40 });
 
@@ -61,23 +61,20 @@ void GamePlayScene::Initialize()
 	enemy_->Initialize();
 	player_->Initialize();
 
-	fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
 
-	fbxObject_1 = new FbxObject3d;
+	//fbxObject_1 = new FbxObject3d;
 
-	fbxObject_1->Initialize();
+	//fbxObject_1->Initialize();
 
 	//------fbxセット------//
-	fbxObject_1->SetModel(fbxModel_1);
-
+	//fbxObject_1->SetModel(fbxModel_1);
 	//------fbxスケール------//
-	fbxObject_1->SetScale({ 10.0f, 10.0f, 10.0f });
-
+	//fbxObject_1->SetScale({ 10.0f, 10.0f, 10.0f });
 	//------fbx位置------//
-	fbxObject_1->SetPosition({ 0,24,100 });
-
-	fbxObject_1->PlayAnimation();
+	//fbxObject_1->SetPosition({ 0,24,100 });
+	//fbxObject_1->PlayAnimation();
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
@@ -137,8 +134,8 @@ void GamePlayScene::Initialize()
 
 void GamePlayScene::Finalize()
 {
-	safe_delete(fbxObject_1);
-	safe_delete(fbxModel_1);
+	//safe_delete(fbxObject_1);
+	//safe_delete(fbxModel_1);
 
 	//自キャラ解放
 	delete enemy_;
@@ -186,16 +183,18 @@ void GamePlayScene::Update()
 
 	//--------------------↓移動制限
 
-	const float CameraTagMoveLimX = 200;
-	const float CameraEyeMoveLimX = 200;
+	const float CameraTagMoveLimX = 190;
+	const float CameraEyeMoveLimX = 190;
 
-	const float CameraMaxTagMoveLimY = 191;//Y最大タゲ　下にどれだけ行けるかなんか逆
-	const float CameraMaxEyeMoveLimY = 191;//Y最大アイ
-	const float CameraMinTagMoveLimY = 250;//Y最小タゲ　上にどれだけ行けるかなんか逆
-	const float CameraMinEyeMoveLimY = 250;//Y最小アイ
+	const float CameraMaxTagMoveLimY = 90;//Y最大タゲ　下にどれだけ行けるかなんか逆
+	const float CameraMaxEyeMoveLimY = 92;//Y最大アイ
+	const float CameraMinTagMoveLimY = 210;//Y最小タゲ　上にどれだけ行けるかなんか逆
+	const float CameraMinEyeMoveLimY = 208;//Y最小アイ
 
-	const float CameraTagMoveLimZ = 100;
-	const float CameraEyeMoveLimZ = 0;
+	const float CameraMaxTagMoveLimZ = 320;//後最大タゲ
+	const float CameraMaxEyeMoveLimZ = 330;//後最大アイ ぐるっとする時Eye値
+	const float CameraMinTagMoveLimZ = 170;//前最小タゲ
+	const float CameraMinEyeMoveLimZ = 160;//前最小アイ
 
 			//------↓ターゲット
 	XMFLOAT3 target_moved=camera->GetTarget();
@@ -203,8 +202,8 @@ void GamePlayScene::Update()
 	target_moved.x = min(target_moved.x, +CameraTagMoveLimX);
 	target_moved.y = max(target_moved.y, -CameraMaxTagMoveLimY); //下にどれだけ行けるかなんか逆
 	target_moved.y = min(target_moved.y, +CameraMinTagMoveLimY);
-	target_moved.z = max(target_moved.z, -CameraTagMoveLimZ);
-	target_moved.z = min(target_moved.z, +CameraTagMoveLimZ);
+	target_moved.z = max(target_moved.z, -CameraMaxTagMoveLimZ);
+	target_moved.z = min(target_moved.z, +CameraMinTagMoveLimZ);//前
 	camera->SetTarget(target_moved);
 			//------↑ターゲット
 			//------↓め！
@@ -213,8 +212,8 @@ void GamePlayScene::Update()
 	eye_moved.x = min(eye_moved.x, +CameraEyeMoveLimX);
 	eye_moved.y = max(eye_moved.y, -CameraMaxEyeMoveLimY); //上にどれだけ行けるかなんか逆
 	eye_moved.y = min(eye_moved.y, +CameraMinEyeMoveLimY);
-	//eye_moved.z = max(eye_moved.z, -CameraMoveLimZ);
-	//eye_moved.z = min(eye_moved.z, +CameraMoveLimZ);
+	eye_moved.z = max(eye_moved.z, -CameraMaxEyeMoveLimZ);//後
+	eye_moved.z = min(eye_moved.z, +CameraMinEyeMoveLimZ);//前
 	camera->SetEye(eye_moved);
 			//------↑め！
 	//--------------------↑移動制限
@@ -351,7 +350,7 @@ void GamePlayScene::Update()
 	obj_worlddome->Update();
 
 	// FBX Update
-	fbxObject_1->Update();
+	//fbxObject_1->Update();
 
 	//スプライト更新
 	sprite_back->Update();

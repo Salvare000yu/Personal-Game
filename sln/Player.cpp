@@ -45,17 +45,21 @@ void Player::Update()
 	time = frame / 60.f;
 
 	//----------↓移動制限 カメラと同じにする
-	const float PlayerMoveLimX = 200;
-	const float PlayerMoveLimY = 200;
-	const float PlayerMoveLimZ = 300;
+	const float PlayerMoveLimX = 190;
+
+	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
+	const float PlayerMinMoveLimY = 200;//上に行ける範囲
+
+	const float PlayerMaxMoveLimZ = 290;//後ろ
+	const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 position = obj_player->GetPosition();
 	position.x = max(position.x, -PlayerMoveLimX);
 	position.x = min(position.x, +PlayerMoveLimX);
-	position.y = max(position.y, -PlayerMoveLimY);
-	position.y = min(position.y, +PlayerMoveLimY);
-	position.z = max(position.z, -PlayerMoveLimZ);
-	position.z = min(position.z, +PlayerMoveLimZ);
+	position.y = max(position.y, -PlayerMaxMoveLimY);//下に行ける範囲
+	position.y = min(position.y, +PlayerMinMoveLimY);//上に行ける範囲
+	position.z = max(position.z, -PlayerMaxMoveLimZ);
+	position.z = min(position.z, +PlayerMinMoveLimZ);
 	obj_player->SetPosition(position);
 	//----------↑移動制限
 
