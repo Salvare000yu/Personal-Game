@@ -79,7 +79,7 @@ void GamePlayScene::Initialize()
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
+	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -99,7 +99,7 @@ void GamePlayScene::Initialize()
 	//sprite_back.push_back(sprite_back);
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
-	sp_guide->SetPosition({ 400,200,0 });
+	sp_guide->SetPosition({ 0,0,0 });
 
 	//スプライトサイズ
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -192,7 +192,7 @@ void GamePlayScene::Update()
 	const float CameraMinEyeMoveLimY = 208;//Y最小アイ
 
 	const float CameraMaxTagMoveLimZ = 320;//後最大タゲ
-	const float CameraMaxEyeMoveLimZ = 330;//後最大アイ ぐるっとする時Eye値
+	const float CameraMaxEyeMoveLimZ = 330;//後最大アイ
 	const float CameraMinTagMoveLimZ = 170;//前最小タゲ
 	const float CameraMinEyeMoveLimZ = 160;//前最小アイ
 
@@ -323,12 +323,12 @@ void GamePlayScene::Update()
 		obj_worlddome->SetRotation({ rotation });
 	}
 
-	if (Trigger0)     // スペースキーが押されていたら
-	{
-		//シーン切り替え
-		BaseScene* scene = new EndScene();
-		sceneManager_->SetNextScene(scene);
-	}
+	//if (Trigger0)     // スペースキーが押されていたら
+	//{
+	//	//シーン切り替え
+	//	BaseScene* scene = new EndScene();
+	//	sceneManager_->SetNextScene(scene);
+	//}
 
 	//バックスプライト動
 	//SPmove SPbackmoveobj;
@@ -342,7 +342,9 @@ void GamePlayScene::Update()
 	//	sprite_back->SetPosition(position);
 	//}
 
-	DebugText::GetInstance()->Print("PLAY", 200, 100);
+	DebugText::GetInstance()->Print("PLAY", 200, 100, 2);
+	DebugText::GetInstance()->Print("WASD&QZ:MOVE", 200, 130,2);
+	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
 	camera->Update();
 
 	//3dobjUPDATE

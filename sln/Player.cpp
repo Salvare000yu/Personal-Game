@@ -4,6 +4,23 @@
 
 #include <DirectXMath.h>
 
+void Player::Attack()
+{
+	Input* input = Input::GetInstance();
+
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	//’e”­ŽË
+	if (TriggerSPACE) {
+		//’e¶¬
+		PlayerBullet* madeBullet = new PlayerBullet();
+		madeBullet->Initialize();
+
+		//’e“o˜^
+		bullet_ = madeBullet;
+	}
+}
+
 Player* Player::GetInstance()
 {
 	static Player instance;
@@ -158,11 +175,23 @@ void Player::Update()
 		obj_player->SetRotation(rotation);
 	}
 
+	//”­ŽËˆ—
+	Attack();
+	//’eXV
+	if (bullet_) {
+		bullet_->Update();
+	}
+
 	obj_player->Update();
 
 }
 
 void Player::Draw()
 {
+	//’eXV
+	if (bullet_) {
+		bullet_->Draw();
+	}
+
 	obj_player->Draw();
 }

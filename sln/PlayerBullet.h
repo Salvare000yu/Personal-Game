@@ -2,11 +2,11 @@
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
-#include "PlayerBullet.h"
 
 #include <memory>
 
-class Player
+#pragma once
+class PlayerBullet
 {
 public:
 	//‰Šú‰»
@@ -18,21 +18,11 @@ public:
 	//•`‰æ
 	void Draw();
 
-	//UŒ‚
-	void Attack();
-
-	static Player* GetInstance();
+	static PlayerBullet* GetInstance();
 
 	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
 
 	float time;
-
-	//ƒvƒŒƒCƒ„[‚Ì’e
-	PlayerBullet* bullet_ = nullptr;
-
-	std::unique_ptr < Model> mod_player = nullptr;
-
-	std::unique_ptr < Object3d> obj_player = nullptr;
 
 private:
 	////-----------------model
@@ -49,8 +39,9 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
+	std::unique_ptr < Model> mod_playerbullet = nullptr;
 
+	std::unique_ptr < Object3d> obj_playerbullet = nullptr;
 
 	float frame = 0;
 };
-
