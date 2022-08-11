@@ -24,6 +24,14 @@ public:
 
 	float time;
 
+	//è¡Ç¶ÇÈÇ‹Ç≈
+	static const int32_t BulVanishTime = 60 * 5;//éıñΩ
+
+	//è¡ñ≈ÇÃêÈçê
+	int32_t vanishTimer_ = BulVanishTime;
+
+	bool IsVanish()const { return isVanish_; }
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//é©ã@
@@ -44,4 +52,7 @@ private:
 	std::unique_ptr < Object3d> obj_playerbullet = nullptr;
 
 	float frame = 0;
+
+	//è¡ñ≈ÉtÉâÉO
+	bool isVanish_ = FALSE;
 };

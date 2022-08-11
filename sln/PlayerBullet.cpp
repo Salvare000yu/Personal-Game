@@ -46,9 +46,16 @@ void PlayerBullet::Update()
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
-	if (TriggerR) {//リセット
-		obj_playerbullet->SetPosition({ 0,40,-170 });
-	}
+	XMFLOAT3 position = obj_playerbullet->GetPosition();
+	position.z = position.z + 2;
+	obj_playerbullet->SetPosition(position);
+
+	//if (TriggerR) {//リセット
+	//	obj_playerbullet->SetPosition({ 0,40,-170 });
+	//}
+
+	//時間経過消滅
+	if (--vanishTimer_ <= 0) { isVanish_ = TRUE; }
 
 	obj_playerbullet->Update();
 }

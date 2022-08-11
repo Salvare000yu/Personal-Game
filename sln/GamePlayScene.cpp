@@ -315,13 +315,13 @@ void GamePlayScene::Update()
 		}
 	}
 
-	////天球回転
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	XMFLOAT3 rotation = obj_worlddome->GetRotation();
-	//	rotation.y+=0.3f;
-	//	obj_worlddome->SetRotation({ rotation });
-	//}
+	//天球回転
+	for (int i = 0; i < 1; i++)
+	{
+		XMFLOAT3 rotation = obj_worlddome->GetRotation();
+		rotation.y+=0.3f;
+		obj_worlddome->SetRotation({ rotation });
+	}
 
 	//if (Trigger0)     // スペースキーが押されていたら
 	//{
@@ -379,7 +379,7 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画
 	object3d_1->Draw();
-	//obj_worlddome->Draw();
+	obj_worlddome->Draw();
 
 	//自キャラ描画
 	enemy_->Draw();

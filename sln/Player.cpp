@@ -66,6 +66,11 @@ void Player::Update()
 
 	time = frame / 60.f;
 
+	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		return bullet->IsVanish();
+		});
+
 	//----------«ˆÚ“®§ŒÀ ƒJƒƒ‰‚Æ“¯‚¶‚É‚·‚é
 	const float PlayerMoveLimX = 190;
 
