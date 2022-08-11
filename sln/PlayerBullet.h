@@ -10,7 +10,7 @@ class PlayerBullet
 {
 public:
 	//‰Šú‰»
-	void Initialize();
+	void Initialize(DirectX::XMFLOAT3 position);
 
 	//XV
 	void Update();

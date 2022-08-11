@@ -4,30 +4,6 @@
 
 #include <DirectXMath.h>
 
-void Player::Attack()
-{
-	Input* input = Input::GetInstance();
-
-	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-
-	//’e”­ŽË
-	if (TriggerSPACE) {
-		//’e¶¬
-		PlayerBullet* madeBullet = new PlayerBullet();
-		madeBullet->Initialize();
-
-		//’e“o˜^
-		bullet_ = madeBullet;
-	}
-}
-
-Player* Player::GetInstance()
-{
-	static Player instance;
-
-	return &instance;
-}
-
 void Player::Initialize()
 {
 	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
@@ -44,6 +20,37 @@ void Player::Initialize()
 	obj_player->SetScale({ 3.0f, 3.0f, 3.0f });
 	//êŠ
 	obj_player->SetPosition({ 0,40,-170 });
+}
+
+void Player::Attack()
+{
+	Input* input = Input::GetInstance();
+
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	//’e”­ŽË
+	if (TriggerSPACE) {
+
+		XMFLOAT3 position = obj_player->GetPosition();
+		////’e‚Ì‚½‚ß‚ÌƒvƒŒƒCƒ„[ƒ|ƒWƒVƒ‡ƒ“ƒZƒbƒg
+		//PlayerposX = position.x;
+		//PlayerposY = position.y;
+		//PlayerposZ = position.z;
+
+		//’e¶¬
+		PlayerBullet* madeBullet = new PlayerBullet();
+		madeBullet->Initialize({position});
+
+		//’e“o˜^
+		bullet_ = madeBullet;
+	}
+}
+
+Player* Player::GetInstance()
+{
+	static Player instance;
+
+	return &instance;
 }
 
 void Player::Update()

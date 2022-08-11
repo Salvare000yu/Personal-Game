@@ -12,8 +12,8 @@ PlayerBullet* PlayerBullet::GetInstance()
 	return &instance;
 }
 
-
-void PlayerBullet::Initialize()
+//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
 {
 	//定義とか仮おいておこう
 
@@ -27,13 +27,7 @@ void PlayerBullet::Initialize()
 	//大きさ
 	obj_playerbullet->SetScale({ 2.0f, 2.0f, 2.0f });
 	//場所
-	//XMFLOAT3 position = obj_playerbullet->GetPosition();
-	プレイヤー側で変数作ってそこに座標入れ、それを使って弾座標
-	bulletposx = playerposx;
-	bulletposy = playerposy;
-	bulletposz = playerposz
-
-	obj_playerbullet->SetPosition({bulletposition });
+	obj_playerbullet->SetPosition({ position });
 
 }
 

@@ -27,6 +27,10 @@ public:
 
 	float time;
 
+	float PlayerposX = 0;
+	float PlayerposY = 0;
+	float PlayerposZ = 0;
+
 	//ƒvƒŒƒCƒ„[‚Ì’e
 	PlayerBullet* bullet_ = nullptr;
 
