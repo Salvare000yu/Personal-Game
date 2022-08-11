@@ -5,6 +5,7 @@
 #include "PlayerBullet.h"
 
 #include <memory>
+#include <list>//STL
 
 class Player
 {
@@ -31,11 +32,12 @@ public:
 	float PlayerposY = 0;
 	float PlayerposZ = 0;
 
-	//プレイヤーの弾
-	PlayerBullet* bullet_ = nullptr;
+	//PlayerBullet* bullet_ = nullptr;
+	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
+	//モデル
 	std::unique_ptr < Model> mod_player = nullptr;
-
+	//オブジェ3d
 	std::unique_ptr < Object3d> obj_player = nullptr;
 
 private:
@@ -52,8 +54,6 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-
-
 
 	float frame = 0;
 };

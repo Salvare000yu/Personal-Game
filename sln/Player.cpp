@@ -4,6 +4,28 @@
 
 #include <DirectXMath.h>
 
+void Player::Attack()
+{
+	//ÉLÅ[ì¸óÕégÇ§
+	Input* input = Input::GetInstance();
+
+	//triggerkey
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	//íeî≠éÀ
+	if (TriggerSPACE) {
+
+		XMFLOAT3 position = obj_player->GetPosition();
+		//íeê∂ê¨
+		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+		//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+		madeBullet->Initialize({ position });
+
+		//íeìoò^
+		bullets_.push_back(std::move(madeBullet));
+	}
+}
+
 void Player::Initialize()
 {
 	//íËã`Ç∆Ç©âºÇ®Ç¢ÇƒÇ®Ç±Ç§
@@ -20,30 +42,6 @@ void Player::Initialize()
 	obj_player->SetScale({ 3.0f, 3.0f, 3.0f });
 	//èÍèä
 	obj_player->SetPosition({ 0,40,-170 });
-}
-
-void Player::Attack()
-{
-	Input* input = Input::GetInstance();
-
-	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-
-	//íeî≠éÀ
-	if (TriggerSPACE) {
-
-		XMFLOAT3 position = obj_player->GetPosition();
-		////íeÇÃÇΩÇﬂÇÃÉvÉåÉCÉÑÅ[É|ÉWÉVÉáÉìÉZÉbÉg
-		//PlayerposX = position.x;
-		//PlayerposY = position.y;
-		//PlayerposZ = position.z;
-
-		//íeê∂ê¨
-		PlayerBullet* madeBullet = new PlayerBullet();
-		madeBullet->Initialize({position});
-
-		//íeìoò^
-		bullet_ = madeBullet;
-	}
 }
 
 Player* Player::GetInstance()
@@ -185,8 +183,8 @@ void Player::Update()
 	//î≠éÀèàóù
 	Attack();
 	//íeçXêV
-	if (bullet_) {
-		bullet_->Update();
+	for (std::unique_ptr<PlayerBullet>& bullet:bullets_) {
+		bullet->Update();
 	}
 
 	obj_player->Update();
@@ -196,8 +194,8 @@ void Player::Update()
 void Player::Draw()
 {
 	//íeçXêV
-	if (bullet_) {
-		bullet_->Draw();
+	for (std::unique_ptr<PlayerBullet>& bullet:bullets_) {
+		bullet->Draw();
 	}
 
 	obj_player->Draw();
