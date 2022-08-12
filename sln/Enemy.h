@@ -7,7 +7,15 @@
 
 class Enemy
 {
+
+	//行動パターン enumclass
+	enum class ActionPattern {
+		Approach,//近づいてくる
+		Leave,//離れる
+	};
+
 public:
+
 	//初期化
 	void Initialize();
 
@@ -22,6 +30,16 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 	
 	float time;
+
+	//近づく速さ
+	const float ApproachSp = 1;
+	//近づける距離
+	const float ApproachLim = -150;
+	//離れられる距離
+	const float LeaveLim = -50;
+
+	//初期パターン enumclassは　　　　型名　　:: 　列挙子
+	ActionPattern actionPattern_ = ActionPattern::Approach;
 
 private:
 	////-----------------model
@@ -44,4 +62,3 @@ private:
 
 	float frame = 0;
 };
-

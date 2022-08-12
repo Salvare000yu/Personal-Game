@@ -79,7 +79,7 @@ void GamePlayScene::Initialize()
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	// 音声再生 鳴らしたいとき
-	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
+	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -172,7 +172,7 @@ void GamePlayScene::Update()
 	const bool inputT = input->PushKey(DIK_T);
 	const bool inputE = input->PushKey(DIK_E);
 
-	const bool TriggerJ = input->TriggerKey(DIK_J);
+	const bool TriggerJ = input->TriggerKey(DIK_J);//敵出現仮(出現関数で)
 	const bool TriggerM = input->TriggerKey(DIK_M);
 	const bool TriggerK = input->TriggerKey(DIK_K);
 	const bool TriggerE = input->TriggerKey(DIK_E);
@@ -345,6 +345,7 @@ void GamePlayScene::Update()
 	DebugText::GetInstance()->Print("PLAY", 200, 100, 2);
 	DebugText::GetInstance()->Print("WASD&QZ:MOVE", 200, 130,2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
+	DebugText::GetInstance()->Print("J:Enemy", 200, 180, 2);
 	camera->Update();
 
 	//3dobjUPDATE

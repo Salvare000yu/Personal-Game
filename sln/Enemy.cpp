@@ -55,6 +55,33 @@ void Enemy::Update()
 		position.x += 5.f*sin(time * 3.14159265358f);
 		obj_enemy->SetPosition(position);
 	}
+	//----------------------------------------------↓関数化しろボケ
+	switch (actionPattern_) {
+	case ActionPattern::Approach://近づくパターン
+	default:
+		//突撃
+		XMFLOAT3 position = obj_enemy->GetPosition();
+		position.z -= ApproachSp;
+		obj_enemy->SetPosition(position);
+
+		//ある程度近づいたらキモ過ぎて離れる
+		if (position.z == ApproachLim) {
+			actionPattern_ = ActionPattern::Leave;
+		}
+		break;
+	case ActionPattern::Leave://後退パターン
+		//後退
+		XMFLOAT3 positionBack = obj_enemy->GetPosition();
+		positionBack.z += ApproachSp;
+		obj_enemy->SetPosition(positionBack);
+
+		//ある程度離れたら近づいてくる
+		if (positionBack.z == LeaveLim) {
+			actionPattern_ = ActionPattern::Approach;
+		}
+		break;
+	}
+	//----------------------------------------------↑関数化しろボケ
 
 	obj_enemy->Update();
 }
