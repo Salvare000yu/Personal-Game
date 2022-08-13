@@ -4,6 +4,12 @@
 
 #include <DirectXMath.h>
 
+void Enemy::ApproachInit()
+{
+	//攻撃用フレーム初期化して間隔代入すれば一旦待ってから発射可能
+	AtkFrame = AtkInterval;
+}
+
 Enemy* Enemy::GetInstance()
 {
 	static Enemy instance;
@@ -17,20 +23,17 @@ void Enemy::Attack()
 	Input* input = Input::GetInstance();
 
 	//triggerkey
-	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 
 	//弾発射
-	if (TriggerSPACE) {
+	XMFLOAT3 position = obj_enemy->GetPosition();
+	//弾生成
+	std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
+	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+	madeBullet->Initialize({ position });
 
-		XMFLOAT3 position = obj_enemy->GetPosition();
-		//弾生成
-		std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
-		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-		madeBullet->Initialize({ position });
-
-		//弾登録
-		bullets_.push_back(std::move(madeBullet));
-	}
+	//弾登録
+	bullets_.push_back(std::move(madeBullet));
 }
 
 void Enemy::Initialize()
@@ -46,7 +49,10 @@ void Enemy::Initialize()
 	//大きさ
 	obj_enemy->SetScale({ 20.0f, 20.0f, 20.0f });
 	//場所
-	obj_enemy->SetPosition({ -100,100,-50 });
+	obj_enemy->SetPosition({ -100,50,-50 });
+
+	//近づくパターン初期化
+	ApproachInit();
 }
 
 void Enemy::Update()
@@ -79,14 +85,25 @@ void Enemy::Update()
 		obj_enemy->SetRotation({ rotation });
 
 		XMFLOAT3 position = obj_enemy->GetPosition();
-		position.x += 5.f*sin(time * 3.14159265358f);
+		position.x += 5.f * sin(time * 3.14159265358f);
 		obj_enemy->SetPosition(position);
 	}
 	//----------------------------------------------↓関数化しろボケ
 	switch (actionPattern_) {
 	case ActionPattern::Approach://近づくパターン
 	default:
-		//突撃
+		//---突撃---//
+		//発射カウントをデクリメント
+		AtkFrame--;
+		//時が満ちたら
+		if (AtkFrame == 0) {
+			//突撃時のみ発射
+			Attack();
+			//再びカウントできるように初期化
+			AtkFrame = AtkInterval;
+		}
+
+		//弾の移動
 		XMFLOAT3 position = obj_enemy->GetPosition();
 		position.z -= ApproachSp;
 		obj_enemy->SetPosition(position);
@@ -97,7 +114,7 @@ void Enemy::Update()
 		}
 		break;
 	case ActionPattern::Leave://後退パターン
-		//後退
+		//---後退---//
 		XMFLOAT3 positionBack = obj_enemy->GetPosition();
 		positionBack.z += ApproachSp;
 		obj_enemy->SetPosition(positionBack);
@@ -110,8 +127,6 @@ void Enemy::Update()
 	}
 	//----------------------------------------------↑関数化しろボケ
 
-	//発射処理
-	Attack();
 	//弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Update();

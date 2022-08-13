@@ -29,6 +29,9 @@ public:
 	//攻撃
 	void Attack();
 
+	//近づく処理初期化
+	void ApproachInit();
+
 	static Enemy* GetInstance();
 
 	std::unique_ptr<Camera> camera; //カメラ
@@ -46,6 +49,9 @@ public:
 	ActionPattern actionPattern_ = ActionPattern::Approach;
 
 	std::list <std::unique_ptr<EnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+
+	//60フレームごとに発射
+	static const int AtkInterval = 60;
 
 private:
 	////-----------------model
@@ -66,5 +72,8 @@ private:
 
 	std::unique_ptr < Object3d> obj_enemy = nullptr;
 
+	//フレーム
 	float frame = 0;
+	//攻撃用フレーム
+	float AtkFrame = 0;
 };

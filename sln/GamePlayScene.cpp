@@ -79,7 +79,7 @@ void GamePlayScene::Initialize()
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
+	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 

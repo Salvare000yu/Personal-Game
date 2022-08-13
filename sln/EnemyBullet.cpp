@@ -18,7 +18,7 @@ void EnemyBullet::Initialize(DirectX::XMFLOAT3 position)
 	//定義とか仮おいておこう
 
 	//もでる読み込み
-	mod_enemybullet.reset(Model::LoadFromOBJ("EneBull"));
+	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
 	//作る
 	obj_enemybullet.reset(Object3d::Create());
 	//セット
@@ -47,7 +47,7 @@ void EnemyBullet::Update()
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
 	XMFLOAT3 position = obj_enemybullet->GetPosition();
-	position.z = position.z + 2;
+	position.z = position.z - 2;
 	obj_enemybullet->SetPosition(position);
 
 	//if (TriggerR) {//リセット
