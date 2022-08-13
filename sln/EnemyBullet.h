@@ -2,23 +2,15 @@
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
-#include "EnemyBullet.h"
 
 #include <memory>
 
-class Enemy
+#pragma once
+class EnemyBullet
 {
-
-	//行動パターン enumclass
-	enum class ActionPattern {
-		Approach,//近づいてくる
-		Leave,//離れる
-	};
-
 public:
-
 	//初期化
-	void Initialize();
+	void Initialize(DirectX::XMFLOAT3 position);
 
 	//更新
 	void Update();
@@ -26,26 +18,19 @@ public:
 	//描画
 	void Draw();
 
-	//攻撃
-	void Attack();
-
-	static Enemy* GetInstance();
+	static EnemyBullet* GetInstance();
 
 	std::unique_ptr<Camera> camera; //カメラ
-	
+
 	float time;
 
-	//近づく速さ
-	const float ApproachSp = 1;
-	//近づける距離
-	const float ApproachLim = -150;
-	//離れられる距離
-	const float LeaveLim = -50;
+	//消えるまで
+	static const int32_t BulVanishTime = 60 * 5;//寿命
 
-	//初期パターン enumclassは　　　　型名　　:: 　列挙子
-	ActionPattern actionPattern_ = ActionPattern::Approach;
+	//消滅の宣告
+	int32_t vanishTimer_ = BulVanishTime;
 
-	std::list <std::unique_ptr<EnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+	bool IsVanish()const { return isVanish_; }
 
 private:
 	////-----------------model
@@ -62,9 +47,12 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	std::unique_ptr < Model> mod_enemy = nullptr;
+	std::unique_ptr < Model> mod_enemybullet = nullptr;
 
-	std::unique_ptr < Object3d> obj_enemy = nullptr;
+	std::unique_ptr < Object3d> obj_enemybullet = nullptr;
 
 	float frame = 0;
+
+	//消滅フラグ
+	bool isVanish_ = FALSE;
 };

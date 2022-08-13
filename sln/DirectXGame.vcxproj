@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EndScene.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="FbxObject3d.cpp" />
     <ClCompile Include="GameSound.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -261,6 +262,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EndScene.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="FbxObject3d.h" />
     <ClInclude Include="GameSound.h" />
     <ClInclude Include="Camera.h" />

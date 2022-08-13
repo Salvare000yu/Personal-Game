@@ -11,6 +11,28 @@ Enemy* Enemy::GetInstance()
 	return &instance;
 }
 
+void Enemy::Attack()
+{
+	//キー入力使う
+	Input* input = Input::GetInstance();
+
+	//triggerkey
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	//弾発射
+	if (TriggerSPACE) {
+
+		XMFLOAT3 position = obj_enemy->GetPosition();
+		//弾生成
+		std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
+		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+		madeBullet->Initialize({ position });
+
+		//弾登録
+		bullets_.push_back(std::move(madeBullet));
+	}
+}
+
 void Enemy::Initialize()
 {
 
@@ -40,6 +62,11 @@ void Enemy::Update()
 	//	position.z += 5;
 	//	obj_enemy->SetPosition(position);
 	//}
+
+		//消滅フラグ立ったらその弾は死して拝せよ
+	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
+		return bullet->IsVanish();
+		});
 
 	//黄金の回転
 	for (int i = 0; i < 1; i++)
@@ -83,10 +110,22 @@ void Enemy::Update()
 	}
 	//----------------------------------------------↑関数化しろボケ
 
+	//発射処理
+	Attack();
+	//弾更新
+	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+		bullet->Update();
+	}
+
 	obj_enemy->Update();
 }
 
 void Enemy::Draw()
 {
+	//弾更新
+	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+		bullet->Draw();
+	}
+
 	obj_enemy->Draw();
 }
