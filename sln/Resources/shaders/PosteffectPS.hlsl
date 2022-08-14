@@ -15,9 +15,9 @@ float4 main(VSOutput input) : SV_TARGET
 	
 	//ŽžŠÔ‚ÅRGBƒVƒtƒg
     float4 texcolor0 = tex0.Sample(smp, input.uv);
-    texcolor0.r = tex0.Sample(smp, input.uv + float2(0.004 * sin(time * 3.141592653589793f), 0)).r;
-    texcolor0.g = tex0.Sample(smp, input.uv + float2(0, 0.002 * sin(time * 3.141592653589793f))).g;
-    texcolor0.b = tex0.Sample(smp, input.uv + float2(0.002 * sin(time * 3.141592653589793f), 0.01)).b;
+    texcolor0.r = tex0.Sample(smp, input.uv + float2(0.002 * sin(time * 3.141592653589793f), 0)).r;
+    texcolor0.g = tex0.Sample(smp, input.uv + float2(0, 0.001 * sin(time * 3.141592653589793f))).g;
+    texcolor0.b = tex0.Sample(smp, input.uv + float2(0.001 * sin(time * 3.141592653589793f), 0.01)).b;
     float4 texcolor1 = tex1.Sample(smp, input.uv);
 
     float4 color = texcolor0;

@@ -6,8 +6,8 @@
 
 void Enemy::ApproachInit()
 {
-	//攻撃用フレーム初期化して間隔代入すれば一旦待ってから発射可能
-	AtkFrame = AtkInterval;
+	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
+	AtkCount = AtkInterval;
 }
 
 Enemy* Enemy::GetInstance()
@@ -49,7 +49,7 @@ void Enemy::Initialize()
 	//大きさ
 	obj_enemy->SetScale({ 20.0f, 20.0f, 20.0f });
 	//場所
-	obj_enemy->SetPosition({ -100,50,-50 });
+	obj_enemy->SetPosition({ -100,50,50 });
 
 	//近づくパターン初期化
 	ApproachInit();
@@ -94,18 +94,19 @@ void Enemy::Update()
 	default:
 		//---突撃---//
 		//発射カウントをデクリメント
-		AtkFrame--;
+		AtkCount--;
 		//時が満ちたら
-		if (AtkFrame == 0) {
+		if (AtkCount == 0) {
 			//突撃時のみ発射
 			Attack();
 			//再びカウントできるように初期化
-			AtkFrame = AtkInterval;
+			AtkCount = AtkInterval;
 		}
 
 		//弾の移動
 		XMFLOAT3 position = obj_enemy->GetPosition();
 		position.z -= ApproachSp;
+		position.y += ApproachSp;
 		obj_enemy->SetPosition(position);
 
 		//ある程度近づいたらキモ過ぎて離れる
@@ -117,6 +118,7 @@ void Enemy::Update()
 		//---後退---//
 		XMFLOAT3 positionBack = obj_enemy->GetPosition();
 		positionBack.z += ApproachSp;
+		positionBack.y -= ApproachSp;
 		obj_enemy->SetPosition(positionBack);
 
 		//ある程度離れたら近づいてくる

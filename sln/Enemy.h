@@ -41,17 +41,17 @@ public:
 	//近づく速さ
 	const float ApproachSp = 1;
 	//近づける距離
-	const float ApproachLim = -150;
+	const float ApproachLim = -50;
 	//離れられる距離
-	const float LeaveLim = -50;
+	const float LeaveLim = 50;
 
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
 	ActionPattern actionPattern_ = ActionPattern::Approach;
 
 	std::list <std::unique_ptr<EnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
-	//60フレームごとに発射
-	static const int AtkInterval = 60;
+	//フレームごとに発射
+	static const int AtkInterval = 30;
 
 private:
 	////-----------------model
@@ -74,6 +74,6 @@ private:
 
 	//フレーム
 	float frame = 0;
-	//攻撃用フレーム
-	float AtkFrame = 0;
+	//攻撃用カウント
+	float AtkCount = 0;
 };
