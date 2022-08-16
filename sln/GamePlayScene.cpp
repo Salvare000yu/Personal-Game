@@ -32,8 +32,6 @@ void GamePlayScene::Initialize()
 	
 	//使う定義とか　仮おいとくね
 	time = frame / 60.f;	// 60fps想定
-
-	const float playerRotZ = 0.f;
 	
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
@@ -57,9 +55,11 @@ void GamePlayScene::Initialize()
 	//いろいろ生成
 	enemy_ = new Enemy();
 	player_ = new Player();
+	//smallEnemy_ = new SmallEnemy();
 	//いろいろキャラ初期化
 	enemy_->Initialize();
 	player_->Initialize();
+	//smallEnemy_->Initialize();
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -140,6 +140,21 @@ void GamePlayScene::Finalize()
 	//自キャラ解放
 	delete enemy_;
 	delete player_;
+	//delete smallEnemy_;
+}
+
+void GamePlayScene::SmallEnemyAppear()
+{
+	//キー入力使う
+	//Input* input = Input::GetInstance();
+
+	//雑魚敵生成
+	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
+	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+	madeSmallEnemy->Initialize();
+
+	//雑魚敵登録
+	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
 void GamePlayScene::Update()
@@ -321,6 +336,27 @@ void GamePlayScene::Update()
 		XMFLOAT3 rotation = obj_worlddome->GetRotation();
 		rotation.y+=0.3f;
 		obj_worlddome->SetRotation({ rotation });
+
+		//雑魚敵カウントをデクリメント
+		SEneAppCount--;
+	}
+
+	//消滅フラグ立ったらその雑魚敵は死して拝せよ
+	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
+		return smallEnemy->IsVanish();
+		});
+
+	//時が満ちたら
+	if (SEneAppCount == 0) {
+		//雑魚敵来る
+		SmallEnemyAppear();
+		//再びカウントできるように初期化
+		SEneAppCount = SEneAppInterval;
+	}
+
+	//雑魚敵更新
+	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+		smallEnemy->Update();
 	}
 
 	//if (Trigger0)     // スペースキーが押されていたら
@@ -361,6 +397,7 @@ void GamePlayScene::Update()
 
 	enemy_->Update();
 	player_->Update();
+	//smallEnemy_->Update();
 }
 
 void GamePlayScene::Draw()
@@ -378,6 +415,11 @@ void GamePlayScene::Draw()
 	//3dオブジェ描画前処理
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
+	//雑魚敵
+	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+		smallEnemy->Draw();
+	}
+
 	//3dオブジェ描画
 	object3d_1->Draw();
 	obj_worlddome->Draw();
@@ -385,6 +427,7 @@ void GamePlayScene::Draw()
 	//自キャラ描画
 	enemy_->Draw();
 	player_->Draw();
+	//smallEnemy_->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);

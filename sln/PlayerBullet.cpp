@@ -18,14 +18,14 @@ void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
 	//定義とか仮おいておこう
 
 	//もでる読み込み
-	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
+	mod_playerbullet.reset(Model::LoadFromOBJ("PlayerBul"));
 	//作る
 	obj_playerbullet.reset(Object3d::Create());
 	//セット
 	obj_playerbullet->SetModel(mod_playerbullet.get());
 	//-----↓任意↓-----//
 	//大きさ
-	obj_playerbullet->SetScale({ 2.0f, 2.0f, 2.0f });
+	obj_playerbullet->SetScale({ 1.5f, 1.5f, 1.5f });
 	//場所
 	obj_playerbullet->SetPosition({ position });
 
@@ -48,6 +48,7 @@ void PlayerBullet::Update()
 
 	XMFLOAT3 position = obj_playerbullet->GetPosition();
 	position.z = position.z + 2;
+	position.y = position.y + 0.3f;
 	obj_playerbullet->SetPosition(position);
 
 	//if (TriggerR) {//リセット

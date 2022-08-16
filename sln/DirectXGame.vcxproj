@@ -178,6 +178,7 @@
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SmallEnemy.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteBase.cpp" />
     <ClCompile Include="Time.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="safe_delete.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SmallEnemy.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteBase.h" />
     <ClInclude Include="Time.h" />

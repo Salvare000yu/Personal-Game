@@ -9,6 +9,7 @@
 
 #include "Enemy.h"
 #include "Player.h"
+#include "SmallEnemy.h"
 
 #include <memory>
 
@@ -25,15 +26,23 @@ public:
 	void Draw() override;
 	void DrawUI() override;
 
+	void SmallEnemyAppear();
+
 	void Obj2move();
 
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
 
+	//フレームごとに発射
+	static const int SEneAppInterval = 30;
+
+	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
+
 	//敵
 	Enemy* enemy_ = nullptr;
 	Player* player_ = nullptr;
+	SmallEnemy* smallEnemy_ = nullptr;
 
 private:
 
@@ -50,5 +59,8 @@ private:
 	FbxObject3d* fbxObject_1=nullptr;
 
 	float frame = 0;
+
+	//雑魚敵出現用カウント
+	float SEneAppCount = 0;
 };
 

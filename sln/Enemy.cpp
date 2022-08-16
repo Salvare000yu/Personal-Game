@@ -139,7 +139,7 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	//’eXV
+	//’e
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}
