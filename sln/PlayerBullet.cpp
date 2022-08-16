@@ -47,7 +47,7 @@ void PlayerBullet::Update()
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
 	XMFLOAT3 position = obj_playerbullet->GetPosition();
-	position.z = position.z + 2;
+	position.z = position.z + 3;
 	position.y = position.y + 0.3f;
 	obj_playerbullet->SetPosition(position);
 

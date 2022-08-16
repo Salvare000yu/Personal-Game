@@ -39,7 +39,7 @@ public:
 	float time;
 
 	//‹ß‚Ã‚­‘¬‚³
-	const float ApproachSp = 0.5;
+	const float ApproachSp = 1;
 	//‹ß‚Ã‚¯‚é‹——£
 	const float ApproachLim = -50;
 	//—£‚ê‚ç‚ê‚é‹——£

@@ -85,7 +85,7 @@ void Enemy::Update()
 		obj_enemy->SetRotation({ rotation });
 
 		XMFLOAT3 position = obj_enemy->GetPosition();
-		position.x += 5.f * sin(time * 3.14159265358f);
+		//position.x += 5.f * sin(time * 3.14159265358f);
 		obj_enemy->SetPosition(position);
 	}
 	//----------------------------------------------↓関数化しろボケ
@@ -107,6 +107,7 @@ void Enemy::Update()
 		XMFLOAT3 position = obj_enemy->GetPosition();
 		position.z -= ApproachSp;
 		position.y += ApproachSp;
+		position.x += 3.f * sin(time * 3.14159265358f);
 		obj_enemy->SetPosition(position);
 
 		//ある程度近づいたらキモ過ぎて離れる
