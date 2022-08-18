@@ -20,7 +20,7 @@ Enemy* Enemy::GetInstance()
 void Enemy::Attack()
 {
 	//ƒL[“ü—ÍŽg‚¤
-	Input* input = Input::GetInstance();
+	//Input* input = Input::GetInstance();
 
 	//triggerkey
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);

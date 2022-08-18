@@ -150,7 +150,7 @@ void GamePlayScene::SmallEnemyAppear()
 
 	//雑魚敵生成
 	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
-	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+
 	madeSmallEnemy->Initialize();
 
 	//雑魚敵登録
@@ -330,6 +330,11 @@ void GamePlayScene::Update()
 		}
 	}
 
+	//消滅フラグ立ったらその雑魚敵は死して拝せよ
+	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
+		return smallEnemy->IsVanish();
+		});
+
 	//天球回転
 	for (int i = 0; i < 1; i++)
 	{
@@ -337,14 +342,7 @@ void GamePlayScene::Update()
 		rotation.y+=0.3f;
 		obj_worlddome->SetRotation({ rotation });
 
-		//雑魚敵カウントをデクリメント
-		SEneAppCount--;
 	}
-
-	//消滅フラグ立ったらその雑魚敵は死して拝せよ
-	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
-		return smallEnemy->IsVanish();
-		});
 
 	//時が満ちたら
 	if (SEneAppCount == 0) {
@@ -353,6 +351,9 @@ void GamePlayScene::Update()
 		//再びカウントできるように初期化
 		SEneAppCount = SEneAppInterval;
 	}
+
+	//雑魚敵カウントをデクリメント
+	SEneAppCount--;
 
 	//雑魚敵更新
 	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
