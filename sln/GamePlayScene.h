@@ -34,8 +34,8 @@ public:
 
 	float time;
 
-	//フレームごとに発射
-	static const int SEneAppInterval = 30;
+	//指定フレームごとに雑魚出現
+	static const int SEneAppInterval = 50;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 

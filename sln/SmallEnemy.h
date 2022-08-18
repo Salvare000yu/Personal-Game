@@ -23,15 +23,10 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	float time;
-
-	//フレームごとに発射
-	static const int AtkInterval = 30;
-
 	//消えるまで
-	static const int32_t BulVanishTime = 60 * 5;//寿命
+	static const int32_t BulVanishTime = 60*6;//寿命
 
-		//消滅の宣告
+	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
 
 	bool IsVanish()const { return isVanish_; }
@@ -55,11 +50,12 @@ private:
 
 	std::unique_ptr < Object3d> obj_smallenemy = nullptr;
 
-	//フレーム
-	float frame = 0;
-	//攻撃用カウント
-	float AtkCount = 0;
-
 	//消滅フラグ
 	bool isVanish_ = FALSE;
+
+	//ランダムx最大最小
+	const int SEneMaxX = 50;
+	const int SEneMinX = -50;
+	//SEneXの乱数入れる変数
+	float SEneRandX = 0;
 };

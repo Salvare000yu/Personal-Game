@@ -3,6 +3,7 @@
 #include "Input.h"
 
 #include <DirectXMath.h>
+#include <random>std::srand(std::time(nullptr));
 
 SmallEnemy* SmallEnemy::GetInstance()
 {
@@ -24,7 +25,8 @@ void SmallEnemy::Initialize()
 	//‘å‚«‚³
 	obj_smallenemy->SetScale({ 5.0f, 5.0f, 5.0f });
 	//êŠ
-	obj_smallenemy->SetPosition({ 0,150,50 });
+	SEneRandX = rand() % 100 - 50;
+	obj_smallenemy->SetPosition({ SEneRandX,40,400 });
 }
 
 void SmallEnemy::Update()
@@ -33,7 +35,11 @@ void SmallEnemy::Update()
 
 	const bool input3 = input->PushKey(DIK_3);
 
-	time = frame / 60.f;
+	//srand((unsigned int)timeGetTime());
+	//SEneRandX = SEneMinX + (int)(rand() * (SEneMaxX - SEneMinX + 1) / (1 + RAND_MAX));
+	//XMFLOAT3 position = obj_smallenemy->GetPosition();
+	//position.x = SEneRandX;
+	//obj_smallenemy->SetPosition(position);
 
 	//if (input3) {
 	//	XMFLOAT3 position = obj_enemy->GetPosition();
@@ -43,7 +49,7 @@ void SmallEnemy::Update()
 	for (int i = 0; i < 1; i++)
 	{
 		XMFLOAT3 position = obj_smallenemy->GetPosition();
-		position.z -= 1;
+		position.z -= 4;
 		obj_smallenemy->SetPosition(position);
 
 	}
