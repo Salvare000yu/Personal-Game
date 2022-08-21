@@ -18,6 +18,29 @@ Input::~Input()
 {
 }
 
+WORD Input::ThumbToPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
+{
+    WORD wButtons = 0;	// 左スティックから十字ボタン変換用
+
+    if (sThumbX <= -sDeadZone) {
+        wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;	// 左スティックを左に倒すのを十字ボタン左に
+    }
+    else if (sThumbX >= sDeadZone) {
+        wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;	// 左スティックを右に倒すのを十字ボタン右に
+    }
+
+    if (sThumbY >= sDeadZone) {
+        wButtons |= XINPUT_GAMEPAD_DPAD_UP;		// 左スティックを上に倒すのを十字ボタン上に
+    }
+    else if (sThumbY <= -sDeadZone) {
+        wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;	// 左スティックを下に倒すのを十字ボタン下に
+    }
+
+    return wButtons;
+}
+
+
+
 Input* Input::GetInstance()
 {
     static Input instance;
@@ -81,4 +104,125 @@ bool Input::TriggerKey(BYTE keyNumber)
         return true;
     }
     return false;
+}
+
+void Input::ControllerInitialize(DWORD controllerNum)
+{
+    // 構造体のクリア
+    ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+    dwResult = XInputGetState(controllerNum, &state);
+
+    // 接続成功
+    if (dwResult == ERROR_SUCCESS) {
+        return;
+    }
+    // 接続失敗
+    else {
+        int a = 0;
+        return;
+    }
+}
+
+void Input::ControllerUpdate(DWORD controllerNum)
+{
+    // 構造体のクリア
+    oldstate = state;
+    ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+    dwResult = XInputGetState(controllerNum, &state);
+
+    if ((state.Gamepad.sThumbLX<XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+        state.Gamepad.sThumbLX>-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
+        (state.Gamepad.sThumbLY<XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
+            state.Gamepad.sThumbLY>-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) {
+        state.Gamepad.sThumbLX = 0;
+        state.Gamepad.sThumbLY = 0;
+    }
+
+    // 左スティックからの入力を方向パッドに変換
+    state.Gamepad.wButtons |= ThumbToPad(
+        state.Gamepad.sThumbLX,
+        state.Gamepad.sThumbLY,
+        XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+}
+
+bool Input::PushButton(int button)
+{
+    if (state.Gamepad.wButtons & button) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushLt()
+{
+    if (state.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushRt()
+{
+    if (state.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushLeftStickUp()
+{
+    if (state.Gamepad.sThumbLY >= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushLeftStickDown()
+{
+    if (state.Gamepad.sThumbLY <= -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushLeftStickLeft()
+{
+    if (state.Gamepad.sThumbLX <= -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushLeftStickRight()
+{
+    if (state.Gamepad.sThumbLX >= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::TriggerButton(int button)
+{
+    if ((state.Gamepad.wButtons & button) && !(oldstate.Gamepad.wButtons & button)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }

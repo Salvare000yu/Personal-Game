@@ -66,6 +66,8 @@ void GameBase::Initialize()
 	//入力の初期化
 	input = Input::GetInstance();
 	//input->Initialize(winApp);
+	//ゲームパッド
+	input->ControllerInitialize(0);
 
 	//オーディオの初期化
 	gameSound = GameSound::GetInstance();
@@ -129,6 +131,8 @@ void GameBase::Update()
 #pragma endregion ウィンドウメッセージ処理
 	//入力更新
 	input->Update();
+	//ゲームパッド更新
+	input->ControllerUpdate(0);
 
 	//シーン更新
 	sceneManager_->Update();/*

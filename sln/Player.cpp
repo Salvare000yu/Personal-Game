@@ -91,14 +91,15 @@ void Player::Update()
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ)
+	if (inputW || inputS || inputA || inputD || inputQ || inputZ|| input->PushButton(static_cast<int>(Button::UP)) || input->PushButton(static_cast<int>(Button::DOWN)) ||
+		input->PushButton(static_cast<int>(Button::RIGHT)) || input->PushButton(static_cast<int>(Button::LEFT)))
 	{
 
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
 
-		if (inputS) {
+		if ((inputS)||input->PushButton(static_cast<int>(Button::DOWN))) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z - moveSpeed;
@@ -112,7 +113,7 @@ void Player::Update()
 
 		}
 
-		if (inputW) {
+		if ((inputW) || input->PushButton(static_cast<int>(Button::UP))) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z + moveSpeed;
@@ -125,7 +126,7 @@ void Player::Update()
 			obj_player->SetRotation(rotation);
 		}
 
-		if (inputA) {
+		if ((inputA) || input->PushButton(static_cast<int>(Button::LEFT))) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x - moveSpeed;
@@ -140,7 +141,7 @@ void Player::Update()
 			OldInputFlag = TRUE;
 		}
 
-		if (inputD) {
+		if ((inputD) || input->PushButton(static_cast<int>(Button::RIGHT))) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x + moveSpeed;
