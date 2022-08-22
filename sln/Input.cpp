@@ -19,7 +19,7 @@ Input::~Input()
 }
 
 //左スティックの操作を十字キーと連動させる
-WORD Input::ThumbToPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
+WORD Input::LeftStickToCross(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
 {
     // 左スティックから十字ボタン変換用
     WORD wButtons = 0;
@@ -148,7 +148,7 @@ void Input::ControllerUpdate(DWORD controllerNum)
     }
 
     // 左スティックからの入力を方向パッドに変換
-    state.Gamepad.wButtons |= ThumbToPad(
+    state.Gamepad.wButtons |= LeftStickToCross(
         state.Gamepad.sThumbLX,
         state.Gamepad.sThumbLY,
         XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);

@@ -385,8 +385,8 @@ void GamePlayScene::Update()
 	//	sprite_back->SetPosition(position);
 	//}
 
-	DebugText::GetInstance()->Print("PLAY", 200, 100, 2);
-	DebugText::GetInstance()->Print("WASD&QZ:MOVE", 200, 130,2);
+	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
+	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130,2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
 	DebugText::GetInstance()->Print("J:Enemy", 200, 180, 2);
 	camera->Update();

@@ -178,7 +178,6 @@
     <ClCompile Include="MyDirectXGame.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Pad.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="PostEffect.cpp" />
@@ -297,7 +296,6 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="MyDirectXGame.h" />
     <ClInclude Include="Object3d.h" />
-    <ClInclude Include="Pad.h" />
     <ClInclude Include="PipelineSet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Player.h" />
