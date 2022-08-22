@@ -18,22 +18,27 @@ Input::~Input()
 {
 }
 
+//左スティックの操作を十字キーと連動させる
 WORD Input::ThumbToPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
 {
-    WORD wButtons = 0;	// 左スティックから十字ボタン変換用
-
+    // 左スティックから十字ボタン変換用
+    WORD wButtons = 0;
+    
+    //左スティックを左に倒す入力を十字ボタン左と連動
     if (sThumbX <= -sDeadZone) {
-        wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;	// 左スティックを左に倒すのを十字ボタン左に
+        wButtons |= XINPUT_GAMEPAD_DPAD_LEFT;
     }
+    //左スティックを右に倒す入力を十字ボタン右と連動
     else if (sThumbX >= sDeadZone) {
-        wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;	// 左スティックを右に倒すのを十字ボタン右に
+        wButtons |= XINPUT_GAMEPAD_DPAD_RIGHT;
     }
-
+    //左スティックを上に倒す入力を十字ボタン上と連動
     if (sThumbY >= sDeadZone) {
-        wButtons |= XINPUT_GAMEPAD_DPAD_UP;		// 左スティックを上に倒すのを十字ボタン上に
+        wButtons |= XINPUT_GAMEPAD_DPAD_UP;
     }
+    //左スティックを下に倒す入力を十字ボタン下と連動
     else if (sThumbY <= -sDeadZone) {
-        wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;	// 左スティックを下に倒すのを十字ボタン下に
+        wButtons |= XINPUT_GAMEPAD_DPAD_DOWN;
     }
 
     return wButtons;
@@ -85,6 +90,7 @@ void Input::Update()
     result = devkeyboard->GetDeviceState(sizeof(key), key);
 }
 
+//押している間
 bool Input::PushKey(BYTE keyNumber)
 {
     //指定キーを押していればTRUE
@@ -95,6 +101,7 @@ bool Input::PushKey(BYTE keyNumber)
     return false;
 }
 
+//押したときのみ
 bool Input::TriggerKey(BYTE keyNumber)
 {
 

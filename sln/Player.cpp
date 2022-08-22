@@ -11,9 +11,11 @@ void Player::Attack()
 
 	//triggerkey
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	//パッド押した瞬間のみ
+	const bool PadTriggerRB = input->TriggerButton(static_cast<int>(Button::RB));
 
 	//弾発射
-	if (TriggerSPACE) {
+	if (TriggerSPACE|| PadTriggerRB) {
 
 		XMFLOAT3 position = obj_player->GetPosition();
 		//弾生成
@@ -61,6 +63,11 @@ void Player::Update()
 	const bool inputE = input->PushKey(DIK_E);
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
+	//パッド押している間
+	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
+	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
+	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
+	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
@@ -91,15 +98,14 @@ void Player::Update()
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ|| input->PushButton(static_cast<int>(Button::UP)) || input->PushButton(static_cast<int>(Button::DOWN)) ||
-		input->PushButton(static_cast<int>(Button::RIGHT)) || input->PushButton(static_cast<int>(Button::LEFT)))
+	if (inputW || inputS || inputA || inputD || inputQ || inputZ|| PadInputUP|| PadInputDOWN|| PadInputLEFT|| PadInputRIGHT)
 	{
 
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
 
-		if ((inputS)||input->PushButton(static_cast<int>(Button::DOWN))) {
+		if ((inputS)|| PadInputDOWN) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z - moveSpeed;
@@ -113,7 +119,7 @@ void Player::Update()
 
 		}
 
-		if ((inputW) || input->PushButton(static_cast<int>(Button::UP))) {
+		if ((inputW) || PadInputUP) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.z = position.z + moveSpeed;
@@ -126,7 +132,7 @@ void Player::Update()
 			obj_player->SetRotation(rotation);
 		}
 
-		if ((inputA) || input->PushButton(static_cast<int>(Button::LEFT))) {
+		if ((inputA) || PadInputLEFT) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x - moveSpeed;
@@ -141,7 +147,7 @@ void Player::Update()
 			OldInputFlag = TRUE;
 		}
 
-		if ((inputD) || input->PushButton(static_cast<int>(Button::RIGHT))) {
+		if ((inputD) || PadInputRIGHT) {
 
 			XMFLOAT3 position = obj_player->GetPosition();
 			position.x = position.x + moveSpeed;

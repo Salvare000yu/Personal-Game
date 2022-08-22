@@ -100,30 +100,19 @@ void TitleScene::Update()
 
 	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 
-	if (input->TriggerKey(DIK_SPACE))     // スペースキーが押されていたら
+	//押した瞬間のみ
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	//パッド押した瞬間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+
+	if (TriggerSPACE||PadTriggerA)     // スペースキーが押されていたら
 	{
 		//シーン切り替え
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
-	// 座標操作
-	const bool inputUp = input->PushKey(DIK_UP);
-	const bool inputDown = input->PushKey(DIK_DOWN);
-	const bool inputRight = input->PushKey(DIK_RIGHT);
-	const bool inputLeft = input->PushKey(DIK_LEFT);
-	if (inputUp || inputDown || inputRight || inputLeft)
-	{
-
-	}
-
-
-	if (input->PushKey(DIK_D) || input->PushKey(DIK_A))
-	{
-
-	}
-
-	DebugText::GetInstance()->Print("SPACE:PLAYSCENE", 450, 100, 3.0f);
+	DebugText::GetInstance()->Print("[SPACEorGAMEPAD:A] PLAYSCENE", 400, 100, 3.0f);
 	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
 
 	////3dobj

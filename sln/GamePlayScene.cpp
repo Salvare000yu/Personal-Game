@@ -172,6 +172,7 @@ void GamePlayScene::Update()
 		clearColor[1] = 1.0f;
 	}
 
+	//キー操作押している間
 	// 座標操作
 	const bool inputUp = input->PushKey(DIK_UP);
 	const bool inputDown = input->PushKey(DIK_DOWN);
@@ -186,7 +187,7 @@ void GamePlayScene::Update()
 	const bool inputZ = input->PushKey(DIK_Z);
 	const bool inputT = input->PushKey(DIK_T);
 	const bool inputE = input->PushKey(DIK_E);
-
+	//押した瞬間
 	const bool TriggerJ = input->TriggerKey(DIK_J);//敵出現仮(出現関数で)
 	const bool TriggerM = input->TriggerKey(DIK_M);
 	const bool TriggerK = input->TriggerKey(DIK_K);
@@ -195,6 +196,11 @@ void GamePlayScene::Update()
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	const bool Trigger2 = input->TriggerKey(DIK_2);
+	//パッド押している間
+	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
+	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
+	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
+	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	//--------------------↓移動制限
 
@@ -233,26 +239,26 @@ void GamePlayScene::Update()
 			//------↑め！
 	//--------------------↑移動制限
 
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ)
+	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
 	{
 
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
 
-		if (inputS) {
+		if (inputS || PadInputDOWN) {
 			// カメラをバックさせる
 			camera->MoveEyeVector(XMFLOAT3(0, 0, -moveSpeed));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z - moveSpeed));
 
 		}
-		if (inputW) {
+		if (inputW || PadInputUP) {
 			// カメラを前進させる
 			camera->MoveEyeVector(XMFLOAT3(0, 0, +moveSpeed));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z + moveSpeed));
 
 		}
-		if (inputA) {
+		if (inputA || PadInputLEFT) {
 			// カメラを左進させる
 			camera->MoveEyeVector(XMFLOAT3(-moveSpeed, 0, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x - moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
@@ -266,7 +272,7 @@ void GamePlayScene::Update()
 			OldInputFlag_A = FALSE;
 		}*/
 
-		if (inputD) {
+		if (inputD || PadInputRIGHT) {
 			// カメラを右進させる
 			camera->MoveEyeVector(XMFLOAT3(moveSpeed, 0, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x + moveSpeed, camera->GetTarget().y, camera->GetTarget().z));

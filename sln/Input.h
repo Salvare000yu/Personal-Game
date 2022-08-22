@@ -49,29 +49,26 @@ public://メンバ関数
 	bool PushKey(BYTE keyNumber);
 
 	/// <summary>
-/// キーのトリガー
-/// </summary>
-/// 	キー番号
-/// 	トリガーか
+	/// キーのトリガー
+	/// </summary>
+	/// 	キー番号
+	/// 	トリガーか
 	bool TriggerKey(BYTE keyNumber);
 
+	//--------------------Xinput↓
+	// 
 	// コントローラー初期化
 	void ControllerInitialize(DWORD controllerNum);
 	// コントローラー更新
 	void ControllerUpdate(DWORD controllerNum);
 
-	//--------------------Xinput↓
 	XINPUT_STATE state;
 	XINPUT_STATE oldstate;
 	DWORD dwResult;
-	// スティックの入力を十字ボタンに変換
-	WORD ThumbToPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone);
+	//左スティックの入力を十字ボタンに変換
+	WORD LeftStickToCross(SHORT LeftStickX, SHORT LeftStickY, SHORT sDeadZone);
 
-	/// <summary>
-	/// コントローラーボタンの押し下をチェック
-	/// </summary>
-	/// <param name="button">ボタン</param>
-	/// <returns>押されているか</returns>
+	//ボタン押している間
 	bool PushButton(int button);
 
 	/// <summary>
@@ -86,38 +83,21 @@ public://メンバ関数
 	/// <returns>右トリガーか</returns>
 	bool PushRt();
 
-	/// <summary>
-	/// コントローラースティックの押し下をチェック
-	/// </summary>
-	/// <returns>左スティック上が押されているか</returns>
+	//左スティック上入力
 	bool PushLeftStickUp();
 
-	/// <summary>
-	/// コントローラースティックの押し下をチェック
-	/// </summary>
-	/// <returns>左スティック下が押されているか</returns>
+	//左スティック下入力
 	bool PushLeftStickDown();
 
-	/// <summary>
-	/// コントローラースティックの押し下をチェック
-	/// </summary>
-	/// <returns>左スティック左が押されているか</returns>
+	//左スティック左入力
 	bool PushLeftStickLeft();
 
-	/// <summary>
-	/// コントローラースティックの押し下をチェック
-	/// </summary>
-	/// <returns>左スティック右が押されているか</returns>
+	//左スティック右入力
 	bool PushLeftStickRight();
 
-	/// <summary>
-	/// コントローラーボタンの押し下をチェック
-	/// </summary>
-	/// <param name="button">ボタン</param>
-	/// <returns>トリガーボタンか</returns>
+	//ボタン押した瞬間のみ
 	bool TriggerButton(int button);
 	//--------------------Xinput↑
-
 
 private://メンバ変数
 	//初期化
