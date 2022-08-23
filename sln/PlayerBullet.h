@@ -32,6 +32,8 @@ public:
 
 	bool IsVanish()const { return isVanish_; }
 
+
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//Ž©‹@

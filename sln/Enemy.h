@@ -53,6 +53,9 @@ public:
 	//フレームごとに発射
 	static const int AtkInterval = 30;
 
+	//当たった時呼び出すためのコールバック関数
+	void OnCollision();
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
