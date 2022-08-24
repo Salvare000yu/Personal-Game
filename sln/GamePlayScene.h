@@ -44,14 +44,19 @@ public:
 	Player* player_ = nullptr;
 	SmallEnemy* smallEnemy_ = nullptr;
 
+	//衝突判定と応答
+	void CheckAllCollisions();
+
 private:
 
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	std::unique_ptr < Sprite> sp_guide = nullptr;
 
+	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
 	std::unique_ptr < Model> mod_worlddome = nullptr;//天球
 
+	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
 	std::unique_ptr < Object3d> obj_worlddome = nullptr;
 

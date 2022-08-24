@@ -7,6 +7,9 @@
 #include "DxBase.h"
 #include "EndScene.h"
 #include "FbxObject3d.h"
+
+#include "math/Vector3.h"
+
 #include "safe_delete.h"
 
 #include <DirectXMath.h>
@@ -36,19 +39,24 @@ void GamePlayScene::Initialize()
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
+	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
+	obj_sword.reset(Object3d::Create());
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
+	obj_sword->SetModel(mod_sword.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj_sword->SetScale({ 5.0f, 5.0f, 5.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
+	obj_sword->SetPosition({ 0,50,0 });
 	//------object回転------//
 	//obj_player->SetRotation({ 0,0,40 });
 
@@ -155,6 +163,32 @@ void GamePlayScene::SmallEnemyAppear()
 
 	//雑魚敵登録
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
+}
+
+void GamePlayScene::CheckAllCollisions()
+{
+	PlayerBullet* playerBullet = PlayerBullet::GetInstance();
+
+	Vector3 posA, posB;
+
+	//プレイヤーの弾リストを取得する
+	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+
+	//敵の弾リストを取得する
+	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
+
+#pragma region 自機と敵弾の衝突判定
+	//std::unique_ptr<PlayerBullet>  BulletPos = std::make_unique<PlayerBullet>();
+	//BulletPos->Initialize({ position });
+	//posA = PlayerBullet::obj_playerbullet;
+	//PlayerBullet::BulletPosMemory;
+#pragma endregion
+
+#pragma region 自弾と敵の衝突判定
+#pragma endregion
+
+#pragma region 自弾と敵弾衝突判定
+#pragma endregion
 }
 
 void GamePlayScene::Update()
@@ -393,6 +427,7 @@ void GamePlayScene::Update()
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
+	obj_sword->Update();
 
 	// FBX Update
 	//fbxObject_1->Update();
@@ -429,6 +464,7 @@ void GamePlayScene::Draw()
 	//3dオブジェ描画
 	object3d_1->Draw();
 	obj_worlddome->Draw();
+	obj_sword->Draw();
 
 	//自キャラ描画
 	enemy_->Draw();

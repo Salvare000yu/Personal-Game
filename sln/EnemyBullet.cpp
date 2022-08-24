@@ -12,6 +12,11 @@ EnemyBullet* EnemyBullet::GetInstance()
 	return &instance;
 }
 
+void EnemyBullet::OnCollision()
+{
+	isVanish_ = TRUE;
+}
+
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void EnemyBullet::Initialize(DirectX::XMFLOAT3 position)
 {

@@ -55,6 +55,8 @@ public:
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
+	//弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
 private:
 	////-----------------model

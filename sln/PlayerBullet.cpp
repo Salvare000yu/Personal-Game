@@ -12,6 +12,11 @@ PlayerBullet* PlayerBullet::GetInstance()
 	return &instance;
 }
 
+void PlayerBullet::OnCollision()
+{
+	isVanish_ = TRUE;
+}
+
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
 {
@@ -49,6 +54,7 @@ void PlayerBullet::Update()
 	XMFLOAT3 position = obj_playerbullet->GetPosition();
 	position.z = position.z + 3;
 	position.y = position.y + 0.3f;
+	BulletPosMemory = (position);
 	obj_playerbullet->SetPosition(position);
 
 	//if (TriggerR) {//リセット

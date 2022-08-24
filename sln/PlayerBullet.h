@@ -8,6 +8,25 @@
 #pragma once
 class PlayerBullet
 {
+private:
+	////-----------------model
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
+
+	////-----------------obj
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
+
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+
+	float frame = 0;
+
+	//消滅フラグ
+	bool isVanish_ = FALSE;
 public:
 	//初期化
 	void Initialize(DirectX::XMFLOAT3 position);
@@ -24,6 +43,7 @@ public:
 
 	float time;
 
+	XMFLOAT3 BulletPosMemory = {};
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命
 
@@ -32,29 +52,11 @@ public:
 
 	bool IsVanish()const { return isVanish_; }
 
-
-
-private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
-
-	// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-
+	//当たった時呼び出すためのコールバック関数
+	void OnCollision();
+		
 	std::unique_ptr < Model> mod_playerbullet = nullptr;
 
 	std::unique_ptr < Object3d> obj_playerbullet = nullptr;
 
-	float frame = 0;
-
-	//消滅フラグ
-	bool isVanish_ = FALSE;
 };

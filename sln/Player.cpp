@@ -16,7 +16,6 @@ void Player::Attack()
 
 	//íeî≠éÀ
 	if (TriggerSPACE|| PadTriggerRB) {
-
 		XMFLOAT3 position = obj_player->GetPosition();
 		//íeê∂ê¨
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();

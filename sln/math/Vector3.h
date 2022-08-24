@@ -1,6 +1,8 @@
 #pragma once
 #include <DirectXMath.h>
 
+#include <memory>
+
 using namespace DirectX;
 
 struct Vector3 : public XMFLOAT3
