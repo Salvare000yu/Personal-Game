@@ -25,6 +25,10 @@ void SmallEnemy::Initialize()
 	//大きさ
 	obj_smallenemy->SetScale({ 5.0f, 5.0f, 5.0f });
 	//場所
+
+	//---静的メンバ変数初期化　雑魚敵の座標を当たり判定で使う
+	XMFLOAT3 SEnePosMemory = {};
+
 	SEneRandX = rand() % 100 - 50;
 	obj_smallenemy->SetPosition({ SEneRandX,40,400 });
 }
@@ -50,6 +54,8 @@ void SmallEnemy::Update()
 	{
 		XMFLOAT3 position = obj_smallenemy->GetPosition();
 		position.z -= 4;
+
+		SEnePosMemory = (position);//判定のためポジション入れる
 		obj_smallenemy->SetPosition(position);
 
 	}

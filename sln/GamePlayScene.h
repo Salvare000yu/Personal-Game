@@ -47,6 +47,11 @@ public:
 	//衝突判定と応答
 	void CheckAllCollisions();
 
+	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
+	XMFLOAT3 playerbulposmemory = PlayerBullet::GetPlayerBulPosMemory();
+	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
+	XMFLOAT3 seneposmemory = SmallEnemy::GetSEnePosMemory();
+
 private:
 
 	std::unique_ptr < Sprite> sprite_back = nullptr;

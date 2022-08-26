@@ -7,6 +7,14 @@
 
 class SmallEnemy
 {
+private:
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
 
@@ -33,6 +41,11 @@ public:
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
+
+	//雑魚敵座標判定で使うためのgetbulletposmemory
+	static XMFLOAT3 SmallEnemy::GetSEnePosMemory(void) { return SEnePosMemory; }
+	//静的メンバ変数　当たり判定で使う為の雑魚敵座標
+	static XMFLOAT3 SEnePosMemory;
 
 private:
 	////-----------------model

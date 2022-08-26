@@ -27,6 +27,7 @@ private:
 
 	//消滅フラグ
 	bool isVanish_ = FALSE;
+
 public:
 	//初期化
 	void Initialize(DirectX::XMFLOAT3 position);
@@ -43,7 +44,11 @@ public:
 
 	float time;
 
-	XMFLOAT3 BulletPosMemory = {};
+	//弾座標判定で使うためのgetbulletposmemory
+	static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory(void) { return PlayerBulPosMemory; }
+	//静的メンバ変数　当たり判定で使う為の弾座標
+	static XMFLOAT3 PlayerBulPosMemory;
+
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命
 

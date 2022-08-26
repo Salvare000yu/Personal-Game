@@ -8,6 +8,7 @@
 #include "EndScene.h"
 #include "FbxObject3d.h"
 
+#include "math/Collision.h"
 #include "math/Vector3.h"
 
 #include "safe_delete.h"
@@ -167,9 +168,8 @@ void GamePlayScene::SmallEnemyAppear()
 
 void GamePlayScene::CheckAllCollisions()
 {
-	PlayerBullet* playerBullet = PlayerBullet::GetInstance();
-
-	Vector3 posA, posB;
+	//”»’è‘ÎÛ A , B
+	XMFLOAT3 posA, posB;
 
 	//ƒvƒŒƒCƒ„[‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
@@ -178,13 +178,21 @@ void GamePlayScene::CheckAllCollisions()
 	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 
 #pragma region ©‹@‚Æ“G’e‚ÌÕ“Ë”»’è
-	//std::unique_ptr<PlayerBullet>  BulletPos = std::make_unique<PlayerBullet>();
-	//BulletPos->Initialize({ position });
-	//posA = PlayerBullet::obj_playerbullet;
-	//PlayerBullet::BulletPosMemory;
 #pragma endregion
 
-#pragma region ©’e‚Æ“G‚ÌÕ“Ë”»’è
+#pragma region ©’e‚ÆG‹›“G‚ÌÕ“Ë”»’è
+	//©‹@‚ªposA@©‹@’eÀ•W
+	posA = playerbulposmemory;
+
+	////©‹@‚ÆG‹›“G‚Ì”»’è
+	//for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_){
+	////G‹›“G‚ÌÀ•W
+	//	posB = seneposmemory;
+	//	//‹…‚Æ‹…‚Ì“–‚½‚è”»’è
+	//	if (Collision::testSphereSphere(posA, posB)) {
+
+	//	}
+	//}
 #pragma endregion
 
 #pragma region ©’e‚Æ“G’eÕ“Ë”»’è

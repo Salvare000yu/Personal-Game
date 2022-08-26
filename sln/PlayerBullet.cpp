@@ -32,6 +32,10 @@ void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
 	//大きさ
 	obj_playerbullet->SetScale({ 1.5f, 1.5f, 1.5f });
 	//場所
+
+	//---静的メンバ変数初期化　弾の座標を当たり判定で使う
+	XMFLOAT3 PlayerBulPosMemory = {};
+
 	obj_playerbullet->SetPosition({ position });
 
 }
@@ -54,7 +58,7 @@ void PlayerBullet::Update()
 	XMFLOAT3 position = obj_playerbullet->GetPosition();
 	position.z = position.z + 3;
 	position.y = position.y + 0.3f;
-	BulletPosMemory = (position);
+	PlayerBulPosMemory = (position);//判定のためポジション入れる
 	obj_playerbullet->SetPosition(position);
 
 	//if (TriggerR) {//リセット
