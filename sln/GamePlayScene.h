@@ -48,9 +48,9 @@ public:
 	void CheckAllCollisions();
 
 	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
-	XMFLOAT3 playerbulposmemory = PlayerBullet::GetPlayerBulPosMemory();
+	//XMFLOAT3 playerbulposmemory = PlayerBullet::GetPlayerBulPosMemory();
 	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
-	XMFLOAT3 seneposmemory = SmallEnemy::GetSEnePosMemory();
+	//XMFLOAT3 seneposmemory = SmallEnemy::GetSEnePosMemory();
 
 private:
 

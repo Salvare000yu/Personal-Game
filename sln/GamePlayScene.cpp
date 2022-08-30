@@ -182,7 +182,7 @@ void GamePlayScene::CheckAllCollisions()
 
 #pragma region ©’e‚ÆG‹›“G‚ÌÕ“Ë”»’è
 	//©‹@‚ªposA@©‹@’eÀ•W
-	posA = playerbulposmemory;
+	//posA = playerbulposmemory;
 
 	////©‹@‚ÆG‹›“G‚Ì”»’è
 	//for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_){

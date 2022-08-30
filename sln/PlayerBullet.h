@@ -1,11 +1,10 @@
 #pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
-#include "Camera.h"
+//#include "Camera.h"
 
 #include <memory>
 
-#pragma once
 class PlayerBullet
 {
 private:
@@ -45,9 +44,9 @@ public:
 	float time;
 
 	//弾座標判定で使うためのgetbulletposmemory
-	static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory(void) { return PlayerBulPosMemory; }
+	//static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory(void) { return PlayerBulPosMemory; }
 	//静的メンバ変数　当たり判定で使う為の弾座標
-	static XMFLOAT3 PlayerBulPosMemory;
+	//static XMFLOAT3 PlayerBulPosMemory;
 
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命

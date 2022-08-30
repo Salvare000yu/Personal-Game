@@ -55,7 +55,7 @@ void SmallEnemy::Update()
 		XMFLOAT3 position = obj_smallenemy->GetPosition();
 		position.z -= 4;
 
-		SEnePosMemory = (position);//判定のためポジション入れる
+		//SEnePosMemory = (position);//判定のためポジション入れる
 		obj_smallenemy->SetPosition(position);
 
 	}

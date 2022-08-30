@@ -5,7 +5,6 @@
 
 #include <memory>
 
-#pragma once
 class EnemyBullet
 {
 public:
