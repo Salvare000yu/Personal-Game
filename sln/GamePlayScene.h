@@ -28,6 +28,8 @@ public:
 
 	void SmallEnemyAppear();
 
+	void OnCollision();
+
 	//衝突判定と応答
 	void CheckAllCollisions();
 
@@ -45,7 +47,7 @@ public:
 	//敵
 	Enemy* enemy_ = nullptr;
 	Player* player_ = nullptr;
-	SmallEnemy* smallEnemy_ = nullptr;
+	SmallEnemy* sEnemys_ = nullptr;
 
 	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
 	//XMFLOAT3 playerbulposmemory = PlayerBullet::GetPlayerBulPosMemory();

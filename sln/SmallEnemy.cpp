@@ -12,6 +12,11 @@ SmallEnemy* SmallEnemy::GetInstance()
 	return &instance;
 }
 
+void SmallEnemy::OnCollision()
+{
+	/*isVanish_ = TRUE;*/
+}
+
 DirectX::XMFLOAT3 SmallEnemy::GetSmallEnemyPosMemory()
 {
 	XMFLOAT3 SmallEnemyPosMemory = {};
@@ -41,7 +46,7 @@ void SmallEnemy::Update()
 	Input* input = Input::GetInstance();
 
 	const bool input3 = input->PushKey(DIK_3);
-
+	if(input3){ isVanish_ = TRUE; }
 	//srand((unsigned int)timeGetTime());
 	//SEneRandX = SEneMinX + (int)(rand() * (SEneMaxX - SEneMinX + 1) / (1 + RAND_MAX));
 	//XMFLOAT3 position = obj_smallenemy->GetPosition();

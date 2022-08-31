@@ -69,9 +69,6 @@ private:
 	//Á–Åƒtƒ‰ƒO
 	bool isVanish_ = FALSE;
 
-	//ƒ‰ƒ“ƒ_ƒ€xÅ‘åÅ¬
-	const int SEneMaxX = 50;
-	const int SEneMinX = -50;
 	//SEneX‚Ì—”“ü‚ê‚é•Ï”
 	float SEneRandX = 0;
 };

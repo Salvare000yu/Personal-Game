@@ -42,7 +42,7 @@ public:
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
-	//弾リストを取得
+	//弾リストを取得 gamesceneに自弾貸すため
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 private:

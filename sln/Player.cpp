@@ -52,6 +52,10 @@ Player* Player::GetInstance()
 	return &instance;
 }
 
+void Player::OnCollision()
+{
+}
+
 void Player::Update()
 {
 	Input* input = Input::GetInstance();

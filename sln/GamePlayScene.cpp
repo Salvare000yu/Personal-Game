@@ -22,10 +22,10 @@ void GamePlayScene::Initialize()
 #pragma region 描画初期化処理
 
 	camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
-	
+
 	camera->SetTarget({ 0,50,-200 });
 	camera->SetEye({ 0,48,-210 });
-	
+
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
 	// カメラセット
@@ -33,10 +33,10 @@ void GamePlayScene::Initialize()
 	//グラフィックスパイプライン生成
 	FbxObject3d::CreateGraphicsPipeline();
 	FbxObject3d::SetCamera(camera.get());
-	
+
 	//使う定義とか　仮おいとくね
 	time = frame / 60.f;	// 60fps想定
-	
+
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
@@ -166,6 +166,11 @@ void GamePlayScene::SmallEnemyAppear()
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
+void GamePlayScene::OnCollision()
+{
+
+}
+
 void GamePlayScene::CheckAllCollisions()
 {
 	//判定対象 A , B
@@ -175,23 +180,49 @@ void GamePlayScene::CheckAllCollisions()
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
 
 	//敵の弾リストを取得する
-	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
+	//const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
+
+	//const std::list<std::unique_ptr<SmallEnemy>>& smallEnemys = smallEnemy_->GetBullets();
+	//const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_;
 
 #pragma region 自機と敵弾の衝突判定
 #pragma endregion
 
 #pragma region 自弾と雑魚敵の衝突判定
 	//自弾がposA　雑魚敵PosB
-	XMFLOAT3 PlayerBulPosData= PlayerBullet::GetPlayerBulPosMemory();//自弾
-	XMFLOAT3 SmallEnemyPosData= SmallEnemy::GetSmallEnemyPosMemory();//雑魚敵
+	XMFLOAT3 PlayerBulPosData = PlayerBullet::GetPlayerBulPosMemory();//自弾
+	XMFLOAT3 SmallEnemyPosData = SmallEnemy::GetSmallEnemyPosMemory();//雑魚敵
+	float pBulRad = 5.f;//自機弾の判定球の半径
+	float sEnemRad = 5.f;//雑魚敵の判定球の半径
+	float posABDistance = 0.f;//poAposBの距離
+	float posABRad = 0.f;
 
 	posA = PlayerBulPosData;
 
-	//自機と雑魚敵の判定
-	for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_){
-	//雑魚敵の座標
+	//自機と雑魚敵の判定　for文で雑魚敵を毎回取り出して処理
+	for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+		//雑魚敵の座標
 		posB = SmallEnemyPosData;
-		//球と球の当たり判定
+
+		//-------------↓posABの距離計算↓---------------//
+		posABDistance =
+			(((SmallEnemyPosData.x - PlayerBulPosData.x) * (SmallEnemyPosData.x - PlayerBulPosData.x)) +
+				((SmallEnemyPosData.y - PlayerBulPosData.y) * (SmallEnemyPosData.y - PlayerBulPosData.y)) +
+				((SmallEnemyPosData.z - PlayerBulPosData.z) * (SmallEnemyPosData.z - PlayerBulPosData.z))
+				);
+		//-------------↑posABの距離計算↑---------------//
+		//-------------↓posA半径+posB半径の2乗計算↓----//
+		posABDistance =
+			((pBulRad + sEnemRad) * (pBulRad + sEnemRad));
+		//-------------↑posA半径+posB半径の2乗計算↑----//
+
+		//球と球判定
+		if (posABDistance <= posABDistance) {
+			//
+			player_->OnCollision();
+			sEnemys_->OnCollision();
+		}
+
 	}
 #pragma endregion
 
@@ -260,7 +291,7 @@ void GamePlayScene::Update()
 	const float CameraMinEyeMoveLimZ = 160;//前最小アイ
 
 			//------↓ターゲット
-	XMFLOAT3 target_moved=camera->GetTarget();
+	XMFLOAT3 target_moved = camera->GetTarget();
 	target_moved.x = max(target_moved.x, -CameraTagMoveLimX);
 	target_moved.x = min(target_moved.x, +CameraTagMoveLimX);
 	target_moved.y = max(target_moved.y, -CameraMaxTagMoveLimY); //下にどれだけ行けるかなんか逆
@@ -268,8 +299,8 @@ void GamePlayScene::Update()
 	target_moved.z = max(target_moved.z, -CameraMaxTagMoveLimZ);
 	target_moved.z = min(target_moved.z, +CameraMinTagMoveLimZ);//前
 	camera->SetTarget(target_moved);
-			//------↑ターゲット
-			//------↓め！
+	//------↑ターゲット
+	//------↓め！
 	XMFLOAT3 eye_moved = camera->GetEye();
 	eye_moved.x = max(eye_moved.x, -CameraEyeMoveLimX);
 	eye_moved.x = min(eye_moved.x, +CameraEyeMoveLimX);
@@ -278,12 +309,12 @@ void GamePlayScene::Update()
 	eye_moved.z = max(eye_moved.z, -CameraMaxEyeMoveLimZ);//後
 	eye_moved.z = min(eye_moved.z, +CameraMinEyeMoveLimZ);//前
 	camera->SetEye(eye_moved);
-			//------↑め！
-	//--------------------↑移動制限
+	//------↑め！
+//--------------------↑移動制限
 
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
 	{
-		
+
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
@@ -358,22 +389,22 @@ void GamePlayScene::Update()
 		constexpr float tagmove = 5;
 		if (inputUp) {
 			XMFLOAT3 position = sp_guide->GetPosition();
-			position.y-=tagmove;
+			position.y -= tagmove;
 			sp_guide->SetPosition({ position });
 		}
 		if (inputDown) {
 			XMFLOAT3 position = sp_guide->GetPosition();
-			position.y+= tagmove;
+			position.y += tagmove;
 			sp_guide->SetPosition({ position });
 		}
 		if (inputRight) {
 			XMFLOAT3 position = sp_guide->GetPosition();
-			position.x+= tagmove;
+			position.x += tagmove;
 			sp_guide->SetPosition({ position });
 		}
 		if (inputLeft) {
 			XMFLOAT3 position = sp_guide->GetPosition();
-			position.x-= tagmove;
+			position.x -= tagmove;
 			sp_guide->SetPosition({ position });
 		}
 	}
@@ -387,7 +418,7 @@ void GamePlayScene::Update()
 	for (int i = 0; i < 1; i++)
 	{
 		XMFLOAT3 rotation = obj_worlddome->GetRotation();
-		rotation.y+=0.3f;
+		rotation.y += 0.3f;
 		obj_worlddome->SetRotation({ rotation });
 
 	}
@@ -430,7 +461,7 @@ void GamePlayScene::Update()
 	CheckAllCollisions();
 
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
-	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130,2);
+	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
 	camera->Update();
 
@@ -461,7 +492,7 @@ void GamePlayScene::Draw()
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
 	//sprite_back->Draw();
-	
+
 
 	//3dオブジェ描画前処理
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
@@ -500,8 +531,8 @@ void GamePlayScene::Draw()
 	//}
 
 	//// スプライト共通コマンド
-	SpriteBase::GetInstance()->PreDraw(); 
-	
+	SpriteBase::GetInstance()->PreDraw();
+
 	//------お手前スプライト描画
 	sp_guide->Draw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
