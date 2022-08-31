@@ -1,6 +1,4 @@
 #include "PlayerBullet.h"
-#include "Player.h"
-#include "Object3d.h"
 #include "Input.h"
 
 #include <DirectXMath.h>
@@ -12,13 +10,19 @@ PlayerBullet* PlayerBullet::GetInstance()
 	return &instance;
 }
 
+DirectX::XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
+{
+	XMFLOAT3 PlayerBulPosMemory={};
+	return PlayerBulPosMemory;
+}
+
 void PlayerBullet::OnCollision()
 {
 	isVanish_ = TRUE;
 }
 
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
+void PlayerBullet::Initialize(DirectX::XMFLOAT3 BulletPos)
 {
 	//定義とか仮おいておこう
 
@@ -33,10 +37,7 @@ void PlayerBullet::Initialize(DirectX::XMFLOAT3 position)
 	obj_playerbullet->SetScale({ 1.5f, 1.5f, 1.5f });
 	//場所
 
-	//---静的メンバ変数初期化　弾の座標を当たり判定で使う
-	//XMFLOAT3 PlayerBulPosMemory = {};
-
-	obj_playerbullet->SetPosition({ position });
+	obj_playerbullet->SetPosition({ BulletPos });
 
 }
 
@@ -55,11 +56,14 @@ void PlayerBullet::Update()
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
-	XMFLOAT3 position = obj_playerbullet->GetPosition();
-	position.z = position.z + 3;
-	position.y = position.y + 0.3f;
-	//PlayerBulPosMemory = (position);//判定のためポジション入れる
-	obj_playerbullet->SetPosition(position);
+	XMFLOAT3 BulletPos = obj_playerbullet->GetPosition();
+	BulletPos.z = BulletPos.z + 3;
+	BulletPos.y = BulletPos.y + 0.3f;
+
+	//---静的メンバ変数初期化　弾の座標を当たり判定で使う
+	XMFLOAT3 PlayerBulPosMemory = {};
+	PlayerBulPosMemory = obj_playerbullet->GetPosition();//判定のためポジション入れる
+	obj_playerbullet->SetPosition(BulletPos);
 
 	//if (TriggerR) {//リセット
 	//	obj_playerbullet->SetPosition({ 0,40,-170 });

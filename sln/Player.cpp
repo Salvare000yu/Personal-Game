@@ -16,11 +16,11 @@ void Player::Attack()
 
 	//íeî≠éÀ
 	if (TriggerSPACE|| PadTriggerRB) {
-		XMFLOAT3 position = obj_player->GetPosition();
+		XMFLOAT3 PlayerPos = obj_player->GetPosition();
 		//íeê∂ê¨
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
 		//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-		madeBullet->Initialize({ position });
+		madeBullet->Initialize({ PlayerPos });
 
 		//íeìoò^
 		bullets_.push_back(std::move(madeBullet));
@@ -86,14 +86,14 @@ void Player::Update()
 	const float PlayerMaxMoveLimZ = 290;//å„ÇÎ
 	const float PlayerMinMoveLimZ = 200;
 
-	XMFLOAT3 position = obj_player->GetPosition();
-	position.x = max(position.x, -PlayerMoveLimX);
-	position.x = min(position.x, +PlayerMoveLimX);
-	position.y = max(position.y, -PlayerMaxMoveLimY);//â∫Ç…çsÇØÇÈîÕàÕ
-	position.y = min(position.y, +PlayerMinMoveLimY);//è„Ç…çsÇØÇÈîÕàÕ
-	position.z = max(position.z, -PlayerMaxMoveLimZ);
-	position.z = min(position.z, +PlayerMinMoveLimZ);
-	obj_player->SetPosition(position);
+	XMFLOAT3 PlayerPos = obj_player->GetPosition();
+	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
+	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
+	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//â∫Ç…çsÇØÇÈîÕàÕ
+	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//è„Ç…çsÇØÇÈîÕàÕ
+	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
+	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
+	obj_player->SetPosition(PlayerPos);
 	//----------Å™à⁄ìÆêßå¿
 
 	//------------------Å´ÉvÉåÉCÉÑÅ[à⁄ìÆÅïépê®
@@ -106,9 +106,9 @@ void Player::Update()
 
 		if ((inputS)|| PadInputDOWN) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.z = position.z - moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.z = PlayerPos.z - moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 
 			XMFLOAT3 rotation = obj_player->GetRotation();
 			if (rotation.x <= 10) {
@@ -120,9 +120,9 @@ void Player::Update()
 
 		if ((inputW) || PadInputUP) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.z = position.z + moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.z = PlayerPos.z + moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 
 			XMFLOAT3 rotation = obj_player->GetRotation();
 			if (rotation.x >= -10) {
@@ -133,9 +133,9 @@ void Player::Update()
 
 		if ((inputA) || PadInputLEFT) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.x = position.x - moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.x = PlayerPos.x - moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 
 			XMFLOAT3 rotation = obj_player->GetRotation();
 			if (rotation.z <= 10) {
@@ -148,9 +148,9 @@ void Player::Update()
 
 		if ((inputD) || PadInputRIGHT) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.x = position.x + moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.x = PlayerPos.x + moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 
 			XMFLOAT3 rotation = obj_player->GetRotation();
 			if (rotation.z >= -10) {
@@ -163,16 +163,16 @@ void Player::Update()
 
 		if (inputQ) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.y = position.y + moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.y = PlayerPos.y + moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 		}
 
 		if (inputZ) {
 
-			XMFLOAT3 position = obj_player->GetPosition();
-			position.y = position.y - moveSpeed;
-			obj_player->SetPosition(position);
+			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			PlayerPos.y = PlayerPos.y - moveSpeed;
+			obj_player->SetPosition(PlayerPos);
 		}
 
 	}

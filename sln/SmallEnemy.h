@@ -42,10 +42,10 @@ public:
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
 
-	//雑魚敵座標判定で使うためのgetbulletposmemory
-	//static XMFLOAT3 SmallEnemy::GetSEnePosMemory(void) { return SEnePosMemory; }
+	//雑魚敵座標判定で使うための
+	static XMFLOAT3 SmallEnemy::GetSmallEnemyPosMemory();
 	//静的メンバ変数　当たり判定で使う為の雑魚敵座標
-	//static XMFLOAT3 SEnePosMemory;
+	static XMFLOAT3 SmallEnemyPosMemory;
 
 private:
 	////-----------------model

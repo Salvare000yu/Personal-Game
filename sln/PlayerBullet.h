@@ -1,7 +1,5 @@
 #pragma once
-#include "BaseScene.h"
 #include "Object3d.h"
-//#include "Camera.h"
 
 #include <memory>
 
@@ -29,7 +27,7 @@ private:
 
 public:
 	//初期化
-	void Initialize(DirectX::XMFLOAT3 position);
+	void Initialize(DirectX::XMFLOAT3 BulletPos);
 
 	//更新
 	void Update();
@@ -44,9 +42,9 @@ public:
 	float time;
 
 	//弾座標判定で使うためのgetbulletposmemory
-	//static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory(void) { return PlayerBulPosMemory; }
+	static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory();
 	//静的メンバ変数　当たり判定で使う為の弾座標
-	//static XMFLOAT3 PlayerBulPosMemory;
+	static XMFLOAT3 PlayerBulPosMemory;
 
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命

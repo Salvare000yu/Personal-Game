@@ -181,18 +181,18 @@ void GamePlayScene::CheckAllCollisions()
 #pragma endregion
 
 #pragma region ©’e‚ÆG‹›“G‚ÌÕ“Ë”»’è
-	//©‹@‚ªposA@©‹@’eÀ•W
-	//posA = playerbulposmemory;
+	//©’e‚ªposA@G‹›“GPosB
+	XMFLOAT3 PlayerBulPosData= PlayerBullet::GetPlayerBulPosMemory();//©’e
+	XMFLOAT3 SmallEnemyPosData= SmallEnemy::GetSmallEnemyPosMemory();//G‹›“G
 
-	////©‹@‚ÆG‹›“G‚Ì”»’è
-	//for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_){
-	////G‹›“G‚ÌÀ•W
-	//	posB = seneposmemory;
-	//	//‹…‚Æ‹…‚Ì“–‚½‚è”»’è
-	//	if (Collision::testSphereSphere(posA, posB)) {
+	posA = PlayerBulPosData;
 
-	//	}
-	//}
+	//©‹@‚ÆG‹›“G‚Ì”»’è
+	for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_){
+	//G‹›“G‚ÌÀ•W
+		posB = SmallEnemyPosData;
+		//‹…‚Æ‹…‚Ì“–‚½‚è”»’è
+	}
 #pragma endregion
 
 #pragma region ©’e‚Æ“G’eÕ“Ë”»’è
@@ -283,7 +283,7 @@ void GamePlayScene::Update()
 
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
 	{
-
+		
 		//------ƒvƒŒƒCƒ„[‚à“¯‚¶ˆÚ“®------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 1;
@@ -426,6 +426,8 @@ void GamePlayScene::Update()
 
 	//	sprite_back->SetPosition(position);
 	//}
+
+	CheckAllCollisions();
 
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130,2);
