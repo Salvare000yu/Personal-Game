@@ -26,6 +26,9 @@ public:
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命
 
+	//消滅フラグ
+	bool isVanish_ = FALSE;
+
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
 
@@ -55,6 +58,4 @@ private:
 
 	float frame = 0;
 
-	//消滅フラグ
-	bool isVanish_ = FALSE;
 };

@@ -34,6 +34,9 @@ public:
 	//消えるまで
 	static const int32_t BulVanishTime = 60*6;//寿命
 
+	//消滅フラグ
+	bool isVanish_=FALSE;
+
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
 
@@ -65,9 +68,6 @@ private:
 	std::unique_ptr < Model> mod_smallenemy = nullptr;
 
 	std::unique_ptr < Object3d> obj_smallenemy = nullptr;
-
-	//消滅フラグ
-	bool isVanish_ = FALSE;
 
 	//SEneXの乱数入れる変数
 	float SEneRandX = 0;
