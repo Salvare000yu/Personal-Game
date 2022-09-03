@@ -52,6 +52,12 @@ Player* Player::GetInstance()
 	return &instance;
 }
 
+DirectX::XMFLOAT3 Player::GetPlayerPosMemory()
+{
+	XMFLOAT3 PlayerPosMemory = {};
+	return PlayerPosMemory;
+}
+
 void Player::OnCollision()
 {
 }
@@ -186,6 +192,9 @@ void Player::Update()
 	}
 
 	//------------------↑プレイヤー移動＆姿勢
+
+	XMFLOAT3 PlayerPosMemory = {};
+	PlayerPosMemory = obj_player->GetPosition();//判定のためポジション入れる
 
 	//自分回転
 	if (inputE)

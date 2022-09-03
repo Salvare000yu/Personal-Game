@@ -178,6 +178,8 @@ void GamePlayScene::CheckAllCollisions()
 
 	//ƒvƒŒƒCƒ„[‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
 	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
+	//“G‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
+	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
 
 	//“G‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
 	//const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
@@ -186,6 +188,43 @@ void GamePlayScene::CheckAllCollisions()
 	//const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_;
 
 #pragma region ©‹@‚Æ“G’e‚ÌÕ“Ë”»’è
+	
+	XMFLOAT3 PlayerPosData = Player::GetPlayerPosMemory();//©‹@
+	XMFLOAT3 EnemyBulPosData = EnemyBullet::GetEnemyBulPosMemory();//“G’e
+	float PlayerRad = 5.f;//©‹@‚Ì”»’è‹…‚Ì”¼Œa
+	float EnemyBulRad = 5.f;//“G’e‚Ì”»’è‹…‚Ì”¼Œa
+	float EnemyBulPlayerDistance = 0.f;//posAposB‚Ì‹——£
+	float PlayerEnemyBulRad = 0.f;//”¼Œa1{”¼Œa2‚Ì“ñæ
+
+	//posA‚É©‹@À•W
+	posA = PlayerPosData;
+
+	//©‹@‚Æ“G’e‚Ì”»’è@for•¶‚Å“G’e‚ğ–ˆ‰ñæ‚èo‚µ‚Äˆ—
+	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
+		//posB‚É“G’eÀ•W
+		posB = EnemyBulPosData;
+		//-------------«posAB‚Ì‹——£ŒvZ«---------------//
+		EnemyBulPlayerDistance =
+			(
+				((EnemyBulPosData.x - PlayerPosData.x) * (EnemyBulPosData.x - PlayerPosData.x)) +
+				((EnemyBulPosData.y - PlayerPosData.y) * (EnemyBulPosData.y - PlayerPosData.y)) +
+				((EnemyBulPosData.z - PlayerPosData.z) * (EnemyBulPosData.z - PlayerPosData.z))
+			);
+		//-------------ªposAB‚Ì‹——£ŒvZª---------------//
+		//-------------«posA”¼Œa+posB”¼Œa‚Ì2æŒvZ«----//
+		PlayerEnemyBulRad =
+			((PlayerRad + EnemyBulRad) * (PlayerRad + EnemyBulRad));
+		//-------------ªposA”¼Œa+posB”¼Œa‚Ì2æŒvZª----//
+
+		//‹…‚Æ‹…”»’è
+		if (EnemyBulPlayerDistance <= PlayerEnemyBulRad) {
+			//
+			player_->OnCollision();
+			bullet->OnCollision();
+		}
+
+	}
+
 #pragma endregion
 
 #pragma region ©’e‚ÆG‹›“G‚ÌÕ“Ë”»’è
@@ -194,8 +233,8 @@ void GamePlayScene::CheckAllCollisions()
 	XMFLOAT3 SmallEnemyPosData = SmallEnemy::GetSmallEnemyPosMemory();//G‹›“G
 	float pBulRad = 5.f;//©‹@’e‚Ì”»’è‹…‚Ì”¼Œa
 	float sEnemRad = 5.f;//G‹›“G‚Ì”»’è‹…‚Ì”¼Œa
-	float posABDistance = 0.f;//poAposB‚Ì‹——£
-	float posABRad = 0.f;
+	float PlayerBulSmallEnemyDistance = 0.f;//posAposB‚Ì‹——£
+	float PlayerBulSmallEnemyRad = 0.f;//”¼Œa1{”¼Œa2‚Ì“ñæ
 
 	posA = PlayerBulPosData;
 
@@ -205,19 +244,19 @@ void GamePlayScene::CheckAllCollisions()
 		posB = SmallEnemyPosData;
 
 		//-------------«posAB‚Ì‹——£ŒvZ«---------------//
-		posABDistance =
+		PlayerBulSmallEnemyDistance =
 			(((SmallEnemyPosData.x - PlayerBulPosData.x) * (SmallEnemyPosData.x - PlayerBulPosData.x)) +
 				((SmallEnemyPosData.y - PlayerBulPosData.y) * (SmallEnemyPosData.y - PlayerBulPosData.y)) +
 				((SmallEnemyPosData.z - PlayerBulPosData.z) * (SmallEnemyPosData.z - PlayerBulPosData.z))
 				);
 		//-------------ªposAB‚Ì‹——£ŒvZª---------------//
 		//-------------«posA”¼Œa+posB”¼Œa‚Ì2æŒvZ«----//
-		posABDistance =
+		PlayerBulSmallEnemyRad =
 			((pBulRad + sEnemRad) * (pBulRad + sEnemRad));
 		//-------------ªposA”¼Œa+posB”¼Œa‚Ì2æŒvZª----//
 
 		//‹…‚Æ‹…”»’è
-		if (posABDistance <= posABDistance) {
+		if (PlayerBulSmallEnemyDistance <= PlayerBulSmallEnemyRad) {
 			//
 			player_->OnCollision();
 			sEnemys_->OnCollision();

@@ -17,6 +17,10 @@ Enemy* Enemy::GetInstance()
 	return &instance;
 }
 
+void Enemy::OnCollision()
+{
+}
+
 void Enemy::Attack()
 {
 	//ƒL[“ü—Íg‚¤

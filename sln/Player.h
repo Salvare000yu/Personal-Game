@@ -9,6 +9,22 @@
 
 class Player
 {
+private:
+	////-----------------model
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
+
+	////-----------------obj
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
+
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+
+	float frame = 0;
 public:
 	//初期化
 	void Initialize();
@@ -45,21 +61,10 @@ public:
 	//弾リストを取得 gamesceneに自弾貸すため
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
-private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
+	//弾座標判定で使うためのgetbulletposmemory
+	static XMFLOAT3 Player::GetPlayerPosMemory();
+	//静的メンバ変数　当たり判定で使う為の弾座標
+	static XMFLOAT3 PlayerPosMemory;
 
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
-
-	// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-
-	float frame = 0;
 };
 
