@@ -15,8 +15,8 @@ EnemyBullet* EnemyBullet::GetInstance()
 
 void EnemyBullet::OnCollision()
 {
-	DebugText::GetInstance()->Print("EnemyBulletCollision", 180, 180, 5);
-	isVanish_ = TRUE;
+	//DebugText::GetInstance()->Print("EnemyBulletCollision", 180, 180, 5);
+	//isVanish_ = TRUE;
 }
 
 DirectX::XMFLOAT3 EnemyBullet::GetEnemyBulPosMemory()

@@ -53,7 +53,7 @@ void GamePlayScene::Initialize()
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
-	obj_sword->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
@@ -198,6 +198,9 @@ void GamePlayScene::CheckAllCollisions()
 
 	//posAに自機座標
 	posA = PlayerPosData;
+
+	XMFLOAT3 swordPos= obj_sword->GetPosition();
+	obj_sword->SetPosition({ EnemyBulPosData.x,EnemyBulPosData.y,EnemyBulPosData.z });
 
 	//自機と敵弾の判定　for文で敵弾を毎回取り出して処理
 	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
@@ -502,6 +505,7 @@ void GamePlayScene::Update()
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
+	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 190, 2);
 	camera->Update();
 
 	//3dobjUPDATE
