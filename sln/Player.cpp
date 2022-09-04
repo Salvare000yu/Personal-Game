@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Object3d.h"
 #include "Input.h"
+#include "GameSound.h"
 
 #include <DirectXMath.h>
 
@@ -15,12 +16,15 @@ void Player::Attack()
 	const bool PadTriggerRB = input->TriggerButton(static_cast<int>(Button::RB));
 
 	//íeî≠éÀ
-	if (TriggerSPACE|| PadTriggerRB) {
+	if (TriggerSPACE || PadTriggerRB) {
 		XMFLOAT3 PlayerPos = obj_player->GetPosition();
 		//íeê∂ê¨
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
 		//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
 		madeBullet->Initialize({ PlayerPos });
+
+		// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
+		GameSound::GetInstance()->PlayWave("shot.wav", 0.3);
 
 		//íeìoò^
 		bullets_.push_back(std::move(madeBullet));
@@ -43,6 +47,9 @@ void Player::Initialize()
 	obj_player->SetScale({ 3.0f, 3.0f, 3.0f });
 	//èÍèä
 	obj_player->SetPosition({ 0,40,-170 });
+
+	// âπê∫ì«Ç›çûÇ›
+	GameSound::GetInstance()->LoadWave("shot.wav");
 }
 
 Player* Player::GetInstance()
@@ -112,7 +119,7 @@ void Player::Update()
 
 		//------ÉvÉåÉCÉÑÅ[Ç‡ìØÇ∂à⁄ìÆ------//
 		bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 1;
+		constexpr float moveSpeed = 2;
 
 		if ((inputS)|| PadInputDOWN) {
 

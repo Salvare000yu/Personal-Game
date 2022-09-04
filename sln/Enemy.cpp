@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "Object3d.h"
 #include "Input.h"
+#include "GameSound.h"
 
 #include <DirectXMath.h>
 
@@ -28,6 +29,9 @@ void Enemy::Attack()
 
 	//triggerkey
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	
+	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
 
 	//’e”­Ë
 	XMFLOAT3 position = obj_enemy->GetPosition();
@@ -54,6 +58,9 @@ void Enemy::Initialize()
 	obj_enemy->SetScale({ 20.0f, 20.0f, 20.0f });
 	//êŠ
 	obj_enemy->SetPosition({ -100,50,50 });
+
+	// ‰¹º“Ç‚İ‚İ
+	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
 
 	//‹ß‚Ã‚­ƒpƒ^[ƒ“‰Šú‰»
 	ApproachInit();

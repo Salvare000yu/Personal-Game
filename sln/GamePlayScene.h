@@ -62,10 +62,14 @@ private:
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
 	std::unique_ptr < Model> mod_worlddome = nullptr;//天球
+	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
+	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
 
 	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
 	std::unique_ptr < Object3d> obj_worlddome = nullptr;
+	std::unique_ptr < Object3d> obj_kaberight = nullptr;
+	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1=nullptr;

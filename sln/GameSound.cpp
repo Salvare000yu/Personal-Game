@@ -128,7 +128,7 @@ void GameSound::Unload(SoundData* soundData)
 	soundData->wfex = {};
 }
 
-void GameSound::PlayWave(const std::string& filename)
+void GameSound::PlayWave(const std::string& filename,float volumecont, int loopCount)
 {
 	HRESULT result;
 
@@ -148,8 +148,10 @@ void GameSound::PlayWave(const std::string& filename)
 	buf.pAudioData = soundData.pBuffer;
 	buf.AudioBytes = soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
+	buf.LoopCount = loopCount;
 
 	// 波形データの再生
 	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	result = pSourceVoice->SetVolume(volumecont);
 	result = pSourceVoice->Start();
 }

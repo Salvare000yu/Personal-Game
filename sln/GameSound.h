@@ -73,7 +73,8 @@ public:
     /// 音声再生
     /// </summary>
     /// <param name="filename">WAVファイル名</param>
-    void PlayWave(const std::string& filename);
+    /// 0で1回のみ再生（デフォ0）回数分繰り返す　XAUDIO2_LOOP_INFINITEで無限にループ
+    void PlayWave(const std::string& filename,float volumecont=1.0, int loopCount = 0);
 
 private:
     Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;

@@ -41,25 +41,36 @@ void GamePlayScene::Initialize()
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
+	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
+	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
 	obj_sword.reset(Object3d::Create());
+	obj_kaberight.reset(Object3d::Create());
+	obj_kabeleft.reset(Object3d::Create());
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
 	obj_sword->SetModel(mod_sword.get());
+	obj_kaberight->SetModel(mod_kaberight.get());
+	obj_kabeleft->SetModel(mod_kabeleft.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
+	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
+	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
+	obj_kaberight->SetPosition({ 200,-200,0 });
+	obj_kabeleft->SetPosition({ -200,-200,0 });
 	//------object回転------//
-	//obj_player->SetRotation({ 0,0,40 });
+	obj_kaberight->SetRotation({ 0,90,0 });
+	obj_kabeleft->SetRotation({ 0,-90,0 });
 
 	//いろいろ生成
 	enemy_ = new Enemy();
@@ -88,7 +99,7 @@ void GamePlayScene::Initialize()
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	// 音声再生 鳴らしたいとき
-	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav");
+	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.5, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -359,7 +370,7 @@ void GamePlayScene::Update()
 
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 1;
+		constexpr float moveSpeed = 2;
 
 		if (inputS || PadInputDOWN) {
 			// カメラをバックさせる
@@ -505,13 +516,14 @@ void GamePlayScene::Update()
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
-	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 190, 2);
 	camera->Update();
 
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
 	obj_sword->Update();
+	obj_kaberight->Update();
+	obj_kabeleft->Update();
 
 	// FBX Update
 	//fbxObject_1->Update();
@@ -549,6 +561,8 @@ void GamePlayScene::Draw()
 	object3d_1->Draw();
 	obj_worlddome->Draw();
 	obj_sword->Draw();
+	obj_kaberight->Draw();
+	obj_kabeleft->Draw();
 
 	//自キャラ描画
 	enemy_->Draw();
