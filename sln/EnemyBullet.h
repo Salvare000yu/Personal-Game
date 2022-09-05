@@ -2,10 +2,11 @@
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
+#include "BaseObject.h"
 
 #include <memory>
 
-class EnemyBullet
+class EnemyBullet:public BaseObject
 {
 
 private:
@@ -25,18 +26,16 @@ private:
 
 	std::unique_ptr < Model> mod_enemybullet = nullptr;
 
-	std::unique_ptr < Object3d> obj_enemybullet = nullptr;
-
 	float frame = 0;
 public:
 	//èâä˙âª
-	void Initialize(DirectX::XMFLOAT3 position);
+	void Initialize()override;
 
 	//çXêV
-	void Update();
+	void Update()override;
 
 	//ï`âÊ
-	void Draw();
+	void Draw()override;
 
 	static EnemyBullet* GetInstance();
 

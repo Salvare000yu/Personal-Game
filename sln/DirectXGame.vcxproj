@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="FbxObject3d.cpp" />
@@ -169,11 +170,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="math\Collision.cpp" />
-    <ClCompile Include="math\Matrix4.cpp" />
-    <ClCompile Include="math\Primitive.cpp" />
-    <ClCompile Include="math\Quaternion.cpp" />
-    <ClCompile Include="math\Vector3.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="MyDirectXGame.cpp" />
     <ClCompile Include="Object3d.cpp" />
@@ -267,6 +263,7 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="EndScene.h" />
     <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="FbxObject3d.h" />
@@ -288,11 +285,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
-    <ClInclude Include="math\Collision.h" />
-    <ClInclude Include="math\Matrix4.h" />
-    <ClInclude Include="math\Primitive.h" />
-    <ClInclude Include="math\Quaternion.h" />
-    <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="MyDirectXGame.h" />
     <ClInclude Include="Object3d.h" />

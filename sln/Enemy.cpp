@@ -11,13 +11,6 @@ void Enemy::ApproachInit()
 	AtkCount = AtkInterval;
 }
 
-Enemy* Enemy::GetInstance()
-{
-	static Enemy instance;
-
-	return &instance;
-}
-
 void Enemy::OnCollision()
 {
 }
@@ -34,11 +27,12 @@ void Enemy::Attack()
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
 
 	//íeî≠éÀ
-	XMFLOAT3 position = obj_enemy->GetPosition();
+	XMFLOAT3 position = obj->GetPosition();
 	//íeê∂ê¨
 	std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
 	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-	madeBullet->Initialize({ position });
+	madeBullet->Initialize();
+	madeBullet->SetPosition(position);
 
 	//íeìoò^
 	bullets_.push_back(std::move(madeBullet));
@@ -50,14 +44,14 @@ void Enemy::Initialize()
 	//Ç‡Ç≈ÇÈì«Ç›çûÇ›
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	//çÏÇÈ
-	obj_enemy.reset(Object3d::Create());
+	obj.reset(Object3d::Create());
 	//ÉZÉbÉg
-	obj_enemy->SetModel(mod_enemy.get());
+	obj->SetModel(mod_enemy.get());
 	//-----Å´îCà”Å´-----//
 	//ëÂÇ´Ç≥
-	obj_enemy->SetScale({ 20.0f, 20.0f, 20.0f });
+	obj->SetScale({ 20.0f, 20.0f, 20.0f });
 	//èÍèä
-	obj_enemy->SetPosition({ -100,50,50 });
+	obj->SetPosition({ -100,50,50 });
 
 	// âπê∫ì«Ç›çûÇ›
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
@@ -75,9 +69,9 @@ void Enemy::Update()
 	time = frame / 60.f;
 
 	//if (input3) {
-	//	XMFLOAT3 position = obj_enemy->GetPosition();
+	//	XMFLOAT3 position = obj->GetPosition();
 	//	position.z += 5;
-	//	obj_enemy->SetPosition(position);
+	//	obj->SetPosition(position);
 	//}
 
 		//è¡ñ≈ÉtÉâÉOóßÇ¡ÇΩÇÁÇªÇÃíeÇÕéÄÇµÇƒîqÇπÇÊ
@@ -90,14 +84,14 @@ void Enemy::Update()
 	{
 		frame += 1.f;
 
-		XMFLOAT3 rotation = obj_enemy->GetRotation();
+		XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y += 0.7f;
 		rotation.x += 0.4f;
-		obj_enemy->SetRotation({ rotation });
+		obj->SetRotation({ rotation });
 
-		XMFLOAT3 position = obj_enemy->GetPosition();
+		XMFLOAT3 position = obj->GetPosition();
 		//position.x += 5.f * sin(time * 3.14159265358f);
-		obj_enemy->SetPosition(position);
+		obj->SetPosition(position);
 	}
 	//----------------------------------------------Å´ä÷êîâªÇµÇÎÉ{ÉP
 	switch (actionPattern_) {
@@ -115,11 +109,11 @@ void Enemy::Update()
 		}
 
 		//íeÇÃà⁄ìÆ
-		XMFLOAT3 position = obj_enemy->GetPosition();
+		XMFLOAT3 position = obj->GetPosition();
 		position.z -= ApproachSp;
 		position.y += ApproachSp;
 		position.x += 3.f * sin(time * 3.14159265358f);
-		obj_enemy->SetPosition(position);
+		obj->SetPosition(position);
 
 		//Ç†ÇÈíˆìxãﬂÇ√Ç¢ÇΩÇÁÉLÉÇâﬂÇ¨Çƒó£ÇÍÇÈ
 		if (position.z == ApproachLim) {
@@ -128,10 +122,10 @@ void Enemy::Update()
 		break;
 	case ActionPattern::Leave://å„ëﬁÉpÉ^Å[Éì
 		//---å„ëﬁ---//
-		XMFLOAT3 positionBack = obj_enemy->GetPosition();
+		XMFLOAT3 positionBack = obj->GetPosition();
 		positionBack.z += ApproachSp;
 		positionBack.y -= ApproachSp;
-		obj_enemy->SetPosition(positionBack);
+		obj->SetPosition(positionBack);
 
 		//Ç†ÇÈíˆìxó£ÇÍÇΩÇÁãﬂÇ√Ç¢ÇƒÇ≠ÇÈ
 		if (positionBack.z == LeaveLim) {
@@ -146,7 +140,7 @@ void Enemy::Update()
 		bullet->Update();
 	}
 
-	obj_enemy->Update();
+	obj->Update();
 }
 
 void Enemy::Draw()
@@ -156,5 +150,5 @@ void Enemy::Draw()
 		bullet->Draw();
 	}
 
-	obj_enemy->Draw();
+	obj->Draw();
 }

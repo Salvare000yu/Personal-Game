@@ -3,11 +3,12 @@
 #include "Object3d.h"
 #include "Camera.h"
 #include "PlayerBullet.h"
+#include "BaseObject.h"
 
 #include <memory>
 #include <list>//STL
 
-class Player
+class Player:public BaseObject
 {
 private:
 	////-----------------model
@@ -27,34 +28,26 @@ private:
 	float frame = 0;
 public:
 	//初期化
-	void Initialize();
+	void Initialize() override;
 
 	//更新
-	void Update();
+	void Update()override;
 
 	//描画
-	void Draw();
+	void Draw()override;
 
 	//攻撃
 	void Attack();
 
-	static Player* GetInstance();
-
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
-
-	float PlayerposX = 0;
-	float PlayerposY = 0;
-	float PlayerposZ = 0;
 
 	//PlayerBullet* bullet_ = nullptr;
 	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//モデル
 	std::unique_ptr < Model> mod_player = nullptr;
-	//オブジェ3d
-	std::unique_ptr < Object3d> obj_player = nullptr;
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();

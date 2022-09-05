@@ -203,6 +203,8 @@ public: // メンバ関数
 	/// <param name="position">スケール</param>
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
 
+	const XMFLOAT3& GetScale() { return scale; }
+
 	/// <summary>
 	/// モデルのセット
 	/// </summary>

@@ -17,11 +17,12 @@ void Player::Attack()
 
 	//弾発射
 	if (TriggerSPACE || PadTriggerRB) {
-		XMFLOAT3 PlayerPos = obj_player->GetPosition();
+		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//弾生成
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
 		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-		madeBullet->Initialize({ PlayerPos });
+		madeBullet->Initialize();
+		madeBullet->SetPosition(PlayerPos);
 
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("shot.wav", 0.3);
@@ -39,24 +40,17 @@ void Player::Initialize()
 	//もでる読み込み
 	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
 	//作る
-	obj_player.reset(Object3d::Create());
+	obj.reset(Object3d::Create());
 	//セット
-	obj_player->SetModel(mod_player.get());
+	obj->SetModel(mod_player.get());
 	//-----↓任意↓-----//
 	//大きさ
-	obj_player->SetScale({ 3.0f, 3.0f, 3.0f });
+	obj->SetScale({ 3.0f, 3.0f, 3.0f });
 	//場所
-	obj_player->SetPosition({ 0,40,-170 });
+	obj->SetPosition({ 0,40,-170 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("shot.wav");
-}
-
-Player* Player::GetInstance()
-{
-	static Player instance;
-
-	return &instance;
 }
 
 DirectX::XMFLOAT3 Player::GetPlayerPosMemory()
@@ -103,14 +97,14 @@ void Player::Update()
 	const float PlayerMaxMoveLimZ = 290;//後ろ
 	const float PlayerMinMoveLimZ = 200;
 
-	XMFLOAT3 PlayerPos = obj_player->GetPosition();
+	XMFLOAT3 PlayerPos = obj->GetPosition();
 	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
 	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
 	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
 	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
 	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
 	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
-	obj_player->SetPosition(PlayerPos);
+	obj->SetPosition(PlayerPos);
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
@@ -123,92 +117,92 @@ void Player::Update()
 
 		if ((inputS)|| PadInputDOWN) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.z = PlayerPos.z - moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj_player->GetRotation();
+			XMFLOAT3 rotation = obj->GetRotation();
 			if (rotation.x <= 10) {
 				rotation.x += 1.f;
 			}
-			obj_player->SetRotation(rotation);
+			obj->SetRotation(rotation);
 
 		}
 
 		if ((inputW) || PadInputUP) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.z = PlayerPos.z + moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj_player->GetRotation();
+			XMFLOAT3 rotation = obj->GetRotation();
 			if (rotation.x >= -10) {
 				rotation.x -= 1.f;
 			}
-			obj_player->SetRotation(rotation);
+			obj->SetRotation(rotation);
 		}
 
 		if ((inputA) || PadInputLEFT) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.x = PlayerPos.x - moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj_player->GetRotation();
+			XMFLOAT3 rotation = obj->GetRotation();
 			if (rotation.z <= 10) {
 				rotation.z += 1.f;
 			}
-			obj_player->SetRotation(rotation);
+			obj->SetRotation(rotation);
 
 			OldInputFlag = TRUE;
 		}
 
 		if ((inputD) || PadInputRIGHT) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.x = PlayerPos.x + moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj_player->GetRotation();
+			XMFLOAT3 rotation = obj->GetRotation();
 			if (rotation.z >= -10) {
 				rotation.z -= 1.f;
 			}
-			obj_player->SetRotation(rotation);
+			obj->SetRotation(rotation);
 
 			OldInputFlag = TRUE;
 		}
 
 		if (inputQ) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.y = PlayerPos.y + moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 		}
 
 		if (inputZ) {
 
-			XMFLOAT3 PlayerPos = obj_player->GetPosition();
+			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.y = PlayerPos.y - moveSpeed;
-			obj_player->SetPosition(PlayerPos);
+			obj->SetPosition(PlayerPos);
 		}
 
 	}
 	if(TriggerR){//リセット
-		obj_player->SetPosition({ 0,40,-170 });
-		obj_player->SetRotation({ 0,0,0 });
+		obj->SetPosition({ 0,40,-170 });
+		obj->SetRotation({ 0,0,0 });
 	}
 
 	//------------------↑プレイヤー移動＆姿勢
 
 	XMFLOAT3 PlayerPosMemory = {};
-	PlayerPosMemory = obj_player->GetPosition();//判定のためポジション入れる
+	PlayerPosMemory = obj->GetPosition();//判定のためポジション入れる
 
 	//自分回転
 	if (inputE)
 	{
-		XMFLOAT3 rotation = obj_player->GetRotation();
+		XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y++;
-		obj_player->SetRotation(rotation);
+		obj->SetRotation(rotation);
 	}
 
 	//発射処理
@@ -218,7 +212,7 @@ void Player::Update()
 		bullet->Update();
 	}
 
-	obj_player->Update();
+	obj->Update();
 
 }
 
@@ -229,5 +223,5 @@ void Player::Draw()
 		bullet->Draw();
 	}
 
-	obj_player->Draw();
+	obj->Draw();
 }

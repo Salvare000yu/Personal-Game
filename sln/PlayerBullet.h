@@ -1,9 +1,10 @@
 #pragma once
 #include "Object3d.h"
+#include "BaseObject.h"
 
 #include <memory>
 
-class PlayerBullet
+class PlayerBullet:public BaseObject
 {
 private:
 	////-----------------model
@@ -27,15 +28,13 @@ private:
 
 public:
 	//èâä˙âª
-	void Initialize(DirectX::XMFLOAT3 BulletPos);
+	void Initialize()override;
 
 	//çXêV
-	void Update();
+	void Update()override;
 
 	//ï`âÊ
-	void Draw();
-
-	static PlayerBullet* GetInstance();
+	void Draw()override;
 
 	std::unique_ptr<Camera> camera; //ÉJÉÅÉâ
 
@@ -58,7 +57,5 @@ public:
 	void OnCollision();
 		
 	std::unique_ptr < Model> mod_playerbullet = nullptr;
-
-	std::unique_ptr < Object3d> obj_playerbullet = nullptr;
 
 };

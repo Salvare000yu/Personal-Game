@@ -3,10 +3,11 @@
 #include "Object3d.h"
 #include "Camera.h"
 #include "EnemyBullet.h"
+#include "BaseObject.h"
 
 #include <memory>
 
-class Enemy
+class Enemy:public BaseObject
 {
 
 	//行動パターン enumclass
@@ -18,21 +19,19 @@ class Enemy
 public:
 
 	//初期化
-	void Initialize();
+	void Initialize()override;
 
 	//更新
-	void Update();
+	void Update()override;
 
 	//描画
-	void Draw();
+	void Draw()override;
 
 	//攻撃
 	void Attack();
 
 	//近づく処理初期化
 	void ApproachInit();
-
-	static Enemy* GetInstance();
 
 	std::unique_ptr<Camera> camera; //カメラ
 	
@@ -74,8 +73,6 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 	std::unique_ptr < Model> mod_enemy = nullptr;
-
-	std::unique_ptr < Object3d> obj_enemy = nullptr;
 
 	//フレーム
 	float frame = 0;

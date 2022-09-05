@@ -2,10 +2,11 @@
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
+#include "BaseObject.h"
 
 #include <memory>
 
-class SmallEnemy
+class SmallEnemy:public BaseObject
 {
 private:
 	// Microsoft::WRL::‚ğÈ—ª
@@ -19,15 +20,13 @@ private:
 public:
 
 	//‰Šú‰»
-	void Initialize();
+	void Initialize()override;
 
 	//XV
-	void Update();
+	void Update()override;
 
 	//•`‰æ
-	void Draw();
-
-	static SmallEnemy* GetInstance();
+	void Draw()override;
 
 	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
 
@@ -66,8 +65,6 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 	std::unique_ptr < Model> mod_smallenemy = nullptr;
-
-	std::unique_ptr < Object3d> obj_smallenemy = nullptr;
 
 	//SEneX‚Ì—”“ü‚ê‚é•Ï”
 	float SEneRandX = 0;
