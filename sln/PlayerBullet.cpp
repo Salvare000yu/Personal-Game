@@ -36,22 +36,10 @@ void PlayerBullet::Initialize()
 
 void PlayerBullet::Update()
 {
-
-	Input* input = Input::GetInstance();
-
-	const bool inputW = input->PushKey(DIK_W);
-	const bool inputS = input->PushKey(DIK_S);
-	const bool inputA = input->PushKey(DIK_A);
-	const bool inputD = input->PushKey(DIK_D);
-	const bool inputE = input->PushKey(DIK_E);
-	const bool inputQ = input->PushKey(DIK_Q);
-	const bool inputZ = input->PushKey(DIK_Z);
-
-	const bool TriggerR = input->TriggerKey(DIK_R);
-
 	XMFLOAT3 BulletPos = obj->GetPosition();
-	BulletPos.z = BulletPos.z + 3;
-	BulletPos.y = BulletPos.y + 0.3f;
+	BulletPos.z += velocity.z;
+	BulletPos.x += velocity.x;
+	BulletPos.y += velocity.y;
 
 	//---静的メンバ変数初期化　弾の座標を当たり判定で使う
 	XMFLOAT3 PlayerBulPosMemory = {};

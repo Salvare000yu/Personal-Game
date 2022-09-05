@@ -188,6 +188,8 @@ public: // メンバ関数
 	/// <returns>座標</returns>
 	const XMFLOAT3& GetRotation() { return rotation; }
 
+	const XMMATRIX& GetMatRot() { return matRot; }
+
 
 	/// <summary>
 	/// 座標の設定
@@ -232,4 +234,6 @@ private: // メンバ変数
 	Object3d* parent = nullptr;
 	// ビルボード
 	bool isBillboard = false;
+
+	XMMATRIX matRot;
 };

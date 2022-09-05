@@ -26,6 +26,8 @@ private:
 	//消滅フラグ
 	bool isVanish_ = FALSE;
 
+	XMFLOAT3 velocity{ 0,0,3 };
+
 public:
 	//初期化
 	void Initialize()override;
@@ -55,6 +57,10 @@ public:
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
+
+	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
+
+	const XMFLOAT3& GetVelocity() { return velocity; }
 		
 	std::unique_ptr < Model> mod_playerbullet = nullptr;
 

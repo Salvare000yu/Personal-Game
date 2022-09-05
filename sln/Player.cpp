@@ -5,6 +5,8 @@
 
 #include <DirectXMath.h>
 
+using namespace DirectX;
+
 void Player::Attack()
 {
 	//キー入力使う
@@ -23,6 +25,13 @@ void Player::Attack()
 		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 		madeBullet->Initialize();
 		madeBullet->SetPosition(PlayerPos);
+
+		// velocityを算出
+		XMVECTOR vecvelocity = XMVectorSet(0, 0, 3, 0);
+		XMFLOAT3 xmfloat3velocity;
+		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+
+		madeBullet->SetVelocity(xmfloat3velocity);
 
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("shot.wav", 0.3);
@@ -73,6 +82,10 @@ void Player::Update()
 	const bool inputE = input->PushKey(DIK_E);
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
+	const bool inputUp = input->PushKey(DIK_UP);
+	const bool inputDown = input->PushKey(DIK_DOWN);
+	const bool inputRight = input->PushKey(DIK_RIGHT);
+	const bool inputLeft = input->PushKey(DIK_LEFT);
 	//パッド押している間
 	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
 	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
@@ -190,6 +203,24 @@ void Player::Update()
 	if(TriggerR){//リセット
 		obj->SetPosition({ 0,40,-170 });
 		obj->SetRotation({ 0,0,0 });
+	}
+
+	if (inputUp || inputDown || inputRight || inputLeft)
+	{
+		XMFLOAT3 Rot = obj->GetRotation();
+		if (inputUp){
+			Rot.x -= 1;
+		}
+		if (inputDown) {
+			Rot.x += 1;
+		}
+		if (inputRight) {
+			Rot.y += 1;
+		}
+		if (inputLeft) {
+			Rot.y -= 1;
+		}
+		obj->SetRotation(Rot);
 	}
 
 	//------------------↑プレイヤー移動＆姿勢
