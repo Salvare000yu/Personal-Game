@@ -61,6 +61,17 @@ void Player::Initialize()
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("shot.wav");
 }
+
+DirectX::XMFLOAT3 Player::GetPlayerPosMemory()
+{
+	XMFLOAT3 PlayerPosMemory = {};
+	return PlayerPosMemory;
+}
+
+void Player::OnCollision()
+{
+}
+
 void Player::Update()
 {
 	Input* input = Input::GetInstance();

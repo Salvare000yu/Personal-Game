@@ -13,6 +13,18 @@ EnemyBullet* EnemyBullet::GetInstance()
 	return &instance;
 }
 
+void EnemyBullet::OnCollision()
+{
+	//DebugText::GetInstance()->Print("EnemyBulletCollision", 180, 180, 5);
+	//isVanish_ = TRUE;
+}
+
+DirectX::XMFLOAT3 EnemyBullet::GetEnemyBulPosMemory()
+{
+	XMFLOAT3 EnemyBulPosMemory = {};
+	return EnemyBulPosMemory;
+}
+
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void EnemyBullet::Initialize()
 {
@@ -36,6 +48,9 @@ void EnemyBullet::Update()
 {
 
 	XMFLOAT3 position = obj->GetPosition();
+	//---静的メンバ変数初期化　敵弾の座標を当たり判定で使う
+	XMFLOAT3 EnemyBulPosMemory = {};
+	EnemyBulPosMemory = obj->GetPosition();//判定のためポジション入れる
 	position.z = position.z - 2;
 	obj->SetPosition(position);
 

@@ -5,6 +5,8 @@
 
 #include "Camera.h"
 
+#include "FbxObject3d.h"
+
 #include "Enemy.h"
 #include "Player.h"
 #include "SmallEnemy.h"
@@ -26,6 +28,11 @@ public:
 
 	void SmallEnemyAppear();
 
+	void OnCollision();
+
+	//衝突判定と応答
+	void CheckAllCollisions();
+
 	void Obj2move();
 
 	std::unique_ptr<Camera> camera; //カメラ
@@ -37,10 +44,8 @@ public:
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 
-	std::list <std::unique_ptr<Enemy>> enemy_;//enemy　ユニークポインタ
-	//敵リストを取得
-	//const std::list<std::unique_ptr<Enemy>>& GetEnemy() { return enemy_; }
-
+	//敵
+	Enemy* enemy_ = nullptr;
 	Player* player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
 
@@ -66,8 +71,8 @@ private:
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
-	//FbxModel* fbxModel_1 = nullptr;
-	//FbxObject3d* fbxObject_1=nullptr;
+	FbxModel* fbxModel_1 = nullptr;
+	FbxObject3d* fbxObject_1=nullptr;
 
 	float frame = 0;
 

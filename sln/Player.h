@@ -52,7 +52,12 @@ public:
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();
 	//弾リストを取得 gamesceneに自弾貸すため
-	std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+
+	//弾座標判定で使うためのgetbulletposmemory
+	static XMFLOAT3 Player::GetPlayerPosMemory();
+	//静的メンバ変数　当たり判定で使う為の弾座標
+	static XMFLOAT3 PlayerPosMemory;
 
 };
 

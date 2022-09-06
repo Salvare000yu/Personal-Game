@@ -41,6 +41,14 @@ public:
 
 	bool IsVanish()const { return isVanish_; }
 
+	//当たった時呼び出すためのコールバック関数
+	void OnCollision();
+
+	//雑魚敵座標判定で使うための
+	static XMFLOAT3 SmallEnemy::GetSmallEnemyPosMemory();
+	//静的メンバ変数　当たり判定で使う為の雑魚敵座標
+	static XMFLOAT3 SmallEnemyPosMemory;
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
