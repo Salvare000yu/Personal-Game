@@ -15,7 +15,7 @@ protected:
 
 public:
 
-	inline void SetAlive(bool Alive) { alive = Alive; }
+	inline void SetAlive(bool Alive) { this->alive = Alive; }
 
 	inline void SetPosition(const DirectX::XMFLOAT3& position) { obj->SetPosition(position); }
 	inline const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }

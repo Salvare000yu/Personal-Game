@@ -3,17 +3,6 @@
 
 #include <DirectXMath.h>
 
-DirectX::XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
-{
-	XMFLOAT3 PlayerBulPosMemory={};
-	return PlayerBulPosMemory;
-}
-
-void PlayerBullet::OnCollision()
-{
-	isVanish_ = TRUE;
-}
-
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void PlayerBullet::Initialize()
 {
@@ -41,9 +30,6 @@ void PlayerBullet::Update()
 	BulletPos.x += velocity.x;
 	BulletPos.y += velocity.y;
 
-	//---静的メンバ変数初期化　弾の座標を当たり判定で使う
-	XMFLOAT3 PlayerBulPosMemory = {};
-	PlayerBulPosMemory = obj->GetPosition();//判定のためポジション入れる
 	obj->SetPosition(BulletPos);
 
 	//if (TriggerR) {//リセット
@@ -51,7 +37,7 @@ void PlayerBullet::Update()
 	//}
 
 	//時間経過消滅
-	if (--vanishTimer_ <= 0) { isVanish_ = TRUE; }
+	//if (--vanishTimer_ <= 0) { isVanish_ = TRUE; }
 
 	obj->Update();
 }

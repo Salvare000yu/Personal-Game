@@ -73,11 +73,9 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetRotation({ 0,-90,0 });
 
 	//‚¢‚ë‚¢‚ë¶¬
-	enemy_ = new Enemy();
 	player_ = new Player();
 	//smallEnemy_ = new SmallEnemy();
 	//‚¢‚ë‚¢‚ëƒLƒƒƒ‰‰Šú‰»
-	enemy_->Initialize();
 	player_->Initialize();
 	//smallEnemy_->Initialize();
 
@@ -158,7 +156,6 @@ void GamePlayScene::Finalize()
 	//safe_delete(fbxModel_1);
 
 	//©ƒLƒƒƒ‰‰ğ•ú
-	delete enemy_;
 	delete player_;
 	//delete smallEnemy_;
 }
@@ -176,113 +173,6 @@ void GamePlayScene::SmallEnemyAppear()
 	//G‹›“G“o˜^
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
-
-void GamePlayScene::OnCollision()
-{
-
-}
-
-//void GamePlayScene::CheckAllCollisions()
-//{
-//	//”»’è‘ÎÛ A , B
-//	XMFLOAT3 posA, posB;
-//
-//	//ƒvƒŒƒCƒ„[‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
-//	const std::list<std::unique_ptr<PlayerBullet>>& playerBullets = player_->GetBullets();
-//	//“G‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
-//	const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
-//
-//	//“G‚Ì’eƒŠƒXƒg‚ğæ“¾‚·‚é
-//	//const std::list<std::unique_ptr<EnemyBullet>>& enemyBullets = enemy_->GetBullets();
-//
-//	//const std::list<std::unique_ptr<SmallEnemy>>& smallEnemys = smallEnemy_->GetBullets();
-//	//const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_;
-//
-//#pragma region ©‹@‚Æ“G’e‚ÌÕ“Ë”»’è
-//	
-//	XMFLOAT3 PlayerPosData = Player::GetPlayerPosMemory();//©‹@
-//	XMFLOAT3 EnemyBulPosData = EnemyBullet::GetEnemyBulPosMemory();//“G’e
-//	float PlayerRad = 5.f;//©‹@‚Ì”»’è‹…‚Ì”¼Œa
-//	float EnemyBulRad = 5.f;//“G’e‚Ì”»’è‹…‚Ì”¼Œa
-//	float EnemyBulPlayerDistance = 0.f;//posAposB‚Ì‹——£
-//	float PlayerEnemyBulRad = 0.f;//”¼Œa1{”¼Œa2‚Ì“ñæ
-//
-//	//posA‚É©‹@À•W
-//	posA = PlayerPosData;
-//
-//	XMFLOAT3 swordPos= obj_sword->GetPosition();
-//	obj_sword->SetPosition({ EnemyBulPosData.x,EnemyBulPosData.y,EnemyBulPosData.z });
-//
-//	//©‹@‚Æ“G’e‚Ì”»’è@for•¶‚Å“G’e‚ğ–ˆ‰ñæ‚èo‚µ‚Äˆ—
-//	for (const std::unique_ptr<EnemyBullet>& bullet : enemyBullets) {
-//		//posB‚É“G’eÀ•W
-//		posB = EnemyBulPosData;
-//		//-------------«posAB‚Ì‹——£ŒvZ«---------------//
-//		EnemyBulPlayerDistance =
-//			(
-//				((EnemyBulPosData.x - PlayerPosData.x) * (EnemyBulPosData.x - PlayerPosData.x)) +
-//				((EnemyBulPosData.y - PlayerPosData.y) * (EnemyBulPosData.y - PlayerPosData.y)) +
-//				((EnemyBulPosData.z - PlayerPosData.z) * (EnemyBulPosData.z - PlayerPosData.z))
-//			);
-//		//-------------ªposAB‚Ì‹——£ŒvZª---------------//
-//		//-------------«posA”¼Œa+posB”¼Œa‚Ì2æŒvZ«----//
-//		PlayerEnemyBulRad =
-//			((PlayerRad + EnemyBulRad) * (PlayerRad + EnemyBulRad));
-//		//-------------ªposA”¼Œa+posB”¼Œa‚Ì2æŒvZª----//
-//
-//		//‹…‚Æ‹…”»’è
-//		if (EnemyBulPlayerDistance <= PlayerEnemyBulRad) {
-//			//
-//			player_->OnCollision();
-//			bullet->OnCollision();
-//		}
-//
-//	}
-//
-//#pragma endregion
-//
-//#pragma region ©’e‚ÆG‹›“G‚ÌÕ“Ë”»’è
-//	//©’e‚ªposA@G‹›“GPosB
-//	XMFLOAT3 PlayerBulPosData = PlayerBullet::GetPlayerBulPosMemory();//©’e
-//	XMFLOAT3 SmallEnemyPosData = SmallEnemy::GetSmallEnemyPosMemory();//G‹›“G
-//	float pBulRad = 5.f;//©‹@’e‚Ì”»’è‹…‚Ì”¼Œa
-//	float sEnemRad = 5.f;//G‹›“G‚Ì”»’è‹…‚Ì”¼Œa
-//	float PlayerBulSmallEnemyDistance = 0.f;//posAposB‚Ì‹——£
-//	float PlayerBulSmallEnemyRad = 0.f;//”¼Œa1{”¼Œa2‚Ì“ñæ
-//
-//	posA = PlayerBulPosData;
-//
-//	//©‹@‚ÆG‹›“G‚Ì”»’è@for•¶‚ÅG‹›“G‚ğ–ˆ‰ñæ‚èo‚µ‚Äˆ—
-//	for (const std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-//		//G‹›“G‚ÌÀ•W
-//		posB = SmallEnemyPosData;
-//
-//		//-------------«posAB‚Ì‹——£ŒvZ«---------------//
-//		PlayerBulSmallEnemyDistance =
-//			(((SmallEnemyPosData.x - PlayerBulPosData.x) * (SmallEnemyPosData.x - PlayerBulPosData.x)) +
-//				((SmallEnemyPosData.y - PlayerBulPosData.y) * (SmallEnemyPosData.y - PlayerBulPosData.y)) +
-//				((SmallEnemyPosData.z - PlayerBulPosData.z) * (SmallEnemyPosData.z - PlayerBulPosData.z))
-//				);
-//		//-------------ªposAB‚Ì‹——£ŒvZª---------------//
-//		//-------------«posA”¼Œa+posB”¼Œa‚Ì2æŒvZ«----//
-//		PlayerBulSmallEnemyRad =
-//			((pBulRad + sEnemRad) * (pBulRad + sEnemRad));
-//		//-------------ªposA”¼Œa+posB”¼Œa‚Ì2æŒvZª----//
-//
-//		//‹…‚Æ‹…”»’è
-//		if (PlayerBulSmallEnemyDistance <= PlayerBulSmallEnemyRad) {
-//			//
-//			player_->OnCollision();
-//			sEnemys_->OnCollision();
-//		}
-//
-//	}
-//#pragma endregion
-//
-//#pragma region ©’e‚Æ“G’eÕ“Ë”»’è
-//#pragma endregion
-//}
-
 void GamePlayScene::Update()
 {
 	//ƒgƒŠƒK[ƒL[g‚¤
@@ -512,6 +402,12 @@ void GamePlayScene::Update()
 	//}
 
 	//CheckAllCollisions();
+	std::unique_ptr<Enemy> madeenemy = std::make_unique<Enemy>();
+	enemy_.push_back(std::move(madeenemy));
+	//’eXV
+	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		enemy->Update();
+	}
 
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
@@ -532,7 +428,6 @@ void GamePlayScene::Update()
 	sprite_back->Update();
 	sp_guide->Update();
 
-	enemy_->Update();
 	player_->Update();
 	//smallEnemy_->Update();
 }
@@ -557,6 +452,11 @@ void GamePlayScene::Draw()
 		smallEnemy->Draw();
 	}
 
+	//’e
+	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		enemy->Draw();
+	}
+
 	//3dƒIƒuƒWƒF•`‰æ
 	object3d_1->Draw();
 	obj_worlddome->Draw();
@@ -565,7 +465,6 @@ void GamePlayScene::Draw()
 	obj_kabeleft->Draw();
 
 	//©ƒLƒƒƒ‰•`‰æ
-	enemy_->Draw();
 	player_->Draw();
 	//smallEnemy_->Draw();
 

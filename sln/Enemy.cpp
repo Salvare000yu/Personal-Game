@@ -11,10 +11,6 @@ void Enemy::ApproachInit()
 	AtkCount = AtkInterval;
 }
 
-void Enemy::OnCollision()
-{
-}
-
 void Enemy::Attack()
 {
 	//キー入力使う
@@ -134,6 +130,8 @@ void Enemy::Update()
 		break;
 	}
 	//----------------------------------------------↑関数化しろボケ
+
+	
 
 	//弾更新
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
