@@ -11,10 +11,6 @@ void Enemy::ApproachInit()
 	AtkCount = AtkInterval;
 }
 
-void Enemy::OnCollision()
-{
-}
-
 void Enemy::Attack()
 {
 	//キー入力使う
@@ -76,7 +72,7 @@ void Enemy::Update()
 
 		//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
-		return bullet->IsVanish();
+		return !bullet->GetAlive();
 		});
 
 	//黄金の回転

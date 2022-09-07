@@ -68,10 +68,6 @@ DirectX::XMFLOAT3 Player::GetPlayerPosMemory()
 	return PlayerPosMemory;
 }
 
-void Player::OnCollision()
-{
-}
-
 void Player::Update()
 {
 	Input* input = Input::GetInstance();
@@ -98,7 +94,7 @@ void Player::Update()
 
 	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		return bullet->IsVanish();
+		return !bullet->GetAlive();
 		});
 
 	//----------«ˆÚ“®§ŒÀ ƒJƒƒ‰‚Æ“¯‚¶‚É‚·‚é

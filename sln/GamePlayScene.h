@@ -28,11 +28,6 @@ public:
 
 	void SmallEnemyAppear();
 
-	void OnCollision();
-
-	//衝突判定と応答
-	void CheckAllCollisions();
-
 	void Obj2move();
 
 	std::unique_ptr<Camera> camera; //カメラ
@@ -48,11 +43,6 @@ public:
 	Enemy* enemy_ = nullptr;
 	Player* player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
-
-	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
-	//XMFLOAT3 playerbulposmemory = PlayerBullet::GetPlayerBulPosMemory();
-	//静的メンバ変数取得 当たり判定で弾座標使うために別クラスの数使いたい
-	//XMFLOAT3 seneposmemory = SmallEnemy::GetSEnePosMemory();
 
 private:
 

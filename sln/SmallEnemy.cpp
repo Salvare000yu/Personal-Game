@@ -5,12 +5,6 @@
 #include <DirectXMath.h>
 #include <random>std::srand(std::time(nullptr));
 
-DirectX::XMFLOAT3 SmallEnemy::GetSmallEnemyPosMemory()
-{
-	XMFLOAT3 SmallEnemyPosMemory = {};
-	return SmallEnemyPosMemory;
-}
-
 void SmallEnemy::Initialize()
 {
 
@@ -27,11 +21,6 @@ void SmallEnemy::Initialize()
 
 	SEneRandX = rand() % 100 - 50;
 	obj->SetPosition({ SEneRandX,40,400 });
-}
-
-void SmallEnemy::OnCollision()
-{
-	//isVanish_ = TRUE;
 }
 
 void SmallEnemy::Update()
@@ -63,7 +52,7 @@ void SmallEnemy::Update()
 	}
 
 	//éûä‘åoâﬂè¡ñ≈
-	if (--vanishTimer_ <= 0) { isVanish_ = TRUE; }
+	if (--vanishTimer_ <= 0) { alive = false; }
 
 	obj->Update();
 }

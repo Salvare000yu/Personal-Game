@@ -46,19 +46,7 @@ public:
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命
 
-	//消滅フラグ
-	bool isVanish_ = FALSE;
-
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
-
-	bool IsVanish()const { return isVanish_; }
-
-	//当たった時呼び出すためのコールバック関数
-	void OnCollision();
-	//雑魚敵座標判定で使うための
-	static XMFLOAT3 EnemyBullet::GetEnemyBulPosMemory();
-	//静的メンバ変数　当たり判定で使う為の雑魚敵座標
-	static XMFLOAT3 EnemyBulPosMemory;
 
 };

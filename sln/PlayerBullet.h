@@ -23,9 +23,6 @@ private:
 
 	float frame = 0;
 
-	//消滅フラグ
-	bool isVanish_ = FALSE;
-
 	XMFLOAT3 velocity{ 0,0,3 };
 
 public:
@@ -52,11 +49,6 @@ public:
 
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
-
-	bool IsVanish()const { return isVanish_; }
-
-	//当たった時呼び出すためのコールバック関数
-	void OnCollision();
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 

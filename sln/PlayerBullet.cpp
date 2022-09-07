@@ -9,11 +9,6 @@ DirectX::XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
 	return PlayerBulPosMemory;
 }
 
-void PlayerBullet::OnCollision()
-{
-	isVanish_ = TRUE;
-}
-
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void PlayerBullet::Initialize()
 {
@@ -49,9 +44,6 @@ void PlayerBullet::Update()
 	//if (TriggerR) {//リセット
 	//	obj->SetPosition({ 0,40,-170 });
 	//}
-
-	//時間経過消滅
-	if (--vanishTimer_ <= 0) { isVanish_ = TRUE; }
 
 	obj->Update();
 }
