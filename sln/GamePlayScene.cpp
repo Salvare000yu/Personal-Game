@@ -7,6 +7,7 @@
 #include "DxBase.h"
 #include "EndScene.h"
 #include "FbxObject3d.h"
+#include "Collision.h"
 
 #include "safe_delete.h"
 
@@ -40,6 +41,11 @@ void GamePlayScene::Initialize()
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
 	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
+	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
+	mod_playerbullet.reset(Model::LoadFromOBJ("PlayerBul"));
+	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
+	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
+	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
@@ -70,13 +76,22 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetRotation({ 0,-90,0 });
 
 	//いろいろ生成
-	enemy_ = new Enemy();
-	player_ = new Player();
+	player_.reset( new Player());
 	//smallEnemy_ = new SmallEnemy();
 	//いろいろキャラ初期化
-	enemy_->Initialize();
 	player_->Initialize();
+	player_->SetModel(mod_player.get());
+	player_->SetPBulModel(mod_playerbullet.get());
 	//smallEnemy_->Initialize();
+
+	enemy_.emplace_front();
+	for (std::unique_ptr<Enemy>& enemy : enemy_)
+	{
+		enemy=std::make_unique<Enemy>();
+		enemy->Initialize();
+		enemy->SetModel(mod_enemy.get());
+		enemy->SetEBulModel(mod_enemybullet.get());
+	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 	//----------FBX オブジェクト生成とモデルのセット-----------//
@@ -146,7 +161,7 @@ void GamePlayScene::Initialize()
 
 #pragma endregion 描画初期化処理
 
-	int counter = 0; // アニメーションの経過時間カウンター
+	//int counter = 0; // アニメーションの経過時間カウンター
 }
 
 void GamePlayScene::Finalize()
@@ -155,8 +170,7 @@ void GamePlayScene::Finalize()
 	//safe_delete(fbxModel_1);
 
 	//自キャラ解放
-	delete enemy_;
-	delete player_;
+	//delete player_;
 	//delete smallEnemy_;
 }
 
@@ -170,24 +184,16 @@ void GamePlayScene::SmallEnemyAppear()
 
 	madeSmallEnemy->Initialize();
 
+	madeSmallEnemy->SetModel(mod_smallenemy.get());
+
 	//雑魚敵登録
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
 void GamePlayScene::Update()
 {
-	//トリガーキー使う
-	bool TriggerKey(UINT index);
 
 	Input* input = Input::GetInstance();
-
-	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
-
-	if (input->PushKey(DIK_SPACE))     // スペースキーが押されていたら
-	{
-		// 画面クリアカラーの数値を書き換える
-		clearColor[1] = 1.0f;
-	}
 
 	//キー操作押している間
 	// 座標操作
@@ -353,6 +359,49 @@ void GamePlayScene::Update()
 	//	}
 	//}
 
+	//自機の弾と敵の当たり判定
+	{
+		Sphere pBulForm;
+
+		for (auto& pb : player_->GetBullets()) {
+			if (!pb->GetAlive())continue;
+			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
+			pBulForm.radius = pb->GetScale().x;
+
+			// 衝突判定をする
+			for (auto& e : enemy_) {
+				if (!e->GetAlive())continue;
+				Sphere enemyForm;
+				enemyForm.center = XMLoadFloat3(&e->GetPosition());
+				enemyForm.radius = e->GetScale().x;
+
+				// 当たったら消える
+				if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
+					e->SetAlive(false);
+					pb->SetAlive(false);
+					break;
+				}
+			}
+		}
+
+		if (!enemy_.empty())
+		{
+			if (enemy_.front()->GetAlive()) {
+				DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
+			}
+			else {
+				DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
+			}
+		}
+		else {
+			DebugText::GetInstance()->Print("empty", 200, 190, 2);
+		}
+
+		// 敵を消す
+		enemy_.erase(std::remove_if(enemy_.begin(), enemy_.end(),
+			[](const std::unique_ptr <Enemy>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), enemy_.end());
+	}
+
 	//消滅フラグ立ったらその雑魚敵は死して拝せよ
 	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
 		return !smallEnemy->GetAlive();
@@ -381,6 +430,11 @@ void GamePlayScene::Update()
 	//雑魚敵更新
 	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 		smallEnemy->Update();
+	}
+
+	//敵更新
+	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		enemy->Update();
 	}
 
 	//if (Trigger0)     // スペースキーが押されていたら
@@ -421,7 +475,6 @@ void GamePlayScene::Update()
 	sprite_back->Update();
 	sp_guide->Update();
 
-	enemy_->Update();
 	player_->Update();
 	//smallEnemy_->Update();
 }
@@ -446,6 +499,11 @@ void GamePlayScene::Draw()
 		smallEnemy->Draw();
 	}
 
+	//敵描画
+	for (std::unique_ptr<Enemy>& enemy : enemy_) {
+		enemy->Draw();
+	}
+
 	//3dオブジェ描画
 	object3d_1->Draw();
 	obj_worlddome->Draw();
@@ -454,7 +512,6 @@ void GamePlayScene::Draw()
 	obj_kabeleft->Draw();
 
 	//自キャラ描画
-	enemy_->Draw();
 	player_->Draw();
 	//smallEnemy_->Draw();
 

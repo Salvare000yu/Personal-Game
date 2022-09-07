@@ -38,10 +38,11 @@ public:
 	static const int SEneAppInterval = 50;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
+	std::list <std::unique_ptr<Enemy>> enemy_;
 
 	//“G
-	Enemy* enemy_ = nullptr;
-	Player* player_ = nullptr;
+	//Enemy* enemy_ = nullptr;
+	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
 
 private:
@@ -54,6 +55,11 @@ private:
 	std::unique_ptr < Model> mod_worlddome = nullptr;//“V‹…
 	std::unique_ptr < Model> mod_kaberight = nullptr;//•Ç
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//•Ç
+	std::unique_ptr < Model> mod_smallenemy = nullptr;//ŽG‹›“G
+	std::unique_ptr < Model> mod_playerbullet = nullptr;//Ž©‹@’e
+	std::unique_ptr < Model> mod_enemybullet = nullptr;//“G’e
+	std::unique_ptr < Model> mod_player = nullptr;// Ž©‹@
+	std::unique_ptr < Model> mod_enemy = nullptr;
 
 	std::unique_ptr < Object3d> obj_sword = nullptr;//ƒfƒoƒbƒN—pƒLƒƒƒ‰
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
@@ -62,7 +68,7 @@ private:
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
 	FbxModel* fbxModel_1 = nullptr;
-	FbxObject3d* fbxObject_1=nullptr;
+	FbxObject3d* fbxObject_1 = nullptr;
 
 	float frame = 0;
 

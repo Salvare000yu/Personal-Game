@@ -17,13 +17,9 @@ EnemyBullet* EnemyBullet::GetInstance()
 void EnemyBullet::Initialize()
 {
 	//定義とか仮おいておこう
-
-	//もでる読み込み
-	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
+	
 	//作る
 	obj.reset(Object3d::Create());
-	//セット
-	obj->SetModel(mod_enemybullet.get());
 	//-----↓任意↓-----//
 	//大きさ
 	obj->SetScale({ 2.0f, 2.0f, 2.0f });

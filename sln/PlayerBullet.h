@@ -53,7 +53,5 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
-		
-	std::unique_ptr < Model> mod_playerbullet = nullptr;
 
 };

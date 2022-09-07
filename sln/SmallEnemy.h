@@ -33,13 +33,8 @@ public:
 	//Á‚¦‚é‚Ü‚Å
 	static const int32_t BulVanishTime = 60*6;//õ–½
 
-	//Á–Åƒtƒ‰ƒO
-	bool isVanish_=FALSE;
-
 	//Á–Å‚Ìé
 	int32_t vanishTimer_ = BulVanishTime;
-
-	bool IsVanish()const { return isVanish_; }
 
 private:
 	////-----------------model
@@ -55,8 +50,6 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-
-	std::unique_ptr < Model> mod_smallenemy = nullptr;
 
 	//SEneX‚Ì—”“ü‚ê‚é•Ï”
 	float SEneRandX = 0;

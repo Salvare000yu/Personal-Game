@@ -8,7 +8,7 @@
 #include <memory>
 #include <list>//STL
 
-class Player:public BaseObject
+class Player :public BaseObject
 {
 private:
 	////-----------------model
@@ -26,7 +26,12 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 	float frame = 0;
+
+	Model* pBulModel = nullptr;
+
 public:
+	inline void SetPBulModel(Model* model) { pBulModel=model; }
+
 	//初期化
 	void Initialize() override;
 
@@ -45,9 +50,6 @@ public:
 
 	//PlayerBullet* bullet_ = nullptr;
 	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
-
-	//モデル
-	std::unique_ptr < Model> mod_player = nullptr;
 
 	//当たった時呼び出すためのコールバック関数
 	void OnCollision();

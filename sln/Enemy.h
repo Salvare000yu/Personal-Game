@@ -55,6 +55,8 @@ public:
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
+	inline void SetEBulModel(Model* model) { eBulModel = model; }
+
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
@@ -70,10 +72,10 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	std::unique_ptr < Model> mod_enemy = nullptr;
-
 	//フレーム
 	float frame = 0;
 	//攻撃用カウント
 	float AtkCount = 0;
+
+	Model* eBulModel = nullptr;
 };

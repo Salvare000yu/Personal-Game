@@ -8,12 +8,8 @@
 void SmallEnemy::Initialize()
 {
 
-	//もでる読み込み
-	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
 	//作る
 	obj.reset(Object3d::Create());
-	//セット
-	obj->SetModel(mod_smallenemy.get());
 	//-----↓任意↓-----//
 	//大きさ
 	obj->SetScale({ 5.0f, 5.0f, 5.0f });
@@ -44,9 +40,6 @@ void SmallEnemy::Update()
 	{
 		XMFLOAT3 smEnemPos = obj->GetPosition();
 		smEnemPos.z -= 4;
-		//---静的メンバ変数初期化　弾の座標を当たり判定で使う
-		XMFLOAT3 SmallEnemyPosMemory = {};
-		SmallEnemyPosMemory = obj->GetPosition();//判定のためポジション入れる
 		obj->SetPosition(smEnemPos);
 
 	}

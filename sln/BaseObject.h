@@ -26,6 +26,9 @@ public:
 	inline void SetRotation(const DirectX::XMFLOAT3& rotation) { obj->SetRotation(rotation); }
 	inline const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
 
+	//ƒ‚ƒfƒ‹‰Šú‰»ŠÖ”
+	inline void SetModel(Model* model ) { obj->SetModel(model); }
+
 	inline bool GetAlive() const { return alive; }
 
 	virtual void Initialize();
@@ -33,4 +36,5 @@ public:
 	virtual void Update();
 
 	virtual void Draw();
+
 };

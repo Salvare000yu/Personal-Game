@@ -28,6 +28,7 @@ void Enemy::Attack()
 	std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
 	//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚ÌŽž‚ÌƒvƒŒƒCƒ„[pos‚É•\Ž¦‚·‚é‚æ‚¤‚É‚·‚é
 	madeBullet->Initialize();
+	madeBullet->SetModel(eBulModel);
 	madeBullet->SetPosition(position);
 
 	//’e“o˜^
@@ -37,12 +38,8 @@ void Enemy::Attack()
 void Enemy::Initialize()
 {
 
-	//‚à‚Å‚é“Ç‚Ýž‚Ý
-	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	//ì‚é
 	obj.reset(Object3d::Create());
-	//ƒZƒbƒg
-	obj->SetModel(mod_enemy.get());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
 	obj->SetScale({ 20.0f, 20.0f, 20.0f });

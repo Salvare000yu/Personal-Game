@@ -24,8 +24,6 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	std::unique_ptr < Model> mod_enemybullet = nullptr;
-
 	float frame = 0;
 public:
 	//èâä˙âª

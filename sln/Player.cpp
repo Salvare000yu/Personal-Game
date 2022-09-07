@@ -24,6 +24,7 @@ void Player::Attack()
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
 		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 		madeBullet->Initialize();
+		madeBullet->SetModel(pBulModel);
 		madeBullet->SetPosition(PlayerPos);
 
 		// velocityを算出
@@ -46,12 +47,8 @@ void Player::Initialize()
 	//定義とか仮おいておこう
 
 
-	//もでる読み込み
-	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
 	//作る
 	obj.reset(Object3d::Create());
-	//セット
-	obj->SetModel(mod_player.get());
 	//-----↓任意↓-----//
 	//大きさ
 	obj->SetScale({ 3.0f, 3.0f, 3.0f });
@@ -60,12 +57,6 @@ void Player::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("shot.wav");
-}
-
-DirectX::XMFLOAT3 Player::GetPlayerPosMemory()
-{
-	XMFLOAT3 PlayerPosMemory = {};
-	return PlayerPosMemory;
 }
 
 void Player::Update()
@@ -220,9 +211,6 @@ void Player::Update()
 	}
 
 	//------------------↑プレイヤー移動＆姿勢
-
-	XMFLOAT3 PlayerPosMemory = {};
-	PlayerPosMemory = obj->GetPosition();//判定のためポジション入れる
 
 	//自分回転
 	if (inputE)
