@@ -35,7 +35,7 @@ void Player::Attack()
 		madeBullet->SetVelocity(xmfloat3velocity);
 
 		// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-		GameSound::GetInstance()->PlayWave("shot.wav", 0.3);
+		GameSound::GetInstance()->PlayWave("shot.wav", 0.3f);
 
 		//’e“o˜^
 		bullets_.push_back(std::move(madeBullet));

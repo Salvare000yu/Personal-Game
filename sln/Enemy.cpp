@@ -105,7 +105,7 @@ void Enemy::Update()
 		XMFLOAT3 position = obj->GetPosition();
 		position.z -= ApproachSp;
 		position.y += ApproachSp;
-		position.x += 3.f * sin(time * 3.14159265358f);
+		position.x += 3.f * sinf(time * 3.14159265358f);
 		obj->SetPosition(position);
 
 		//‚ ‚é’ö“x‹ß‚Ã‚¢‚½‚çƒLƒ‚‰ß‚¬‚Ä—£‚ê‚é

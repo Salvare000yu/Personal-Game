@@ -3,10 +3,11 @@
 #include "Input.h"
 
 #include <DirectXMath.h>
-#include <random>std::srand(std::time(nullptr));
+#include <random>
 
 void SmallEnemy::Initialize()
 {
+	std::srand((unsigned)std::time(nullptr));
 
 	//ì‚é
 	obj.reset(Object3d::Create());
@@ -15,7 +16,7 @@ void SmallEnemy::Initialize()
 	obj->SetScale({ 5.0f, 5.0f, 5.0f });
 	//êŠ
 
-	SEneRandX = rand() % 100 - 50;
+	SEneRandX = float(rand() % 100 - 50);
 	obj->SetPosition({ SEneRandX,40,400 });
 }
 

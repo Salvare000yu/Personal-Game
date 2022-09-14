@@ -337,7 +337,7 @@ bool DxBase::DebugLayer()
 #endif
 
     //GPUValidation
-    debugController->SetEnableGPUBasedValidation(TRUE);
+  //  debugController->SetEnableGPUBasedValidation(TRUE);
 
     return true;
 }
@@ -351,7 +351,7 @@ bool DxBase::SetBreakOnSeverity()
         infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);//エラー止まる
         //--comptr--infoQueue->Release();
     }
-#endif
+
     D3D12_MESSAGE_ID denyIds[] = {
         //windows11でdxgiデバッグレイヤーとdx12デバッグレイヤーのそうごっさようばぐによるエラーメッセージ
         D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
@@ -366,6 +366,8 @@ bool DxBase::SetBreakOnSeverity()
     filter.DenyList.pSeverityList = severities;
     //指定したエラー表示抑制
     infoQueue->PushStorageFilter(&filter);
+
+#endif
 
     return true;
 }
