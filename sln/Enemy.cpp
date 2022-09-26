@@ -101,7 +101,7 @@ void Enemy::Update()
 			AtkCount = AtkInterval;
 		}
 
-		//’e‚ÌˆÚ“®
+		//‚ÌˆÚ“®
 		XMFLOAT3 position = obj->GetPosition();
 		position.z -= ApproachSp;
 		position.y += ApproachSp;
@@ -143,5 +143,7 @@ void Enemy::Draw()
 		bullet->Draw();
 	}
 
-	obj->Draw();
+	if (alive) {
+		obj->Draw();
+	}
 }
