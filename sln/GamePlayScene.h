@@ -2,6 +2,7 @@
 #include "BaseScene.h"
 #include "Sprite.h"
 #include "Object3d.h"
+#include "BaseObject.h"
 
 #include "Camera.h"
 
@@ -13,7 +14,7 @@
 
 #include <memory>
 
-class GamePlayScene :public BaseScene
+class GamePlayScene :public BaseScene,public BaseObject
 {
 public:
 
@@ -44,6 +45,9 @@ public:
 	//Enemy* enemy_ = nullptr;
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
+
+	//ŽG‹›“GƒŠƒXƒg‚ðŽæ“¾
+	const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
 
 private:
 

@@ -384,6 +384,7 @@ void GamePlayScene::Update()
 			}
 		}
 
+		//“G‚¢‚ê‚ÎTRUE@Á‚¦‚½‚çFALSE@‚¢‚È‚¢‚ÆENPTY
 		if (!enemy_.empty())
 		{
 			if (enemy_.front()->GetAlive()) {
@@ -400,6 +401,38 @@ void GamePlayScene::Update()
 		// “G‚ğÁ‚·
 		enemy_.erase(std::remove_if(enemy_.begin(), enemy_.end(),
 			[](const std::unique_ptr <Enemy>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), enemy_.end());
+	}
+
+	//©‹@‚Ì’e‚ÆG‹›“G“–‚½‚è”»’è
+	{
+
+		Sphere pBulForm;
+
+		for (auto& pb : player_->GetBullets()) {
+			if (!pb->GetAlive())continue;
+			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
+			pBulForm.radius = pb->GetScale().x;
+
+			// Õ“Ë”»’è‚ğ‚·‚é
+			for (auto& se : smallEnemys_) {
+				if (!se->GetAlive())continue;
+				Sphere smallenemyForm;
+				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
+				smallenemyForm.radius = se->GetScale().x;
+
+				// “–‚½‚Á‚½‚çÁ‚¦‚é
+				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
+					se->SetAlive(false);
+					pb->SetAlive(false);
+					break;
+				}
+			}
+		}
+
+		//// G‹›“G‚ğÁ‚·
+		//smallEnemys_.erase(std::remove_if(smallEnemys_.begin(), smallEnemys_.end(),
+		//	[](const std::unique_ptr <GamePlayScene>& i) {return !i->GetAlive() && i->GetSmallEnemys().empty(); }), smallEnemys_.end());
+
 	}
 
 	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚ÌG‹›“G‚Í€‚µ‚Ä”q‚¹‚æ

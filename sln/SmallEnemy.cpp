@@ -53,6 +53,7 @@ void SmallEnemy::Update()
 
 void SmallEnemy::Draw()
 {
-
-	obj->Draw();
+	if (alive) {
+		obj->Draw();
+	}
 }
