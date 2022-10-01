@@ -41,7 +41,7 @@ void GamePlayScene::Initialize()
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
 	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
-	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
+	mod_smallenemy.reset(Model::LoadFromOBJ("smallenemy_kari"));
 	mod_playerbullet.reset(Model::LoadFromOBJ("PlayerBul"));
 	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
 	mod_player.reset(Model::LoadFromOBJ("hiyoko"));

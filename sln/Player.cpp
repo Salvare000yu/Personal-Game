@@ -121,11 +121,11 @@ void Player::Update()
 			PlayerPos.z = PlayerPos.z - moveSpeed;
 			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj->GetRotation();
-			if (rotation.x <= 10) {
-				rotation.x += 1.f;
-			}
-			obj->SetRotation(rotation);
+			//XMFLOAT3 rotation = obj->GetRotation();
+			//if (rotation.x <= 10) {
+			//	rotation.x += 1.f;
+			//}
+			//obj->SetRotation(rotation);
 
 		}
 
@@ -135,11 +135,11 @@ void Player::Update()
 			PlayerPos.z = PlayerPos.z + moveSpeed;
 			obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj->GetRotation();
-			if (rotation.x >= -10) {
-				rotation.x -= 1.f;
-			}
-			obj->SetRotation(rotation);
+			//XMFLOAT3 rotation = obj->GetRotation();
+			//if (rotation.x >= -10) {
+			//	rotation.x -= 1.f;
+			//}
+			//obj->SetRotation(rotation);
 		}
 
 		if ((inputA) || PadInputLEFT) {
