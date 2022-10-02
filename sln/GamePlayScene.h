@@ -78,5 +78,8 @@ private:
 
 	//雑魚敵出現用カウント
 	float SEneAppCount = 0;
+
+	//敵ライフ
+	int EnemyLP = 10;
 };
 

@@ -14,6 +14,7 @@ void SmallEnemy::Initialize()
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
 	obj->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 	//êŠ
 
 	SEneRandX = float(rand() % 100 - 50);

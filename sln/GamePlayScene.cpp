@@ -358,9 +358,44 @@ void GamePlayScene::Update()
 	//		sp_guide->SetPosition({ position });
 	//	}
 	//}
+	if (EnemyLP == 10) {
+		DebugText::GetInstance()->Print("EnemyLP:10", 200, 200, 3);
+	}
+	if (EnemyLP == 9) {
+		DebugText::GetInstance()->Print("EnemyLP:9", 200, 200, 3);
+	}
+	if (EnemyLP == 8) {
+		DebugText::GetInstance()->Print("EnemyLP:8", 200, 200, 3);
+	}
+	if (EnemyLP == 7) {
+		DebugText::GetInstance()->Print("EnemyLP:7", 200, 200, 3);
+	}
+	if (EnemyLP == 6) {
+		DebugText::GetInstance()->Print("EnemyLP:6", 200, 200, 3);
+	}
+	if (EnemyLP == 5) {
+		DebugText::GetInstance()->Print("EnemyLP:5", 200, 200, 3);
+	}
+	if (EnemyLP == 4) {
+		DebugText::GetInstance()->Print("EnemyLP:4", 200, 200, 3);
+	}
+	if (EnemyLP == 3) {
+		DebugText::GetInstance()->Print("EnemyLP:3", 200, 200, 3);
+	}
+	if (EnemyLP == 2) {
+		DebugText::GetInstance()->Print("EnemyLP:2", 200, 200, 3);
+	}
+	if (EnemyLP == 1) {
+		DebugText::GetInstance()->Print("EnemyLP:1", 200, 200, 3);
+	}
+	if (EnemyLP == 0) {
+		DebugText::GetInstance()->Print("crushing!", 200, 220, 3);
+	}
+
 
 	//Ž©‹@‚Ì’e‚Æ“G‚Ì“–‚½‚è”»’è
 	{
+
 		Sphere pBulForm;
 
 		for (auto& pb : player_->GetBullets()) {
@@ -377,8 +412,15 @@ void GamePlayScene::Update()
 
 				// “–‚½‚Á‚½‚çÁ‚¦‚é
 				if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
-					e->SetAlive(false);
+					
 					pb->SetAlive(false);
+
+					EnemyLP -= 1;
+
+					if (EnemyLP == 0) {
+						e->SetAlive(false);
+					}
+
 					break;
 				}
 			}
