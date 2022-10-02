@@ -47,7 +47,7 @@ public:
 	SmallEnemy* sEnemys_ = nullptr;
 
 	//G‹›“GƒŠƒXƒg‚ğæ“¾
-	const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
+	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
 
 private:
 

@@ -50,7 +50,7 @@ public:
 	std::list <std::unique_ptr<EnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//フレームごとに発射
-	static const int AtkInterval = 30;
+	static const int AtkInterval = 10;
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }

@@ -238,5 +238,8 @@ void Player::Draw()
 		bullet->Draw();
 	}
 
-	obj->Draw();
+	if (alive)
+	{
+		obj->Draw();
+	}
 }

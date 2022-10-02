@@ -95,7 +95,7 @@ void Enemy::Update()
 		AtkCount--;
 		//時が満ちたら
 		if (AtkCount == 0) {
-			//突撃時のみ発射
+			//突撃時、生存時のみ発射
 			if (alive) { Attack(); }
 			//再びカウントできるように初期化
 			AtkCount = AtkInterval;

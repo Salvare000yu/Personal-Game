@@ -47,5 +47,7 @@ void EnemyBullet::Update()
 
 void EnemyBullet::Draw()
 {
-	obj->Draw();
+	if (alive) {
+		obj->Draw();
+	}
 }

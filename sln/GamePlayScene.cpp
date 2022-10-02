@@ -359,38 +359,42 @@ void GamePlayScene::Update()
 	//	}
 	//}
 	if (EnemyLP == 10) {
-		DebugText::GetInstance()->Print("EnemyLP:10", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:10", 200, 230, 3);
 	}
 	if (EnemyLP == 9) {
-		DebugText::GetInstance()->Print("EnemyLP:9", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:9", 200, 230, 3);
 	}
 	if (EnemyLP == 8) {
-		DebugText::GetInstance()->Print("EnemyLP:8", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:8", 200, 230, 3);
 	}
 	if (EnemyLP == 7) {
-		DebugText::GetInstance()->Print("EnemyLP:7", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:7", 200, 230, 3);
 	}
 	if (EnemyLP == 6) {
-		DebugText::GetInstance()->Print("EnemyLP:6", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:6", 200, 230, 3);
 	}
 	if (EnemyLP == 5) {
-		DebugText::GetInstance()->Print("EnemyLP:5", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:5", 200, 230, 3);
 	}
 	if (EnemyLP == 4) {
-		DebugText::GetInstance()->Print("EnemyLP:4", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:4", 200, 230, 3);
 	}
 	if (EnemyLP == 3) {
-		DebugText::GetInstance()->Print("EnemyLP:3", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:3", 200, 230, 3);
 	}
 	if (EnemyLP == 2) {
-		DebugText::GetInstance()->Print("EnemyLP:2", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:2", 200, 230, 3);
 	}
 	if (EnemyLP == 1) {
-		DebugText::GetInstance()->Print("EnemyLP:1", 200, 200, 3);
+		DebugText::GetInstance()->Print("EnemyLP:1", 200, 230, 3);
 	}
 	if (EnemyLP == 0) {
-		DebugText::GetInstance()->Print("crushing!", 200, 220, 3);
+		DebugText::GetInstance()->Print("crushing!", 200, 230, 3);
 	}
+
+	if(player_->GetAlive()){
+		DebugText::GetInstance()->Print("Alive", 200, 270, 3); 
+	}else{ DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
 
 
 	//©‹@‚Ì’e‚Æ“G‚Ì“–‚½‚è”»’è
@@ -470,17 +474,41 @@ void GamePlayScene::Update()
 				}
 			}
 		}
-
-		//// G‹›“G‚ğÁ‚·
-		//smallEnemys_.erase(std::remove_if(smallEnemys_.begin(), smallEnemys_.end(),
-		//	[](const std::unique_ptr <GamePlayScene>& i) {return !i->GetAlive() && i->GetSmallEnemys().empty(); }), smallEnemys_.end());
-
 	}
 
 	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚ÌG‹›“G‚Í€‚µ‚Ä”q‚¹‚æ
 	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
 		return !smallEnemy->GetAlive();
 		});
+
+
+	//©‹@‚Æ“G’e‚Ì“–‚½‚è”»’è
+	{
+
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z;
+
+		if (player_->GetAlive()) {
+			for (auto& e : enemy_) {
+				if (!e->GetAlive())continue;
+				for (auto& eb : e->GetBullets()) {
+					Sphere eBulForm;
+					eBulForm.center = XMLoadFloat3(&eb->GetPosition());
+					eBulForm.radius = eb->GetScale().z;
+
+					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
+						eb->SetAlive(false);
+						player_->SetAlive(false);
+						break;
+					}
+
+				}
+			}
+		}
+
+
+	}
 
 	//“V‹…‰ñ“]
 	for (int i = 0; i < 1; i++)
