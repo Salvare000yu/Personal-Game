@@ -2,6 +2,8 @@
 #include "Object3d.h"
 #include "Input.h"
 
+#include "GameSound.h"
+
 #include <DirectXMath.h>
 #include <random>
 
@@ -19,6 +21,7 @@ void SmallEnemy::Initialize()
 
 	SEneRandX = float(rand() % 100 - 50);
 	obj->SetPosition({ SEneRandX,40,400 });
+
 }
 
 void SmallEnemy::Update()

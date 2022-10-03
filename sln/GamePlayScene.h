@@ -4,6 +4,7 @@
 #include "Object3d.h"
 #include "BaseObject.h"
 
+
 #include "Camera.h"
 
 #include "FbxObject3d.h"

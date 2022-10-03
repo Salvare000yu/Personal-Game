@@ -110,6 +110,11 @@ void GamePlayScene::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
+	GameSound::GetInstance()->LoadWave("se_baaan1.wav");
+	GameSound::GetInstance()->LoadWave("bossdam_1.wav");
+	GameSound::GetInstance()->LoadWave("bossdam_2.wav");
+	GameSound::GetInstance()->LoadWave("bossdam_3.wav");
+	GameSound::GetInstance()->LoadWave("bossdeath.wav");
 	// 音声再生 鳴らしたいとき
 	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.5, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
@@ -398,7 +403,10 @@ void GamePlayScene::Update()
 
 					NowEnemyHP -= pBulPower;
 
+					GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5, 0);
+
 					if (NowEnemyHP == 0) {
+						GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5, 0);
 						e->SetAlive(false);
 					}
 
@@ -445,6 +453,7 @@ void GamePlayScene::Update()
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
+					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.5, 0);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;

@@ -20,7 +20,7 @@ void Enemy::Attack()
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+	//GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();
@@ -101,11 +101,11 @@ void Enemy::Update()
 			AtkCount = AtkInterval;
 		}
 
-		//‚ÌˆÚ“®
+		//“G‚ÌˆÚ“®
 		XMFLOAT3 position = obj->GetPosition();
-		position.z -= ApproachSp;
-		position.y += ApproachSp;
-		position.x += 3.f * sinf(time * 3.14159265358f);
+		//position.z -= ApproachSp;
+		//position.y += ApproachSp;
+		//position.x += 3.f * sinf(time * 3.14159265358f);
 		obj->SetPosition(position);
 
 		//‚ ‚é’ö“x‹ß‚Ã‚¢‚½‚çƒLƒ‚‰ß‚¬‚Ä—£‚ê‚é
