@@ -54,6 +54,7 @@ private:
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	std::unique_ptr < Sprite> sp_guide = nullptr;
 	std::unique_ptr < Sprite> sp_hpbar = nullptr;
+	std::unique_ptr < Sprite> sp_hpbarwaku = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面

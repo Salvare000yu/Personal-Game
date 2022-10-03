@@ -111,7 +111,7 @@ void GamePlayScene::Initialize()
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.5, XAUDIO2_LOOP_INFINITE);
+	//GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.5, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -121,11 +121,13 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPber.png");
+	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPber_waku.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_guide.reset(Sprite::Create(2, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_hpbar.reset(Sprite::Create(3, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_hpbarwaku.reset(Sprite::Create(4, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -134,7 +136,8 @@ void GamePlayScene::Initialize()
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	sp_guide->SetPosition({ 0,0,0 });
-	sp_hpbar->SetPosition({ 140,-110,0 });
+	sp_hpbar->SetPosition({ 140,-80,0 });
+	sp_hpbarwaku->SetPosition({ 140,-80,0 });
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -528,12 +531,12 @@ void GamePlayScene::Update()
 		enemy->Update();
 	}
 
-	//if (Trigger0)     // スペースキーが押されていたら
-	//{
-	//	//シーン切り替え
-	//	BaseScene* scene = new EndScene();
-	//	sceneManager_->SetNextScene(scene);
-	//}
+	//シーン切り替え
+	if(!enemy_.front()->GetAlive()){
+
+		BaseScene* scene = new EndScene();
+		sceneManager_->SetNextScene(scene);
+	}
 
 	//バックスプライト動
 	//SPmove SPbackmoveobj;
@@ -566,6 +569,7 @@ void GamePlayScene::Update()
 	sprite_back->Update();
 	sp_guide->Update();
 	sp_hpbar->Update();
+	sp_hpbarwaku->Update();
 
 	player_->Update();
 	//smallEnemy_->Update();
@@ -631,6 +635,7 @@ void GamePlayScene::Draw()
 	//------お手前スプライト描画
 	sp_guide->Draw();
 	sp_hpbar->Draw();
+	sp_hpbarwaku->Draw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();
