@@ -69,6 +69,7 @@ void Player::Update()
 	const bool inputE = input->PushKey(DIK_E);
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
+	const bool inputC = input->PushKey(DIK_C);
 	const bool inputUp = input->PushKey(DIK_UP);
 	const bool inputDown = input->PushKey(DIK_DOWN);
 	const bool inputRight = input->PushKey(DIK_RIGHT);
@@ -113,7 +114,7 @@ void Player::Update()
 
 		//------ƒvƒŒƒCƒ„[‚à“¯‚¶ˆÚ“®------//
 		bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 2;
+		constexpr float moveSpeed = 2.f;
 
 		if ((inputS)|| PadInputDOWN) {
 
@@ -217,6 +218,12 @@ void Player::Update()
 	{
 		XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y++;
+		obj->SetRotation(rotation);
+	}
+	if (inputC)
+	{
+		XMFLOAT3 rotation = obj->GetRotation();
+		rotation.y--;
 		obj->SetRotation(rotation);
 	}
 

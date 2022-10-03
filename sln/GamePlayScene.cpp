@@ -120,10 +120,12 @@ void GamePlayScene::Initialize()
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
+	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPber.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_guide.reset(Sprite::Create(2, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_hpbar.reset(Sprite::Create(3, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -132,8 +134,9 @@ void GamePlayScene::Initialize()
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	sp_guide->SetPosition({ 0,0,0 });
+	sp_hpbar->SetPosition({ 140,-110,0 });
 
-	//スプライトサイズ
+	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
 	//size.x=90;
@@ -329,6 +332,7 @@ void GamePlayScene::Update()
 	if (TriggerR) {
 		camera->SetTarget({ 0,50,-200 });
 		camera->SetEye({ 0,48,-210 });
+		player_->SetAlive(true);
 		// カメラreセット
 		//Object3d::SetCamera(camera.get());
 	}
@@ -358,37 +362,7 @@ void GamePlayScene::Update()
 	//		sp_guide->SetPosition({ position });
 	//	}
 	//}
-	if (EnemyLP == 10) {
-		DebugText::GetInstance()->Print("EnemyLP:10", 200, 230, 3);
-	}
-	if (EnemyLP == 9) {
-		DebugText::GetInstance()->Print("EnemyLP:9", 200, 230, 3);
-	}
-	if (EnemyLP == 8) {
-		DebugText::GetInstance()->Print("EnemyLP:8", 200, 230, 3);
-	}
-	if (EnemyLP == 7) {
-		DebugText::GetInstance()->Print("EnemyLP:7", 200, 230, 3);
-	}
-	if (EnemyLP == 6) {
-		DebugText::GetInstance()->Print("EnemyLP:6", 200, 230, 3);
-	}
-	if (EnemyLP == 5) {
-		DebugText::GetInstance()->Print("EnemyLP:5", 200, 230, 3);
-	}
-	if (EnemyLP == 4) {
-		DebugText::GetInstance()->Print("EnemyLP:4", 200, 230, 3);
-	}
-	if (EnemyLP == 3) {
-		DebugText::GetInstance()->Print("EnemyLP:3", 200, 230, 3);
-	}
-	if (EnemyLP == 2) {
-		DebugText::GetInstance()->Print("EnemyLP:2", 200, 230, 3);
-	}
-	if (EnemyLP == 1) {
-		DebugText::GetInstance()->Print("EnemyLP:1", 200, 230, 3);
-	}
-	if (EnemyLP == 0) {
+	if (NowEnemyHP == 0) {
 		DebugText::GetInstance()->Print("crushing!", 200, 230, 3);
 	}
 
@@ -400,10 +374,10 @@ void GamePlayScene::Update()
 	//自機の弾と敵の当たり判定
 	{
 
-		Sphere pBulForm;
+		Sphere pBulForm;//球
 
 		for (auto& pb : player_->GetBullets()) {
-			if (!pb->GetAlive())continue;
+			if (!pb->GetAlive())continue;//死んでたらスキップ
 			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
 			pBulForm.radius = pb->GetScale().x;
 
@@ -419,9 +393,9 @@ void GamePlayScene::Update()
 					
 					pb->SetAlive(false);
 
-					EnemyLP -= 1;
+					NowEnemyHP -= pBulPower;
 
-					if (EnemyLP == 0) {
+					if (NowEnemyHP == 0) {
 						e->SetAlive(false);
 					}
 
@@ -510,6 +484,20 @@ void GamePlayScene::Update()
 
 	}
 
+	for (int i = 0; i < 1; i++)
+	{
+
+		//sp_hpbar->size_.x = HpbarDefault;//HPバーサイズ　1000デフォ
+		//sp_hpbar->TransferVertexBuffer();
+
+		//HPBarRatio = NowEnemyHP / EnemyMaxHP * HpbarDefault;//HP比率
+
+		//sp_hpbar->size_.x = HPBarRatio;
+		//sp_hpbar->TransferVertexBuffer();
+		sp_hpbar->size_.x = NowEnemyHP;
+		sp_hpbar->TransferVertexBuffer();
+	}
+
 	//天球回転
 	for (int i = 0; i < 1; i++)
 	{
@@ -577,6 +565,7 @@ void GamePlayScene::Update()
 	//スプライト更新
 	sprite_back->Update();
 	sp_guide->Update();
+	sp_hpbar->Update();
 
 	player_->Update();
 	//smallEnemy_->Update();
@@ -641,6 +630,7 @@ void GamePlayScene::Draw()
 
 	//------お手前スプライト描画
 	sp_guide->Draw();
+	sp_hpbar->Draw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

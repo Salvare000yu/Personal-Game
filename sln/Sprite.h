@@ -75,13 +75,7 @@ public:
 	void SetTexSize(const DirectX::XMFLOAT2& texSize) { texSize_ = texSize; }
 
 	//private:
-protected:
-	//頂点バッファ;
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
-	//頂点バッファビュー;
-	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-	//定数バッファ;
-	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
+public:
 	// Z軸回りの回転角
 	float rotation_ = 0.0f;
 	// 座標
@@ -106,6 +100,14 @@ protected:
 	DirectX::XMFLOAT2 texSize_ = { 100, 100 };
 	// 非表示
 	bool isInvisible = false;
+
+protected:
+	//頂点バッファ;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
+	//頂点バッファビュー;
+	D3D12_VERTEX_BUFFER_VIEW vbView_{};
+	//定数バッファ;
+	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
 
 };
 

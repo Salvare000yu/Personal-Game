@@ -50,9 +50,10 @@ public:
 	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
 
 private:
-
+	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	std::unique_ptr < Sprite> sp_guide = nullptr;
+	std::unique_ptr < Sprite> sp_hpbar = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -79,7 +80,12 @@ private:
 	//雑魚敵出現用カウント
 	float SEneAppCount = 0;
 
+	//自機通常弾威力
+	float pBulPower = 50;
+
 	//敵ライフ
-	int EnemyLP = 10;
+	int EnemyMaxHP = 1000;//てきさいだいHP 
+	int NowEnemyHP = EnemyMaxHP;//現在の敵HP
+	
 };
 
