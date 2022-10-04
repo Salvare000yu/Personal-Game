@@ -50,12 +50,18 @@ public:
 	//雑魚敵リストを取得
 	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
 
+	//揺れる時間
+	static const int32_t pShakeTime = 60*3;
+	//揺れたいまー
+	int32_t pShakeTimer_ = pShakeTime;
+
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	std::unique_ptr < Sprite> sp_guide = nullptr;
-	std::unique_ptr < Sprite> sp_hpbar = nullptr;
-	std::unique_ptr < Sprite> sp_hpbarwaku = nullptr;
+	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
+	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
+	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -83,11 +89,19 @@ private:
 	float SEneAppCount = 0;
 
 	//自機通常弾威力
-	float pBulPower = 50;
+	const float pBulPower = 50;
+	//敵通常弾威力
+	const float eBulPower = 200;
 
-	//敵ライフ
-	int EnemyMaxHP = 1000;//てきさいだいHP 
+	//敵HP
+	const int EnemyMaxHP = 1000;//てきさいだいHP 
 	int NowEnemyHP = EnemyMaxHP;//現在の敵HP
+
+	//自機HP
+	const int PlayerMaxHP = 1000;//じきさいだいHP
+	int NowPlayerHP = PlayerMaxHP;//現在の自機HP
+	//自機ダメージフラグ 喰らってない
+	bool pDamFlag = false;
 	
 };
 

@@ -228,7 +228,7 @@ void Player::Update()
 	}
 
 	//”­Ëˆ—
-	Attack();
+	if (alive) { Attack(); }
 	//’eXV
 	for (std::unique_ptr<PlayerBullet>& bullet:bullets_) {
 		bullet->Update();

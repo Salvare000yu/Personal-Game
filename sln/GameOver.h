@@ -7,7 +7,7 @@
 #include "Object3d.h"
 #include <memory>
 
-class EndScene :public BaseScene
+class GameOver :public BaseScene
 {
 public:
 
@@ -18,11 +18,12 @@ public:
 	void Update() override;
 
 	void Draw() override;
+
 	void DrawUI() override;
 
 private:
 
-	std::unique_ptr < Sprite> sprite = nullptr;
+	std::unique_ptr < Sprite> gameover = nullptr;
 
 	//Model* model_1 = nullptr;
 	//Model* model_2 = nullptr;

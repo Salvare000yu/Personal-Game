@@ -1,4 +1,4 @@
-#include "EndScene.h"
+#include "ClearScene.h"
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
@@ -6,7 +6,7 @@
 #include "GamePlayScene.h"
 #include "TitleScene.h"
 
-void EndScene::Initialize()
+void ClearScene::Initialize()
 {
 #pragma region 描画初期化処理
 
@@ -41,7 +41,7 @@ void EndScene::Initialize()
 	//Object3d object3ds[OBJECT_NUM];
 
 	// スプライト共通テクスチャ読み込み
-	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/EndScene.png");
+	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/GameClear.png");
 
 	// スプライトの生成
 	sprite.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
@@ -57,7 +57,7 @@ void EndScene::Initialize()
 
 	//    sprite->TransferVertexBuffer();
 
-	//    sprites.push_back(sprite);EndScene
+	//    sprites.push_back(sprite);ClearScene
 	//}
 
 #pragma endregion 描画初期化処理
@@ -65,7 +65,7 @@ void EndScene::Initialize()
 	int counter = 0; // アニメーションの経過時間カウンター
 }
 
-void EndScene::Finalize()
+void ClearScene::Finalize()
 {
 
 	//スプライト解放
@@ -79,7 +79,7 @@ void EndScene::Finalize()
 	//delete model_2;
 }
 
-void EndScene::Update()
+void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
 
@@ -110,7 +110,7 @@ void EndScene::Update()
 	sprite->Update();
 }
 
-void EndScene::Draw()
+void ClearScene::Draw()
 {
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
@@ -145,6 +145,6 @@ void EndScene::Draw()
 	//sprite->Draw();
 }
 
-void EndScene::DrawUI()
+void ClearScene::DrawUI()
 {
 }

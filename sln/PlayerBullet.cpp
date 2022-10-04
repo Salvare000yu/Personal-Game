@@ -37,6 +37,9 @@ void PlayerBullet::Update()
 	//	obj->SetPosition({ 0,40,-170 });
 	//}
 
+	//ŠÔŒo‰ßÁ–Å
+	if (--vanishTimer_ <= 0) { alive = false; }
+
 	obj->Update();
 }
 
