@@ -22,7 +22,7 @@ void EnemyBullet::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 2.0f, 2.0f, 2.0f });
+	obj->SetScale({ 3.0f, 3.0f, 3.0f });
 	//êŠ
 	//obj->SetPosition({ position });
 
@@ -47,7 +47,5 @@ void EnemyBullet::Update()
 
 void EnemyBullet::Draw()
 {
-	if (alive) {
-		obj->Draw();
-	}
+	obj->Draw();
 }

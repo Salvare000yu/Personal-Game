@@ -27,6 +27,7 @@ void PlayerBullet::Initialize()
 void PlayerBullet::Update()
 {
 	XMFLOAT3 BulletPos = obj->GetPosition();
+	//’e”­ŽË‘¬“x
 	BulletPos.z += velocity.z;
 	BulletPos.x += velocity.x;
 	BulletPos.y += velocity.y;

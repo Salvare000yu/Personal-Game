@@ -15,15 +15,15 @@ float4 main(VSOutput input) : SV_TARGET
 	
 	//ŽžŠÔ‚ÅRGBƒVƒtƒg
     float4 texcolor0 = tex0.Sample(smp, input.uv);
-    texcolor0.r = tex0.Sample(smp, input.uv + float2(0.003 * sin(time * 3.141592653589793f), 0)).r;
-    texcolor0.g = tex0.Sample(smp, input.uv + float2(0, 0.002 * sin(time * 3.141592653589793f))).g;
-    texcolor0.b = tex0.Sample(smp, input.uv + float2(0.002 * sin(time * 3.141592653589793f), 0.01)).b;
+    texcolor0.r = tex0.Sample(smp, input.uv + float2(0.003 * sin(1.6 * time * 3.141592653589793f), 0)).r;
+    texcolor0.g = tex0.Sample(smp, input.uv + float2(0, 0.003 * sin(1.4*time * 3.141592653589793f))).g;
+    texcolor0.b = tex0.Sample(smp, input.uv + float2(0.002 * sin(1.2*time * 3.141592653589793f), 0.01)).b;
     float4 texcolor1 = tex1.Sample(smp, input.uv);
 
     float4 color = texcolor0;
     if (fmod(input.uv.y, 0.1f) < 0.05f)
     {
-      //  color = texcolor1;//ŽÎü
+        //color = texcolor1;//ŽÎü
     }
 
     return float4(color.rgb, 1);

@@ -117,7 +117,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.5, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.4, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -126,9 +126,10 @@ void GamePlayScene::Initialize()
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
-	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPber.png");
-	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPber_waku.png");
-	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPber.png");
+	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
+	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
+	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
+	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -136,6 +137,7 @@ void GamePlayScene::Initialize()
 	sp_enemyhpbar.reset(Sprite::Create(3, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_enemyhpbarwaku.reset(Sprite::Create(4, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_playerhpbarwaku.reset(Sprite::Create(6, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -147,12 +149,15 @@ void GamePlayScene::Initialize()
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
 	sp_playerhpbar->SetPosition({ 30,500,0 });
+	sp_playerhpbarwaku->SetPosition({ 30,500,0 });
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
+	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
+	sp_playerhpbarwaku->TransferVertexBuffer();
 
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -345,6 +350,7 @@ void GamePlayScene::Update()
 		camera->SetTarget({ 0,50,-200 });
 		camera->SetEye({ 0,48,-210 });
 		player_->SetAlive(true);
+		NowPlayerHP = PlayerMaxHP;
 		enemy_.front()->SetAlive(true);
 		NowEnemyHP = EnemyMaxHP;
 		// カメラreセット
@@ -460,6 +466,7 @@ void GamePlayScene::Update()
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
 					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.5, 0);
+					EnemyMurdersNum++;//撃破数
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -475,6 +482,9 @@ void GamePlayScene::Update()
 
 
 	//自機と敵弾の当たり判定
+	//XMFLOAT3 pPosMem{};//プレイヤー元座標保存　揺れに使う予定
+	//XMFLOAT3 pos=player_->GetPosition();
+	//if(pos.y==0){ DebugText::GetInstance()->Print("0niiru", 200, 350, 3);}//0に戻ったら表示目安
 	{
 
 		Sphere playerForm;
@@ -490,8 +500,10 @@ void GamePlayScene::Update()
 					eBulForm.radius = eb->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
+
+						//pPosMem = player_->GetPosition();//プレイヤー元座標保存　揺れに使う予定
 						pDamFlag = true;
-						NowPlayerHP -= eBulPower;
+						NowPlayerHP -= eBulPower;//自機ダメージ
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5, 0);
 						eb->SetAlive(false);
@@ -509,18 +521,25 @@ void GamePlayScene::Update()
 
 	}
 
+	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
+
 	if (pDamFlag == true) {
-		if (--pShakeTimer_ >= 0) {//揺らす時間
+		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
 			XMFLOAT3 pPosition = player_->GetPosition();
-			DebugText::GetInstance()->Print("timer nai dayo", 200, 100, 9);
+			DebugText::GetInstance()->Print("Damage Cool Time", 200, 500, 4);
+			//pPosition.x = pPosMem.x+rand() % 5 - 2;
+			//pPosition.y = pPosMem.y+rand() % 5 - 2;
 			player_->SetPosition(pPosition);
 
-			if(pShakeTimer_<=0){pDamFlag = false;}
+			if(pShakeTimer_<=0){
+				//player_->SetPosition({ pPosMem });//揺らした後元座標に戻したい
+				pDamFlag = false;
+			}//0なったらくらい状態解除
 		}
 	}
 	else { pShakeTimer_ = pShakeTime; }
-	if(pDamFlag==false){ DebugText::GetInstance()->Print("pdamflag=false", 200, 300, 3); }
-	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 300, 3); }
+	if(pDamFlag==false){ DebugText::GetInstance()->Print("pdamflag=false", 200, 400, 3); }
+	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
 
 	//敵のHPバー
 	for (int i = 0; i < 1; i++)
@@ -528,11 +547,24 @@ void GamePlayScene::Update()
 		sp_enemyhpbar->size_.x = NowEnemyHP;
 		sp_enemyhpbar->TransferVertexBuffer();
 	}
+
 	//自機のHPバー
 	for (int i = 0; i < 1; i++)
 	{
 		sp_playerhpbar->size_.x = NowPlayerHP;
 		sp_playerhpbar->TransferVertexBuffer();
+	}
+	if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
+		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
+		pHpBar.x += 50;
+		sp_playerhpbar->SetPosition(pHpBar);
+		BarPosControlOnlyOnceFlag1 = true;
+	}
+	if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag2 == false) {
+		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
+		pHpBar.x += 30;
+		sp_playerhpbar->SetPosition(pHpBar);
+		BarPosControlOnlyOnceFlag2 = true;
 	}
 
 	//天球回転
@@ -544,14 +576,16 @@ void GamePlayScene::Update()
 
 	}
 
-	//時が満ちたら
-	if (SEneAppCount == 0) {
-		//雑魚敵来る
-		SmallEnemyAppear();
-		//再びカウントできるように初期化
-		SEneAppCount = SEneAppInterval;
+	if (BossEnemyAdvent == false)
+	{
+		//時が満ちたら
+		if (SEneAppCount == 0) {
+			//雑魚敵来る
+			SmallEnemyAppear();
+			//再びカウントできるように初期化
+			SEneAppCount = SEneAppInterval;
+		}
 	}
-
 	//雑魚敵カウントをデクリメント
 	SEneAppCount--;
 
@@ -560,9 +594,13 @@ void GamePlayScene::Update()
 		smallEnemy->Update();
 	}
 
-	//敵更新
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		enemy->Update();
+	//撃破数達成でボス戦
+	if (EnemyMurdersNum >= 6) {
+		//敵更新
+		BossEnemyAdvent = true;
+		for (std::unique_ptr<Enemy>& enemy : enemy_) {
+			enemy->Update();
+		}
 	}
 
 	//----------------シーン切り替え
@@ -612,6 +650,7 @@ void GamePlayScene::Update()
 	sp_enemyhpbar->Update();
 	sp_enemyhpbarwaku->Update();
 	sp_playerhpbar->Update();
+	sp_playerhpbarwaku->Update();
 
 	player_->Update();
 	//smallEnemy_->Update();
@@ -638,8 +677,10 @@ void GamePlayScene::Draw()
 	}
 
 	//敵描画
-	for (std::unique_ptr<Enemy>& enemy : enemy_) {
-		enemy->Draw();
+	if (EnemyMurdersNum >= 5) {
+		for (std::unique_ptr<Enemy>& enemy : enemy_) {
+			enemy->Draw();
+		}
 	}
 
 	//3dオブジェ描画
@@ -679,6 +720,7 @@ void GamePlayScene::Draw()
 	sp_enemyhpbar->Draw();
 	sp_enemyhpbarwaku->Draw();
 	sp_playerhpbar->Draw();
+	sp_playerhpbarwaku->Draw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

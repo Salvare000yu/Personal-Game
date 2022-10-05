@@ -62,6 +62,7 @@ private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
+	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -100,8 +101,14 @@ private:
 	//自機HP
 	const int PlayerMaxHP = 1000;//じきさいだいHP
 	int NowPlayerHP = PlayerMaxHP;//現在の自機HP
+	bool BarPosControlOnlyOnceFlag1 = false;
+	bool BarPosControlOnlyOnceFlag2 = false;
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
+	//敵撃破数
+	int EnemyMurdersNum = 0;
+	//ボス出現条件達成！
+	bool BossEnemyAdvent = false;
 	
 };
 
