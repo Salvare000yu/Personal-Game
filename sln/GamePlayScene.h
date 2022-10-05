@@ -9,7 +9,7 @@
 
 #include "FbxObject3d.h"
 
-#include "Enemy.h"
+#include "Boss.h"
 #include "Player.h"
 #include "SmallEnemy.h"
 
@@ -40,7 +40,7 @@ public:
 	static const int SEneAppInterval = 50;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
-	std::list <std::unique_ptr<Enemy>> enemy_;
+	std::list <std::unique_ptr<Boss>> boss_;
 
 	//敵
 	//Enemy* enemy_ = nullptr;
@@ -95,8 +95,8 @@ private:
 	const float eBulPower = 200;
 
 	//敵HP
-	const int EnemyMaxHP = 1000;//てきさいだいHP 
-	int NowEnemyHP = EnemyMaxHP;//現在の敵HP
+	const int BossMaxHP = 1000;//てきさいだいHP 
+	int NowBossHP = BossMaxHP;//現在の敵HP
 
 	//自機HP
 	const int PlayerMaxHP = 1000;//じきさいだいHP
@@ -106,7 +106,9 @@ private:
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
 	//敵撃破数
-	int EnemyMurdersNum = 0;
+	int sEnemyMurdersNum = 0;
+	//ボス戦までの敵殺害必要数
+	int BossTermsEMurdersNum = 8;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	

@@ -2,12 +2,12 @@
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
-#include "EnemyBullet.h"
+#include "BossBullet.h"
 #include "BaseObject.h"
 
 #include <memory>
 
-class Enemy:public BaseObject
+class Boss:public BaseObject
 {
 
 	//行動パターン enumclass
@@ -47,13 +47,13 @@ public:
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
 	ActionPattern actionPattern_ = ActionPattern::Approach;
 
-	std::list <std::unique_ptr<EnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+	std::list <std::unique_ptr<BossBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
 
 	//弾リストを取得
-	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
+	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
 
 	inline void SetEBulModel(Model* model) { eBulModel = model; }
 

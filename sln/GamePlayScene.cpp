@@ -85,13 +85,13 @@ void GamePlayScene::Initialize()
 	player_->SetPBulModel(mod_playerbullet.get());
 	//smallEnemy_->Initialize();
 
-	enemy_.emplace_front();
-	for (std::unique_ptr<Enemy>& enemy : enemy_)
+	boss_.emplace_front();
+	for (std::unique_ptr<Boss>& boss : boss_)
 	{
-		enemy=std::make_unique<Enemy>();
-		enemy->Initialize();
-		enemy->SetModel(mod_enemy.get());
-		enemy->SetEBulModel(mod_enemybullet.get());
+		boss=std::make_unique<Boss>();
+		boss->Initialize();
+		boss->SetModel(mod_enemy.get());
+		boss->SetEBulModel(mod_enemybullet.get());
 	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
@@ -148,8 +148,8 @@ void GamePlayScene::Initialize()
 	sp_guide->SetPosition({ 0,0,0 });
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ 30,500,0 });
-	sp_playerhpbarwaku->SetPosition({ 30,500,0 });
+	sp_playerhpbar->SetPosition({ -30,500,0 });
+	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -351,8 +351,10 @@ void GamePlayScene::Update()
 		camera->SetEye({ 0,48,-210 });
 		player_->SetAlive(true);
 		NowPlayerHP = PlayerMaxHP;
-		enemy_.front()->SetAlive(true);
-		NowEnemyHP = EnemyMaxHP;
+		boss_.front()->SetAlive(true);
+		NowBossHP = BossMaxHP;
+		sEnemyMurdersNum = 0;
+		BossEnemyAdvent = false;
 		// カメラreセット
 		//Object3d::SetCamera(camera.get());
 	}
@@ -382,7 +384,7 @@ void GamePlayScene::Update()
 	//		sp_guide->SetPosition({ position });
 	//	}
 	//}
-	if (NowEnemyHP == 0) {
+	if (NowBossHP == 0) {
 		DebugText::GetInstance()->Print("crushing!", 200, 230, 3);
 	}
 
@@ -402,24 +404,24 @@ void GamePlayScene::Update()
 			pBulForm.radius = pb->GetScale().x;
 
 			// 衝突判定をする
-			for (auto& e : enemy_) {
-				if (!e->GetAlive())continue;
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
 				Sphere enemyForm;
-				enemyForm.center = XMLoadFloat3(&e->GetPosition());
-				enemyForm.radius = e->GetScale().x;
+				enemyForm.center = XMLoadFloat3(&bo->GetPosition());
+				enemyForm.radius = bo->GetScale().x;
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
 					
 					pb->SetAlive(false);
 
-					NowEnemyHP -= pBulPower;
+					NowBossHP -= pBulPower;
 
 					GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5, 0);
 
-					if (NowEnemyHP <= 0) {
+					if (NowBossHP <= 0) {
 						GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5, 0);
-						e->SetAlive(false);
+						bo->SetAlive(false);
 					}
 
 					break;
@@ -428,9 +430,9 @@ void GamePlayScene::Update()
 		}
 
 		//敵いればTRUE　消えたらFALSE　いないとENPTY
-		if (!enemy_.empty())
+		if (!boss_.empty())
 		{
-			if (enemy_.front()->GetAlive()) {
+			if (boss_.front()->GetAlive()) {
 				DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
 			}
 			else {
@@ -442,8 +444,8 @@ void GamePlayScene::Update()
 		}
 
 		// 敵を消す
-		enemy_.erase(std::remove_if(enemy_.begin(), enemy_.end(),
-			[](const std::unique_ptr <Enemy>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), enemy_.end());
+		boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
+			[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
 	}
 
 	//自機の弾と雑魚敵当たり判定
@@ -466,7 +468,7 @@ void GamePlayScene::Update()
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
 					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.5, 0);
-					EnemyMurdersNum++;//撃破数
+					sEnemyMurdersNum++;//撃破数
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -492,9 +494,9 @@ void GamePlayScene::Update()
 		playerForm.radius = player_->GetScale().z;
 
 		if (player_->GetAlive()) {
-			for (auto& e : enemy_) {
-				if (!e->GetAlive())continue;
-				for (auto& eb : e->GetBullets()) {
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
+				for (auto& eb : bo->GetBullets()) {
 					Sphere eBulForm;
 					eBulForm.center = XMLoadFloat3(&eb->GetPosition());
 					eBulForm.radius = eb->GetScale().z;
@@ -526,7 +528,7 @@ void GamePlayScene::Update()
 	if (pDamFlag == true) {
 		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
 			XMFLOAT3 pPosition = player_->GetPosition();
-			DebugText::GetInstance()->Print("Damage Cool Time", 200, 500, 4);
+			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 			//pPosition.x = pPosMem.x+rand() % 5 - 2;
 			//pPosition.y = pPosMem.y+rand() % 5 - 2;
 			player_->SetPosition(pPosition);
@@ -542,10 +544,17 @@ void GamePlayScene::Update()
 	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
 
 	//敵のHPバー
-	for (int i = 0; i < 1; i++)
+	if (BossEnemyAdvent == true)
 	{
-		sp_enemyhpbar->size_.x = NowEnemyHP;
-		sp_enemyhpbar->TransferVertexBuffer();
+		//更新
+		sp_enemyhpbar->Update();
+		sp_enemyhpbarwaku->Update();
+		for (int i = 0; i < 1; i++)
+		{
+			//サイズ変更
+			sp_enemyhpbar->size_.x = NowBossHP;
+			sp_enemyhpbar->TransferVertexBuffer();
+		}
 	}
 
 	//自機のHPバー
@@ -554,6 +563,7 @@ void GamePlayScene::Update()
 		sp_playerhpbar->size_.x = NowPlayerHP;
 		sp_playerhpbar->TransferVertexBuffer();
 	}
+	//サイズ変更によるズレ
 	if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
 		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
 		pHpBar.x += 50;
@@ -590,22 +600,30 @@ void GamePlayScene::Update()
 	SEneAppCount--;
 
 	//雑魚敵更新
-	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-		smallEnemy->Update();
+	if (BossEnemyAdvent == false)
+	{
+		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+			smallEnemy->Update();
+		}
 	}
 
 	//撃破数達成でボス戦
-	if (EnemyMurdersNum >= 6) {
-		//敵更新
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		//ボス戦突入のお知らせです
 		BossEnemyAdvent = true;
-		for (std::unique_ptr<Enemy>& enemy : enemy_) {
-			enemy->Update();
+		//残っている雑魚敵はもういらない
+		for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
+			se->SetAlive(false);//消す
+		}
+
+		for (std::unique_ptr<Boss>& boss : boss_) {
+			boss->Update();//敵更新
 		}
 	}
 
 	//----------------シーン切り替え
 	//敵撃破でクリア
-	if(!enemy_.front()->GetAlive()){
+	if(!boss_.front()->GetAlive()){
 
 		BaseScene* scene = new ClearScene();
 		sceneManager_->SetNextScene(scene);
@@ -647,8 +665,6 @@ void GamePlayScene::Update()
 	//スプライト更新
 	sprite_back->Update();
 	sp_guide->Update();
-	sp_enemyhpbar->Update();
-	sp_enemyhpbarwaku->Update();
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
 
@@ -677,9 +693,9 @@ void GamePlayScene::Draw()
 	}
 
 	//敵描画
-	if (EnemyMurdersNum >= 5) {
-		for (std::unique_ptr<Enemy>& enemy : enemy_) {
-			enemy->Draw();
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		for (std::unique_ptr<Boss>& boss : boss_) {
+			boss->Draw();
 		}
 	}
 
@@ -715,12 +731,11 @@ void GamePlayScene::Draw()
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 
-	//------お手前スプライト描画
+	//---------------お手前スプライト描画
 	sp_guide->Draw();
-	sp_enemyhpbar->Draw();
-	sp_enemyhpbarwaku->Draw();
 	sp_playerhpbar->Draw();
 	sp_playerhpbarwaku->Draw();
+	if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

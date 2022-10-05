@@ -6,7 +6,7 @@
 
 #include <memory>
 
-class EnemyBullet:public BaseObject
+class BossBullet:public BaseObject
 {
 
 private:
@@ -35,7 +35,7 @@ public:
 	//•`‰æ
 	void Draw()override;
 
-	static EnemyBullet* GetInstance();
+	static BossBullet* GetInstance();
 
 	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
 

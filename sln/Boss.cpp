@@ -1,17 +1,17 @@
-#include "Enemy.h"
+#include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
 
 #include <DirectXMath.h>
 
-void Enemy::ApproachInit()
+void Boss::ApproachInit()
 {
 	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
 	AtkCount = AtkInterval;
 }
 
-void Enemy::Attack()
+void Boss::Attack()
 {
 	//キー入力使う
 	//Input* input = Input::GetInstance();
@@ -25,7 +25,7 @@ void Enemy::Attack()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<EnemyBullet> madeBullet = std::make_unique<EnemyBullet>();
+	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeBullet->Initialize();
 	madeBullet->SetModel(eBulModel);
@@ -35,7 +35,7 @@ void Enemy::Attack()
 	bullets_.push_back(std::move(madeBullet));
 }
 
-void Enemy::Initialize()
+void Boss::Initialize()
 {
 
 	//作る
@@ -53,7 +53,7 @@ void Enemy::Initialize()
 	ApproachInit();
 }
 
-void Enemy::Update()
+void Boss::Update()
 {
 	Input* input = Input::GetInstance();
 
@@ -68,7 +68,7 @@ void Enemy::Update()
 	//}
 
 		//消滅フラグ立ったらその弾は死して拝せよ
-	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet) {
+	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
 
@@ -129,17 +129,17 @@ void Enemy::Update()
 	//----------------------------------------------↑関数化しろボケ
 
 	//弾更新
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
 
 	obj->Update();
 }
 
-void Enemy::Draw()
+void Boss::Draw()
 {
 	//弾
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}
 

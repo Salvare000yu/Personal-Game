@@ -1,20 +1,20 @@
-#include "EnemyBullet.h"
-#include "Enemy.h"
+#include "BossBullet.h"
+#include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
 #include "DebugText.h"
 
 #include <DirectXMath.h>
 
-EnemyBullet* EnemyBullet::GetInstance()
+BossBullet* BossBullet::GetInstance()
 {
-	static EnemyBullet instance;
+	static BossBullet instance;
 
 	return &instance;
 }
 
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-void EnemyBullet::Initialize()
+void BossBullet::Initialize()
 {
 	//定義とか仮おいておこう
 	
@@ -28,7 +28,7 @@ void EnemyBullet::Initialize()
 
 }
 
-void EnemyBullet::Update()
+void BossBullet::Update()
 {
 
 	XMFLOAT3 position = obj->GetPosition();
@@ -45,7 +45,7 @@ void EnemyBullet::Update()
 	obj->Update();
 }
 
-void EnemyBullet::Draw()
+void BossBullet::Draw()
 {
 	obj->Draw();
 }
