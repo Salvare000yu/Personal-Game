@@ -32,7 +32,9 @@ void BossBullet::Update()
 {
 
 	XMFLOAT3 position = obj->GetPosition();
-	position.z = position.z - 2;
+	position.x -= velocity.x;
+	position.y -= velocity.y;
+	position.z -= velocity.z;
 	obj->SetPosition(position);
 
 	//if (TriggerR) {//ƒŠƒZƒbƒg

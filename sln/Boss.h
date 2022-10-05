@@ -29,6 +29,8 @@ public:
 
 	//攻撃
 	void Attack();
+	//拡散攻撃
+	void DiffusionAttack();
 
 	//近づく処理初期化
 	void ApproachInit();
@@ -51,6 +53,7 @@ public:
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
+	static const int DiffusionAtkInterval = 10;
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
@@ -76,6 +79,7 @@ private:
 	float frame = 0;
 	//攻撃用カウント
 	float AtkCount = 0;
+	float DiffusionAtkCount = 0;
 
 	Model* eBulModel = nullptr;
 };

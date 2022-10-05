@@ -19,7 +19,7 @@ void SmallEnemy::Initialize()
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 	//êŠ
 
-	SEneRandX = float(rand() % 100 - 50);
+	SEneRandX = float(rand() % 60);
 	obj->SetPosition({ SEneRandX,40,400 });
 
 }

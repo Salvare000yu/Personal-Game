@@ -355,6 +355,7 @@ void GamePlayScene::Update()
 		NowBossHP = BossMaxHP;
 		sEnemyMurdersNum = 0;
 		BossEnemyAdvent = false;
+
 		// カメラreセット
 		//Object3d::SetCamera(camera.get());
 	}
@@ -525,6 +526,7 @@ void GamePlayScene::Update()
 
 	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
 
+	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
 			XMFLOAT3 pPosition = player_->GetPosition();
@@ -611,6 +613,7 @@ void GamePlayScene::Update()
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		//ボス戦突入のお知らせです
 		BossEnemyAdvent = true;
+		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
 		//残っている雑魚敵はもういらない
 		for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
 			se->SetAlive(false);//消す
@@ -650,6 +653,7 @@ void GamePlayScene::Update()
 	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
 	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
+	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
 	camera->Update();
 
 	//3dobjUPDATE

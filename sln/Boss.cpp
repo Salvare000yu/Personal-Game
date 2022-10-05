@@ -9,6 +9,7 @@ void Boss::ApproachInit()
 {
 	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
 	AtkCount = AtkInterval;
+	DiffusionAtkCount = DiffusionAtkInterval;
 }
 
 void Boss::Attack()
@@ -30,6 +31,31 @@ void Boss::Attack()
 	madeBullet->Initialize();
 	madeBullet->SetModel(eBulModel);
 	madeBullet->SetPosition(position);
+
+	//弾登録
+	bullets_.push_back(std::move(madeBullet));
+}
+
+void Boss::DiffusionAttack()
+{
+	// 音声再生 鳴らしたいとき
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+
+	//弾発射
+	XMFLOAT3 position = obj->GetPosition();
+	//弾生成
+	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+	madeBullet->Initialize();
+	madeBullet->SetModel(eBulModel);
+	madeBullet->SetPosition(position);
+
+	// velocityを算出
+	DirectX::XMVECTOR vecvelocity = DirectX::XMVectorSet(2, 0, 3, 0);
+	XMFLOAT3 xmfloat3velocity;
+	XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+
+	madeBullet->SetVelocity(xmfloat3velocity);
 
 	//弾登録
 	bullets_.push_back(std::move(madeBullet));
@@ -77,10 +103,10 @@ void Boss::Update()
 	{
 		frame += 1.f;
 
-		XMFLOAT3 rotation = obj->GetRotation();
-		rotation.y += 0.7f;
-		rotation.x += 0.4f;
-		obj->SetRotation({ rotation });
+		//XMFLOAT3 rotation = obj->GetRotation();
+		//rotation.y += 0.7f;
+		//rotation.x += 0.4f;
+		//obj->SetRotation({ rotation });
 
 		XMFLOAT3 position = obj->GetPosition();
 		//position.x += 5.f * sin(time * 3.14159265358f);
@@ -108,12 +134,22 @@ void Boss::Update()
 		position.x += 3.f * sinf(time * 3.14159265358f);
 		obj->SetPosition(position);
 
-		//ある程度近づいたらキモ過ぎて離れる
+		//ある程度近づいたら離れる
 		if (position.z == ApproachLim) {
 			actionPattern_ = ActionPattern::Leave;
 		}
 		break;
 	case ActionPattern::Leave://後退パターン
+		//発射カウントをデクリメント
+		DiffusionAtkCount--;
+		//時が満ちたら
+		if (DiffusionAtkCount == 0) {
+			//生存時のみ発射
+			if (alive) { DiffusionAttack(); }
+			//再びカウントできるように初期化
+			DiffusionAtkCount = DiffusionAtkInterval;
+		}
+
 		//---後退---//
 		XMFLOAT3 positionBack = obj->GetPosition();
 		positionBack.z += ApproachSp;

@@ -25,6 +25,9 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 	float frame = 0;
+
+	XMFLOAT3 velocity{ 0,0,4 };
+
 public:
 	//‰Šú‰»
 	void Initialize()override;
@@ -46,5 +49,9 @@ public:
 
 	//Á–Å‚Ìé
 	int32_t vanishTimer_ = BulVanishTime;
+
+	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
+
+	const XMFLOAT3& GetVelocity() { return velocity; }
 
 };
