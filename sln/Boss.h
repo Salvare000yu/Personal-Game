@@ -53,7 +53,7 @@ public:
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
-	static const int DiffusionAtkInterval = 10;
+	static const int DiffusionAtkInterval =20;
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }

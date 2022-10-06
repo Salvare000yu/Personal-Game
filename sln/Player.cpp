@@ -17,8 +17,10 @@ void Player::Attack()
 	//ÉpÉbÉhâüÇµÇΩèuä‘ÇÃÇ›
 	const bool PadTriggerRB = input->TriggerButton(static_cast<int>(Button::RB));
 
+	const bool TriggerMouseLEFT = input->TriggerMouse(0);
+
 	//íeî≠éÀ
-	if (TriggerSPACE || PadTriggerRB) {
+	if (TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) {
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//íeê∂ê¨
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();

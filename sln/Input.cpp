@@ -75,11 +75,26 @@ void Input::Initialize(WinApp* winApp)
     result = devkeyboard->SetCooperativeLevel(
         winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
+    //マウス用
+    result = dinput->CreateDevice(GUID_SysMouse, &devmouse, NULL);
+    // 標準形式
+    result = devmouse->SetDataFormat(&c_dfDIMouse2); 
+
+    result = devmouse->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+
 }
 
 void Input::Update()
 {
     HRESULT result;
+
+    result = devmouse->Acquire();	// マウス動作開始
+    mousePre = mouse;
+    result = devmouse->GetDeviceState(sizeof(mouse), &mouse);
+
+    GetCursorPos(&mousePos);
+    
+    ScreenToClient(WinApp::GetInstance()->GetHwnd(), &mousePos);
 
     //前回のキー入力保存
     memcpy(keyPre, key, sizeof(key));

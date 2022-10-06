@@ -6,6 +6,8 @@
 #include "GamePlayScene.h"
 #include "TitleScene.h"
 
+using namespace DirectX;
+
 void ClearScene::Initialize()
 {
 #pragma region 描画初期化処理
@@ -30,10 +32,10 @@ void ClearScene::Initialize()
 	//object3d_3->SetPosition({ -5,-1,5 });
 
 	// 音声読み込み
-	//Audio::GetInstance()->LoadWave("Alarm01.wav");
+	GameSound::GetInstance()->LoadWave("verROOP_tukawanakutemoiiYO.wav");
 
 	// 音声再生
-	//Audio::GetInstance()->PlayWave("Alarm01.wav");//あってる？
+	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.4, XAUDIO2_LOOP_INFINITE);
 
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
@@ -44,7 +46,7 @@ void ClearScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/GameClear.png");
 
 	// スプライトの生成
-	sprite.reset(Sprite::Create(1, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
+	sprite.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 	//for (int i = 0; i < 1; i++)
 	//{
 	//    int texNumber = 1;
@@ -87,6 +89,8 @@ void ClearScene::Update()
 
 	if (input->TriggerKey(DIK_1))     // スペースキーが押されていたら
 	{
+		// 音声停止
+		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
 		//シーン切り替え
 		BaseScene* scene = new TitleScene();
 		sceneManager_->SetNextScene(scene);

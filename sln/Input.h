@@ -99,6 +99,34 @@ public://メンバ関数
 	bool TriggerButton(int button);
 	//--------------------Xinput↑
 
+	inline POINT GetMousePos() { return mousePos; };
+	inline void SetMousePos(const POINT& pos) {
+		mousePos = pos;
+		// クライアント座標(ゲームウィンドウの座標)からスクリーン座標(パソコンの画面)に変換
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &mousePos);
+		// 変換後座標位置にマウスカーソルの位置をセット
+		SetCursorPos(mousePos.x, mousePos.y);
+		mousePos = pos;
+	}
+
+	enum MouseButton
+	{
+		LEFT = 0,
+		RIGHT = 1
+	};
+
+	/// <param name="mouseNumber">0で左クリック,1で右クリック</param>
+	inline bool PushMouse(_In_ BYTE mouseNumber)
+	{
+		return (bool)mouse.rgbButtons[mouseNumber];
+	}
+
+	/// <param name="mouseNumber">0で左クリック,1で右クリック</param>
+	inline bool TriggerMouse(_In_ BYTE mouseNumber)
+	{
+		return PushMouse(mouseNumber) && !(bool)mousePre.rgbButtons[mouseNumber];
+	}
+
 private://メンバ変数
 	//初期化
 	void Initialize(WinApp* WinApp);
@@ -124,6 +152,11 @@ private://メンバ変数
 	//WindowsAPI
 	WinApp* winApp = nullptr;
 
+	POINT mousePos;
+
+	DIMOUSESTATE2 mouse{};
+	DIMOUSESTATE2 mousePre{};
+	ComPtr<IDirectInputDevice8> devmouse;
 
 };
 

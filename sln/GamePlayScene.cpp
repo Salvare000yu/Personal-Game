@@ -393,7 +393,7 @@ void GamePlayScene::Update()
 	}else{ DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
 
 	//------------------------------«“–‚½‚è”»’èZONE«-----------------------------//
-	//©‹@‚Ì’e‚Æ“G‚Ì“–‚½‚è”»’è
+	//[©‹@‚Ì’e]‚Æ[ƒ{ƒX]‚Ì“–‚½‚è”»’è
 	{
 
 		Sphere pBulForm;//‹…
@@ -428,7 +428,7 @@ void GamePlayScene::Update()
 				}
 			}
 		}
-		//“G‚¢‚ê‚ÎTRUE@Á‚¦‚½‚çFALSE@‚¢‚È‚¢‚ÆENPTY
+		//ƒ{ƒX‚¢‚ê‚ÎTRUE@Á‚¦‚½‚çFALSE@‚¢‚È‚¢‚ÆENPTY
 		if (!boss_.empty())
 		{
 			if (boss_.front()->GetAlive()) {
@@ -441,12 +441,12 @@ void GamePlayScene::Update()
 		else {
 			DebugText::GetInstance()->Print("empty", 200, 190, 2);
 		}
-		// “G‚ğÁ‚·
+		// ƒ{ƒX‚ğÁ‚·
 		boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
 			[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
 	}
 
-	//©‹@‚Ì’e‚ÆG‹›“G“–‚½‚è”»’è
+	//[©‹@‚Ì’e]‚Æ[G‹›“G]“–‚½‚è”»’è
 	{
 
 		Sphere pBulForm;
@@ -465,7 +465,7 @@ void GamePlayScene::Update()
 
 				// “–‚½‚Á‚½‚çÁ‚¦‚é
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
-					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.5, 0);
+					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.4, 0);
 					sEnemyMurdersNum++;//Œ‚”j”
 					se->SetAlive(false);
 					pb->SetAlive(false);
@@ -480,7 +480,7 @@ void GamePlayScene::Update()
 		return !smallEnemy->GetAlive();
 		});
 
-	//©‹@‚Æ“G’e‚Ì“–‚½‚è”»’è
+	//[©‹@]‚Æ[“G’e]‚Ì“–‚½‚è”»’è
 	//XMFLOAT3 pPosMem{};//ƒvƒŒƒCƒ„[Œ³À•W•Û‘¶@—h‚ê‚Ég‚¤—\’è
 	//XMFLOAT3 pos=player_->GetPosition();
 	//if(pos.y==0){ DebugText::GetInstance()->Print("0niiru", 200, 350, 3);}//0‚É–ß‚Á‚½‚ç•\¦–ÚˆÀ
