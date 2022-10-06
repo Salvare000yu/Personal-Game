@@ -44,6 +44,10 @@ public:
         BYTE* pBuffer;
         // バッファのサイズ
         unsigned int bufferSize;
+        //再生中かどうか
+        bool playWaveFlag = false;
+        //波形フォーマットを元にSourceVoiceの生成
+        IXAudio2SourceVoice* pSourceVoice;
     };
 
     static GameSound* GetInstance();
@@ -76,6 +80,12 @@ public:
     /// 0で1回のみ再生（デフォ0）回数分繰り返す　XAUDIO2_LOOP_INFINITEで無限にループ
     void PlayWave(const std::string& filename,float volumecont=1.0, int loopCount = 0);
 
+    /// <summary>
+    /// サウンドを止める
+    /// </summary>
+    /// <param name="filename"></param>
+    void SoundStop(const std::string& filename);
+
 private:
     Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
     //サウンドデータ連想配列
@@ -83,5 +93,8 @@ private:
 
     //サウンド格納ディレクトリ
     std::string directoryPath_;
+
+    // 再生する波形データの設定
+    XAUDIO2_BUFFER buf{};
 };
 

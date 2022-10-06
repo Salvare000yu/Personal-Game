@@ -132,12 +132,12 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 
 	// スプライトの生成
-	sprite_back.reset(Sprite::Create(1, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_guide.reset(Sprite::Create(2, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_enemyhpbar.reset(Sprite::Create(3, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_enemyhpbarwaku.reset(Sprite::Create(4, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_playerhpbar.reset(Sprite::Create(5, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_playerhpbarwaku.reset(Sprite::Create(6, DirectX::XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_enemyhpbar.reset(Sprite::Create(3, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -342,11 +342,10 @@ void GamePlayScene::Update()
 			// カメラを下降させる
 			camera->MoveEyeVector(XMFLOAT3(0, -moveSpeed, 0));
 			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y - moveSpeed, camera->GetTarget().z));
-
 		}
 	}
 
-	if (TriggerR) {
+	if (TriggerR) {//デバック用　適当に　いつかは消す
 		camera->SetTarget({ 0,50,-200 });
 		camera->SetEye({ 0,48,-210 });
 		player_->SetAlive(true);
@@ -393,7 +392,7 @@ void GamePlayScene::Update()
 		DebugText::GetInstance()->Print("Alive", 200, 270, 3); 
 	}else{ DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
 
-
+	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//自機の弾と敵の当たり判定
 	{
 
@@ -429,7 +428,6 @@ void GamePlayScene::Update()
 				}
 			}
 		}
-
 		//敵いればTRUE　消えたらFALSE　いないとENPTY
 		if (!boss_.empty())
 		{
@@ -443,7 +441,6 @@ void GamePlayScene::Update()
 		else {
 			DebugText::GetInstance()->Print("empty", 200, 190, 2);
 		}
-
 		// 敵を消す
 		boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
 			[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
@@ -482,7 +479,6 @@ void GamePlayScene::Update()
 	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
 		return !smallEnemy->GetAlive();
 		});
-
 
 	//自機と敵弾の当たり判定
 	//XMFLOAT3 pPosMem{};//プレイヤー元座標保存　揺れに使う予定
@@ -523,9 +519,9 @@ void GamePlayScene::Update()
 
 
 	}
-
 	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
-
+	//------------------------------↑当たり判定ZONE↑-----------------------------//
+	
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
@@ -600,7 +596,6 @@ void GamePlayScene::Update()
 	}
 	//雑魚敵カウントをデクリメント
 	SEneAppCount--;
-
 	//雑魚敵更新
 	if (BossEnemyAdvent == false)
 	{
@@ -624,19 +619,20 @@ void GamePlayScene::Update()
 		}
 	}
 
-	//----------------シーン切り替え
+	//----------------↓シーン切り替え関連↓----------------//
 	//敵撃破でクリア
 	if(!boss_.front()->GetAlive()){
-
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
 		BaseScene* scene = new ClearScene();
 		sceneManager_->SetNextScene(scene);
 	}
 	//自機HP0でゲームオーバー
 	if (!player_->GetAlive()) {
-
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
 		BaseScene* scene = new GameOver();
 		sceneManager_->SetNextScene(scene);
 	}
+	//----------------↑シーン切り替え関連↑---------------//
 
 	//バックスプライト動
 	//SPmove SPbackmoveobj;

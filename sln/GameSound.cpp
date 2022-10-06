@@ -138,9 +138,15 @@ void GameSound::PlayWave(const std::string& filename,float volumecont, int loopC
 
 	SoundData& soundData = it->second;
 
+	//再生フラグ
+	if (soundData.playWaveFlag == false)
+	{
+		soundData.playWaveFlag = true;
+	}
+
 	// 波形フォーマットを元にSourceVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	result = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	//IXAudio2SourceVoice* pSourceVoice = nullptr;
+	result = xAudio2_->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result));
 
 	// 再生する波形データの設定
@@ -151,7 +157,33 @@ void GameSound::PlayWave(const std::string& filename,float volumecont, int loopC
 	buf.LoopCount = loopCount;
 
 	// 波形データの再生
-	result = pSourceVoice->SubmitSourceBuffer(&buf);
-	result = pSourceVoice->SetVolume(volumecont);
-	result = pSourceVoice->Start();
+	result = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result = soundData.pSourceVoice->SetVolume(volumecont);
+	result = soundData.pSourceVoice->Start();
+
+	//再生確認フラグの確認
+	if (soundData.playWaveFlag == false)
+	{
+		soundData.playWaveFlag = true;
+	}
+}
+
+void GameSound::SoundStop(const std::string& filename)
+{
+	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
+	//未読み込みの検出
+	assert(it != soundDatas_.end());
+	//サウンドデータの参照を取得
+	SoundData& soundData = it->second;
+
+	if (soundData.playWaveFlag == false)
+	{
+		return;
+	}
+
+	soundData.pSourceVoice->Stop(0);
+	soundData.pSourceVoice->FlushSourceBuffers();
+	soundData.pSourceVoice->SubmitSourceBuffer(&buf);
+
+	soundData.playWaveFlag = false;
 }
