@@ -105,6 +105,14 @@ void Input::Update()
     result = devkeyboard->GetDeviceState(sizeof(key), key);
 }
 
+bool Input::SetMousePos(int x, int y)
+{
+    POINT tmpPos = { x,y };
+    ClientToScreen(WinApp::GetInstance()->GetHwnd(), &tmpPos);
+
+    return SetCursorPos(tmpPos.x, tmpPos.y);
+}
+
 //‰Ÿ‚µ‚Ä‚¢‚éŠÔ
 bool Input::PushKey(BYTE keyNumber)
 {

@@ -1,3 +1,4 @@
+#pragma once
 //directXcommon
 #include <d3d12.h>
 #include <d3dx12.h>
@@ -6,7 +7,7 @@
 #include "WinApp.h"
 #include "imgui/imgui.h"
 
-#pragma once
+#include <DirectXMath.h>
 
 //directX基盤
 class DxBase
@@ -26,7 +27,7 @@ public://メンバ関数
 	/// imgui初期化
 	/// </summary>
 	/// <returns>成否</returns>
-	bool InitializeImgui();
+	//bool InitializeImgui();
 
 	//描画前
 	void PreDraw();
@@ -38,6 +39,10 @@ public://メンバ関数
 
 	//コマンドリスト取得
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }
+
+	float angleRoundRad(float rad);
+	float nearSin(float rad);
+	float nearCos(float rad);
 
 private:
 	//デバイス

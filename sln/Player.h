@@ -10,6 +10,10 @@
 
 class Player :public BaseObject
 {
+
+	DirectX::XMVECTOR lookVec{};
+
+	DirectX::XMVECTOR position{};
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
@@ -51,15 +55,14 @@ public:
 	//PlayerBullet* bullet_ = nullptr;
 	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
-	//当たった時呼び出すためのコールバック関数
-	void OnCollision();
 	//弾リストを取得 gamesceneに自弾貸すため
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
-	//弾座標判定で使うためのgetbulletposmemory
-	static XMFLOAT3 Player::GetPlayerPosMemory();
-	//静的メンバ変数　当たり判定で使う為の弾座標
-	static XMFLOAT3 PlayerPosMemory;
-
+	Player()
+		: lookVec(DirectX::XMVectorSet(0, 0, 1, 0)),
+		position(DirectX::XMVectorSet(0, 0, 0, 1)) {
+	}
+	//向き取得
+	inline const DirectX::XMVECTOR& getLookVec() { return lookVec; }
 };
 

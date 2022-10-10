@@ -17,11 +17,15 @@
 
 class GamePlayScene :public BaseScene,public BaseObject
 {
+	DirectX::XMFLOAT2 cameraMoveVel{};
 public:
 
 	void Initialize() override;
 
 	void Finalize() override;
+
+	void UpdateMouse();
+	void UpdateCamera();
 
 	void Update() override;
 
@@ -54,6 +58,8 @@ public:
 	static const int32_t pShakeTime = 60*3;
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
+
+	DirectX::XMFLOAT2 playerRota{};
 
 private:
 	//sprite
@@ -95,12 +101,12 @@ private:
 	const float eBulPower = 200;
 
 	//敵HP
-	const int BossMaxHP = 1000;//てきさいだいHP 
-	int NowBossHP = BossMaxHP;//現在の敵HP
+	const float BossMaxHP = 1000;//てきさいだいHP 
+	float NowBossHP = BossMaxHP;//現在の敵HP
 
 	//自機HP
-	const int PlayerMaxHP = 1000;//じきさいだいHP
-	int NowPlayerHP = PlayerMaxHP;//現在の自機HP
+	const float PlayerMaxHP = 1000;//じきさいだいHP
+	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
 	bool BarPosControlOnlyOnceFlag1 = false;
 	bool BarPosControlOnlyOnceFlag2 = false;
 	//自機ダメージフラグ 喰らってない

@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "Object3d.h"
+//#include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
 
@@ -68,10 +68,14 @@ void Player::Update()
 	const bool inputS = input->PushKey(DIK_S);
 	const bool inputA = input->PushKey(DIK_A);
 	const bool inputD = input->PushKey(DIK_D);
-	const bool inputE = input->PushKey(DIK_E);
+	//const bool inputE = input->PushKey(DIK_E);
 	const bool inputQ = input->PushKey(DIK_Q);
 	const bool inputZ = input->PushKey(DIK_Z);
-	const bool inputC = input->PushKey(DIK_C);
+	//const bool inputC = input->PushKey(DIK_C);
+	const bool inputI = input->PushKey(DIK_I);
+	const bool inputJ = input->PushKey(DIK_J);
+	const bool inputK = input->PushKey(DIK_K);
+	const bool inputL = input->PushKey(DIK_L);
 	const bool inputUp = input->PushKey(DIK_UP);
 	const bool inputDown = input->PushKey(DIK_DOWN);
 	const bool inputRight = input->PushKey(DIK_RIGHT);
@@ -216,16 +220,28 @@ void Player::Update()
 	//------------------ªƒvƒŒƒCƒ„[ˆÚ“®•Žp¨
 
 	//Ž©•ª‰ñ“]
-	if (inputE)
+	if (inputL)
 	{
 		XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y++;
 		obj->SetRotation(rotation);
 	}
-	if (inputC)
+	if (inputJ)
 	{
 		XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y--;
+		obj->SetRotation(rotation);
+	}
+	if (inputI)
+	{
+		XMFLOAT3 rotation = obj->GetRotation();
+		rotation.x--;
+		obj->SetRotation(rotation);
+	}
+	if (inputK)
+	{
+		XMFLOAT3 rotation = obj->GetRotation();
+		rotation.x++;
 		obj->SetRotation(rotation);
 	}
 

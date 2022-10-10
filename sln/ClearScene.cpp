@@ -35,7 +35,7 @@ void ClearScene::Initialize()
 	GameSound::GetInstance()->LoadWave("verROOP_tukawanakutemoiiYO.wav");
 
 	// 音声再生
-	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.4, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.4f, XAUDIO2_LOOP_INFINITE);
 
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;

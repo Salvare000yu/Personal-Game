@@ -99,15 +99,8 @@ public://メンバ関数
 	bool TriggerButton(int button);
 	//--------------------Xinput↑
 
-	inline POINT GetMousePos() { return mousePos; };
-	inline void SetMousePos(const POINT& pos) {
-		mousePos = pos;
-		// クライアント座標(ゲームウィンドウの座標)からスクリーン座標(パソコンの画面)に変換
-		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &mousePos);
-		// 変換後座標位置にマウスカーソルの位置をセット
-		SetCursorPos(mousePos.x, mousePos.y);
-		mousePos = pos;
-	}
+	inline const POINT& GetMousePos() const { return mousePos; };
+	bool SetMousePos(int x, int y);
 
 	enum MouseButton
 	{
