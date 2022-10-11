@@ -726,7 +726,7 @@ void GamePlayScene::Update()
 
 	//----------------↓シーン切り替え関連↓----------------//
 	//敵撃破でクリア
-	if(!boss_.front()->GetAlive()||Trigger2){
+	if(!boss_.front()->GetAlive()){
 		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
 		BaseScene* scene = new ClearScene();
 		sceneManager_->SetNextScene(scene);
@@ -751,9 +751,10 @@ void GamePlayScene::Update()
 	//	sprite_back->SetPosition(position);
 	//}
 
-	DebugText::GetInstance()->Print("[PLAYSCENE]", 200, 100, 2);
-	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]MOVE", 200, 130, 2);
-	DebugText::GetInstance()->Print("ALLOW:spriteMOVE", 200, 160, 2);
+	DebugText::GetInstance()->Print("---PLAYSCENE---", 200, 70, 2);
+	DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 200, 100, 2);
+	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 200, 130, 2);
+	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 200, 160, 2);
 	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
 	if (NowBossHP == 0) {
 		DebugText::GetInstance()->Print("crushing!", 200, 230, 3);
@@ -762,7 +763,7 @@ void GamePlayScene::Update()
 		DebugText::GetInstance()->Print("Alive", 200, 270, 3);
 	}
 	else { DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
-	DebugText::GetInstance()->Print("[2]ClearScene", 200, 210, 2);
+	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 200, 190, 2);
 
 	// マウス情報の更新
 	UpdateMouse();
