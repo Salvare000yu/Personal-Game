@@ -178,7 +178,6 @@ void GamePlayScene::Initialize()
 	//FbxLoader::GetInstance()->LoadModelFromFile(
 	//	"cube"
 	//);
-
 #pragma endregion 描画初期化処理
 
 	//int counter = 0; // アニメーションの経過時間カウンター
@@ -205,7 +204,10 @@ void GamePlayScene::SmallEnemyAppear()
 	madeSmallEnemy->Initialize();
 
 	madeSmallEnemy->SetModel(mod_smallenemy.get());
-
+	for (std::unique_ptr<SmallEnemy>& se : smallEnemys_)
+	{
+		se->SetSEBulModel(mod_enemybullet.get());
+	}
 	//雑魚敵登録
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
@@ -217,7 +219,7 @@ void GamePlayScene::UpdateMouse()
 	constexpr XMFLOAT2 centerPos = XMFLOAT2((float)WinApp::window_width / 2.f,
 		(float)WinApp::window_height / 2.f);
 
-	// 中心からの距i
+	// 中心からの距
 	cameraMoveVel.x = float(input->GetMousePos().x) - centerPos.x;
 	cameraMoveVel.y = float(input->GetMousePos().y) - centerPos.y;
 
@@ -236,6 +238,7 @@ void GamePlayScene::UpdateCamera()
 
 	// 自機の視線ベクトル
 	{
+		//感度
 		const float camMoveVel = 0.05f;
 
 		XMFLOAT3 rota = player_->GetRotation();
@@ -247,6 +250,165 @@ void GamePlayScene::UpdateCamera()
 
 		player_->SetRotation(rota);
 	}
+	//// 自機の視線ベクトル
+	//const XMVECTOR look = XMVector3Normalize(player_->GetLookVec());
+	//// 自機->カメラのベクトル
+	//const XMVECTOR player2cam = XMVectorAdd(XMVectorScale(look, -camLen),
+	//	XMVectorSet(0, camHeight, 0, 1));
+
+	//// カメラの位置
+	//{
+	//	const XMVECTOR pos = XMVectorAdd(player_->GetPosVec(), player2cam);
+
+	//	XMFLOAT3 camPos{};
+	//	XMStoreFloat3(&camPos, pos);
+
+	//	camera->SetEye(camPos);
+	//}
+	//// 注視点設定
+	//{
+	//	const XMVECTOR targetPos = XMVectorAdd(XMVectorScale(look, player2targetLen),
+	//		player_->GetPosVec());
+	//	XMFLOAT3 targetF3{};
+	//	XMStoreFloat3(&targetF3, targetPos);
+
+	//	camera->SetTarget(targetF3);
+	//}
+}
+
+void GamePlayScene::CollisionAll()
+{
+	//------------------------------↓当たり判定ZONE↓-----------------------------//
+//[自機の弾]と[ボス]の当たり判定
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		{
+
+			Sphere pBulForm;//球
+
+			for (auto& pb : player_->GetBullets()) {
+				if (!pb->GetAlive())continue;//死んでたらスキップ
+				pBulForm.center = XMLoadFloat3(&pb->GetPosition());
+				pBulForm.radius = pb->GetScale().x;
+
+				// 衝突判定をする
+				for (auto& bo : boss_) {
+					if (!bo->GetAlive())continue;
+					Sphere enemyForm;
+					enemyForm.center = XMLoadFloat3(&bo->GetPosition());
+					enemyForm.radius = bo->GetScale().x;
+
+					// 当たったら消える
+					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
+
+						pb->SetAlive(false);
+
+						NowBossHP -= pBulPower;
+
+						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5, 0);
+
+						if (NowBossHP <= 0) {
+							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5, 0);
+							bo->SetAlive(false);
+						}
+
+						break;
+					}
+				}
+			}
+			//ボスいればTRUE　消えたらFALSE　いないとENPTY
+			if (!boss_.empty())
+			{
+				if (boss_.front()->GetAlive()) {
+					DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
+				}
+				else {
+					DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
+				}
+			}
+			else {
+				DebugText::GetInstance()->Print("empty", 200, 190, 2);
+			}
+			// ボスを消す
+			boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
+				[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
+		}
+	}
+
+	//[自機の弾]と[雑魚敵]当たり判定
+	{
+
+		Sphere pBulForm;
+
+		for (auto& pb : player_->GetBullets()) {
+			if (!pb->GetAlive())continue;
+			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
+			pBulForm.radius = pb->GetScale().x;
+
+			// 衝突判定をする
+			for (auto& se : smallEnemys_) {
+				if (!se->GetAlive())continue;
+				Sphere smallenemyForm;
+				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
+				smallenemyForm.radius = se->GetScale().x;
+
+				// 当たったら消える
+				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
+					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.4f, 0);
+					sEnemyMurdersNum++;//撃破数
+					se->SetAlive(false);
+					pb->SetAlive(false);
+					break;
+				}
+			}
+		}
+	}
+
+	//消滅フラグ立ったらその雑魚敵は死して拝せよ
+	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
+		return !smallEnemy->GetAlive();
+		});
+
+	//[自機]と[敵弾]の当たり判定
+	//XMFLOAT3 pPosMem{};//プレイヤー元座標保存　揺れに使う予定
+	//XMFLOAT3 pos=player_->GetPosition();
+	//if(pos.y==0){ DebugText::GetInstance()->Print("0niiru", 200, 350, 3);}//0に戻ったら表示目安
+	{
+
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z;
+
+		if (player_->GetAlive()) {
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
+				for (auto& eb : bo->GetBullets()) {
+					Sphere eBulForm;
+					eBulForm.center = XMLoadFloat3(&eb->GetPosition());
+					eBulForm.radius = eb->GetScale().z;
+
+					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
+
+						//pPosMem = player_->GetPosition();//プレイヤー元座標保存　揺れに使う予定
+						pDamFlag = true;
+						NowPlayerHP -= eBulPower;//自機ダメージ
+
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5, 0);
+						eb->SetAlive(false);
+						if (NowPlayerHP <= 0) {//HP0で死亡
+							GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5, 0);
+							player_->SetAlive(false);
+						}
+						break;
+					}
+
+				}
+			}
+		}
+
+
+	}
+	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
+	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
 
@@ -283,6 +445,7 @@ void GamePlayScene::Update()
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	const bool Trigger2 = input->TriggerKey(DIK_2);
+	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 	//パッド押している間
 	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
 	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
@@ -463,138 +626,6 @@ void GamePlayScene::Update()
 	//	rotaVec.y += 175.f * dxBase->nearSin(playerRota.x);
 	//	rotaVec.z += 175.f * dxBase->nearCos(playerRota.y) * dxBase->nearCos(playerRota.x);
 	//}
-
-	//------------------------------↓当たり判定ZONE↓-----------------------------//
-	//[自機の弾]と[ボス]の当たり判定
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-		{
-
-			Sphere pBulForm;//球
-
-			for (auto& pb : player_->GetBullets()) {
-				if (!pb->GetAlive())continue;//死んでたらスキップ
-				pBulForm.center = XMLoadFloat3(&pb->GetPosition());
-				pBulForm.radius = pb->GetScale().x;
-
-				// 衝突判定をする
-				for (auto& bo : boss_) {
-					if (!bo->GetAlive())continue;
-					Sphere enemyForm;
-					enemyForm.center = XMLoadFloat3(&bo->GetPosition());
-					enemyForm.radius = bo->GetScale().x;
-
-					// 当たったら消える
-					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
-
-						pb->SetAlive(false);
-
-						NowBossHP -= pBulPower;
-
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5, 0);
-
-						if (NowBossHP <= 0) {
-							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5, 0);
-							bo->SetAlive(false);
-						}
-
-						break;
-					}
-				}
-			}
-			//ボスいればTRUE　消えたらFALSE　いないとENPTY
-			if (!boss_.empty())
-			{
-				if (boss_.front()->GetAlive()) {
-					DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
-				}
-				else {
-					DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
-				}
-			}
-			else {
-				DebugText::GetInstance()->Print("empty", 200, 190, 2);
-			}
-			// ボスを消す
-			boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
-				[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
-		}
-	}
-
-	//[自機の弾]と[雑魚敵]当たり判定
-	{
-
-		Sphere pBulForm;
-
-		for (auto& pb : player_->GetBullets()) {
-			if (!pb->GetAlive())continue;
-			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
-			pBulForm.radius = pb->GetScale().x;
-
-			// 衝突判定をする
-			for (auto& se : smallEnemys_) {
-				if (!se->GetAlive())continue;
-				Sphere smallenemyForm;
-				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x;
-
-				// 当たったら消える
-				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
-					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.4f, 0);
-					sEnemyMurdersNum++;//撃破数
-					se->SetAlive(false);
-					pb->SetAlive(false);
-					break;
-				}
-			}
-		}
-	}
-
-	//消滅フラグ立ったらその雑魚敵は死して拝せよ
-	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
-		return !smallEnemy->GetAlive();
-		});
-
-	//[自機]と[敵弾]の当たり判定
-	//XMFLOAT3 pPosMem{};//プレイヤー元座標保存　揺れに使う予定
-	//XMFLOAT3 pos=player_->GetPosition();
-	//if(pos.y==0){ DebugText::GetInstance()->Print("0niiru", 200, 350, 3);}//0に戻ったら表示目安
-	{
-
-		Sphere playerForm;
-		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z;
-
-		if (player_->GetAlive()) {
-			for (auto& bo : boss_) {
-				if (!bo->GetAlive())continue;
-				for (auto& eb : bo->GetBullets()) {
-					Sphere eBulForm;
-					eBulForm.center = XMLoadFloat3(&eb->GetPosition());
-					eBulForm.radius = eb->GetScale().z;
-
-					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
-
-						//pPosMem = player_->GetPosition();//プレイヤー元座標保存　揺れに使う予定
-						pDamFlag = true;
-						NowPlayerHP -= eBulPower;//自機ダメージ
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5, 0);
-						eb->SetAlive(false);
-						if (NowPlayerHP <= 0) {//HP0で死亡
-							GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5, 0);
-							player_->SetAlive(false);
-						}
-						break;
-					}
-
-				}
-			}
-		}
-
-
-	}
-	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
-	//------------------------------↑当たり判定ZONE↑-----------------------------//
 	
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
@@ -739,6 +770,8 @@ void GamePlayScene::Update()
 	// カメラの更新
 	UpdateCamera();
 
+	CollisionAll();
+
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
@@ -757,6 +790,12 @@ void GamePlayScene::Update()
 
 	player_->Update();
 	//smallEnemy_->Update();
+
+	//終了
+	if (TriggerESC) {
+		WM_DESTROY;//破棄されるウィンドに送信
+		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
+	}
 }
 
 void GamePlayScene::Draw()

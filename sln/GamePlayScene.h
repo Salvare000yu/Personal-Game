@@ -27,6 +27,8 @@ public:
 	void UpdateMouse();
 	void UpdateCamera();
 
+	void CollisionAll();
+
 	void Update() override;
 
 	void Draw() override;
@@ -34,14 +36,12 @@ public:
 
 	void SmallEnemyAppear();
 
-	void Obj2move();
-
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
 
 	//指定フレームごとに雑魚出現
-	static const int SEneAppInterval = 50;
+	static const int SEneAppInterval = 100;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
@@ -114,7 +114,7 @@ private:
 	//敵撃破数
 	int sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数
-	int BossTermsEMurdersNum = 8;
+	int BossTermsEMurdersNum = 5;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	

@@ -3,6 +3,7 @@
 #include "Object3d.h"
 #include "Camera.h"
 #include "BaseObject.h"
+#include "SmallEnemyBullet.h"
 
 #include <memory>
 
@@ -19,6 +20,8 @@ private:
 
 public:
 
+	void Attack();
+
 	//初期化
 	void Initialize()override;
 
@@ -31,10 +34,20 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	//消えるまで
-	static const int32_t BulVanishTime = 60*6;//寿命
+	static const int32_t BulVanishTime = 60*5+20;//寿命
 
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
+
+	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+
+	//弾リストを取得
+	const std::list<std::unique_ptr<SmallEnemyBullet>>& GetBullets() { return bullets_; }
+
+	inline void SetSEBulModel(Model* model) { seBulModel = model; }
+
+	//フレームごとに発射
+	static const int AtkInterval = 60;
 
 private:
 	////-----------------model
@@ -53,4 +66,8 @@ private:
 
 	//SEneXの乱数入れる変数
 	float SEneRandX = 0;
+
+	//攻撃用カウント
+	float AtkCount = 0;
+	Model* seBulModel = nullptr;
 };

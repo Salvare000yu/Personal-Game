@@ -88,7 +88,7 @@ void Player::Update()
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
-	time = frame / 60.f;
+	//time = frame / 60.f;
 
 	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {

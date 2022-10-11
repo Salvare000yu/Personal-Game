@@ -50,7 +50,7 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	float time;
+	//float time;
 
 	//PlayerBullet* bullet_ = nullptr;
 	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
@@ -63,6 +63,7 @@ public:
 		position(DirectX::XMVectorSet(0, 0, 0, 1)) {
 	}
 	//向き取得
-	inline const DirectX::XMVECTOR& getLookVec() { return lookVec; }
+	inline const DirectX::XMVECTOR& GetLookVec() { return lookVec; }
+	inline DirectX::XMVECTOR GetPosVec() { return position; }
 };
 

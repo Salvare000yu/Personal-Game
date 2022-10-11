@@ -7,9 +7,38 @@
 #include <DirectXMath.h>
 #include <random>
 
+void SmallEnemy::Attack()
+{
+	//キー入力使う
+	//Input* input = Input::GetInstance();
+
+	//triggerkey
+	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	// 音声再生 鳴らしたいとき
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+
+	//弾発射
+	XMFLOAT3 position = obj->GetPosition();
+	//弾生成
+	std::unique_ptr<SmallEnemyBullet> madeBullet = std::make_unique<SmallEnemyBullet>();
+	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+	madeBullet->Initialize();
+	madeBullet->SetModel(seBulModel);
+	madeBullet->SetPosition(position);
+
+	//弾登録
+	bullets_.push_back(std::move(madeBullet));
+}
+
 void SmallEnemy::Initialize()
 {
-	std::srand((unsigned)std::time(nullptr));
+	//std::srand((unsigned)std::time(nullptr));
+	float posXMin = -200.f;
+	float posXMax = 200.f;
+	std::random_device seed;
+	std::mt19937 random(seed());
+	std::uniform_int_distribution<> number(posXMin, posXMax);
 
 	//作る
 	obj.reset(Object3d::Create());
@@ -19,8 +48,11 @@ void SmallEnemy::Initialize()
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 	//場所
 
-	SEneRandX = float(rand() % 60);
-	obj->SetPosition({ SEneRandX,40,400 });
+	//SEneRandX = float(rand() % 60);
+	float SEneRandX = number(random);
+	obj->SetPosition({ SEneRandX,40,1000 });
+
+	AtkCount = AtkInterval;
 
 }
 
@@ -41,22 +73,47 @@ void SmallEnemy::Update()
 	//	position.z += 5;
 	//	obj_enemy->SetPosition(position);
 	//}
+			//消滅フラグ立ったらその弾は死して拝せよ
+	bullets_.remove_if([](std::unique_ptr<SmallEnemyBullet>& bullet) {
+		return !bullet->GetAlive();
+		});
+
 	for (int i = 0; i < 1; i++)
 	{
 		XMFLOAT3 smEnemPos = obj->GetPosition();
 		smEnemPos.z -= 4;
 		obj->SetPosition(smEnemPos);
 
+		//発射カウントをデクリメント
+		AtkCount--;
 	}
 
 	//時間経過消滅
 	if (--vanishTimer_ <= 0) { alive = false; }
+
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//生存時のみ発射
+		if (alive) { Attack(); }
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
+
+	//弾更新
+	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
+		bullet->Update();
+	}
 
 	obj->Update();
 }
 
 void SmallEnemy::Draw()
 {
+	//弾描画
+	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
+		bullet->Draw();
+	}
+
 	if (alive) {
 		obj->Draw();
 	}
