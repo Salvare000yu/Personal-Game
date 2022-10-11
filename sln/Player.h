@@ -33,6 +33,9 @@ private:
 
 	Model* pBulModel = nullptr;
 
+	//攻撃のインターバルのためのフラグ 発射前
+	bool AttackIntervalFlag = false;
+
 public:
 	inline void SetPBulModel(Model* model) { pBulModel=model; }
 
@@ -65,5 +68,10 @@ public:
 	//向き取得
 	inline const DirectX::XMVECTOR& GetLookVec() { return lookVec; }
 	inline DirectX::XMVECTOR GetPosVec() { return position; }
+
+	//攻撃インターバル
+	static const int32_t AtkInterval = 20;
+	//攻撃インターバルタイマー
+	int32_t AtkInterval_ = AtkInterval;
 };
 

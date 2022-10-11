@@ -641,8 +641,8 @@ void GamePlayScene::Update()
 				pDamFlag = false;
 			}//0なったらくらい状態解除
 		}
+		else { pShakeTimer_ = pShakeTime; }
 	}
-	else { pShakeTimer_ = pShakeTime; }
 	if(pDamFlag==false){ DebugText::GetInstance()->Print("pdamflag=false", 200, 400, 3); }
 	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
 
@@ -763,7 +763,7 @@ void GamePlayScene::Update()
 		DebugText::GetInstance()->Print("Alive", 200, 270, 3);
 	}
 	else { DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
-	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 200, 190, 2);
+	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 200, 220, 2);
 
 	// マウス情報の更新
 	UpdateMouse();

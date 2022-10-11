@@ -20,7 +20,7 @@ void Player::Attack()
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
 
 	//弾発射
-	if (TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) {
+	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT)&&AttackIntervalFlag==false) {
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//弾生成
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
@@ -41,7 +41,41 @@ void Player::Attack()
 
 		//弾登録
 		bullets_.push_back(std::move(madeBullet));
+
+		AttackIntervalFlag = true;
+
 	}
+	if (AttackIntervalFlag == true)
+	{
+		if (--AtkInterval_ >= 0) {//クールタイム 0まで減らす	
+
+			//XMFLOAT3 PlayerPos = obj->GetPosition();
+			////弾生成
+			//std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+			////bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+			//madeBullet->Initialize();
+			//madeBullet->SetModel(pBulModel);
+			//madeBullet->SetPosition(PlayerPos);
+
+			//// velocityを算出
+			//XMVECTOR vecvelocity = XMVectorSet(0, 0, 3, 0);
+			//XMFLOAT3 xmfloat3velocity;
+			//XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+
+			//madeBullet->SetVelocity(xmfloat3velocity);
+
+			//// 音声再生 鳴らしたいとき
+			//GameSound::GetInstance()->PlayWave("shot.wav", 0.3f);
+
+			////弾登録
+			//bullets_.push_back(std::move(madeBullet));
+
+			if (AtkInterval_ <= 0) {
+				AttackIntervalFlag = false;
+			}//0なったらくらい状態解除
+		}else { AtkInterval_ = AtkInterval; }
+	}
+
 }
 
 void Player::Initialize()
@@ -115,14 +149,14 @@ void Player::Update()
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ|| PadInputUP|| PadInputDOWN|| PadInputLEFT|| PadInputRIGHT)
+	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
 	{
 
 		//------プレイヤーも同じ移動------//
 		bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
-		if ((inputS)|| PadInputDOWN) {
+		if ((inputS) || PadInputDOWN) {
 
 			XMFLOAT3 PlayerPos = obj->GetPosition();
 			PlayerPos.z = PlayerPos.z - moveSpeed;
@@ -194,7 +228,7 @@ void Player::Update()
 		}
 
 	}
-	if(TriggerR){//リセット
+	if (TriggerR) {//リセット
 		obj->SetPosition({ 0,40,-170 });
 		obj->SetRotation({ 0,0,0 });
 	}
@@ -202,7 +236,7 @@ void Player::Update()
 	if (inputUp || inputDown || inputRight || inputLeft)
 	{
 		XMFLOAT3 Rot = obj->GetRotation();
-		if (inputUp){
+		if (inputUp) {
 			Rot.x -= 1;
 		}
 		if (inputDown) {
@@ -248,7 +282,7 @@ void Player::Update()
 	//発射処理
 	if (alive) { Attack(); }
 	//弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet:bullets_) {
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
 
@@ -259,7 +293,7 @@ void Player::Update()
 void Player::Draw()
 {
 	//弾更新
-	for (std::unique_ptr<PlayerBullet>& bullet:bullets_) {
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}
 
