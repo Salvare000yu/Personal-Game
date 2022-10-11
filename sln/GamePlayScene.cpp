@@ -212,6 +212,12 @@ void GamePlayScene::SmallEnemyAppear()
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
+void GamePlayScene::PlayerDeath()
+{
+	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5f, 0);
+	player_->SetAlive(false);
+}
+
 void GamePlayScene::UpdateMouse()
 {
 	Input* input = Input::GetInstance();
@@ -304,10 +310,10 @@ void GamePlayScene::CollisionAll()
 
 						NowBossHP -= pBulPower;
 
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5, 0);
+						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5f, 0);
 
 						if (NowBossHP <= 0) {
-							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5, 0);
+							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5f, 0);
 							bo->SetAlive(false);
 						}
 
@@ -392,11 +398,10 @@ void GamePlayScene::CollisionAll()
 						pDamFlag = true;
 						NowPlayerHP -= eBulPower;//Ž©‹@ƒ_ƒ[ƒW
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5, 0);
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5f, 0);
 						eb->SetAlive(false);
 						if (NowPlayerHP <= 0) {//HP0‚ÅŽ€–S
-							GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5, 0);
-							player_->SetAlive(false);
+							PlayerDeath();
 						}
 						break;
 					}
@@ -408,6 +413,36 @@ void GamePlayScene::CollisionAll()
 
 	}
 	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmem‚É‚O‚Í‚¢‚Á‚Ä‚½‚ç‚¨‚¹[‚Ä
+	
+	//ŽG‹›“G‚Ì’e‚ÆŽ©‹@‚Ì“–‚½‚è”»’è
+	{
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z;
+
+		if (player_->GetAlive()) {
+			for (auto& se : smallEnemys_) {
+				if (!se->GetAlive())continue;
+				for (auto& seb : se->GetBullets()) {//seb ŽG‹›“G’e
+					Sphere seBulForm;
+					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
+					seBulForm.radius = seb->GetScale().z;
+
+					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
+						NowPlayerHP -= seBulPower;//Ž©‹@ƒ_ƒ[ƒW
+
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5f, 0);
+						seb->SetAlive(false);
+						if (NowPlayerHP <= 0) {//HP0‚ÅŽ€–S
+							PlayerDeath();
+						}
+						break;
+					}
+
+				}
+			}
+		}
+	}
 	//------------------------------ª“–‚½‚è”»’èZONEª-----------------------------//
 }
 

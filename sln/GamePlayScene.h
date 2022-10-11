@@ -36,6 +36,8 @@ public:
 
 	void SmallEnemyAppear();
 
+	void PlayerDeath();
+
 	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
 
 	float time;
@@ -99,6 +101,8 @@ private:
 	const float pBulPower = 50;
 	//“G’Êí’eˆĞ—Í
 	const float eBulPower = 200;
+	//G‹›“G’Êí’eˆĞ—Í
+	const float seBulPower = 100;
 
 	//“GHP
 	const float BossMaxHP = 1000;//‚Ä‚«‚³‚¢‚¾‚¢HP 
