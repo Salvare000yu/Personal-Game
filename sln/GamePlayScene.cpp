@@ -130,6 +130,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
+	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/Miscellaneous Enemy Meter.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -138,6 +139,7 @@ void GamePlayScene::Initialize()
 	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_semeter.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -150,6 +152,7 @@ void GamePlayScene::Initialize()
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
 	sp_playerhpbar->SetPosition({ -30,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
+	sp_semeter->SetPosition({ 1170,620,0 });
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -157,7 +160,9 @@ void GamePlayScene::Initialize()
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
 	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
+	sp_semeter->SetSize({ 70.f,70.f });
 	sp_playerhpbarwaku->TransferVertexBuffer();
+	sp_semeter->TransferVertexBuffer();
 
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -216,6 +221,28 @@ void GamePlayScene::PlayerDeath()
 {
 	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5f, 0);
 	player_->SetAlive(false);
+}
+
+void GamePlayScene::CoolTime()
+{
+	//くーーーーるたいむ仮　今は文字だけ
+	if (pDamFlag == true) {
+		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
+			XMFLOAT3 pPosition = player_->GetPosition();
+			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+			//pPosition.x = pPosMem.x+rand() % 5 - 2;
+			//pPosition.y = pPosMem.y+rand() % 5 - 2;
+			player_->SetPosition(pPosition);
+
+			if (pShakeTimer_ <= 0) {
+				//player_->SetPosition({ pPosMem });//揺らした後元座標に戻したい
+				pDamFlag = false;
+			}//0なったらくらい状態解除
+		}
+		else { pShakeTimer_ = pShakeTime; }
+	}
+	if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 200, 400, 3); }
+	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
 }
 
 void GamePlayScene::UpdateMouse()
@@ -414,7 +441,7 @@ void GamePlayScene::CollisionAll()
 	}
 	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmemに０はいってたらおせーて
 	
-	//雑魚敵の弾と自機の当たり判定
+	//[雑魚敵弾]と[自機]の当たり判定
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
@@ -429,6 +456,7 @@ void GamePlayScene::CollisionAll()
 					seBulForm.radius = seb->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
+						pDamFlag = true;
 						NowPlayerHP -= seBulPower;//自機ダメージ
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5f, 0);
@@ -445,7 +473,6 @@ void GamePlayScene::CollisionAll()
 	}
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
-
 
 void GamePlayScene::Update()
 {
@@ -662,24 +689,8 @@ void GamePlayScene::Update()
 	//	rotaVec.z += 175.f * dxBase->nearCos(playerRota.y) * dxBase->nearCos(playerRota.x);
 	//}
 	
-	//くーーーーるたいむ仮　今は文字だけ
-	if (pDamFlag == true) {
-		if (--pShakeTimer_ >= 0) {//揺らす時間 0まで減らす			
-			XMFLOAT3 pPosition = player_->GetPosition();
-			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
-			//pPosition.x = pPosMem.x+rand() % 5 - 2;
-			//pPosition.y = pPosMem.y+rand() % 5 - 2;
-			player_->SetPosition(pPosition);
-
-			if(pShakeTimer_<=0){
-				//player_->SetPosition({ pPosMem });//揺らした後元座標に戻したい
-				pDamFlag = false;
-			}//0なったらくらい状態解除
-		}
-		else { pShakeTimer_ = pShakeTime; }
-	}
-	if(pDamFlag==false){ DebugText::GetInstance()->Print("pdamflag=false", 200, 400, 3); }
-	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
+	//くらったらクールタイム
+	CoolTime();
 
 	//敵のHPバー
 	if (BossEnemyAdvent == true)
@@ -823,6 +834,7 @@ void GamePlayScene::Update()
 	sp_guide->Update();
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
+	sp_semeter->Update();
 
 	player_->Update();
 	//smallEnemy_->Update();
@@ -897,6 +909,7 @@ void GamePlayScene::Draw()
 	sp_guide->Draw();
 	sp_playerhpbar->Draw();
 	sp_playerhpbarwaku->Draw();
+	sp_semeter->Draw();
 	if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画

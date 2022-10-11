@@ -38,12 +38,14 @@ public:
 
 	void PlayerDeath();
 
+	void CoolTime();
+
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
 
 	//指定フレームごとに雑魚出現
-	static const int SEneAppInterval = 100;
+	static const int SEneAppInterval = 80;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
@@ -71,6 +73,7 @@ private:
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
+	std::unique_ptr < Sprite> sp_semeter = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
