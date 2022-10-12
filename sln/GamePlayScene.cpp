@@ -20,18 +20,23 @@ void GamePlayScene::Initialize()
 {
 #pragma region 描画初期化処理
 
-	camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
+	//camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
+	camera.reset(new CameraTracking());
 
-	camera->SetTarget({ 0,50,-200 });
-	camera->SetEye({ 0,48,-210 });
+	//camera->SetTarget({ 0,50,-200 });
+	//camera->SetEye({ 0,48,-210 });
+	Object3d::SetCamera(camera.get());
 
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
 	// カメラセット
-	Object3d::SetCamera(camera.get());
+	//Object3d::SetCamera(camera.get());
+
+
+	
 	//グラフィックスパイプライン生成
-	FbxObject3d::CreateGraphicsPipeline();
-	FbxObject3d::SetCamera(camera.get());
+	//FbxObject3d::CreateGraphicsPipeline();
+	//FbxObject3d::SetCamera(camera.get());
 
 	//使う定義とか　仮おいとくね
 	time = frame / 60.f;	// 60fps想定
@@ -84,6 +89,13 @@ void GamePlayScene::Initialize()
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
 	//smallEnemy_->Initialize();
+
+	camera->SetTrackingTarget(player_.get());
+	camera->SetTarget(player_->GetPosition());
+	XMFLOAT3 eye = player_->GetPosition();
+	eye.z -= 50;
+	eye.y += 10;
+	camera->SetEye(eye);
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)
@@ -264,7 +276,7 @@ void GamePlayScene::UpdateCamera()
 	// カメラの距離
 	constexpr float camLen = 64.f;
 	// カメラの高さ
-	constexpr float camHeight = camLen * 0.5f;
+	//constexpr float camHeight = camLen * 10.5f;
 
 	// 自機からカメラ注視点までの距離
 	constexpr float player2targetLen = camLen * 2.f;
@@ -312,7 +324,7 @@ void GamePlayScene::UpdateCamera()
 void GamePlayScene::CollisionAll()
 {
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
-//[自機の弾]と[ボス]の当たり判定
+	//[自機の弾]と[ボス]の当たり判定
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		{
 
@@ -337,7 +349,7 @@ void GamePlayScene::CollisionAll()
 
 						NowBossHP -= pBulPower;
 
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.5f, 0);
+						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.6f, 0);
 
 						if (NowBossHP <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5f, 0);
@@ -382,7 +394,7 @@ void GamePlayScene::CollisionAll()
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x;
+				smallenemyForm.radius = se->GetScale().x+7.f;//余裕を持たせる分＋
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
@@ -500,6 +512,8 @@ void GamePlayScene::Update()
 	const bool inputK = input->PushKey(DIK_K);
 	const bool inputJ = input->PushKey(DIK_J);
 	const bool inputL = input->PushKey(DIK_L);
+
+	const bool input3 = input->PushKey(DIK_3);
 	//押した瞬間
 	const bool TriggerM = input->TriggerKey(DIK_M);
 	const bool TriggerE = input->TriggerKey(DIK_E);
@@ -514,105 +528,105 @@ void GamePlayScene::Update()
 	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
 	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
-	//--------------------↓移動制限
-
-	const float CameraTagMoveLimX = 190;
-	const float CameraEyeMoveLimX = 190;
-
-	const float CameraMaxTagMoveLimY = 90;//Y最大タゲ　下にどれだけ行けるかなんか逆
-	const float CameraMaxEyeMoveLimY = 92;//Y最大アイ
-	const float CameraMinTagMoveLimY = 210;//Y最小タゲ　上にどれだけ行けるかなんか逆
-	const float CameraMinEyeMoveLimY = 208;//Y最小アイ
-
-	const float CameraMaxTagMoveLimZ = 320;//後最大タゲ
-	const float CameraMaxEyeMoveLimZ = 330;//後最大アイ
-	const float CameraMinTagMoveLimZ = 170;//前最小タゲ
-	const float CameraMinEyeMoveLimZ = 160;//前最小アイ
-
-			//------↓ターゲット
-	XMFLOAT3 target_moved = camera->GetTarget();
-	target_moved.x = max(target_moved.x, -CameraTagMoveLimX);
-	target_moved.x = min(target_moved.x, +CameraTagMoveLimX);
-	target_moved.y = max(target_moved.y, -CameraMaxTagMoveLimY); //下にどれだけ行けるかなんか逆
-	target_moved.y = min(target_moved.y, +CameraMinTagMoveLimY);
-	target_moved.z = max(target_moved.z, -CameraMaxTagMoveLimZ);
-	target_moved.z = min(target_moved.z, +CameraMinTagMoveLimZ);//前
-	camera->SetTarget(target_moved);
-	//------↑ターゲット
-	//------↓め！
-	XMFLOAT3 eye_moved = camera->GetEye();
-	eye_moved.x = max(eye_moved.x, -CameraEyeMoveLimX);
-	eye_moved.x = min(eye_moved.x, +CameraEyeMoveLimX);
-	eye_moved.y = max(eye_moved.y, -CameraMaxEyeMoveLimY); //上にどれだけ行けるかなんか逆
-	eye_moved.y = min(eye_moved.y, +CameraMinEyeMoveLimY);
-	eye_moved.z = max(eye_moved.z, -CameraMaxEyeMoveLimZ);//後
-	eye_moved.z = min(eye_moved.z, +CameraMinEyeMoveLimZ);//前
-	camera->SetEye(eye_moved);
-	//------↑め！
-//--------------------↑移動制限
-
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
-	{
-
-		//------プレイヤーも同じ移動------//
-		bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 2;
-
-		if (inputS || PadInputDOWN) {
-			// カメラをバックさせる
-			camera->MoveEyeVector(XMFLOAT3(0, 0, -moveSpeed));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z - moveSpeed));
-
-		}
-		if (inputW || PadInputUP) {
-			// カメラを前進させる
-			camera->MoveEyeVector(XMFLOAT3(0, 0, +moveSpeed));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z + moveSpeed));
-
-		}
-		if (inputA || PadInputLEFT) {
-			// カメラを左進させる
-			camera->MoveEyeVector(XMFLOAT3(-moveSpeed, 0, 0));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x - moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
-
-		}/*
-		if(!inputA&&OldInputFlag_A==TRUE) {
-			XMFLOAT3 rotation = obj_player->GetRotation();
-			rotation.z = 0;
-			obj_player->SetRotation(rotation);
-
-			OldInputFlag_A = FALSE;
-		}*/
-
-		if (inputD || PadInputRIGHT) {
-			// カメラを右進させる
-			camera->MoveEyeVector(XMFLOAT3(moveSpeed, 0, 0));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x + moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
-
-		}
-		//else{ OldInputFlag = FALSE; }
-
-		//if (OldInputFlag == TRUE) {
-
-		//	XMFLOAT3 rotation = obj_player->GetRotation();
-		//	rotation.z = 0;
-		//	obj_player->SetRotation(rotation);
-
-		//	OldInputFlag = FALSE;
-		//}
-
-		if (inputQ) {
-			// カメラを上昇させる
-			camera->MoveEyeVector(XMFLOAT3(0, moveSpeed, 0));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y + moveSpeed, camera->GetTarget().z));
-
-		}
-		if (inputZ) {
-			// カメラを下降させる
-			camera->MoveEyeVector(XMFLOAT3(0, -moveSpeed, 0));
-			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y - moveSpeed, camera->GetTarget().z));
-		}
-	}
+//	//--------------------↓移動制限
+//
+//	const float CameraTagMoveLimX = 190;
+//	const float CameraEyeMoveLimX = 190;
+//
+//	const float CameraMaxTagMoveLimY = 90;//Y最大タゲ　下にどれだけ行けるかなんか逆
+//	const float CameraMaxEyeMoveLimY = 92;//Y最大アイ
+//	const float CameraMinTagMoveLimY = 210;//Y最小タゲ　上にどれだけ行けるかなんか逆
+//	const float CameraMinEyeMoveLimY = 208;//Y最小アイ
+//
+//	const float CameraMaxTagMoveLimZ = 320;//後最大タゲ
+//	const float CameraMaxEyeMoveLimZ = 330;//後最大アイ
+//	const float CameraMinTagMoveLimZ = 170;//前最小タゲ
+//	const float CameraMinEyeMoveLimZ = 160;//前最小アイ
+//
+//			//------↓ターゲット
+//	XMFLOAT3 target_moved = camera->GetTarget();
+//	target_moved.x = max(target_moved.x, -CameraTagMoveLimX);
+//	target_moved.x = min(target_moved.x, +CameraTagMoveLimX);
+//	target_moved.y = max(target_moved.y, -CameraMaxTagMoveLimY); //下にどれだけ行けるかなんか逆
+//	target_moved.y = min(target_moved.y, +CameraMinTagMoveLimY);
+//	target_moved.z = max(target_moved.z, -CameraMaxTagMoveLimZ);
+//	target_moved.z = min(target_moved.z, +CameraMinTagMoveLimZ);//前
+//	camera->SetTarget(target_moved);
+//	//------↑ターゲット
+//	//------↓め！
+//	XMFLOAT3 eye_moved = camera->GetEye();
+//	eye_moved.x = max(eye_moved.x, -CameraEyeMoveLimX);
+//	eye_moved.x = min(eye_moved.x, +CameraEyeMoveLimX);
+//	eye_moved.y = max(eye_moved.y, -CameraMaxEyeMoveLimY); //上にどれだけ行けるかなんか逆
+//	eye_moved.y = min(eye_moved.y, +CameraMinEyeMoveLimY);
+//	eye_moved.z = max(eye_moved.z, -CameraMaxEyeMoveLimZ);//後
+//	eye_moved.z = min(eye_moved.z, +CameraMinEyeMoveLimZ);//前
+//	camera->SetEye(eye_moved);
+//	//------↑め！
+////--------------------↑移動制限
+//
+//	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
+//	{
+//
+//		//------プレイヤーも同じ移動------//
+//		bool OldInputFlag = FALSE;
+//		constexpr float moveSpeed = 2;
+//
+//		if (inputS || PadInputDOWN) {
+//			// カメラをバックさせる
+//			camera->MoveEyeVector(XMFLOAT3(0, 0, -moveSpeed));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z - moveSpeed));
+//
+//		}
+//		if (inputW || PadInputUP) {
+//			// カメラを前進させる
+//			camera->MoveEyeVector(XMFLOAT3(0, 0, +moveSpeed));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y, camera->GetTarget().z + moveSpeed));
+//
+//		}
+//		if (inputA || PadInputLEFT) {
+//			// カメラを左進させる
+//			camera->MoveEyeVector(XMFLOAT3(-moveSpeed, 0, 0));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x - moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
+//
+//		}/*
+//		if(!inputA&&OldInputFlag_A==TRUE) {
+//			XMFLOAT3 rotation = obj_player->GetRotation();
+//			rotation.z = 0;
+//			obj_player->SetRotation(rotation);
+//
+//			OldInputFlag_A = FALSE;
+//		}*/
+//
+//		if (inputD || PadInputRIGHT) {
+//			// カメラを右進させる
+//			camera->MoveEyeVector(XMFLOAT3(moveSpeed, 0, 0));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x + moveSpeed, camera->GetTarget().y, camera->GetTarget().z));
+//
+//		}
+//		//else{ OldInputFlag = FALSE; }
+//
+//		//if (OldInputFlag == TRUE) {
+//
+//		//	XMFLOAT3 rotation = obj_player->GetRotation();
+//		//	rotation.z = 0;
+//		//	obj_player->SetRotation(rotation);
+//
+//		//	OldInputFlag = FALSE;
+//		//}
+//
+//		if (inputQ) {
+//			// カメラを上昇させる
+//			camera->MoveEyeVector(XMFLOAT3(0, moveSpeed, 0));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y + moveSpeed, camera->GetTarget().z));
+//
+//		}
+//		if (inputZ) {
+//			// カメラを下降させる
+//			camera->MoveEyeVector(XMFLOAT3(0, -moveSpeed, 0));
+//			camera->SetTarget(XMFLOAT3(camera->GetTarget().x, camera->GetTarget().y - moveSpeed, camera->GetTarget().z));
+//		}
+//	}
 
 	if (TriggerR) {//デバック用　適当に　いつかは消す
 		camera->SetTarget({ 0,50,-200 });
@@ -713,17 +727,35 @@ void GamePlayScene::Update()
 		sp_playerhpbar->TransferVertexBuffer();
 	}
 	//サイズ変更によるズレ
-	if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
+	{
 		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
-		pHpBar.x += 50;
+		if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
+			pHpBar.x += 30;
+			BarPosControlOnlyOnceFlag3 = true;
+		}
+		if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
+			pHpBar.x += 20;
+			BarPosControlOnlyOnceFlag1 = true;
+		}
+		if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
+			pHpBar.x += 20;
+			BarPosControlOnlyOnceFlag4 = true;
+		}
+		if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
+			pHpBar.x += 10;
+			BarPosControlOnlyOnceFlag5 = true;
+		}
+		if (NowPlayerHP <= 300 && BarPosControlOnlyOnceFlag6 == false) {
+			pHpBar.x += 10;
+			BarPosControlOnlyOnceFlag6 = true;
+		}
+		if (NowPlayerHP <= 200 && BarPosControlOnlyOnceFlag7 == false) {
+			pHpBar.x += 10;
+			BarPosControlOnlyOnceFlag7 = true;
+		}
+
+		if (input3) { pHpBar.x += -1.f; }
 		sp_playerhpbar->SetPosition(pHpBar);
-		BarPosControlOnlyOnceFlag1 = true;
-	}
-	if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag2 == false) {
-		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
-		pHpBar.x += 30;
-		sp_playerhpbar->SetPosition(pHpBar);
-		BarPosControlOnlyOnceFlag2 = true;
 	}
 
 	//天球回転
@@ -813,8 +845,8 @@ void GamePlayScene::Update()
 
 	// マウス情報の更新
 	UpdateMouse();
-	camera->Update();
 	// カメラの更新
+	camera->Update();
 	UpdateCamera();
 
 	CollisionAll();

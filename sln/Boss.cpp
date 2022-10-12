@@ -39,7 +39,7 @@ void Boss::Attack()
 void Boss::DiffusionAttack()
 {
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5f);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();

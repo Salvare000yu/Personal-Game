@@ -31,6 +31,12 @@ public:
 
 	inline bool GetAlive() const { return alive; }
 
+	/// <summary>
+	/// ‰ñ“]s—ñ‚Ìæ“¾
+	/// </summary>
+	/// <returns>‰ñ“]s—ñ</returns>
+	inline const DirectX::XMMATRIX& GetMatRotation() const { return obj->GetMatRot(); }
+
 	virtual void Initialize();
 
 	virtual void Update();

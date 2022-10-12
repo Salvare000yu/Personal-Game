@@ -70,7 +70,7 @@ public:
 	inline DirectX::XMVECTOR GetPosVec() { return position; }
 
 	//攻撃インターバル
-	static const int32_t AtkInterval = 20;
+	static const int32_t AtkInterval = 10;
 	//攻撃インターバルタイマー
 	int32_t AtkInterval_ = AtkInterval;
 };

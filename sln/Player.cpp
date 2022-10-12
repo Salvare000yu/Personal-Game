@@ -20,7 +20,7 @@ void Player::Attack()
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
 
 	//弾発射
-	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT)&&AttackIntervalFlag==false) {
+	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//弾生成
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
@@ -73,7 +73,8 @@ void Player::Attack()
 			if (AtkInterval_ <= 0) {
 				AttackIntervalFlag = false;
 			}//0なったらくらい状態解除
-		}else { AtkInterval_ = AtkInterval; }
+		}
+		else { AtkInterval_ = AtkInterval; }
 	}
 
 }
@@ -139,6 +140,7 @@ void Player::Update()
 	const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 PlayerPos = obj->GetPosition();
+	XMFLOAT3 rotation = obj->GetRotation();
 	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
 	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
 	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
@@ -151,16 +153,15 @@ void Player::Update()
 	//------------------↓プレイヤー移動＆姿勢
 	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
 	{
-
 		//------プレイヤーも同じ移動------//
-		bool OldInputFlag = FALSE;
+		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
 		if ((inputS) || PadInputDOWN) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.z = PlayerPos.z - moveSpeed;
-			obj->SetPosition(PlayerPos);
+
+			PlayerPos.z -= moveSpeed;
+			//obj->SetPosition(PlayerPos);
 
 			//XMFLOAT3 rotation = obj->GetRotation();
 			//if (rotation.x <= 10) {
@@ -172,9 +173,9 @@ void Player::Update()
 
 		if ((inputW) || PadInputUP) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.z = PlayerPos.z + moveSpeed;
-			obj->SetPosition(PlayerPos);
+
+			PlayerPos.z += moveSpeed;
+			//obj->SetPosition(PlayerPos);
 
 			//XMFLOAT3 rotation = obj->GetRotation();
 			//if (rotation.x >= -10) {
@@ -185,49 +186,45 @@ void Player::Update()
 
 		if ((inputA) || PadInputLEFT) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.x = PlayerPos.x - moveSpeed;
-			obj->SetPosition(PlayerPos);
+			PlayerPos.x -= moveSpeed;
+			//obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj->GetRotation();
-			if (rotation.z <= 10) {
-				rotation.z += 1.f;
-			}
-			obj->SetRotation(rotation);
+			//if (rotation.z <= 10) {
+			//	rotation.z += 1.f;
+			//}
+			//obj->SetRotation(rotation);
 
-			OldInputFlag = TRUE;
+			//OldInputFlag = TRUE;
 		}
 
 		if ((inputD) || PadInputRIGHT) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.x = PlayerPos.x + moveSpeed;
-			obj->SetPosition(PlayerPos);
+			PlayerPos.x += moveSpeed;
+			//obj->SetPosition(PlayerPos);
 
-			XMFLOAT3 rotation = obj->GetRotation();
-			if (rotation.z >= -10) {
-				rotation.z -= 1.f;
-			}
-			obj->SetRotation(rotation);
+			//if (rotation.z >= -10) {
+			//	rotation.z -= 1.f;
+			//}
+			//obj->SetRotation(rotation);
 
-			OldInputFlag = TRUE;
+			//OldInputFlag = TRUE;
 		}
 
 		if (inputQ) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.y = PlayerPos.y + moveSpeed;
-			obj->SetPosition(PlayerPos);
+			PlayerPos.y += moveSpeed;
+			//obj->SetPosition(PlayerPos);
 		}
 
 		if (inputZ) {
 
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			PlayerPos.y = PlayerPos.y - moveSpeed;
-			obj->SetPosition(PlayerPos);
-		}
 
+			PlayerPos.y -= moveSpeed;
+			//obj->SetPosition(PlayerPos);
+		}
+		obj->SetPosition(PlayerPos);
 	}
+
 	if (TriggerR) {//リセット
 		obj->SetPosition({ 0,40,-170 });
 		obj->SetRotation({ 0,0,0 });
@@ -256,25 +253,25 @@ void Player::Update()
 	//自分回転
 	if (inputL)
 	{
-		XMFLOAT3 rotation = obj->GetRotation();
+		//XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y++;
 		obj->SetRotation(rotation);
 	}
 	if (inputJ)
 	{
-		XMFLOAT3 rotation = obj->GetRotation();
+		//XMFLOAT3 rotation = obj->GetRotation();
 		rotation.y--;
 		obj->SetRotation(rotation);
 	}
 	if (inputI)
 	{
-		XMFLOAT3 rotation = obj->GetRotation();
+		//XMFLOAT3 rotation = obj->GetRotation();
 		rotation.x--;
 		obj->SetRotation(rotation);
 	}
 	if (inputK)
 	{
-		XMFLOAT3 rotation = obj->GetRotation();
+		//XMFLOAT3 rotation = obj->GetRotation();
 		rotation.x++;
 		obj->SetRotation(rotation);
 	}

@@ -19,6 +19,8 @@ Camera::Camera(int window_width, int window_height)
 
 void Camera::Update()
 {
+	StartUpdate();
+
 	if (viewDirty || projectionDirty) {
 		// ÄŒvZ•K—v‚È‚ç
 		if (viewDirty) {

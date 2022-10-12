@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include "Object3d.h"
 #include "BaseObject.h"
-
+#include "CameraTracking.h"
 
 #include "Camera.h"
 
@@ -40,7 +40,7 @@ public:
 
 	void CoolTime();
 
-	std::unique_ptr<Camera> camera; //カメラ
+	//std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
 
@@ -95,6 +95,9 @@ private:
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1 = nullptr;
 
+	// カメラ
+	std::unique_ptr<CameraTracking> camera;
+
 	float frame = 0;
 
 	//雑魚敵出現用カウント
@@ -114,8 +117,14 @@ private:
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
+	//バーのずれ
 	bool BarPosControlOnlyOnceFlag1 = false;
 	bool BarPosControlOnlyOnceFlag2 = false;
+	bool BarPosControlOnlyOnceFlag3 = false;
+	bool BarPosControlOnlyOnceFlag4 = false;
+	bool BarPosControlOnlyOnceFlag5 = false;
+	bool BarPosControlOnlyOnceFlag6 = false;
+	bool BarPosControlOnlyOnceFlag7 = false;
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
 	//敵撃破数
