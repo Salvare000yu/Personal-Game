@@ -17,7 +17,17 @@
 
 class GamePlayScene :public BaseScene,public BaseObject
 {
+
 	DirectX::XMFLOAT2 cameraMoveVel{};
+private:
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+
 public:
 
 	void Initialize() override;
@@ -40,8 +50,6 @@ public:
 
 	void CoolTime();
 
-	//std::unique_ptr<Camera> camera; //カメラ
-
 	float time;
 
 	//指定フレームごとに雑魚出現
@@ -62,8 +70,6 @@ public:
 	static const int32_t pShakeTime = 60*3;
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
-
-	DirectX::XMFLOAT2 playerRota{};
 
 private:
 	//sprite
@@ -117,7 +123,7 @@ private:
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
-	//バーのずれ
+	//バーのずれ‐‐いつか消す
 	bool BarPosControlOnlyOnceFlag1 = false;
 	bool BarPosControlOnlyOnceFlag2 = false;
 	bool BarPosControlOnlyOnceFlag3 = false;

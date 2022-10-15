@@ -49,7 +49,7 @@ public:
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
 	ActionPattern actionPattern_ = ActionPattern::Approach;
 
-	std::list <std::unique_ptr<BossBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
@@ -61,11 +61,6 @@ public:
 	inline void SetEBulModel(Model* model) { eBulModel = model; }
 
 private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
 
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;

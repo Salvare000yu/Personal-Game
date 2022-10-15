@@ -21,9 +21,7 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	float frame = 0;
-
-	XMFLOAT3 velocity{ 0,0,4 };
+	XMFLOAT3 velocity{ 0,0,6 };
 
 public:
 	//‰Šú‰»
@@ -36,8 +34,6 @@ public:
 	void Draw()override;
 
 	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
-
-	float time;
 
 	//’eÀ•W”»’è‚Åg‚¤‚½‚ß‚Ìgetbulletposmemory
 	static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory();

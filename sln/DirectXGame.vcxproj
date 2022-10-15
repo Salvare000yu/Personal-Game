@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -150,46 +150,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="CameraTracking.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="CollisionPrimitive.cpp" />
-    <ClCompile Include="ClearScene.cpp" />
-    <ClCompile Include="BossBullet.cpp" />
-    <ClCompile Include="FbxObject3d.cpp" />
-    <ClCompile Include="GameOver.cpp" />
-    <ClCompile Include="GameSound.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DebugText.cpp" />
+    <ClCompile Include="3d\BaseObject.cpp" />
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="camera\CameraTracking.cpp" />
+    <ClCompile Include="Collision\Collision.cpp" />
+    <ClCompile Include="Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="scene\ClearScene.cpp" />
+    <ClCompile Include="GameChar\BossBullet.cpp" />
+    <ClCompile Include="fbx\FbxObject3d.cpp" />
+    <ClCompile Include="scene\GameOver.cpp" />
+    <ClCompile Include="GameSound\GameSound.cpp" />
+    <ClCompile Include="2d\DebugText.cpp" />
     <ClCompile Include="DxBase.cpp" />
-    <ClCompile Include="FbxLoader.cpp" />
-    <ClCompile Include="FbxModel.cpp" />
-    <ClCompile Include="GameBase.cpp" />
-    <ClCompile Include="GamePlayScene.cpp" />
+    <ClCompile Include="fbx\FbxLoader.cpp" />
+    <ClCompile Include="fbx\FbxModel.cpp" />
+    <ClCompile Include="base\GameBase.cpp" />
+    <ClCompile Include="scene\GamePlayScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx12.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="input\Input.cpp" />
+    <ClCompile Include="scene\BaseScene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="3d\Model.cpp" />
     <ClCompile Include="MyDirectXGame.cpp" />
-    <ClCompile Include="Object3d.cpp" />
-    <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="3d\Object3d.cpp" />
+    <ClCompile Include="GameChar\Boss.cpp" />
+    <ClCompile Include="GameChar\Player.cpp" />
+    <ClCompile Include="GameChar\PlayerBullet.cpp" />
     <ClCompile Include="PostEffect.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SmallEnemy.cpp" />
-    <ClCompile Include="SmallEnemyBullet.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="SpriteBase.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="GameChar\SmallEnemy.cpp" />
+    <ClCompile Include="GameChar\SmallEnemyBullet.cpp" />
+    <ClCompile Include="2d\Sprite.cpp" />
+    <ClCompile Include="2d\SpriteBase.cpp" />
     <ClCompile Include="Time.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="WinApp.cpp" />
+    <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="base\WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -269,22 +269,22 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="CameraTracking.h" />
-    <ClInclude Include="Collision.h" />
-    <ClInclude Include="CollisionPrimitive.h" />
-    <ClInclude Include="ClearScene.h" />
-    <ClInclude Include="BossBullet.h" />
-    <ClInclude Include="FbxObject3d.h" />
-    <ClInclude Include="GameOver.h" />
-    <ClInclude Include="GameSound.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="DebugText.h" />
+    <ClInclude Include="3d\BaseObject.h" />
+    <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="camera\CameraTracking.h" />
+    <ClInclude Include="Collision\Collision.h" />
+    <ClInclude Include="Collision\CollisionPrimitive.h" />
+    <ClInclude Include="scene\ClearScene.h" />
+    <ClInclude Include="GameChar\BossBullet.h" />
+    <ClInclude Include="fbx\FbxObject3d.h" />
+    <ClInclude Include="scene\GameOver.h" />
+    <ClInclude Include="GameSound\GameSound.h" />
+    <ClInclude Include="2d\DebugText.h" />
     <ClInclude Include="DxBase.h" />
-    <ClInclude Include="FbxLoader.h" />
-    <ClInclude Include="FbxModel.h" />
-    <ClInclude Include="GameBase.h" />
-    <ClInclude Include="GamePlayScene.h" />
+    <ClInclude Include="fbx\FbxLoader.h" />
+    <ClInclude Include="fbx\FbxModel.h" />
+    <ClInclude Include="base\GameBase.h" />
+    <ClInclude Include="scene\GamePlayScene.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx12.h" />
@@ -293,25 +293,25 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="BaseScene.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="input\Input.h" />
+    <ClInclude Include="scene\BaseScene.h" />
+    <ClInclude Include="3d\Model.h" />
     <ClInclude Include="MyDirectXGame.h" />
-    <ClInclude Include="Object3d.h" />
+    <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="PipelineSet.h" />
-    <ClInclude Include="Boss.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="GameChar\Boss.h" />
+    <ClInclude Include="GameChar\Player.h" />
+    <ClInclude Include="GameChar\PlayerBullet.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="safe_delete.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SmallEnemy.h" />
-    <ClInclude Include="SmallEnemyBullet.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpriteBase.h" />
+    <ClInclude Include="scene\SceneManager.h" />
+    <ClInclude Include="GameChar\SmallEnemy.h" />
+    <ClInclude Include="GameChar\SmallEnemyBullet.h" />
+    <ClInclude Include="2d\Sprite.h" />
+    <ClInclude Include="2d\SpriteBase.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="WinApp.h" />
+    <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="3d\WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

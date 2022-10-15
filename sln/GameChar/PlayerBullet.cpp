@@ -3,7 +3,9 @@
 
 #include <DirectXMath.h>
 
-DirectX::XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
+using namespace DirectX;
+
+XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
 {
 	XMFLOAT3 PlayerBulPosMemory={};
 	return PlayerBulPosMemory;

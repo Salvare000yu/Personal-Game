@@ -16,7 +16,7 @@ void SmallEnemy::Attack()
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();
@@ -34,11 +34,15 @@ void SmallEnemy::Attack()
 void SmallEnemy::Initialize()
 {
 	//std::srand((unsigned)std::time(nullptr));
-	float posXMin = -200.f;
-	float posXMax = 200.f;
+	const float posXMin = -200.f;
+	const float posXMax = 200.f;
+	const float posYMin = 10.f;
+	const float posYMax = 70.f;
+
 	std::random_device seed;
 	std::mt19937 random(seed());
-	std::uniform_int_distribution<> number(posXMin, posXMax);
+	std::uniform_int_distribution<> posXNum(posXMin, posXMax);
+	std::uniform_int_distribution<> posYNum(posYMin, posYMax);
 
 	//ì‚é
 	obj.reset(Object3d::Create());
@@ -49,8 +53,9 @@ void SmallEnemy::Initialize()
 	//êŠ
 
 	//SEneRandX = float(rand() % 60);
-	float SEneRandX = number(random);
-	obj->SetPosition({ SEneRandX,40,1000 });
+	float SEneRandX = posXNum(random);
+	float SEneRandY = posYNum(random);
+	obj->SetPosition({ SEneRandX,SEneRandY,1000 });
 
 	AtkCount = AtkInterval;
 
