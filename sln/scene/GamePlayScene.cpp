@@ -4,13 +4,13 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
-#include "DxBase.h"
+#include "../DxBase.h"
 #include "ClearScene.h"
 #include "GameOver.h"
 #include "FbxObject3d.h"
 #include "Collision.h"
 
-#include "safe_delete.h"
+#include "../safe_delete.h"
 
 #include <DirectXMath.h>
 
@@ -127,7 +127,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.4f, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.2f, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -229,7 +229,7 @@ void GamePlayScene::SmallEnemyAppear()
 
 void GamePlayScene::PlayerDeath()
 {
-	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.5f, 0);
+	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
 	player_->SetAlive(false);
 }
 
@@ -251,8 +251,8 @@ void GamePlayScene::CoolTime()
 		}
 		else { pShakeTimer_ = pShakeTime; }
 	}
-	if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 200, 400, 3); }
-	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 200, 400, 3); }
+	if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
+	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
 }
 
 void GamePlayScene::UpdateMouse()
@@ -323,10 +323,10 @@ void GamePlayScene::CollisionAll()
 
 						NowBossHP -= pBulPower;
 
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.6f, 0);
+						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 
 						if (NowBossHP <= 0) {
-							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.5f, 0);
+							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
 							bo->SetAlive(false);
 						}
 
@@ -334,19 +334,19 @@ void GamePlayScene::CollisionAll()
 					}
 				}
 			}
-			//ボスいればTRUE　消えたらFALSE　いないとENPTY
-			if (!boss_.empty())
-			{
-				if (boss_.front()->GetAlive()) {
-					DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
-				}
-				else {
-					DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
-				}
-			}
-			else {
-				DebugText::GetInstance()->Print("empty", 200, 190, 2);
-			}
+			////ボスいればTRUE　消えたらFALSE　いないとENPTY
+			//if (!boss_.empty())
+			//{
+			//	if (boss_.front()->GetAlive()) {
+			//		DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
+			//	}
+			//	else {
+			//		DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
+			//	}
+			//}
+			//else {
+			//	DebugText::GetInstance()->Print("empty", 200, 190, 2);
+			//}
 			// ボスを消す
 			boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
 				[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
@@ -372,7 +372,7 @@ void GamePlayScene::CollisionAll()
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
-					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.4f, 0);
+					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.2f, 0);
 					sEnemyMurdersNum++;//撃破数
 					se->SetAlive(false);
 					pb->SetAlive(false);
@@ -411,7 +411,7 @@ void GamePlayScene::CollisionAll()
 						pDamFlag = true;
 						NowPlayerHP -= eBulPower;//自機ダメージ
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5f, 0);
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						bob->SetAlive(false);
 						if (NowPlayerHP <= 0) {//HP0で死亡
 							PlayerDeath();
@@ -445,7 +445,7 @@ void GamePlayScene::CollisionAll()
 						pDamFlag = true;
 						NowPlayerHP -= seBulPower;//自機ダメージ
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.5f, 0);
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						seb->SetAlive(false);
 						if (NowPlayerHP <= 0) {//HP0で死亡
 							PlayerDeath();
@@ -630,7 +630,6 @@ void GamePlayScene::Update()
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		//ボス戦突入のお知らせです
 		BossEnemyAdvent = true;
-		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
 		//残っている雑魚敵はもういらない
 		for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
 			se->SetAlive(false);//消す
@@ -668,27 +667,13 @@ void GamePlayScene::Update()
 	//	sprite_back->SetPosition(position);
 	//}
 
-	DebugText::GetInstance()->Print("---PLAYSCENE---", 200, 70, 2);
-	DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 200, 100, 2);
-	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 200, 130, 2);
-	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 200, 160, 2);
-	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
-	if (NowBossHP == 0) {
-		DebugText::GetInstance()->Print("crushing!", 200, 230, 3);
-	}
-	if (player_->GetAlive()) {
-		DebugText::GetInstance()->Print("Alive", 200, 270, 3);
-	}
-	else { DebugText::GetInstance()->Print("GameOver", 200, 270, 3); }
-	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 200, 220, 2);
-
+	CollisionAll();
+	DrawUI();
 	// マウス情報の更新
 	UpdateMouse();
 	// カメラの更新
 	camera->Update();
 	UpdateCamera();
-
-	CollisionAll();
 
 	//3dobjUPDATE
 	object3d_1->Update();
@@ -789,4 +774,36 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
+	DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
+	DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
+	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
+	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
+	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
+	if (NowBossHP == 0) {
+		DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
+	}
+	if (player_->GetAlive()) {
+		DebugText::GetInstance()->Print("Alive", 100, 270, 3);
+	}
+	else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
+	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 220, 2);
+
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
+	}
+
+	{
+		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
+		
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
+		DebugText::GetInstance()->Print(tmp, 300, 390,3);
+	}
+	{
+		DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
+
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
+		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+	}
 }

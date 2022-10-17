@@ -29,15 +29,15 @@ void Player::Attack()
 		madeBullet->SetModel(pBulModel);
 		madeBullet->SetPosition(PlayerPos);
 
-		// velocity‚ðŽZo
-		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 3, 0);
+		// velocity‚ðŽZo ’e”­ŽË‘¬“xz
+		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 6, 0);
 		XMFLOAT3 xmfloat3velocity;
 		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
 		madeBullet->SetVelocity(xmfloat3velocity);
 
 		// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-		GameSound::GetInstance()->PlayWave("shot.wav", 0.3f);
+		GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
 
 		//’e“o˜^
 		bullets_.push_back(std::move(madeBullet));

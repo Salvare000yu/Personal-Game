@@ -21,7 +21,7 @@ void Boss::Attack()
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5);
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();
@@ -39,7 +39,7 @@ void Boss::Attack()
 void Boss::DiffusionAttack()
 {
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.5f);
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();

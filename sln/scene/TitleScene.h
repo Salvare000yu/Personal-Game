@@ -7,7 +7,7 @@
 #include "Object3d.h"
 #include "SpriteBase.h"
 #include <memory>
-#include "DxBase.h"
+#include "../DxBase.h"
 
 class TitleScene :public BaseScene
 {

@@ -5,7 +5,7 @@
 #include "DebugText.h"
 #include "GamePlayScene.h"
 
-#include "PostEffect.h"
+#include "../PostEffect.h"
 
 //PostEffect* postEffect = nullptr;
 
@@ -38,7 +38,7 @@ void TitleScene::Initialize()
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
 
 	// 音声再生
-	GameSound::GetInstance()->PlayWave("A_rhythmaze_125.wav", 0.4f, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("A_rhythmaze_125.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;

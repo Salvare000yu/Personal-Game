@@ -5,12 +5,6 @@
 
 using namespace DirectX;
 
-XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory()
-{
-	XMFLOAT3 PlayerBulPosMemory={};
-	return PlayerBulPosMemory;
-}
-
 //bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void PlayerBullet::Initialize()
 {

@@ -35,11 +35,6 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	//弾座標判定で使うためのgetbulletposmemory
-	static XMFLOAT3 PlayerBullet::GetPlayerBulPosMemory();
-	//静的メンバ変数　当たり判定で使う為の弾座標
-	static XMFLOAT3 PlayerBulPosMemory;
-
 	//消えるまで
 	static const int32_t BulVanishTime = 60 * 5;//寿命
 

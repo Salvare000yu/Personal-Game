@@ -16,7 +16,7 @@ void SmallEnemy::Attack()
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 
 	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.1f);
 
 	//’e”­ŽË
 	XMFLOAT3 position = obj->GetPosition();

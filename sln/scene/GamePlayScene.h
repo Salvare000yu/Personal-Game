@@ -134,9 +134,9 @@ private:
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
 	//敵撃破数
-	int sEnemyMurdersNum = 0;
+	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数
-	int BossTermsEMurdersNum = 5;
+	float BossTermsEMurdersNum = 5;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	
