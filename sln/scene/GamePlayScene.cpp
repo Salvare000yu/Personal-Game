@@ -237,15 +237,17 @@ void GamePlayScene::CoolTime()
 {
 	//‚­[[[[‚é‚½‚¢‚Þ‰¼@¡‚Í•¶Žš‚¾‚¯
 	if (pDamFlag == true) {
-		if (--pShakeTimer_ >= 0) {//—h‚ç‚·ŽžŠÔ 0‚Ü‚ÅŒ¸‚ç‚·			
-			XMFLOAT3 pPosition = player_->GetPosition();
+		if (--pShakeTimer_ >= 0) {// 0‚Ü‚ÅŒ¸‚ç‚·			
 			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
-			//pPosition.x = pPosMem.x+rand() % 5 - 2;
-			//pPosition.y = pPosMem.y+rand() % 5 - 2;
-			player_->SetPosition(pPosition);
+			
+			//eye—h‚ç‚·
+			XMFLOAT3 eye =camera->GetEye();
+			randShakeNow = 4 + 1;//1~4
+			eye.x = eye.x +rand()% randShakeNow-2;//1~4‚Ü‚Å‚ÌrandShakeNow‚ÌÅ‘å’l‚©‚ç”¼•ª‚ðˆø‚¢‚Ä•‰‚Ì”‚àŠÜ‚Þ‚æ‚¤‚É
+			eye.y = eye.y +rand()% randShakeNow-2;
+			camera->SetEye(eye);
 
 			if (pShakeTimer_ <= 0) {
-				//player_->SetPosition({ pPosMem });//—h‚ç‚µ‚½ŒãŒ³À•W‚É–ß‚µ‚½‚¢
 				pDamFlag = false;
 			}//0‚È‚Á‚½‚ç‚­‚ç‚¢ó‘Ô‰ðœ
 		}
@@ -388,9 +390,6 @@ void GamePlayScene::CollisionAll()
 		});
 
 	//[Ž©‹@]‚Æ[“G’e]‚Ì“–‚½‚è”»’è
-	//XMFLOAT3 pPosMem{};//ƒvƒŒƒCƒ„[Œ³À•W•Û‘¶@—h‚ê‚ÉŽg‚¤—\’è
-	//XMFLOAT3 pos=player_->GetPosition();
-	//if(pos.y==0){ DebugText::GetInstance()->Print("0niiru", 200, 350, 3);}//0‚É–ß‚Á‚½‚ç•\Ž¦–ÚˆÀ
 	{
 
 		Sphere playerForm;
@@ -407,7 +406,6 @@ void GamePlayScene::CollisionAll()
 
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 
-						//pPosMem = player_->GetPosition();//ƒvƒŒƒCƒ„[Œ³À•W•Û‘¶@—h‚ê‚ÉŽg‚¤—\’è
 						pDamFlag = true;
 						NowPlayerHP -= eBulPower;//Ž©‹@ƒ_ƒ[ƒW
 
@@ -425,7 +423,6 @@ void GamePlayScene::CollisionAll()
 
 
 	}
-	//if(pPosMem.x==0){ DebugText::GetInstance()->Print("posMem is 0", 200, 390, 3); }//posmem‚É‚O‚Í‚¢‚Á‚Ä‚½‚ç‚¨‚¹[‚Ä
 	
 	//[ŽG‹›“G’e]‚Æ[Ž©‹@]‚Ì“–‚½‚è”»’è
 	{
@@ -774,24 +771,26 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
+	//ðŒ‚È‚µí‚É•\Ž¦
 	DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
 	DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
 	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
 	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
+	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
 	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
-	if (NowBossHP == 0) {
-		DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
-	}
-	if (player_->GetAlive()) {
-		DebugText::GetInstance()->Print("Alive", 100, 270, 3);
-	}
-	else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
-	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 220, 2);
+	//if (NowBossHP == 0) {
+	//	DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
+	//}
+	//if (player_->GetAlive()) {
+	//	DebugText::GetInstance()->Print("Alive", 100, 270, 3);
+	//}
+	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
 
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
 	}
 
+	//ŽG‹›“GŒ‚”j”ŠÖ˜A
 	{
 		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
 		

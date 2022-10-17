@@ -67,7 +67,7 @@ public:
 	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
 
 	//揺れる時間
-	static const int32_t pShakeTime = 60*3;
+	static const int32_t pShakeTime = 60/2;
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
 
@@ -140,5 +140,7 @@ private:
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	
+	int randShakeDef = 0;
+	int randShakeNow=randShakeDef;
 };
 
