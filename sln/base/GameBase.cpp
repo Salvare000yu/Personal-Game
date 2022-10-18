@@ -1,6 +1,6 @@
 ﻿//フレームワーク旧
 #include "GameBase.h"
-#include "PostEffect.h"
+#include "../PostEffect.h"
 #include <memory>
 
 void GameBase::Run()

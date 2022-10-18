@@ -27,6 +27,10 @@ void GamePlayScene::Initialize()
 	//camera->SetEye({ 0,48,-210 });
 	Object3d::SetCamera(camera.get());
 
+	// マウスカーソル非表示
+	Input* input = Input::GetInstance();
+	input->MouseCursorHiddenFlag(false);
+
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
 	// カメラセット
@@ -46,7 +50,7 @@ void GamePlayScene::Initialize()
 	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("smallenemy_kari"));
-	mod_playerbullet.reset(Model::LoadFromOBJ("PlayerBul"));
+	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
 	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
@@ -323,9 +327,9 @@ void GamePlayScene::CoolTime()
 			
 			//pos揺らす
 			XMFLOAT3 pos =player_->GetPosition();
-			randShakeNow = 60 + 1;//1~4
-			pos.x = pos.x +rand()% randShakeNow-3;//1~4までのrandShakeNowの最大値から半分を引いて負の数も含むように
-			pos.y = pos.y +rand()% randShakeNow-3;
+			randShakeNow = 8 + 1;//1~4
+			pos.x = pos.x +rand()% randShakeNow-4;//1~4までのrandShakeNowの最大値から半分を引いて負の数も含むように
+			pos.y = pos.y +rand()% randShakeNow-4;
 			player_->SetPosition(pos);
 
 			if (pShakeTimer_ <= 0) {
@@ -376,6 +380,35 @@ void GamePlayScene::UpdateCamera()
 		rota.y += cameraMoveVel.x * camMoveVel;
 
 		player_->SetRotation(rota);
+	}
+}
+
+void GamePlayScene::PadStickCamera()
+{
+	//パッド右スティックでカメラ視点
+	Input* input = Input::GetInstance();
+
+	const float PadCamMoveAmount=0.5f;
+
+	if (input->PushRightStickUp()) {
+		XMFLOAT3 pRot = player_->GetRotation();
+		pRot.x -= PadCamMoveAmount;
+		player_->SetRotation(pRot);
+	}
+	if (input->PushRightStickDown()) {
+		XMFLOAT3 pRot = player_->GetRotation();
+		pRot.x += PadCamMoveAmount;
+		player_->SetRotation(pRot);
+	}
+	if (input->PushRightStickRight()) {
+		XMFLOAT3 pRot = player_->GetRotation();
+		pRot.y += PadCamMoveAmount;
+		player_->SetRotation(pRot);
+	}
+	if (input->PushRightStickLeft()) {
+		XMFLOAT3 pRot = player_->GetRotation();
+		pRot.y -= PadCamMoveAmount;
+		player_->SetRotation(pRot);
 	}
 }
 
@@ -476,7 +509,7 @@ void GamePlayScene::CollisionAll()
 
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z;
+		playerForm.radius = player_->GetScale().z+2;
 
 		if (player_->GetAlive()) {
 			for (auto& bo : boss_) {
@@ -510,7 +543,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z;
+		playerForm.radius = player_->GetScale().z+2;
 
 		if (player_->GetAlive()) {
 			for (auto& se : smallEnemys_) {
@@ -518,7 +551,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
 					Sphere seBulForm;
 					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
-					seBulForm.radius = seb->GetScale().z;
+					seBulForm.radius = seb->GetScale().z+1;//余裕
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
 						pDamFlag = true;
@@ -737,6 +770,8 @@ void GamePlayScene::Update()
 
 	CollisionAll();
 	DrawUI();
+	//パッド右スティックカメラ視点
+	PadStickCamera();
 	// マウス情報の更新
 	UpdateMouse();
 	// カメラの更新

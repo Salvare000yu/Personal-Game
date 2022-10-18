@@ -12,6 +12,10 @@ void GameOver::Initialize()
 {
 #pragma region 描画初期化処理
 
+	// マウスカーソル非表示
+	Input* input = Input::GetInstance();
+	input->MouseCursorHiddenFlag(false);
+
 	////---objからモデルデータ読み込み---
 	//model_1 = Model::LoadFromOBJ("ground");
 	//model_2 = Model::LoadFromOBJ("triangle_mat");
@@ -84,8 +88,11 @@ void GameOver::Finalize()
 void GameOver::Update()
 {
 	Input* input = Input::GetInstance();
+	const bool input1 = input->TriggerKey(DIK_1);
+	//パッド押した瞬間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
-	if (input->TriggerKey(DIK_1))     // スペースキーが押されていたら
+	if (PadTriggerA||input1)     // 1が押されていたら
 	{
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
@@ -150,5 +157,5 @@ void GameOver::Draw()
 
 void GameOver::DrawUI()
 {
-	DebugText::GetInstance()->Print("1:Title", 450, 100, 3);
+	DebugText::GetInstance()->Print("[1orPAD_A]:Title", 430, 100, 3);
 }

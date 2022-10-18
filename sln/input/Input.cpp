@@ -45,7 +45,6 @@ WORD Input::LeftStickToCross(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
 }
 
 
-
 Input* Input::GetInstance()
 {
     static Input instance;
@@ -169,6 +168,13 @@ void Input::ControllerUpdate(DWORD controllerNum)
         state.Gamepad.sThumbLX = 0;
         state.Gamepad.sThumbLY = 0;
     }
+    if ((state.Gamepad.sThumbRX<XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+        state.Gamepad.sThumbRX>-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
+        (state.Gamepad.sThumbRY<XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
+            state.Gamepad.sThumbRY>-XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)) {
+        state.Gamepad.sThumbRX = 0;
+        state.Gamepad.sThumbRY = 0;
+    }
 
     // 左スティックからの入力を方向パッドに変換
     state.Gamepad.wButtons |= LeftStickToCross(
@@ -247,6 +253,46 @@ bool Input::PushLeftStickRight()
     }
 }
 
+bool Input::PushRightStickUp()
+{
+    if (state.Gamepad.sThumbRY >= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushRightStickDown()
+{
+    if (state.Gamepad.sThumbRY <= -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushRightStickLeft()
+{
+    if (state.Gamepad.sThumbRX <= -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Input::PushRightStickRight()
+{
+    if (state.Gamepad.sThumbRX >= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 bool Input::TriggerButton(int button)
 {
     if ((state.Gamepad.wButtons & button) && !(oldstate.Gamepad.wButtons & button)) {
@@ -255,4 +301,9 @@ bool Input::TriggerButton(int button)
     else {
         return false;
     }
+}
+
+void Input::MouseCursorHiddenFlag(const bool dispFlag)
+{
+    ShowCursor((BOOL)dispFlag);
 }

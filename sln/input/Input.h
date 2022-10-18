@@ -85,15 +85,21 @@ public://メンバ関数
 
 	//左スティック上入力
 	bool PushLeftStickUp();
-
 	//左スティック下入力
 	bool PushLeftStickDown();
-
 	//左スティック左入力
 	bool PushLeftStickLeft();
-
 	//左スティック右入力
 	bool PushLeftStickRight();
+
+	//右スティック上入力
+	bool PushRightStickUp();
+	//右スティック下入力
+	bool PushRightStickDown();
+	//右スティック左入力
+	bool PushRightStickLeft();
+	//右スティック右入力
+	bool PushRightStickRight();
 
 	//ボタン押した瞬間のみ
 	bool TriggerButton(int button);
@@ -119,6 +125,8 @@ public://メンバ関数
 	{
 		return PushMouse(mouseNumber) && !(bool)mousePre.rgbButtons[mouseNumber];
 	}
+
+	void MouseCursorHiddenFlag(const bool dispFlag);
 
 private://メンバ変数
 	//初期化

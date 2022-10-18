@@ -15,6 +15,10 @@ void TitleScene::Initialize()
 {
 #pragma region 描画初期化処理
 
+	// マウスカーソル非表示
+	Input* input = Input::GetInstance();
+	input->MouseCursorHiddenFlag(false);
+
 	////---objからモデルデータ読み込み---
 	//model_1 = Model::LoadFromOBJ("ground");
 	//model_2 = Model::LoadFromOBJ("triangle_mat");

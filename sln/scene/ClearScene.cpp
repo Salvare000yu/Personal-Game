@@ -12,6 +12,10 @@ void ClearScene::Initialize()
 {
 #pragma region 描画初期化処理
 
+	// マウスカーソル非表示
+	Input* input = Input::GetInstance();
+	input->MouseCursorHiddenFlag(false);
+
 	////---objからモデルデータ読み込み---
 	//model_1 = Model::LoadFromOBJ("ground");
 	//model_2 = Model::LoadFromOBJ("triangle_mat");
@@ -84,10 +88,13 @@ void ClearScene::Finalize()
 void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
+	const bool input1 = input->TriggerKey(DIK_1);
+	//パッド押した瞬間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
 	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 
-	if (input->TriggerKey(DIK_1))     // スペースキーが押されていたら
+	if (input1|| PadTriggerA)     // スペースキーが押されていたら
 	{
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
@@ -102,7 +109,8 @@ void ClearScene::Update()
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
 
-	DebugText::GetInstance()->Print("1:PLAYSCENE", 450, 100, 3.0f);
+	DrawUI();
+
 	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
 
 	////3dobj
@@ -151,4 +159,5 @@ void ClearScene::Draw()
 
 void ClearScene::DrawUI()
 {
+	DebugText::GetInstance()->Print("[1orPAD_A]:PLAYSCENE", 430, 100, 3.0f);
 }
