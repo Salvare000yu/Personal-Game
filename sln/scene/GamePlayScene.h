@@ -48,6 +48,8 @@ public:
 
 	void PlayerDeath();
 
+	void PlayerMove();
+
 	void CoolTime();
 
 	float time;

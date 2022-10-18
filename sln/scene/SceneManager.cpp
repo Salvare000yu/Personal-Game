@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 
-#include "PostEffect.h"
-#include "DxBase.h"
+#include "../PostEffect.h"
+#include "../DxBase.h"
 #include "DebugText.h"
 
 SceneManager::~SceneManager()

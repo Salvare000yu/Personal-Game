@@ -32,8 +32,6 @@ void GamePlayScene::Initialize()
 	// カメラセット
 	//Object3d::SetCamera(camera.get());
 
-
-	
 	//グラフィックスパイプライン生成
 	//FbxObject3d::CreateGraphicsPipeline();
 	//FbxObject3d::SetCamera(camera.get());
@@ -50,7 +48,7 @@ void GamePlayScene::Initialize()
 	mod_smallenemy.reset(Model::LoadFromOBJ("smallenemy_kari"));
 	mod_playerbullet.reset(Model::LoadFromOBJ("PlayerBul"));
 	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
-	mod_player.reset(Model::LoadFromOBJ("hiyoko"));
+	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
@@ -233,6 +231,89 @@ void GamePlayScene::PlayerDeath()
 	player_->SetAlive(false);
 }
 
+void GamePlayScene::PlayerMove()
+{
+	Input* input = Input::GetInstance();
+	const bool inputW = input->PushKey(DIK_W);
+	const bool inputS = input->PushKey(DIK_S);
+	const bool inputA = input->PushKey(DIK_A);
+	const bool inputD = input->PushKey(DIK_D);
+	const bool inputQ = input->PushKey(DIK_Q);
+	const bool inputZ = input->PushKey(DIK_Z);
+	//パッド押している間
+	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
+	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
+	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
+	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
+
+	//----------↓移動制限
+	const float PlayerMoveLimX = 190;
+
+	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
+	const float PlayerMinMoveLimY = 200;//上に行ける範囲
+
+	const float PlayerMaxMoveLimZ = 290;//後ろ
+	const float PlayerMinMoveLimZ = 200;
+
+	XMFLOAT3 PlayerPos = player_->GetPosition();
+	XMFLOAT3 rotation = player_->GetRotation();
+	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
+	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
+	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
+	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
+	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
+	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
+	player_->SetPosition(PlayerPos);
+	//----------↑移動制限
+
+	//------------------↓プレイヤー移動＆姿勢
+	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
+	{
+		//------プレイヤーも同じ移動------//
+		//bool OldInputFlag = FALSE;
+		constexpr float moveSpeed = 2.f;
+
+		if ((inputS) || PadInputDOWN) {PlayerPos.y -= moveSpeed;}
+
+		if ((inputW) || PadInputUP) {PlayerPos.y += moveSpeed;}
+
+		if ((inputA) || PadInputLEFT) {
+
+			PlayerPos.x -= moveSpeed;
+
+			//if (rotation.z <= 10) {
+			//	rotation.z += 1.f;
+			//}
+
+			//OldInputFlag = TRUE;
+		}
+
+		if ((inputD) || PadInputRIGHT) {
+
+			PlayerPos.x += moveSpeed;
+
+			//if (rotation.z >= -10) {
+			//	rotation.z -= 1.f;
+			//}
+
+			//OldInputFlag = TRUE;
+		}
+
+		//if (inputQ) {
+
+		//	PlayerPos.y += moveSpeed;
+		//}
+
+		//if (inputZ) {
+
+
+		//	PlayerPos.y -= moveSpeed;
+		//}
+		player_->SetPosition(PlayerPos);
+		player_->SetRotation(rotation);
+	}
+}
+
 void GamePlayScene::CoolTime()
 {
 	//くーーーーるたいむ仮　今は文字だけ
@@ -389,7 +470,7 @@ void GamePlayScene::CollisionAll()
 		return !smallEnemy->GetAlive();
 		});
 
-	//[自機]と[敵弾]の当たり判定
+	//[自機]と[ボス弾]の当たり判定
 	{
 
 		Sphere playerForm;
@@ -402,7 +483,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& bob : bo->GetBullets()) {
 					Sphere eBulForm;
 					eBulForm.center = XMLoadFloat3(&bob->GetPosition());
-					eBulForm.radius = bob->GetScale().z;
+					eBulForm.radius = bob->GetScale().z + 2.f;
 
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 
@@ -470,12 +551,6 @@ void GamePlayScene::Update()
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
 
-	const bool inputW = input->PushKey(DIK_W);
-	const bool inputS = input->PushKey(DIK_S);
-	const bool inputA = input->PushKey(DIK_A);
-	const bool inputD = input->PushKey(DIK_D);
-	const bool inputQ = input->PushKey(DIK_Q);
-	const bool inputZ = input->PushKey(DIK_Z);
 	const bool inputT = input->PushKey(DIK_T);
 	const bool inputE = input->PushKey(DIK_E);
 
@@ -493,11 +568,6 @@ void GamePlayScene::Update()
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	const bool Trigger2 = input->TriggerKey(DIK_2);
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
-	//パッド押している間
-	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
-	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
-	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
-	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	if (TriggerR) {//デバック用　適当に　いつかは消す
 		camera->SetTarget({ 0,50,-200 });
@@ -672,6 +742,9 @@ void GamePlayScene::Update()
 	camera->Update();
 	UpdateCamera();
 
+	//プレイヤー移動
+	PlayerMove();
+
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
@@ -778,6 +851,11 @@ void GamePlayScene::DrawUI()
 	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
 	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
 	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
+	{
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f,%2.f,%2.f", player_->GetPosition().x, player_->GetPosition().y, player_->GetPosition().z);
+		DebugText::GetInstance()->Print(tmp, 430, 220, 3);
+	}
 	//if (NowBossHP == 0) {
 	//	DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
 	//}
@@ -786,23 +864,25 @@ void GamePlayScene::DrawUI()
 	//}
 	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
 
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
+		DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
 	}
+	else {//ボス戦じゃないときのみ表示
+		//雑魚敵撃破数関連
+		{
+			DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
 
-	//雑魚敵撃破数関連
-	{
-		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
-		
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
-		DebugText::GetInstance()->Print(tmp, 300, 390,3);
-	}
-	{
-		DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
+			char tmp[32]{};
+			sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
+			DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+		}
+		{
+			DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
 
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
-		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+			char tmp[32]{};
+			sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
+			DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+		}
 	}
 }

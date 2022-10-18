@@ -85,8 +85,6 @@ void GameOver::Update()
 {
 	Input* input = Input::GetInstance();
 
-	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
-
 	if (input->TriggerKey(DIK_1))     // スペースキーが押されていたら
 	{
 		// 音声停止
@@ -101,8 +99,9 @@ void GameOver::Update()
 	const bool inputDown = input->PushKey(DIK_DOWN);
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
+	
+	DrawUI();
 
-	DebugText::GetInstance()->Print("1:Title", 450, 100, 3.0f);
 	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
 
 	////3dobj
@@ -151,5 +150,5 @@ void GameOver::Draw()
 
 void GameOver::DrawUI()
 {
-
+	DebugText::GetInstance()->Print("1:Title", 450, 100, 3);
 }

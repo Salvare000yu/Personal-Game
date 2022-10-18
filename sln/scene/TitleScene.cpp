@@ -98,8 +98,6 @@ void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
 
-	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // Â‚Á‚Û‚¢F
-
 	//‰Ÿ‚µ‚½uŠÔ‚Ì‚Ý
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
@@ -115,7 +113,8 @@ void TitleScene::Update()
 		sceneManager_->SetNextScene(scene);
 	}
 
-	DebugText::GetInstance()->Print("[SPACEorGAMEPAD:A] PLAYSCENE", 400, 100, 3.0f);
+	DrawUI();
+
 	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
 
 	////3dobj
@@ -174,4 +173,5 @@ void TitleScene::Draw()
 
 void TitleScene::DrawUI()
 {
+	DebugText::GetInstance()->Print("[SPACEorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
 }

@@ -83,7 +83,6 @@ void Player::Initialize()
 {
 	//定義とか仮おいておこう
 
-
 	//作る
 	obj.reset(Object3d::Create());
 	//-----↓任意↓-----//
@@ -123,107 +122,13 @@ void Player::Update()
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
-	//time = frame / 60.f;
-
 	//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
 
-	//----------↓移動制限 カメラと同じにする
-	const float PlayerMoveLimX = 190;
-
-	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
-	const float PlayerMinMoveLimY = 200;//上に行ける範囲
-
-	const float PlayerMaxMoveLimZ = 290;//後ろ
-	const float PlayerMinMoveLimZ = 200;
-
-	XMFLOAT3 PlayerPos = obj->GetPosition();
 	XMFLOAT3 rotation = obj->GetRotation();
-	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
-	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
-	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
-	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
-	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
-	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
-	obj->SetPosition(PlayerPos);
-	//----------↑移動制限
-
-	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
-	{
-		//------プレイヤーも同じ移動------//
-		//bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 2.f;
-
-		if ((inputS) || PadInputDOWN) {
-
-
-			PlayerPos.z -= moveSpeed;
-			//obj->SetPosition(PlayerPos);
-
-			//XMFLOAT3 rotation = obj->GetRotation();
-			//if (rotation.x <= 10) {
-			//	rotation.x += 1.f;
-			//}
-			//obj->SetRotation(rotation);
-
-		}
-
-		if ((inputW) || PadInputUP) {
-
-
-			PlayerPos.z += moveSpeed;
-			//obj->SetPosition(PlayerPos);
-
-			//XMFLOAT3 rotation = obj->GetRotation();
-			//if (rotation.x >= -10) {
-			//	rotation.x -= 1.f;
-			//}
-			//obj->SetRotation(rotation);
-		}
-
-		if ((inputA) || PadInputLEFT) {
-
-			PlayerPos.x -= moveSpeed;
-			//obj->SetPosition(PlayerPos);
-
-			//if (rotation.z <= 10) {
-			//	rotation.z += 1.f;
-			//}
-			//obj->SetRotation(rotation);
-
-			//OldInputFlag = TRUE;
-		}
-
-		if ((inputD) || PadInputRIGHT) {
-
-			PlayerPos.x += moveSpeed;
-			//obj->SetPosition(PlayerPos);
-
-			//if (rotation.z >= -10) {
-			//	rotation.z -= 1.f;
-			//}
-			//obj->SetRotation(rotation);
-
-			//OldInputFlag = TRUE;
-		}
-
-		if (inputQ) {
-
-			PlayerPos.y += moveSpeed;
-			//obj->SetPosition(PlayerPos);
-		}
-
-		if (inputZ) {
-
-
-			PlayerPos.y -= moveSpeed;
-			//obj->SetPosition(PlayerPos);
-		}
-		obj->SetPosition(PlayerPos);
-	}
+	XMFLOAT3 position = obj->GetRotation();
 
 	if (TriggerR) {//リセット
 		obj->SetPosition({ 0,40,-170 });
