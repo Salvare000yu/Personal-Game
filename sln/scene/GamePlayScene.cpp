@@ -281,9 +281,9 @@ void GamePlayScene::PlayerMove()
 
 			PlayerPos.x -= moveSpeed;
 
-			//if (rotation.z <= 10) {
-			//	rotation.z += 1.f;
-			//}
+			if (rotation.z <= 10) {
+				rotation.z += 1.f;
+			}
 
 			//OldInputFlag = TRUE;
 		}
@@ -292,9 +292,9 @@ void GamePlayScene::PlayerMove()
 
 			PlayerPos.x += moveSpeed;
 
-			//if (rotation.z >= -10) {
-			//	rotation.z -= 1.f;
-			//}
+			if (rotation.z >= -10) {
+				rotation.z -= 1.f;
+			}
 
 			//OldInputFlag = TRUE;
 		}
@@ -321,12 +321,12 @@ void GamePlayScene::CoolTime()
 		if (--pShakeTimer_ >= 0) {// 0まで減らす			
 			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 			
-			//eye揺らす
-			XMFLOAT3 eye =camera->GetEye();
-			randShakeNow = 4 + 1;//1~4
-			eye.x = eye.x +rand()% randShakeNow-2;//1~4までのrandShakeNowの最大値から半分を引いて負の数も含むように
-			eye.y = eye.y +rand()% randShakeNow-2;
-			camera->SetEye(eye);
+			//pos揺らす
+			XMFLOAT3 pos =player_->GetPosition();
+			randShakeNow = 60 + 1;//1~4
+			pos.x = pos.x +rand()% randShakeNow-3;//1~4までのrandShakeNowの最大値から半分を引いて負の数も含むように
+			pos.y = pos.y +rand()% randShakeNow-3;
+			player_->SetPosition(pos);
 
 			if (pShakeTimer_ <= 0) {
 				pDamFlag = false;
@@ -336,6 +336,7 @@ void GamePlayScene::CoolTime()
 	}
 	if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
 	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
+
 }
 
 void GamePlayScene::UpdateMouse()
@@ -570,8 +571,8 @@ void GamePlayScene::Update()
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 
 	if (TriggerR) {//デバック用　適当に　いつかは消す
-		camera->SetTarget({ 0,50,-200 });
-		camera->SetEye({ 0,48,-210 });
+		camera->SetTarget({  });
+		camera->SetEye({  });
 		player_->SetAlive(true);
 		NowPlayerHP = PlayerMaxHP;
 		boss_.front()->SetAlive(true);
