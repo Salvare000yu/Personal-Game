@@ -388,7 +388,8 @@ void GamePlayScene::PadStickCamera()
 	//パッド右スティックでカメラ視点
 	Input* input = Input::GetInstance();
 
-	const float PadCamMoveAmount=0.5f;
+	//感度
+	const float PadCamMoveAmount=0.7f;
 
 	if (input->PushRightStickUp()) {
 		XMFLOAT3 pRot = player_->GetRotation();
@@ -489,7 +490,7 @@ void GamePlayScene::CollisionAll()
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
-					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.2f, 0);
+					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
 					sEnemyMurdersNum++;//撃破数
 					se->SetAlive(false);
 					pb->SetAlive(false);
@@ -784,7 +785,7 @@ void GamePlayScene::Update()
 	//3dobjUPDATE
 	object3d_1->Update();
 	obj_worlddome->Update();
-	obj_sword->Update();
+	//obj_sword->Update();
 	obj_kaberight->Update();
 	obj_kabeleft->Update();
 
@@ -837,7 +838,7 @@ void GamePlayScene::Draw()
 	//3dオブジェ描画
 	object3d_1->Draw();
 	obj_worlddome->Draw();
-	obj_sword->Draw();
+	//obj_sword->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 
