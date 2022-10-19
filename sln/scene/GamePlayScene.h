@@ -41,6 +41,8 @@ public:
 
 	void CollisionAll();
 
+	void Pause();
+
 	void Update() override;
 
 	void Draw() override;
@@ -84,6 +86,10 @@ private:
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_semeter = nullptr;
+	std::unique_ptr < Sprite> sp_pause = nullptr;
+	std::unique_ptr < Sprite> sp_continuation = nullptr;
+	std::unique_ptr < Sprite> sp_gotitle = nullptr;
+	std::unique_ptr < Sprite> sp_operation = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -146,5 +152,10 @@ private:
 	
 	int randShakeDef = 0;
 	int randShakeNow=randShakeDef;
+
+	//↓-----ポーズ関連-----↓//
+	bool PauseFlag = false;//ポーズしていない
+	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
+	//↑-----ポーズ関連-----↑//
 };
 

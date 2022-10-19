@@ -9,6 +9,7 @@
 #include "GameOver.h"
 #include "FbxObject3d.h"
 #include "Collision.h"
+#include "WinApp.h"
 
 #include "../safe_delete.h"
 
@@ -77,8 +78,8 @@ void GamePlayScene::Initialize()
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
-	obj_kaberight->SetPosition({ 210,-200,0 });
-	obj_kabeleft->SetPosition({ -210,-200,0 });
+	obj_kaberight->SetPosition({ 310,-200,0 });
+	obj_kabeleft->SetPosition({ -310,-200,0 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,90,0 });
 	obj_kabeleft->SetRotation({ 0,-90,0 });
@@ -143,6 +144,10 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/Miscellaneous Enemy Meter.png");
+	SpriteBase::GetInstance()->LoadTexture(8, L"Resources/pause.png");
+	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/continuation.png");
+	SpriteBase::GetInstance()->LoadTexture(10, L"Resources/GoTitle.png");
+	SpriteBase::GetInstance()->LoadTexture(11, L"Resources/Operation.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -152,11 +157,18 @@ void GamePlayScene::Initialize()
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_semeter.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_pause.reset(Sprite::Create(8, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_continuation.reset(Sprite::Create(9, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_gotitle.reset(Sprite::Create(10, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_operation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
 
 	//sprite_back.push_back(sprite_back);
+
+	//window縦横取得したいとき使う
+	WinApp* winApp = WinApp::GetInstance();
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	sp_guide->SetPosition({ 0,0,0 });
@@ -166,6 +178,11 @@ void GamePlayScene::Initialize()
 	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
 	sp_semeter->SetPosition({ 1170,620,0 });
 
+	float gotitlePosY = winApp->window_width / 2;
+	sp_continuation->SetPosition({ winApp->window_width/2-150,gotitlePosY-450,0 });//上
+	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//真ん中
+	sp_gotitle->SetPosition({ winApp->window_width/2-150,gotitlePosY-150 ,0});//下
+
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
@@ -173,8 +190,16 @@ void GamePlayScene::Initialize()
 	//sp_guide->SetSize({200,0});
 	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
 	sp_semeter->SetSize({ 70.f,70.f });
+	sp_continuation->SetSize({ 300.f,100.f });
+	sp_gotitle->SetSize({ 300.f,100.f });
+	sp_operation->SetSize({ 300.f,100.f });
+
+
 	sp_playerhpbarwaku->TransferVertexBuffer();
 	sp_semeter->TransferVertexBuffer();
+	sp_continuation->TransferVertexBuffer();
+	sp_gotitle->TransferVertexBuffer();
+	sp_operation->TransferVertexBuffer();
 
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -327,8 +352,8 @@ void GamePlayScene::CoolTime()
 			
 			//pos揺らす
 			XMFLOAT3 pos =player_->GetPosition();
-			randShakeNow = 8 + 1;//1~4
-			pos.x = pos.x +rand()% randShakeNow-4;//1~4までのrandShakeNowの最大値から半分を引いて負の数も含むように
+			randShakeNow = 8 + 1;//a~b
+			pos.x = pos.x +rand()% randShakeNow-4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
 			pos.y = pos.y +rand()% randShakeNow-4;
 			player_->SetPosition(pos);
 
@@ -573,36 +598,120 @@ void GamePlayScene::CollisionAll()
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
-void GamePlayScene::Update()
+void GamePlayScene::Pause()
 {
+	const float PauseSelectSizeDef = 300.0f;
+	const float PauseSelectSize = 350.0f;
 
 	Input* input = Input::GetInstance();
-	DxBase* dxBase = DxBase::GetInstance();
+	const bool TriggerUp = input->TriggerKey(DIK_UP);
+	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	/*
+	////選択中表示　デバッグ用
+	{
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f", PauseNowSelect);
+		DebugText::GetInstance()->Print(tmp, 430, 460, 5);
+	}*/
+	if (PauseNowSelect == 0) {//続行
+		//選択中サイズでっかく
+		sp_continuation->SetSize({ PauseSelectSize,100.f });
+		sp_continuation->TransferVertexBuffer();
 
-	//キー操作押している間
-	// 座標操作
-	const bool inputUp = input->PushKey(DIK_UP);
-	const bool inputDown = input->PushKey(DIK_DOWN);
-	const bool inputRight = input->PushKey(DIK_RIGHT);
-	const bool inputLeft = input->PushKey(DIK_LEFT);
+		if (TriggerDown) {//1を次は選択
+			sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_continuation->TransferVertexBuffer();
+			PauseNowSelect = 1;
+		}
+		if (TriggerUp) {//上で2
+			sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_continuation->TransferVertexBuffer();
+			PauseNowSelect = 2;
+		}
 
-	const bool inputT = input->PushKey(DIK_T);
-	const bool inputE = input->PushKey(DIK_E);
+	}
 
-	const bool inputI = input->PushKey(DIK_I);
-	const bool inputK = input->PushKey(DIK_K);
-	const bool inputJ = input->PushKey(DIK_J);
-	const bool inputL = input->PushKey(DIK_L);
+	if (PauseNowSelect == 1) {//操作説明
+		//選択中サイズでっかく
+		sp_operation->SetSize({ PauseSelectSize,100.f });
+		sp_operation->TransferVertexBuffer();
 
-	const bool input3 = input->PushKey(DIK_3);
-	//押した瞬間
-	const bool TriggerM = input->TriggerKey(DIK_M);
-	const bool TriggerE = input->TriggerKey(DIK_E);
-	const bool TriggerR = input->TriggerKey(DIK_R);
+		if (TriggerDown) {//下で2
+			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->TransferVertexBuffer();
+			PauseNowSelect = 2;
+		}
+		if (TriggerUp) {//上で0
+			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->TransferVertexBuffer();
+			PauseNowSelect = 0;
+		}
+
+	}
+
+	if (PauseNowSelect == 2) {//タイトルへ
+		//選択中サイズでっかく
+		sp_gotitle->SetSize({ PauseSelectSize,100.f });
+		sp_gotitle->TransferVertexBuffer();
+		if (TriggerDown) {//下で0
+			sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+			sp_gotitle->TransferVertexBuffer();
+			PauseNowSelect = 0;
+		}
+		if (TriggerUp) {//上で1
+			sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+			sp_gotitle->TransferVertexBuffer();
+			PauseNowSelect = 1;
+		}
+	}
+}
+
+void GamePlayScene::Update()
+{
+	Input* input = Input::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
-	const bool Trigger2 = input->TriggerKey(DIK_2);
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
+
+	if (Trigger0) {
+		PauseFlag = true;
+	}
+	if (PauseFlag == true) {
+		Pause();
+		if (Trigger1) {
+			PauseFlag = false;
+		}
+	}
+
+	//ポーズでないとき～
+	//この外はポーズ中も実行
+	if (PauseFlag == false)
+	{
+
+		Input* input = Input::GetInstance();
+		DxBase* dxBase = DxBase::GetInstance();
+
+		//キー操作押している間
+		// 座標操作
+		const bool inputUp = input->PushKey(DIK_UP);
+		const bool inputDown = input->PushKey(DIK_DOWN);
+		const bool inputRight = input->PushKey(DIK_RIGHT);
+		const bool inputLeft = input->PushKey(DIK_LEFT);
+
+		const bool inputT = input->PushKey(DIK_T);
+		const bool inputE = input->PushKey(DIK_E);
+
+		const bool inputI = input->PushKey(DIK_I);
+		const bool inputK = input->PushKey(DIK_K);
+		const bool inputJ = input->PushKey(DIK_J);
+		const bool inputL = input->PushKey(DIK_L);
+
+		const bool input3 = input->PushKey(DIK_3);
+		//押した瞬間
+		const bool TriggerM = input->TriggerKey(DIK_M);
+		const bool TriggerE = input->TriggerKey(DIK_E);
+		const bool TriggerR = input->TriggerKey(DIK_R);
+		const bool Trigger2 = input->TriggerKey(DIK_2);
 
 	if (TriggerR) {//デバック用　適当に　いつかは消す
 		camera->SetTarget({  });
@@ -650,9 +759,6 @@ void GamePlayScene::Update()
 	//敵のHPバー
 	if (BossEnemyAdvent == true)
 	{
-		//更新
-		sp_enemyhpbar->Update();
-		sp_enemyhpbarwaku->Update();
 		for (int i = 0; i < 1; i++)
 		{
 			//サイズ変更
@@ -720,27 +826,6 @@ void GamePlayScene::Update()
 	}
 	//雑魚敵カウントをデクリメント
 	SEneAppCount--;
-	//雑魚敵更新
-	if (BossEnemyAdvent == false)
-	{
-		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-			smallEnemy->Update();
-		}
-	}
-
-	//撃破数達成でボス戦
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-		//ボス戦突入のお知らせです
-		BossEnemyAdvent = true;
-		//残っている雑魚敵はもういらない
-		for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
-			se->SetAlive(false);//消す
-		}
-
-		for (std::unique_ptr<Boss>& boss : boss_) {
-			boss->Update();//敵更新
-		}
-	}
 
 	//----------------↓シーン切り替え関連↓----------------//
 	//敵撃破でクリア
@@ -773,33 +858,65 @@ void GamePlayScene::Update()
 	DrawUI();
 	//パッド右スティックカメラ視点
 	PadStickCamera();
-	// マウス情報の更新
-	UpdateMouse();
-	// カメラの更新
-	camera->Update();
-	UpdateCamera();
 
-	//プレイヤー移動
-	PlayerMove();
+		// マウス情報の更新
+		UpdateMouse();
+		// カメラの更新
+		camera->Update();
+		UpdateCamera();
 
-	//3dobjUPDATE
-	object3d_1->Update();
-	obj_worlddome->Update();
-	//obj_sword->Update();
-	obj_kaberight->Update();
-	obj_kabeleft->Update();
+		//プレイヤー移動
+		PlayerMove();
 
-	// FBX Update
-	//fbxObject_1->Update();
+		//3dobjUPDATE
+		object3d_1->Update();
+		obj_worlddome->Update();
+		//obj_sword->Update();
+		obj_kaberight->Update();
+		obj_kabeleft->Update();
+		//雑魚敵更新
+		if (BossEnemyAdvent == false)
+		{
+			for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+				smallEnemy->Update();
+			}
+		}
+		//撃破数達成でボス戦
+		if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+			//ボス戦突入のお知らせです
+			BossEnemyAdvent = true;
+			//残っている雑魚敵はもういらない
+			for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
+				se->SetAlive(false);//消す
+			}
 
-	//スプライト更新
-	sprite_back->Update();
-	sp_guide->Update();
-	sp_playerhpbar->Update();
-	sp_playerhpbarwaku->Update();
-	sp_semeter->Update();
+			for (std::unique_ptr<Boss>& boss : boss_) {
+				boss->Update();//敵更新
+			}
+		}
+		// FBX Update
+		//fbxObject_1->Update();
 
-	player_->Update();
+		//スプライト更新
+		sprite_back->Update();
+		sp_guide->Update();
+		sp_playerhpbar->Update();
+		sp_playerhpbarwaku->Update();
+		sp_semeter->Update();
+		sp_pause->Update();
+		sp_continuation->Update();
+		sp_gotitle->Update();
+		sp_operation->Update();
+		//敵のHPバー
+		if (BossEnemyAdvent == true)
+		{
+			//更新
+			sp_enemyhpbar->Update();
+			sp_enemyhpbarwaku->Update();
+		}
+
+		player_->Update();
+	}
 
 	//終了
 	if (TriggerESC) {
@@ -839,8 +956,8 @@ void GamePlayScene::Draw()
 	object3d_1->Draw();
 	obj_worlddome->Draw();
 	//obj_sword->Draw();
-	obj_kaberight->Draw();
-	obj_kabeleft->Draw();
+	//obj_kaberight->Draw();
+	//obj_kabeleft->Draw();
 
 	//自キャラ描画
 	player_->Draw();
@@ -872,6 +989,12 @@ void GamePlayScene::Draw()
 	sp_playerhpbar->Draw();
 	sp_playerhpbarwaku->Draw();
 	sp_semeter->Draw();
+	if (PauseFlag == true) {
+		sp_pause->Draw();
+		sp_continuation->Draw();
+		sp_gotitle->Draw();
+		sp_operation->Draw();
+	}
 	if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
