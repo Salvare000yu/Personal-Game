@@ -42,7 +42,9 @@ public:
 	void CollisionAll();
 
 	void PauseConti();////ゲーム続行
-	void PauseOper();//操作説明画面へ
+	void PauseOper();
+	void OperationWind();
+	//操作説明画面へ
 	void PauseGoTitle();//タイトルへ戻る
 	void Pause();//ポーズ
 
@@ -93,6 +95,7 @@ private:
 	std::unique_ptr < Sprite> sp_continuation = nullptr;
 	std::unique_ptr < Sprite> sp_gotitle = nullptr;
 	std::unique_ptr < Sprite> sp_operation = nullptr;
+	std::unique_ptr < Sprite> sp_operation_wind = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -162,8 +165,13 @@ private:
 	const float PauseSelectSize = 350.0f;
 	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
 	void  (GamePlayScene::* pFunc)();
+
+	int WaitKey0 = 0;//０だけでポーズ開閉できるように
+	int WaitKeyEnter = 0;//Enterで操作説明がめん..
+	bool OperWindOpenFlag = false;//開いていない
 	//↑-----ポーズ関連-----↑//
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
+
 };
 

@@ -16,6 +16,8 @@
 
 #include "../safe_delete.h"
 
+#include "../PostEffect.h"
+
 #include <DirectXMath.h>
 
 using namespace DirectX;
@@ -151,6 +153,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/continuation.png");
 	SpriteBase::GetInstance()->LoadTexture(10, L"Resources/GoTitle.png");
 	SpriteBase::GetInstance()->LoadTexture(11, L"Resources/Operation.png");
+	SpriteBase::GetInstance()->LoadTexture(12, L"Resources/operation_wind.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -164,6 +167,7 @@ void GamePlayScene::Initialize()
 	sp_continuation.reset(Sprite::Create(9, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_gotitle.reset(Sprite::Create(10, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_operation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_operation_wind.reset(Sprite::Create(12, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -609,27 +613,27 @@ void GamePlayScene::PauseConti()
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
 	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA= input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerUp= input->TriggerButton(static_cast<int>(Button::UP));
-	const bool PadTriggerDown= input->TriggerButton(static_cast<int>(Button::DOWN));
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
+	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
 	//選択中サイズでっかく
 	sp_continuation->SetSize({ PauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
-	if (TriggerDown|| PadTriggerDown) {//1を次は選択
+	if (TriggerDown || PadTriggerDown) {//1を次は選択
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 1;
 	}
-	if (TriggerUp|| PadTriggerUp) {//上で2
+	if (TriggerUp || PadTriggerUp) {//上で2
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 2;
 	}
 
 	//継続
-	if (TriggerEnter|| PadTriggerA)
+	if (TriggerEnter || PadTriggerA)
 	{
 		PauseFlag = false;
 	}
@@ -640,6 +644,7 @@ void GamePlayScene::PauseOper()
 	Input* input = Input::GetInstance();
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
@@ -649,17 +654,36 @@ void GamePlayScene::PauseOper()
 	sp_operation->SetSize({ PauseSelectSize,100.f });
 	sp_operation->TransferVertexBuffer();
 
-	if (TriggerDown || PadTriggerDown) {//下で2
-		sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-		sp_operation->TransferVertexBuffer();
-		PauseNowSelect = 2;
+	//操作説明開いてないときのみ
+	if (OperWindOpenFlag == false)
+	{
+		if (TriggerDown || PadTriggerDown) {//下で2
+			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->TransferVertexBuffer();
+			PauseNowSelect = 2;
+		}
+		if (TriggerUp || PadTriggerUp) {//上で0
+			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->TransferVertexBuffer();
+			PauseNowSelect = 0;
+		}
 	}
-	if (TriggerUp || PadTriggerUp) {//上で0
-		sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-		sp_operation->TransferVertexBuffer();
-		PauseNowSelect = 0;
-	}
+	//操作説明画面開く
+	if (TriggerEnter || PadTriggerA)
+	{
+		OperWindOpenFlag = true;
+		OperationWind();
 
+		WaitKeyEnter++;
+		if (TriggerEnter && WaitKeyEnter >= 2) {
+			OperWindOpenFlag = false;
+			WaitKeyEnter = 0;
+		}
+	}
+}
+void GamePlayScene::OperationWind()
+{
+	sp_operation_wind->Update();
 }
 void GamePlayScene::PauseGoTitle()
 {
@@ -704,6 +728,7 @@ void GamePlayScene::Pause()
 	Input* input = Input::GetInstance();
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	const bool Trigger0 = input->TriggerKey(DIK_0);
 	/*
 	////選択中表示　デバッグ用
 	{
@@ -713,12 +738,18 @@ void GamePlayScene::Pause()
 	}*/
 
 	//メンバ関数ポインタ対応した選択
-	if(PauseNowSelect == 0){ pFunc = &GamePlayScene::PauseConti; }
-	if(PauseNowSelect == 1){ pFunc = &GamePlayScene::PauseOper; }
-	if(PauseNowSelect == 2){ pFunc = &GamePlayScene::PauseGoTitle; }
-	
+	if (PauseNowSelect == 0) { pFunc = &GamePlayScene::PauseConti; }
+	if (PauseNowSelect == 1) { pFunc = &GamePlayScene::PauseOper; }
+	if (PauseNowSelect == 2) { pFunc = &GamePlayScene::PauseGoTitle; }
+
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
+
+	WaitKey0++;
+	if (Trigger0&& WaitKey0 >=2) {
+		PauseFlag = false;
+		WaitKey0 = 0;
+	}
 
 }
 
@@ -735,9 +766,6 @@ void GamePlayScene::Update()
 	}
 	if (PauseFlag == true) {
 		Pause();
-		if (Trigger1) {
-			PauseFlag = false;
-		}
 	}
 
 	//ポーズでないとき～
@@ -922,7 +950,7 @@ void GamePlayScene::Update()
 		camera->Update();
 		UpdateCamera();
 
-		if(pRotDef==false){ 
+		if (pRotDef == false) { //一度だけ
 			player_->SetRotation({});
 			pRotDef = true;
 		}
@@ -989,6 +1017,7 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
+
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
 
@@ -1058,10 +1087,10 @@ void GamePlayScene::Draw()
 		sp_operation->Draw();
 	}
 	if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
+	if(OperWindOpenFlag==true){sp_operation_wind->Draw();}
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();
-
 }
 
 void GamePlayScene::DrawUI()
