@@ -79,6 +79,23 @@ void Player::Attack()
 
 }
 
+void Player::FiringLine()
+{
+
+	//‚¢‚ë‚¢‚ë¶¬
+	firingline_.reset(new PlayerFireLine());
+	//‚¢‚ë‚¢‚ëƒLƒƒƒ‰‰Šú‰»
+	firingline_ = std::make_unique<PlayerFireLine>();
+	firingline_->Initialize();
+	firingline_->SetModel(pFiringLine);
+
+	XMFLOAT3 PlayerPos = obj->GetPosition();
+	firingline_->SetPosition(PlayerPos);
+
+	XMFLOAT3 PlayerRot = obj->GetRotation();
+	firingline_->SetRotation(PlayerRot);
+}
+
 void Player::Initialize()
 {
 	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
@@ -188,6 +205,11 @@ void Player::Update()
 		bullet->Update();
 	}
 
+
+	FiringLine();
+
+	firingline_->Update();
+
 	obj->Update();
 
 }
@@ -203,4 +225,6 @@ void Player::Draw()
 	{
 		obj->Draw();
 	}
+
+	firingline_->Draw();
 }

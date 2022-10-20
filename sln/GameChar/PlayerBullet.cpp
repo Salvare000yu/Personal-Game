@@ -5,7 +5,6 @@
 
 using namespace DirectX;
 
-//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void PlayerBullet::Initialize()
 {
 	//定義とか仮おいておこう

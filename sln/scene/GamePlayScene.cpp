@@ -60,6 +60,7 @@ void GamePlayScene::Initialize()
 	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
+	mod_firingline.reset(Model::LoadFromOBJ("firing line"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
@@ -95,6 +96,7 @@ void GamePlayScene::Initialize()
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
+	player_->SetPFiringLine(mod_firingline.get());
 
 	camera->SetTrackingTarget(player_.get());
 	camera->SetTarget(player_->GetPosition());
@@ -675,7 +677,7 @@ void GamePlayScene::PauseOper()
 		OperationWind();
 
 		WaitKeyEnter++;
-		if (TriggerEnter && WaitKeyEnter >= 2) {
+		if ((TriggerEnter|| PadTriggerA) && WaitKeyEnter >= 2) {
 			OperWindOpenFlag = false;
 			WaitKeyEnter = 0;
 		}

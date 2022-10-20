@@ -12,6 +12,7 @@
 #include "Boss.h"
 #include "Player.h"
 #include "SmallEnemy.h"
+#include "PlayerFireLine.h"
 
 #include <memory>
 
@@ -69,7 +70,6 @@ public:
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
 
-	//敵
 	//Enemy* enemy_ = nullptr;
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
@@ -107,6 +107,7 @@ private:
 	std::unique_ptr < Model> mod_enemybullet = nullptr;//敵弾
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
 	std::unique_ptr < Model> mod_enemy = nullptr;
+	std::unique_ptr < Model> mod_firingline = nullptr;
 
 	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;

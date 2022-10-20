@@ -1,12 +1,17 @@
 #pragma once
-#include "Object3d.h"
 #include "BaseObject.h"
 
 #include <memory>
 
-class PlayerBullet:public BaseObject
+class PlayerFireLine:public BaseObject
 {
 private:
+	////-----------------model
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//é©ã@
+
+	////-----------------obj
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//é©ã@
+
 	// Microsoft::WRL::Çè»ó™
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::Çè»ó™
@@ -29,14 +34,9 @@ public:
 
 	std::unique_ptr<Camera> camera; //ÉJÉÅÉâ
 
-	//è¡Ç¶ÇÈÇ‹Ç≈
-	static const int32_t BulVanishTime = 60 * 5;//éıñΩ
-
-	//è¡ñ≈ÇÃêÈçê
-	int32_t vanishTimer_ = BulVanishTime;
-
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
 };
+

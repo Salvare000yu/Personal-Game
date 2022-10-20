@@ -155,6 +155,7 @@
     <ClCompile Include="camera\CameraTracking.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="GameChar\PlayerFireLine.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="GameChar\BossBullet.cpp" />
     <ClCompile Include="fbx\FbxObject3d.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="camera\CameraTracking.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionPrimitive.h" />
+    <ClInclude Include="GameChar\PlayerFireLine.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="GameChar\BossBullet.h" />
     <ClInclude Include="fbx\FbxObject3d.h" />

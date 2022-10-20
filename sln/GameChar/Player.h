@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "PlayerBullet.h"
 #include "BaseObject.h"
+#include "PlayerFireLine.h"
 
 #include <memory>
 #include <list>//STL
@@ -32,12 +33,15 @@ private:
 	float frame = 0;
 
 	Model* pBulModel = nullptr;
+	Model* pFiringLine = nullptr;
+	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
 	//攻撃のインターバルのためのフラグ 発射前
 	bool AttackIntervalFlag = false;
 
 public:
 	inline void SetPBulModel(Model* model) { pBulModel=model; }
+	inline void SetPFiringLine(Model* model) { pFiringLine = model; }
 
 	//初期化
 	void Initialize() override;
@@ -50,6 +54,8 @@ public:
 
 	//攻撃
 	void Attack();
+
+	void FiringLine();
 
 	std::unique_ptr<Camera> camera; //カメラ
 
