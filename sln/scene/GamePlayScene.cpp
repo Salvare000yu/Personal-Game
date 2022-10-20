@@ -724,6 +724,7 @@ void GamePlayScene::Pause()
 
 void GamePlayScene::Update()
 {
+
 	Input* input = Input::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
@@ -920,6 +921,11 @@ void GamePlayScene::Update()
 		// カメラの更新
 		camera->Update();
 		UpdateCamera();
+
+		if(pRotDef==false){ 
+			player_->SetRotation({});
+			pRotDef = true;
+		}
 
 		//プレイヤー移動
 		PlayerMove();

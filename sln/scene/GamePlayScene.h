@@ -163,5 +163,7 @@ private:
 	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
 	void  (GamePlayScene::* pFunc)();
 	//↑-----ポーズ関連-----↑//
+
+	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 };
 
