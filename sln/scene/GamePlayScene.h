@@ -41,7 +41,10 @@ public:
 
 	void CollisionAll();
 
-	void Pause();
+	void PauseConti();////ゲーム続行
+	void PauseOper();//操作説明画面へ
+	void PauseGoTitle();//タイトルへ戻る
+	void Pause();//ポーズ
 
 	void Update() override;
 
@@ -155,7 +158,10 @@ private:
 
 	//↓-----ポーズ関連-----↓//
 	bool PauseFlag = false;//ポーズしていない
+	const float PauseSelectSizeDef = 300.0f;
+	const float PauseSelectSize = 350.0f;
 	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
+	void  (GamePlayScene::* pFunc)();
 	//↑-----ポーズ関連-----↑//
 };
 

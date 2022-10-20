@@ -5,8 +5,11 @@
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "../DxBase.h"
+
+#include "TitleScene.h"
 #include "ClearScene.h"
 #include "GameOver.h"
+
 #include "FbxObject3d.h"
 #include "Collision.h"
 #include "WinApp.h"
@@ -70,7 +73,7 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
-	obj_worlddome->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj_worlddome->SetScale({ 8.0f, 8.0f, 8.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
 	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
@@ -85,7 +88,7 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetRotation({ 0,-90,0 });
 
 	//いろいろ生成
-	player_.reset( new Player());
+	player_.reset(new Player());
 	//いろいろキャラ初期化
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
@@ -101,7 +104,7 @@ void GamePlayScene::Initialize()
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)
 	{
-		boss=std::make_unique<Boss>();
+		boss = std::make_unique<Boss>();
 		boss->Initialize();
 		boss->SetModel(mod_enemy.get());
 		boss->SetEBulModel(mod_enemybullet.get());
@@ -130,7 +133,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
 	// 音声再生 鳴らしたいとき
-	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav",0.2f, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
 
@@ -179,9 +182,9 @@ void GamePlayScene::Initialize()
 	sp_semeter->SetPosition({ 1170,620,0 });
 
 	float gotitlePosY = winApp->window_width / 2;
-	sp_continuation->SetPosition({ winApp->window_width/2-150,gotitlePosY-450,0 });//上
+	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//上
 	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//真ん中
-	sp_gotitle->SetPosition({ winApp->window_width/2-150,gotitlePosY-150 ,0});//下
+	sp_gotitle->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 150 ,0 });//下
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -302,9 +305,9 @@ void GamePlayScene::PlayerMove()
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
-		if ((inputS) || PadInputDOWN) {PlayerPos.y -= moveSpeed;}
+		if ((inputS) || PadInputDOWN) { PlayerPos.y -= moveSpeed; }
 
-		if ((inputW) || PadInputUP) {PlayerPos.y += moveSpeed;}
+		if ((inputW) || PadInputUP) { PlayerPos.y += moveSpeed; }
 
 		if ((inputA) || PadInputLEFT) {
 
@@ -349,12 +352,12 @@ void GamePlayScene::CoolTime()
 	if (pDamFlag == true) {
 		if (--pShakeTimer_ >= 0) {// 0まで減らす			
 			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
-			
+
 			//pos揺らす
-			XMFLOAT3 pos =player_->GetPosition();
+			XMFLOAT3 pos = player_->GetPosition();
 			randShakeNow = 8 + 1;//a~b
-			pos.x = pos.x +rand()% randShakeNow-4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
-			pos.y = pos.y +rand()% randShakeNow-4;
+			pos.x = pos.x + rand() % randShakeNow - 4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+			pos.y = pos.y + rand() % randShakeNow - 4;
 			player_->SetPosition(pos);
 
 			if (pShakeTimer_ <= 0) {
@@ -414,7 +417,7 @@ void GamePlayScene::PadStickCamera()
 	Input* input = Input::GetInstance();
 
 	//感度
-	const float PadCamMoveAmount=0.7f;
+	const float PadCamMoveAmount = 0.7f;
 
 	if (input->PushRightStickUp()) {
 		XMFLOAT3 pRot = player_->GetRotation();
@@ -511,7 +514,7 @@ void GamePlayScene::CollisionAll()
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x+7.f;//余裕を持たせる分＋
+				smallenemyForm.radius = se->GetScale().x + 7.f;//余裕を持たせる分＋
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
@@ -535,7 +538,7 @@ void GamePlayScene::CollisionAll()
 
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z+2;
+		playerForm.radius = player_->GetScale().z + 2;
 
 		if (player_->GetAlive()) {
 			for (auto& bo : boss_) {
@@ -564,12 +567,12 @@ void GamePlayScene::CollisionAll()
 
 
 	}
-	
+
 	//[雑魚敵弾]と[自機]の当たり判定
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z+2;
+		playerForm.radius = player_->GetScale().z + 2;
 
 		if (player_->GetAlive()) {
 			for (auto& se : smallEnemys_) {
@@ -577,7 +580,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
 					Sphere seBulForm;
 					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
-					seBulForm.radius = seb->GetScale().z+1;//余裕
+					seBulForm.radius = seb->GetScale().z + 1;//余裕
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
 						pDamFlag = true;
@@ -598,10 +601,105 @@ void GamePlayScene::CollisionAll()
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
+void GamePlayScene::PauseConti()
+{
+	Input* input = Input::GetInstance();
+	//押した瞬間
+	const bool TriggerUp = input->TriggerKey(DIK_UP);
+	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド押している間
+	const bool PadTriggerA= input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerUp= input->TriggerButton(static_cast<int>(Button::UP));
+	const bool PadTriggerDown= input->TriggerButton(static_cast<int>(Button::DOWN));
+
+	//選択中サイズでっかく
+	sp_continuation->SetSize({ PauseSelectSize,100.f });
+	sp_continuation->TransferVertexBuffer();
+
+	if (TriggerDown|| PadTriggerDown) {//1を次は選択
+		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_continuation->TransferVertexBuffer();
+		PauseNowSelect = 1;
+	}
+	if (TriggerUp|| PadTriggerUp) {//上で2
+		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_continuation->TransferVertexBuffer();
+		PauseNowSelect = 2;
+	}
+
+	//継続
+	if (TriggerEnter|| PadTriggerA)
+	{
+		PauseFlag = false;
+	}
+
+}
+void GamePlayScene::PauseOper()
+{
+	Input* input = Input::GetInstance();
+	const bool TriggerUp = input->TriggerKey(DIK_UP);
+	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	//パッド押している間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
+	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
+
+	//選択中サイズでっかく
+	sp_operation->SetSize({ PauseSelectSize,100.f });
+	sp_operation->TransferVertexBuffer();
+
+	if (TriggerDown || PadTriggerDown) {//下で2
+		sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_operation->TransferVertexBuffer();
+		PauseNowSelect = 2;
+	}
+	if (TriggerUp || PadTriggerUp) {//上で0
+		sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_operation->TransferVertexBuffer();
+		PauseNowSelect = 0;
+	}
+
+}
+void GamePlayScene::PauseGoTitle()
+{
+	Input* input = Input::GetInstance();
+	const bool TriggerUp = input->TriggerKey(DIK_UP);
+	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド押している間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
+	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
+
+	//選択中サイズでっかく
+	sp_gotitle->SetSize({ PauseSelectSize,100.f });
+	sp_gotitle->TransferVertexBuffer();
+	if (TriggerDown || PadTriggerDown) {//下で0
+		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+		sp_gotitle->TransferVertexBuffer();
+		PauseNowSelect = 0;
+	}
+	if (TriggerUp || PadTriggerUp) {//上で1
+		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+		sp_gotitle->TransferVertexBuffer();
+		PauseNowSelect = 1;
+	}
+
+	//タイトルへ戻る
+	if (TriggerEnter || PadTriggerA)
+	{
+		// 音声停止
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
+		//シーン切り替え
+		BaseScene* scene = new TitleScene();
+		sceneManager_->SetNextScene(scene);
+	}
+
+}
+
 void GamePlayScene::Pause()
 {
-	const float PauseSelectSizeDef = 300.0f;
-	const float PauseSelectSize = 350.0f;
 
 	Input* input = Input::GetInstance();
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
@@ -613,57 +711,15 @@ void GamePlayScene::Pause()
 		sprintf_s(tmp, 32, "%2.f", PauseNowSelect);
 		DebugText::GetInstance()->Print(tmp, 430, 460, 5);
 	}*/
-	if (PauseNowSelect == 0) {//続行
-		//選択中サイズでっかく
-		sp_continuation->SetSize({ PauseSelectSize,100.f });
-		sp_continuation->TransferVertexBuffer();
 
-		if (TriggerDown) {//1を次は選択
-			sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_continuation->TransferVertexBuffer();
-			PauseNowSelect = 1;
-		}
-		if (TriggerUp) {//上で2
-			sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_continuation->TransferVertexBuffer();
-			PauseNowSelect = 2;
-		}
+	//メンバ関数ポインタ対応した選択
+	if(PauseNowSelect == 0){ pFunc = &GamePlayScene::PauseConti; }
+	if(PauseNowSelect == 1){ pFunc = &GamePlayScene::PauseOper; }
+	if(PauseNowSelect == 2){ pFunc = &GamePlayScene::PauseGoTitle; }
+	
+	//メンバ関数ポインタ呼び出し
+	(this->*pFunc)();
 
-	}
-
-	if (PauseNowSelect == 1) {//操作説明
-		//選択中サイズでっかく
-		sp_operation->SetSize({ PauseSelectSize,100.f });
-		sp_operation->TransferVertexBuffer();
-
-		if (TriggerDown) {//下で2
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 2;
-		}
-		if (TriggerUp) {//上で0
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 0;
-		}
-
-	}
-
-	if (PauseNowSelect == 2) {//タイトルへ
-		//選択中サイズでっかく
-		sp_gotitle->SetSize({ PauseSelectSize,100.f });
-		sp_gotitle->TransferVertexBuffer();
-		if (TriggerDown) {//下で0
-			sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
-			sp_gotitle->TransferVertexBuffer();
-			PauseNowSelect = 0;
-		}
-		if (TriggerUp) {//上で1
-			sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
-			sp_gotitle->TransferVertexBuffer();
-			PauseNowSelect = 1;
-		}
-	}
 }
 
 void GamePlayScene::Update()
@@ -713,151 +769,151 @@ void GamePlayScene::Update()
 		const bool TriggerR = input->TriggerKey(DIK_R);
 		const bool Trigger2 = input->TriggerKey(DIK_2);
 
-	if (TriggerR) {//デバック用　適当に　いつかは消す
-		camera->SetTarget({  });
-		camera->SetEye({  });
-		player_->SetAlive(true);
-		NowPlayerHP = PlayerMaxHP;
-		boss_.front()->SetAlive(true);
-		NowBossHP = BossMaxHP;
-		sEnemyMurdersNum = 0;
-		BossEnemyAdvent = false;
+		if (TriggerR) {//デバック用　適当に　いつかは消す
+			camera->SetTarget({  });
+			camera->SetEye({  });
+			player_->SetAlive(true);
+			NowPlayerHP = PlayerMaxHP;
+			boss_.front()->SetAlive(true);
+			NowBossHP = BossMaxHP;
+			sEnemyMurdersNum = 0;
+			BossEnemyAdvent = false;
 
-		// カメラreセット
-		//Object3d::SetCamera(camera.get());
-	}
+			// カメラreセット
+			//Object3d::SetCamera(camera.get());
+		}
 
-	////タゲ移動
-	//if (inputUp || inputDown || inputRight || inputLeft)
-	//{
-	//	constexpr float tagmove = 5;
-	//	if (inputUp) {
-	//		XMFLOAT3 position = sp_guide->GetPosition();
-	//		position.y -= tagmove;
-	//		sp_guide->SetPosition({ position });
-	//	}
-	//	if (inputDown) {
-	//		XMFLOAT3 position = sp_guide->GetPosition();
-	//		position.y += tagmove;
-	//		sp_guide->SetPosition({ position });
-	//	}
-	//	if (inputRight) {
-	//		XMFLOAT3 position = sp_guide->GetPosition();
-	//		position.x += tagmove;
-	//		sp_guide->SetPosition({ position });
-	//	}
-	//	if (inputLeft) {
-	//		XMFLOAT3 position = sp_guide->GetPosition();
-	//		position.x -= tagmove;
-	//		sp_guide->SetPosition({ position });
-	//	}
-	//}
-	
-	//くらったらクールタイム
-	CoolTime();
+		////タゲ移動
+		//if (inputUp || inputDown || inputRight || inputLeft)
+		//{
+		//	constexpr float tagmove = 5;
+		//	if (inputUp) {
+		//		XMFLOAT3 position = sp_guide->GetPosition();
+		//		position.y -= tagmove;
+		//		sp_guide->SetPosition({ position });
+		//	}
+		//	if (inputDown) {
+		//		XMFLOAT3 position = sp_guide->GetPosition();
+		//		position.y += tagmove;
+		//		sp_guide->SetPosition({ position });
+		//	}
+		//	if (inputRight) {
+		//		XMFLOAT3 position = sp_guide->GetPosition();
+		//		position.x += tagmove;
+		//		sp_guide->SetPosition({ position });
+		//	}
+		//	if (inputLeft) {
+		//		XMFLOAT3 position = sp_guide->GetPosition();
+		//		position.x -= tagmove;
+		//		sp_guide->SetPosition({ position });
+		//	}
+		//}
 
-	//敵のHPバー
-	if (BossEnemyAdvent == true)
-	{
+		//くらったらクールタイム
+		CoolTime();
+
+		//敵のHPバー
+		if (BossEnemyAdvent == true)
+		{
+			for (int i = 0; i < 1; i++)
+			{
+				//サイズ変更
+				sp_enemyhpbar->size_.x = NowBossHP;
+				sp_enemyhpbar->TransferVertexBuffer();
+			}
+		}
+
+		//自機のHPバー
 		for (int i = 0; i < 1; i++)
 		{
-			//サイズ変更
-			sp_enemyhpbar->size_.x = NowBossHP;
-			sp_enemyhpbar->TransferVertexBuffer();
+			sp_playerhpbar->size_.x = NowPlayerHP;
+			sp_playerhpbar->TransferVertexBuffer();
 		}
-	}
+		//サイズ変更によるズレ--いつか消すから仮
+		{
+			XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
+			if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
+				pHpBar.x += 30;
+				BarPosControlOnlyOnceFlag3 = true;
+			}
+			if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
+				pHpBar.x += 20;
+				BarPosControlOnlyOnceFlag1 = true;
+			}
+			if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
+				pHpBar.x += 20;
+				BarPosControlOnlyOnceFlag4 = true;
+			}
+			if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
+				pHpBar.x += 10;
+				BarPosControlOnlyOnceFlag5 = true;
+			}
+			if (NowPlayerHP <= 300 && BarPosControlOnlyOnceFlag6 == false) {
+				pHpBar.x += 10;
+				BarPosControlOnlyOnceFlag6 = true;
+			}
+			if (NowPlayerHP <= 200 && BarPosControlOnlyOnceFlag7 == false) {
+				pHpBar.x += 10;
+				BarPosControlOnlyOnceFlag7 = true;
+			}
 
-	//自機のHPバー
-	for (int i = 0; i < 1; i++)
-	{
-		sp_playerhpbar->size_.x = NowPlayerHP;
-		sp_playerhpbar->TransferVertexBuffer();
-	}
-	//サイズ変更によるズレ--いつか消すから仮
-	{
-		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
-		if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
-			pHpBar.x += 30;
-			BarPosControlOnlyOnceFlag3 = true;
-		}
-		if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
-			pHpBar.x += 20;
-			BarPosControlOnlyOnceFlag1 = true;
-		}
-		if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
-			pHpBar.x += 20;
-			BarPosControlOnlyOnceFlag4 = true;
-		}
-		if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag5 = true;
-		}
-		if (NowPlayerHP <= 300 && BarPosControlOnlyOnceFlag6 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag6 = true;
-		}
-		if (NowPlayerHP <= 200 && BarPosControlOnlyOnceFlag7 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag7 = true;
+			if (input3) { pHpBar.x += -1.f; }
+			sp_playerhpbar->SetPosition(pHpBar);
 		}
 
-		if (input3) { pHpBar.x += -1.f; }
-		sp_playerhpbar->SetPosition(pHpBar);
-	}
+		//天球回転
+		for (int i = 0; i < 1; i++)
+		{
+			XMFLOAT3 rotation = obj_worlddome->GetRotation();
+			rotation.y += 0.3f;
+			obj_worlddome->SetRotation({ rotation });
 
-	//天球回転
-	for (int i = 0; i < 1; i++)
-	{
-		XMFLOAT3 rotation = obj_worlddome->GetRotation();
-		rotation.y += 0.3f;
-		obj_worlddome->SetRotation({ rotation });
-
-	}
-
-	if (BossEnemyAdvent == false)
-	{
-		//時が満ちたら
-		if (SEneAppCount == 0) {
-			//雑魚敵来る
-			SmallEnemyAppear();
-			//再びカウントできるように初期化
-			SEneAppCount = SEneAppInterval;
 		}
-	}
-	//雑魚敵カウントをデクリメント
-	SEneAppCount--;
 
-	//----------------↓シーン切り替え関連↓----------------//
-	//敵撃破でクリア
-	if(!boss_.front()->GetAlive()){
-		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-		BaseScene* scene = new ClearScene();
-		sceneManager_->SetNextScene(scene);
-	}
-	//自機HP0でゲームオーバー
-	if (!player_->GetAlive()) {
-		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-		BaseScene* scene = new GameOver();
-		sceneManager_->SetNextScene(scene);
-	}
-	//----------------↑シーン切り替え関連↑---------------//
+		if (BossEnemyAdvent == false)
+		{
+			//時が満ちたら
+			if (SEneAppCount == 0) {
+				//雑魚敵来る
+				SmallEnemyAppear();
+				//再びカウントできるように初期化
+				SEneAppCount = SEneAppInterval;
+			}
+		}
+		//雑魚敵カウントをデクリメント
+		SEneAppCount--;
 
-	//バックスプライト動
-	//SPmove SPbackmoveobj;
-	//for (int i = 0; i < 1; i++)
-	//{
-	//	XMFLOAT3 position = sprite_back->GetPosition();
+		//----------------↓シーン切り替え関連↓----------------//
+		//敵撃破でクリア
+		if (!boss_.front()->GetAlive()) {
+			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
+			BaseScene* scene = new ClearScene();
+			sceneManager_->SetNextScene(scene);
+		}
+		//自機HP0でゲームオーバー
+		if (!player_->GetAlive()) {
+			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
+			BaseScene* scene = new GameOver();
+			sceneManager_->SetNextScene(scene);
+		}
+		//----------------↑シーン切り替え関連↑---------------//
 
-	//	position.x += 5;
-	//	if (position.x == 0) { position.x = -11400; }
+		//バックスプライト動
+		//SPmove SPbackmoveobj;
+		//for (int i = 0; i < 1; i++)
+		//{
+		//	XMFLOAT3 position = sprite_back->GetPosition();
 
-	//	sprite_back->SetPosition(position);
-	//}
+		//	position.x += 5;
+		//	if (position.x == 0) { position.x = -11400; }
 
-	CollisionAll();
-	DrawUI();
-	//パッド右スティックカメラ視点
-	PadStickCamera();
+		//	sprite_back->SetPosition(position);
+		//}
+
+		CollisionAll();
+		DrawUI();
+		//パッド右スティックカメラ視点
+		PadStickCamera();
 
 		// マウス情報の更新
 		UpdateMouse();
@@ -956,8 +1012,8 @@ void GamePlayScene::Draw()
 	object3d_1->Draw();
 	obj_worlddome->Draw();
 	//obj_sword->Draw();
-	//obj_kaberight->Draw();
-	//obj_kabeleft->Draw();
+	obj_kaberight->Draw();
+	obj_kabeleft->Draw();
 
 	//自キャラ描画
 	player_->Draw();
