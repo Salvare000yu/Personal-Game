@@ -96,6 +96,7 @@ private:
 	std::unique_ptr < Sprite> sp_gotitle = nullptr;
 	std::unique_ptr < Sprite> sp_operation = nullptr;
 	std::unique_ptr < Sprite> sp_operation_wind = nullptr;
+	std::unique_ptr < Sprite> sp_sight = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面

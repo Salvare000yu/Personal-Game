@@ -100,10 +100,10 @@ void GamePlayScene::Initialize()
 
 	camera->SetTrackingTarget(player_.get());
 	camera->SetTarget(player_->GetPosition());
-	XMFLOAT3 eye = player_->GetPosition();
-	eye.z -= 50;
-	eye.y += 10;
-	camera->SetEye(eye);
+	//XMFLOAT3 eye = player_->GetPosition();
+	//eye.z -= 50;
+	//eye.y += 10;
+	//camera->SetEye(eye);
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)
@@ -156,6 +156,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(10, L"Resources/GoTitle.png");
 	SpriteBase::GetInstance()->LoadTexture(11, L"Resources/Operation.png");
 	SpriteBase::GetInstance()->LoadTexture(12, L"Resources/operation_wind.png");
+	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -170,6 +171,7 @@ void GamePlayScene::Initialize()
 	sp_gotitle.reset(Sprite::Create(10, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_operation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_operation_wind.reset(Sprite::Create(12, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -186,6 +188,7 @@ void GamePlayScene::Initialize()
 	sp_playerhpbar->SetPosition({ -30,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
 	sp_semeter->SetPosition({ 1170,620,0 });
+	sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
 
 	float gotitlePosY = winApp->window_width / 2;
 	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//上
@@ -336,7 +339,6 @@ void GamePlayScene::PlayerMove()
 
 			//OldInputFlag = TRUE;
 		}
-
 		//if (inputQ) {
 
 		//	PlayerPos.y += moveSpeed;
@@ -999,6 +1001,7 @@ void GamePlayScene::Update()
 		sp_continuation->Update();
 		sp_gotitle->Update();
 		sp_operation->Update();
+		sp_sight->Update();
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
@@ -1008,7 +1011,7 @@ void GamePlayScene::Update()
 		}
 
 		player_->Update();
-	}
+	}//ここまでポーズしてないとき
 
 	//終了
 	if (TriggerESC) {
@@ -1078,17 +1081,21 @@ void GamePlayScene::Draw()
 	SpriteBase::GetInstance()->PreDraw();
 
 	//---------------お手前スプライト描画
-	sp_guide->Draw();
-	sp_playerhpbar->Draw();
-	sp_playerhpbarwaku->Draw();
-	sp_semeter->Draw();
+	if (PauseFlag == false)
+	{
+		sp_guide->Draw();
+		sp_playerhpbar->Draw();
+		sp_playerhpbarwaku->Draw();
+		sp_semeter->Draw();
+		sp_sight->Draw();
+	}
 	if (PauseFlag == true) {
 		sp_pause->Draw();
 		sp_continuation->Draw();
 		sp_gotitle->Draw();
 		sp_operation->Draw();
-	}
-	if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
+
+	}else if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
 	if(OperWindOpenFlag==true){sp_operation_wind->Draw();}
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画

@@ -41,7 +41,7 @@ void CameraTracking::StartUpdate()
 		// 移動前の座標
 		XMFLOAT3 old = GetEye();
 		//ついてくついてくする速度
-		constexpr float interpolation = 1.0f;
+		constexpr float interpolation = 1.1f;
 		// 移動幅 = 移動後の座標 - 移動前の座標
 		XMFLOAT3 vel =
 		{ (eye.x - old.x) * interpolation,
