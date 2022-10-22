@@ -110,6 +110,7 @@ void TitleScene::Update()
 
 	if (TriggerSPACE||PadTriggerA)     // スペースキーが押されていたら
 	{
+		input->PadVibration();
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//シーン切り替え

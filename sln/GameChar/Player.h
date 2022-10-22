@@ -30,8 +30,6 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	float frame = 0;
-
 	Model* pBulModel = nullptr;
 	Model* pFiringLine = nullptr;
 	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
@@ -58,8 +56,6 @@ public:
 	void FiringLine();
 
 	std::unique_ptr<Camera> camera; //カメラ
-
-	//float time;
 
 	//PlayerBullet* bullet_ = nullptr;
 	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ

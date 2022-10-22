@@ -82,10 +82,13 @@ public:
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
 
+	//自機ダメージフラグ 喰らってない
+	bool pDamFlag = false;
+
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
-	std::unique_ptr < Sprite> sp_guide = nullptr;
+	//std::unique_ptr < Sprite> sp_guide = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
@@ -149,8 +152,7 @@ private:
 	bool BarPosControlOnlyOnceFlag5 = false;
 	bool BarPosControlOnlyOnceFlag6 = false;
 	bool BarPosControlOnlyOnceFlag7 = false;
-	//自機ダメージフラグ 喰らってない
-	bool pDamFlag = false;
+
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数

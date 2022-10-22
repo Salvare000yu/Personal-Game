@@ -145,7 +145,7 @@ void GamePlayScene::Initialize()
 
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
-	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
+	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
@@ -160,7 +160,7 @@ void GamePlayScene::Initialize()
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_enemyhpbar.reset(Sprite::Create(3, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -182,13 +182,14 @@ void GamePlayScene::Initialize()
 	WinApp* winApp = WinApp::GetInstance();
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
-	sp_guide->SetPosition({ 0,0,0 });
+	//sp_guide->SetPosition({ 0,0,0 });
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
 	sp_playerhpbar->SetPosition({ -30,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
 	sp_semeter->SetPosition({ 1170,620,0 });
-	sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
+	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
+	sp_sight->SetPosition({ 0,0,0 });
 
 	float gotitlePosY = winApp->window_width / 2;
 	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//上
@@ -356,10 +357,14 @@ void GamePlayScene::PlayerMove()
 
 void GamePlayScene::CoolTime()
 {
+	Input* input = Input::GetInstance();
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
+
 		if (--pShakeTimer_ >= 0) {// 0まで減らす			
 			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+
+			input->PadVibration();
 
 			//pos揺らす
 			XMFLOAT3 pos = player_->GetPosition();
@@ -369,6 +374,7 @@ void GamePlayScene::CoolTime()
 			player_->SetPosition(pos);
 
 			if (pShakeTimer_ <= 0) {
+				input->PadVibrationDef();
 				pDamFlag = false;
 			}//0なったらくらい状態解除
 		}
@@ -425,7 +431,7 @@ void GamePlayScene::PadStickCamera()
 	Input* input = Input::GetInstance();
 
 	//感度
-	const float PadCamMoveAmount = 0.7f;
+	const float PadCamMoveAmount = 0.5f;
 
 	if (input->PushRightStickUp()) {
 		XMFLOAT3 pRot = player_->GetRotation();
@@ -679,7 +685,7 @@ void GamePlayScene::PauseOper()
 		OperationWind();
 
 		WaitKeyEnter++;
-		if ((TriggerEnter|| PadTriggerA) && WaitKeyEnter >= 2) {
+		if ((TriggerEnter || PadTriggerA) && WaitKeyEnter >= 2) {
 			OperWindOpenFlag = false;
 			WaitKeyEnter = 0;
 		}
@@ -733,6 +739,9 @@ void GamePlayScene::Pause()
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
 	const bool Trigger0 = input->TriggerKey(DIK_0);
+	//パッドトリガー
+	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
+
 	/*
 	////選択中表示　デバッグ用
 	{
@@ -749,8 +758,10 @@ void GamePlayScene::Pause()
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
 
-	WaitKey0++;
-	if (Trigger0&& WaitKey0 >=2) {
+	//閉じる
+	WaitKey0++;//同じボタンでとじれるように
+	//操作説明画面見てるときは押しても閉じない
+	if (((Trigger0 || PadTriggerStart) && WaitKey0 >= 2) && OperWindOpenFlag == false) {
 		PauseFlag = false;
 		WaitKey0 = 0;
 	}
@@ -764,8 +775,10 @@ void GamePlayScene::Update()
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
+	//パッドトリガー
+	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	if (Trigger0) {
+	if (Trigger0 || PadTriggerStart) {
 		PauseFlag = true;
 	}
 	if (PauseFlag == true) {
@@ -848,20 +861,15 @@ void GamePlayScene::Update()
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
-			for (int i = 0; i < 1; i++)
-			{
-				//サイズ変更
-				sp_enemyhpbar->size_.x = NowBossHP;
-				sp_enemyhpbar->TransferVertexBuffer();
-			}
+			//サイズ変更
+			sp_enemyhpbar->size_.x = NowBossHP;
+			sp_enemyhpbar->TransferVertexBuffer();
 		}
 
 		//自機のHPバー
-		for (int i = 0; i < 1; i++)
-		{
-			sp_playerhpbar->size_.x = NowPlayerHP;
-			sp_playerhpbar->TransferVertexBuffer();
-		}
+		sp_playerhpbar->size_.x = NowPlayerHP;
+		sp_playerhpbar->TransferVertexBuffer();
+
 		//サイズ変更によるズレ--いつか消すから仮
 		{
 			XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
@@ -889,19 +897,13 @@ void GamePlayScene::Update()
 				pHpBar.x += 10;
 				BarPosControlOnlyOnceFlag7 = true;
 			}
-
-			if (input3) { pHpBar.x += -1.f; }
 			sp_playerhpbar->SetPosition(pHpBar);
 		}
 
 		//天球回転
-		for (int i = 0; i < 1; i++)
-		{
-			XMFLOAT3 rotation = obj_worlddome->GetRotation();
-			rotation.y += 0.3f;
-			obj_worlddome->SetRotation({ rotation });
-
-		}
+		XMFLOAT3 rotation = obj_worlddome->GetRotation();
+		rotation.y += 0.3f;
+		obj_worlddome->SetRotation({ rotation });
 
 		if (BossEnemyAdvent == false)
 		{
@@ -955,6 +957,7 @@ void GamePlayScene::Update()
 		UpdateCamera();
 
 		if (pRotDef == false) { //一度だけ
+			input->PadVibrationDef();
 			player_->SetRotation({});
 			pRotDef = true;
 		}
@@ -993,7 +996,7 @@ void GamePlayScene::Update()
 
 		//スプライト更新
 		sprite_back->Update();
-		sp_guide->Update();
+		//sp_guide->Update();
 		sp_playerhpbar->Update();
 		sp_playerhpbarwaku->Update();
 		sp_semeter->Update();
@@ -1083,7 +1086,7 @@ void GamePlayScene::Draw()
 	//---------------お手前スプライト描画
 	if (PauseFlag == false)
 	{
-		sp_guide->Draw();
+		//sp_guide->Draw();
 		sp_playerhpbar->Draw();
 		sp_playerhpbarwaku->Draw();
 		sp_semeter->Draw();
@@ -1095,8 +1098,9 @@ void GamePlayScene::Draw()
 		sp_gotitle->Draw();
 		sp_operation->Draw();
 
-	}else if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
-	if(OperWindOpenFlag==true){sp_operation_wind->Draw();}
+	}
+	else if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
+	if (OperWindOpenFlag == true) { sp_operation_wind->Draw(); }
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

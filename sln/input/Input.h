@@ -103,6 +103,9 @@ public://ƒƒ“ƒoŠÖ”
 
 	//ƒ{ƒ^ƒ“‰Ÿ‚µ‚½uŠÔ‚Ì‚İ
 	bool TriggerButton(int button);
+	void PadVibration();
+	void PadVibrationPAttack();
+	void PadVibrationDef();
 	//--------------------Xinputª
 
 	inline const POINT& GetMousePos() const { return mousePos; };

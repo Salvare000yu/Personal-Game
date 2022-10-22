@@ -303,6 +303,36 @@ bool Input::TriggerButton(int button)
     }
 }
 
+void Input::PadVibration()
+{
+    //ゲームパッド振動
+    XINPUT_VIBRATION vibration;
+    vibration.wLeftMotorSpeed = 65535;//max65535
+    vibration.wRightMotorSpeed = 65535;
+    XInputSetState(0, &vibration);
+}
+
+void Input::PadVibrationPAttack()
+{
+    //ゲームパッド振動
+    XINPUT_VIBRATION vibration;
+    vibration.wLeftMotorSpeed = 30000;//max65535
+    vibration.wRightMotorSpeed = 30000;
+    XInputSetState(0, &vibration);
+
+}
+
+
+void Input::PadVibrationDef()
+{
+    //ゲームパッド振動でふぉ
+    XINPUT_VIBRATION vibration;
+    vibration.wLeftMotorSpeed = 0;//max65535
+    vibration.wRightMotorSpeed = 0;
+    XInputSetState(0, &vibration);
+
+}
+
 void Input::MouseCursorHiddenFlag(const bool dispFlag)
 {
     ShowCursor((BOOL)dispFlag);

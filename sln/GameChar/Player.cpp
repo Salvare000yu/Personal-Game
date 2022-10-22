@@ -21,6 +21,7 @@ void Player::Attack()
 
 	//íeî≠éÀ
 	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
+
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//íeê∂ê¨
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
@@ -30,7 +31,7 @@ void Player::Attack()
 		madeBullet->SetPosition(PlayerPos);
 
 		// velocityÇéZèo íeî≠éÀë¨ìxz
-		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 10, 0);
+		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 15, 0);
 		XMFLOAT3 xmfloat3velocity;
 		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
@@ -42,11 +43,14 @@ void Player::Attack()
 		//íeìoò^
 		bullets_.push_back(std::move(madeBullet));
 
+		//input->PadVibrationDef();
+
 		AttackIntervalFlag = true;
 
 	}
 	if (AttackIntervalFlag == true)
 	{
+
 		if (--AtkInterval_ >= 0) {//ÉNÅ[ÉãÉ^ÉCÉÄ 0Ç‹Ç≈å∏ÇÁÇ∑	
 
 			//XMFLOAT3 PlayerPos = obj->GetPosition();
