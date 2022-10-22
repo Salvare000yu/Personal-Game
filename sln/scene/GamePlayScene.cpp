@@ -150,7 +150,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
-	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/Miscellaneous Enemy Meter.png");
+	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/OpenPause.png");
 	SpriteBase::GetInstance()->LoadTexture(8, L"Resources/pause.png");
 	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/continuation.png");
 	SpriteBase::GetInstance()->LoadTexture(10, L"Resources/GoTitle.png");
@@ -165,7 +165,7 @@ void GamePlayScene::Initialize()
 	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_semeter.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_openpause.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_pause.reset(Sprite::Create(8, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_continuation.reset(Sprite::Create(9, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_gotitle.reset(Sprite::Create(10, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -185,9 +185,9 @@ void GamePlayScene::Initialize()
 	//sp_guide->SetPosition({ 0,0,0 });
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ -30,500,0 });
-	sp_playerhpbarwaku->SetPosition({ -30,500,0 });
-	sp_semeter->SetPosition({ 1170,620,0 });
+	sp_playerhpbar->SetPosition({ -70,500,0 });
+	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
+	sp_openpause->SetPosition({ 1050,600,0 });
 	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
 	sp_sight->SetPosition({ 0,0,0 });
 
@@ -202,14 +202,14 @@ void GamePlayScene::Initialize()
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
 	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
-	sp_semeter->SetSize({ 70.f,70.f });
+	sp_openpause->SetSize({ 210.f,130.f });
 	sp_continuation->SetSize({ 300.f,100.f });
 	sp_gotitle->SetSize({ 300.f,100.f });
 	sp_operation->SetSize({ 300.f,100.f });
 
 
 	sp_playerhpbarwaku->TransferVertexBuffer();
-	sp_semeter->TransferVertexBuffer();
+	sp_openpause->TransferVertexBuffer();
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
@@ -723,6 +723,7 @@ void GamePlayScene::PauseGoTitle()
 	//タイトルへ戻る
 	if (TriggerEnter || PadTriggerA)
 	{
+		input->PadVibration();//振動
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
 		//シーン切り替え
@@ -998,7 +999,7 @@ void GamePlayScene::Update()
 		//sp_guide->Update();
 		sp_playerhpbar->Update();
 		sp_playerhpbarwaku->Update();
-		sp_semeter->Update();
+		sp_openpause->Update();
 		sp_pause->Update();
 		sp_continuation->Update();
 		sp_gotitle->Update();
@@ -1083,7 +1084,7 @@ void GamePlayScene::Draw()
 		//sp_guide->Draw();
 		sp_playerhpbar->Draw();
 		sp_playerhpbarwaku->Draw();
-		sp_semeter->Draw();
+		sp_openpause->Draw();
 		sp_sight->Draw();
 	}
 	if (PauseFlag == true) {

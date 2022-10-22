@@ -93,7 +93,7 @@ private:
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
-	std::unique_ptr < Sprite> sp_semeter = nullptr;
+	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;
 	std::unique_ptr < Sprite> sp_continuation = nullptr;
 	std::unique_ptr < Sprite> sp_gotitle = nullptr;

@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
+#include "SelectScene.h"
 
 #include "../PostEffect.h"
 
@@ -78,8 +79,6 @@ void TitleScene::Initialize()
 //	postEffect->SetPosition({ 10,10,0 });
 //	postEffect->TransferVertexBuffer();
 #pragma endregion 描画初期化処理
-
-	int counter = 0; // アニメーションの経過時間カウンター
 }
 
 void TitleScene::Finalize()
@@ -113,18 +112,16 @@ void TitleScene::Update()
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//シーン切り替え
-		BaseScene* scene = new GamePlayScene();
+		BaseScene* scene = new SelectScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
+	//セレクトから振動少し続ける
+	if (--VibCount == 0) {
+		input->PadVibrationDef();
+	}
+
 	DrawUI();
-
-	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
-
-	////3dobj
-	//object3d_1->Update();
-	//object3d_2->Update();
-	//object3d_3->Update();
 
 	//スプライト更新
 	sprite1->Update();
@@ -136,38 +133,9 @@ void TitleScene::Draw()
 {
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
-	//SpriteCommonBeginDraw(SspriteBase, dxBase->GetCmdList());
 	//// スプライト描画
 	sprite1->Draw();
 
-	//ポストエフェクトの描画
-	//postEffect->Draw();
-
-	////3dオブジェ描画前処理
-	//Object3d::PreDraw();
-
-	////3dオブジェ描画
-	//object3d_1->Draw();
-	//object3d_2->Draw();
-	//object3d_3->Draw();
-
-	////3dオブジェ描画後処理
-	//Object3d::PostDraw();
-
-	// ４．描画コマンドここから
-
-	//for (int i = 0; i < _countof(object3ds); i++)
-	//{
-	//    DrawObject3d(&object3ds[i], dxBase->GetCmdList(), basicDescHeap.Get(), vbView, ibView,
-	//        CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeap->GetGPUDescriptorHandleForHeapStart(), constantBufferNum, dxBase->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)),
-	//        indices, _countof(indices));
-	//}
-
-	//// スプライト共通コマンド
-	//SpriteBase::GetInstance()->PreDraw();
-	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// スプライト描画
-	//sprite->Draw();
 }
 
 void TitleScene::DrawUI()

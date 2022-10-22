@@ -33,5 +33,6 @@ private:
 	//Object3d* object3d_1 = nullptr;
 	//Object3d* object3d_2 = nullptr;
 	//Object3d* object3d_3 = nullptr;
+	int VibCount = 15;//タイトルから何フレーム振動させるか
 };
 
