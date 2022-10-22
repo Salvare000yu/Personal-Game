@@ -63,11 +63,15 @@ void SelectScene::SelectOper()
 	//選択中画像表示 -50は枠の縦横分
 	sp_SSNow->SetPosition({ sp_SSoper->GetPosition().x - 50,sp_SSoper->GetPosition().y - 50,0 });
 
-	if (TriggerRight || PadTriggerRight) {//1を次は選択
-		NowSelect = 1;
-	}
-	if (TriggerLeft || PadTriggerLeft) {
-		NowSelect = 2;
+	//操作説明開いてないときのみ
+	if (OperWindOpenFlag == false)
+	{
+		if (TriggerRight || PadTriggerRight) {//1を次は選択
+			NowSelect = 1;
+		}
+		if (TriggerLeft || PadTriggerLeft) {
+			NowSelect = 2;
+		}
 	}
 
 	//操作説明画面
