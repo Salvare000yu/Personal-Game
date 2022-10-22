@@ -312,17 +312,6 @@ void Input::PadVibration()
     XInputSetState(0, &vibration);
 }
 
-void Input::PadVibrationPAttack()
-{
-    //ゲームパッド振動
-    XINPUT_VIBRATION vibration;
-    vibration.wLeftMotorSpeed = 30000;//max65535
-    vibration.wRightMotorSpeed = 30000;
-    XInputSetState(0, &vibration);
-
-}
-
-
 void Input::PadVibrationDef()
 {
     //ゲームパッド振動でふぉ

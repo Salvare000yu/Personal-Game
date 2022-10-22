@@ -109,8 +109,6 @@ void ClearScene::Update()
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
 
-	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
-
 	DrawUI();
 
 	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
@@ -122,12 +120,6 @@ void ClearScene::Update()
 
 	//スプライト更新
 	sprite->Update();
-
-	//終了
-	if (TriggerESC) {
-		WM_DESTROY;//破棄されるウィンドに送信
-		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
-	}
 }
 
 void ClearScene::Draw()

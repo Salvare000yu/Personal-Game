@@ -774,7 +774,6 @@ void GamePlayScene::Update()
 	Input* input = Input::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
-	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
@@ -1016,11 +1015,6 @@ void GamePlayScene::Update()
 		player_->Update();
 	}//ここまでポーズしてないとき
 
-	//終了
-	if (TriggerESC) {
-		WM_DESTROY;//破棄されるウィンドに送信
-		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
-	}
 }
 
 void GamePlayScene::Draw()

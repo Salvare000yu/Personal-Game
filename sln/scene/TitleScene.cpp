@@ -104,7 +104,6 @@ void TitleScene::Update()
 
 	//押した瞬間のみ
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 	//パッド押した瞬間
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
@@ -131,11 +130,6 @@ void TitleScene::Update()
 	sprite1->Update();
 	//postEffect->Update();
 
-	//終了
-	if (TriggerESC) {
-		WM_DESTROY;//破棄されるウィンドに送信
-		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
-	}
 }
 
 void TitleScene::Draw()

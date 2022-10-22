@@ -135,9 +135,16 @@ void GameBase::Update()
 	input->ControllerUpdate(0);
 
 	//シーン更新
-	sceneManager_->Update();/*
+	sceneManager_->Update();
+	
+	//終了
+	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
+	if (TriggerESC) {
+		WM_DESTROY;//破棄されるウィンドに送信
+		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
+	}
 
-	PostEffect::GetInstance()->Update();*/
+	/*PostEffect::GetInstance()->Update();*/
 }
 
 void GameBase::Draw()

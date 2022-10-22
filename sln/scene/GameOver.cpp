@@ -106,8 +106,6 @@ void GameOver::Update()
 	const bool inputDown = input->PushKey(DIK_DOWN);
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
-
-	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 	
 	DrawUI();
 
@@ -121,11 +119,6 @@ void GameOver::Update()
 	//スプライト更新
 	gameover->Update();
 
-	//終了
-	if (TriggerESC) {
-		WM_DESTROY;//破棄されるウィンドに送信
-		PostQuitMessage(0);//WM_DESTROYの応答、終了要求
-	}
 }
 
 void GameOver::Draw()
