@@ -16,6 +16,8 @@
 
 #include <memory>
 
+using namespace DirectX;
+
 class GamePlayScene :public BaseScene,public BaseObject
 {
 
@@ -23,11 +25,11 @@ class GamePlayScene :public BaseScene,public BaseObject
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
+	//// DirectX::を省略
+	//using XMFLOAT2 = DirectX::XMFLOAT2;
+	//using XMFLOAT3 = DirectX::XMFLOAT3;
+	//using XMFLOAT4 = DirectX::XMFLOAT4;
+	//using XMMATRIX = DirectX::XMMATRIX;
 
 public:
 
@@ -62,6 +64,8 @@ public:
 
 	void CoolTime();
 
+	XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);
+
 	float time;
 
 	//指定フレームごとに雑魚出現
@@ -84,6 +88,9 @@ public:
 
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
+
+	std::vector<XMVECTOR> points;
+	size_t splineStartIndex;
 
 private:
 	//sprite

@@ -20,11 +20,10 @@
 
 #include <DirectXMath.h>
 
-using namespace DirectX;
+//using namespace DirectX;
 
 void GamePlayScene::Initialize()
 {
-#pragma region 描画初期化処理
 
 	//camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
 	camera.reset(new CameraTracking());
@@ -76,7 +75,7 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
-	obj_worlddome->SetScale({ 8.0f, 8.0f, 8.0f });
+	obj_worlddome->SetScale({ 10.0f, 10.0f, 10.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
 	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
@@ -233,9 +232,19 @@ void GamePlayScene::Initialize()
 	//FbxLoader::GetInstance()->LoadModelFromFile(
 	//	"cube"
 	//);
-#pragma endregion 描画初期化処理
 
 	//int counter = 0; // アニメーションの経過時間カウンター
+	
+	//// スプライン曲線
+	////posints = { start, start, p2, p3, end, end }
+	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
+	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
+	//points.emplace_back(XMVectorSet(0, 0, 60, 0));
+	//points.emplace_back(XMVectorSet(0, 50, 80, 0));
+	//points.emplace_back(XMVectorSet(0, 30, 50, 0));//e
+	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//e
+	////p1からスタート
+	//splineStartIndex = 1;
 }
 
 void GamePlayScene::Finalize()
@@ -289,23 +298,23 @@ void GamePlayScene::PlayerMove()
 	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	//----------↓移動制限
-	const float PlayerMoveLimX = 190;
+	//const float PlayerMoveLimX = 190;
 
-	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
-	const float PlayerMinMoveLimY = 200;//上に行ける範囲
+	//const float PlayerMaxMoveLimY = 100;//下に行ける範囲
+	//const float PlayerMinMoveLimY = 200;//上に行ける範囲
 
-	const float PlayerMaxMoveLimZ = 290;//後ろ
-	const float PlayerMinMoveLimZ = 200;
+	//const float PlayerMaxMoveLimZ = 290;//後ろ
+	//const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 PlayerPos = player_->GetPosition();
 	XMFLOAT3 rotation = player_->GetRotation();
-	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
-	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
-	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
-	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
-	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
-	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
-	player_->SetPosition(PlayerPos);
+	//PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
+	//PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
+	//PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
+	//PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
+	//PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
+	//PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
+	//player_->SetPosition(PlayerPos);
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
@@ -380,8 +389,8 @@ void GamePlayScene::CoolTime()
 		}
 		else { pShakeTimer_ = pShakeTime; }
 	}
-	if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
-	if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
+	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
+	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
 
 }
 
@@ -965,6 +974,31 @@ void GamePlayScene::Update()
 		//プレイヤー移動
 		PlayerMove();
 
+		//// スプライン曲線で移動
+		//{
+		//	frame++;
+		//	float timeRate = (float)frame / 120.f;
+
+		//	if (timeRate >= 1.0f)
+		//	{
+		//		if (splineStartIndex < points.size() - 3) {
+		//			splineStartIndex++;
+		//			timeRate -= 1.0f;
+		//			frame = 0;
+		//		}
+		//		else
+		//		{
+		//			timeRate = 1.0f;
+		//		}
+		//	}
+
+		//	// ベクターをフロートに変換
+		//	XMFLOAT3 splineFloat;
+		//	XMStoreFloat3(&splineFloat, SplinePosition(points, splineStartIndex, timeRate));
+
+		//	player_->SetPosition(splineFloat);
+		//}
+
 		//3dobjUPDATE
 		object3d_1->Update();
 		obj_worlddome->Update();
@@ -1099,22 +1133,45 @@ void GamePlayScene::Draw()
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();
+
+}
+
+XMVECTOR GamePlayScene::SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t)
+{
+
+	//size_t n = posints.size() - 2;
+
+	//if (startIndex > n)return posints[n];
+	//if (startIndex < 1)return posints[1];
+
+	//XMVECTOR p0 = posints[startIndex - 1];
+	//XMVECTOR p1 = posints[startIndex];
+	//XMVECTOR p2 = posints[startIndex + 1];
+	//XMVECTOR p3 = posints[startIndex + 2];
+
+	////mt3スプライン曲線の考え方
+	//XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
+	//	(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+	//	(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+
+	//return position;
 }
 
 void GamePlayScene::DrawUI()
 {
 	//条件なし常に表示
 	DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
-	DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
-	DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
-	DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
-	DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
+	//DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
+	//DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
+	//DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
+	//DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
 	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f,%2.f,%2.f", player_->GetPosition().x, player_->GetPosition().y, player_->GetPosition().z);
-		DebugText::GetInstance()->Print(tmp, 430, 220, 3);
-	}
+	//{
+	////自機座標
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%2.f,%2.f,%2.f", player_->GetPosition().x, player_->GetPosition().y, player_->GetPosition().z);
+	//	DebugText::GetInstance()->Print(tmp, 430, 220, 3);
+	//}
 	//if (NowBossHP == 0) {
 	//	DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
 	//}
@@ -1125,7 +1182,7 @@ void GamePlayScene::DrawUI()
 
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
-		DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
+		//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
 	}
 	else {//ボス戦じゃないときのみ表示
 		//雑魚敵撃破数関連

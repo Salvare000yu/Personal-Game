@@ -105,7 +105,7 @@ void TitleScene::Update()
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	//パッド押した瞬間
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-
+	input->PadVibration();
 	if (TriggerSPACE||PadTriggerA)     // スペースキーが押されていたら
 	{
 		input->PadVibration();

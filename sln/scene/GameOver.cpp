@@ -36,10 +36,10 @@ void GameOver::Initialize()
 	//object3d_3->SetPosition({ -5,-1,5 });
 
 	// 音声読み込み
-	GameSound::GetInstance()->LoadWave("verROOP_tukawanakutemoiiYO.wav");
+	GameSound::GetInstance()->LoadWave("D_rhythmaze_119.wav");
 
 	// 音声再生
-	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
+	GameSound::GetInstance()->PlayWave("D_rhythmaze_119.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 
 	// 3Dオブジェクトの数
 	//const int OBJECT_NUM = 2;
@@ -95,7 +95,7 @@ void GameOver::Update()
 	if (PadTriggerA||input1)     // 1が押されていたら
 	{
 		// 音声停止
-		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
+		GameSound::GetInstance()->SoundStop("D_rhythmaze_119.wav");
 		//シーン切り替え
 		BaseScene* scene = new TitleScene();
 		sceneManager_->SetNextScene(scene);
