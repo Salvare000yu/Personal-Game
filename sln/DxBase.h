@@ -40,10 +40,6 @@ public://メンバ関数
 	//コマンドリスト取得
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }
 
-	float angleRoundRad(float rad);
-	float nearSin(float rad);
-	float nearCos(float rad);
-
 private:
 	//デバイス
 	//Microsoft::WRL::ComPtr<ID3D12Device>dev;

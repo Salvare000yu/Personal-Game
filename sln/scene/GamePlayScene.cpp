@@ -289,8 +289,8 @@ void GamePlayScene::PlayerMove()
 	const bool inputS = input->PushKey(DIK_S);
 	const bool inputA = input->PushKey(DIK_A);
 	const bool inputD = input->PushKey(DIK_D);
-	const bool inputQ = input->PushKey(DIK_Q);
-	const bool inputZ = input->PushKey(DIK_Z);
+	//const bool inputQ = input->PushKey(DIK_Q);
+	//const bool inputZ = input->PushKey(DIK_Z);
 	//パッド押している間
 	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
 	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
@@ -298,27 +298,27 @@ void GamePlayScene::PlayerMove()
 	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	//----------↓移動制限
-	//const float PlayerMoveLimX = 190;
+	const float PlayerMoveLimX = 190;
 
-	//const float PlayerMaxMoveLimY = 100;//下に行ける範囲
-	//const float PlayerMinMoveLimY = 200;//上に行ける範囲
+	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
+	const float PlayerMinMoveLimY = 200;//上に行ける範囲
 
-	//const float PlayerMaxMoveLimZ = 290;//後ろ
-	//const float PlayerMinMoveLimZ = 200;
+	const float PlayerMaxMoveLimZ = 290;//後ろ
+	const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 PlayerPos = player_->GetPosition();
 	XMFLOAT3 rotation = player_->GetRotation();
-	//PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
-	//PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
-	//PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
-	//PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
-	//PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
-	//PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
-	//player_->SetPosition(PlayerPos);
+	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
+	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
+	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
+	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
+	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
+	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
+	player_->SetPosition(PlayerPos);
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || inputQ || inputZ || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)
+	if (inputW || inputS || inputA || inputD || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)// inputQ || inputZ ||
 	{
 		//------プレイヤーも同じ移動------//
 		//bool OldInputFlag = FALSE;
@@ -752,6 +752,9 @@ void GamePlayScene::Pause()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
+	// マウス情報の更新
+	UpdateMouse();
+
 	/*
 	////選択中表示　デバッグ用
 	{
@@ -1136,26 +1139,26 @@ void GamePlayScene::Draw()
 
 }
 
-XMVECTOR GamePlayScene::SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t)
-{
-
-	//size_t n = posints.size() - 2;
-
-	//if (startIndex > n)return posints[n];
-	//if (startIndex < 1)return posints[1];
-
-	//XMVECTOR p0 = posints[startIndex - 1];
-	//XMVECTOR p1 = posints[startIndex];
-	//XMVECTOR p2 = posints[startIndex + 1];
-	//XMVECTOR p3 = posints[startIndex + 2];
-
-	////mt3スプライン曲線の考え方
-	//XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
-	//	(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
-	//	(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
-
-	//return position;
-}
+//XMVECTOR GamePlayScene::SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t)
+//{
+//
+//	//size_t n = posints.size() - 2;
+//
+//	//if (startIndex > n)return posints[n];
+//	//if (startIndex < 1)return posints[1];
+//
+//	//XMVECTOR p0 = posints[startIndex - 1];
+//	//XMVECTOR p1 = posints[startIndex];
+//	//XMVECTOR p2 = posints[startIndex + 1];
+//	//XMVECTOR p3 = posints[startIndex + 2];
+//
+//	////mt3スプライン曲線の考え方
+//	//XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
+//	//	(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+//	//	(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+//
+//	//return position;
+//}
 
 void GamePlayScene::DrawUI()
 {

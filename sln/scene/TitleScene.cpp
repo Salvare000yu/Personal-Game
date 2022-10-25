@@ -102,11 +102,12 @@ void TitleScene::Update()
 	Input* input = Input::GetInstance();
 
 	//押した瞬間のみ
-	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押した瞬間
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	input->PadVibration();
-	if (TriggerSPACE||PadTriggerA)     // スペースキーが押されていたら
+	
+	if (TriggerEnter ||PadTriggerA)     // スペースキーが押されていたら
 	{
 		input->PadVibration();
 		// 音声停止
@@ -140,5 +141,5 @@ void TitleScene::Draw()
 
 void TitleScene::DrawUI()
 {
-	DebugText::GetInstance()->Print("[SPACEorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
+	DebugText::GetInstance()->Print("[ENTERorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
 }

@@ -88,12 +88,15 @@ void GameOver::Finalize()
 void GameOver::Update()
 {
 	Input* input = Input::GetInstance();
-	const bool input1 = input->TriggerKey(DIK_1);
+	//const bool input1 = input->TriggerKey(DIK_1);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//ƒpƒbƒh‰Ÿ‚µ‚½uŠÔ
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
-	if (PadTriggerA||input1)     // 1‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
+	if (PadTriggerA|| TriggerEnter)     // 1‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
 	{
+		//U“®
+		input->PadVibration();
 		// ‰¹º’âŽ~
 		GameSound::GetInstance()->SoundStop("D_rhythmaze_119.wav");
 		//ƒV[ƒ“Ø‚è‘Ö‚¦
@@ -102,10 +105,10 @@ void GameOver::Update()
 	}
 
 	// À•W‘€ì
-	const bool inputUp = input->PushKey(DIK_UP);
-	const bool inputDown = input->PushKey(DIK_DOWN);
-	const bool inputRight = input->PushKey(DIK_RIGHT);
-	const bool inputLeft = input->PushKey(DIK_LEFT);
+	//const bool inputUp = input->PushKey(DIK_UP);
+	//const bool inputDown = input->PushKey(DIK_DOWN);
+	//const bool inputRight = input->PushKey(DIK_RIGHT);
+	//const bool inputLeft = input->PushKey(DIK_LEFT);
 	
 	DrawUI();
 
@@ -158,5 +161,5 @@ void GameOver::Draw()
 
 void GameOver::DrawUI()
 {
-	DebugText::GetInstance()->Print("[1orPAD_A]:Title", 430, 100, 3);
+	DebugText::GetInstance()->Print("[ENTERorPAD_A]:Title", 430, 100, 3);
 }

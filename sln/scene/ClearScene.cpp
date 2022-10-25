@@ -88,14 +88,18 @@ void ClearScene::Finalize()
 void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
-	const bool input1 = input->TriggerKey(DIK_1);
+	//const bool input1 = input->TriggerKey(DIK_1);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	
 	//パッド押した瞬間
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
 	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 
-	if (input1|| PadTriggerA)     // スペースキーが押されていたら
+	if (TriggerEnter || PadTriggerA)     // エンターキーが押されていたら
 	{
+		//振動
+		input->PadVibration();
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
 		//シーン切り替え
@@ -159,5 +163,5 @@ void ClearScene::Draw()
 
 void ClearScene::DrawUI()
 {
-	DebugText::GetInstance()->Print("[1orPAD_A]:PLAYSCENE", 430, 100, 3.0f);
+	DebugText::GetInstance()->Print("[ENTERorPAD_A]:PLAYSCENE", 430, 100, 3.0f);
 }

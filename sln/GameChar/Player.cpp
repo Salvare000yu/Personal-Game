@@ -211,7 +211,6 @@ void Player::Update()
 		bullet->Update();
 	}
 
-
 	FiringLine();
 
 	firingline_->Update();
