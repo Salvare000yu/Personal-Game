@@ -6,6 +6,8 @@
 #include "GamePlayScene.h"
 #include "SelectScene.h"
 
+#include "Timer.h"
+
 #include "../PostEffect.h"
 
 //PostEffect* postEffect = nullptr;
@@ -100,6 +102,9 @@ void TitleScene::Finalize()
 void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
+	Timer* timer = Timer::GetInstance();
+	//時間リセット。タイトルに戻る度。
+	timer->TimerPlay(false);
 
 	//押した瞬間のみ
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);

@@ -92,7 +92,7 @@ void GameOver::Update()
 	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//ƒpƒbƒh‰Ÿ‚µ‚½uŠÔ
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-
+	input->PadVibrationDef();
 	if (PadTriggerA|| TriggerEnter)     // 1‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
 	{
 		//U“®

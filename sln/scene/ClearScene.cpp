@@ -5,6 +5,7 @@
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "TitleScene.h"
+#include "Timer.h"
 
 using namespace DirectX;
 
@@ -163,5 +164,14 @@ void ClearScene::Draw()
 
 void ClearScene::DrawUI()
 {
-	DebugText::GetInstance()->Print("[ENTERorPAD_A]:PLAYSCENE", 430, 100, 3.0f);
+	DebugText::GetInstance()->Print("[ENTERorPAD_A]:PLAYSCENE", 410, 100, 3.0f);
+
+	//ŽžŠÔ
+	{
+		Timer* timer = Timer::GetInstance();
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "ClearTime : %2.f", timer->time);
+		DebugText::GetInstance()->Print(tmp, 410, 180, 5);
+	}
+
 }

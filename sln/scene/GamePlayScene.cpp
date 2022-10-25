@@ -5,6 +5,7 @@
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "../DxBase.h"
+#include "Timer.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -240,7 +241,7 @@ void GamePlayScene::Initialize()
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
 	//points.emplace_back(XMVectorSet(0, 0, 60, 0));
-	//points.emplace_back(XMVectorSet(0, 50, 80, 0));
+	//points.emplace_back(XMVectorSet(0, 70, 100, 0));
 	//points.emplace_back(XMVectorSet(0, 30, 50, 0));//e
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//e
 	////p1からスタート
@@ -751,7 +752,7 @@ void GamePlayScene::Pause()
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
-
+	input->PadVibrationDef();
 	// マウス情報の更新
 	UpdateMouse();
 
@@ -956,7 +957,6 @@ void GamePlayScene::Update()
 
 		//	sprite_back->SetPosition(position);
 		//}
-
 		CollisionAll();
 		DrawUI();
 		//パッド右スティックカメラ視点
@@ -1142,22 +1142,22 @@ void GamePlayScene::Draw()
 //XMVECTOR GamePlayScene::SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t)
 //{
 //
-//	//size_t n = posints.size() - 2;
+//	size_t n = posints.size() - 2;
 //
-//	//if (startIndex > n)return posints[n];
-//	//if (startIndex < 1)return posints[1];
+//	if (startIndex > n)return posints[n];
+//	if (startIndex < 1)return posints[1];
 //
-//	//XMVECTOR p0 = posints[startIndex - 1];
-//	//XMVECTOR p1 = posints[startIndex];
-//	//XMVECTOR p2 = posints[startIndex + 1];
-//	//XMVECTOR p3 = posints[startIndex + 2];
+//	XMVECTOR p0 = posints[startIndex - 1];
+//	XMVECTOR p1 = posints[startIndex];
+//	XMVECTOR p2 = posints[startIndex + 1];
+//	XMVECTOR p3 = posints[startIndex + 2];
 //
-//	////mt3スプライン曲線の考え方
-//	//XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
-//	//	(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
-//	//	(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+//	//mt3スプライン曲線の考え方
+//	XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
+//		(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+//		(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
 //
-//	//return position;
+//	return position;
 //}
 
 void GamePlayScene::DrawUI()
@@ -1182,6 +1182,18 @@ void GamePlayScene::DrawUI()
 	//	DebugText::GetInstance()->Print("Alive", 100, 270, 3);
 	//}
 	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
+
+	//時間計測
+	{
+		Timer* timer = Timer::GetInstance();
+		if (PauseFlag == false)
+		{
+			timer->TimerPlay();
+		}
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f", timer->time);
+		DebugText::GetInstance()->Print(tmp, 150, 220, 5);
+	}
 
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
