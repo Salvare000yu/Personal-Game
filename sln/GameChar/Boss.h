@@ -29,6 +29,8 @@ public:
 
 	//攻撃
 	void Attack();
+	void Approach();
+	void Leave();
 	//拡散攻撃
 	void DiffusionAttack();
 
@@ -45,6 +47,8 @@ public:
 	const float ApproachLim = -50;
 	//離れられる距離
 	const float LeaveLim = 90;
+
+	void  (Boss::* pFunc)();
 
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
 	ActionPattern actionPattern_ = ActionPattern::Approach;

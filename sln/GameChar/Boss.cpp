@@ -36,6 +36,58 @@ void Boss::Attack()
 	bullets_.push_back(std::move(madeBullet));
 }
 
+void Boss::Approach()
+{
+	//---突撃---//
+	//発射カウントをデクリメント
+	AtkCount--;
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { Attack(); }
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
+
+	//敵の移動
+	XMFLOAT3 position = obj->GetPosition();
+	position.z -= ApproachSp;
+	position.y += ApproachSp;
+	position.x += 3.f * sinf(time * 3.14159265358f);
+	obj->SetPosition(position);
+
+	//ある程度近づいたら離れる
+	if (position.z == ApproachLim) {
+		actionPattern_ = ActionPattern::Leave;
+	}
+}
+
+void Boss::Leave()
+{
+	//---後退---//
+
+	//発射カウントをデクリメント
+	DiffusionAtkCount--;
+	//時が満ちたら
+	if (DiffusionAtkCount == 0) {
+		//生存時のみ発射
+		if (alive) { DiffusionAttack(); }
+		//再びカウントできるように初期化
+		DiffusionAtkCount = DiffusionAtkInterval;
+	}
+
+	//---後退---//
+	XMFLOAT3 positionBack = obj->GetPosition();
+	positionBack.z += ApproachSp;
+	positionBack.y -= ApproachSp;
+	obj->SetPosition(positionBack);
+
+	//ある程度離れたら近づいてくる
+	if (positionBack.z == LeaveLim) {
+		actionPattern_ = ActionPattern::Approach;
+	}
+}
+
 void Boss::DiffusionAttack()
 {
 	// 音声再生 鳴らしたいとき
@@ -113,56 +165,62 @@ void Boss::Update()
 		obj->SetPosition(position);
 	}
 	//----------------------------------------------↓関数化しろボケ
-	switch (actionPattern_) {
-	case ActionPattern::Approach://近づくパターン
-	default:
-		//---突撃---//
-		//発射カウントをデクリメント
-		AtkCount--;
-		//時が満ちたら
-		if (AtkCount == 0) {
-			//突撃時、生存時のみ発射
-			if (alive) { Attack(); }
-			//再びカウントできるように初期化
-			AtkCount = AtkInterval;
-		}
+	//switch (actionPattern_) {
+	//case ActionPattern::Approach://近づくパターン
+	//default:
+	//	//---突撃---//
+	//	//発射カウントをデクリメント
+	//	AtkCount--;
+	//	//時が満ちたら
+	//	if (AtkCount == 0) {
+	//		//突撃時、生存時のみ発射
+	//		if (alive) { Attack(); }
+	//		//再びカウントできるように初期化
+	//		AtkCount = AtkInterval;
+	//	}
 
-		//敵の移動
-		XMFLOAT3 position = obj->GetPosition();
-		position.z -= ApproachSp;
-		position.y += ApproachSp;
-		position.x += 3.f * sinf(time * 3.14159265358f);
-		obj->SetPosition(position);
+	//	//敵の移動
+	//	XMFLOAT3 position = obj->GetPosition();
+	//	position.z -= ApproachSp;
+	//	position.y += ApproachSp;
+	//	position.x += 3.f * sinf(time * 3.14159265358f);
+	//	obj->SetPosition(position);
 
-		//ある程度近づいたら離れる
-		if (position.z == ApproachLim) {
-			actionPattern_ = ActionPattern::Leave;
-		}
-		break;
-	case ActionPattern::Leave://後退パターン
-		//発射カウントをデクリメント
-		DiffusionAtkCount--;
-		//時が満ちたら
-		if (DiffusionAtkCount == 0) {
-			//生存時のみ発射
-			if (alive) { DiffusionAttack(); }
-			//再びカウントできるように初期化
-			DiffusionAtkCount = DiffusionAtkInterval;
-		}
+	//	//ある程度近づいたら離れる
+	//	if (position.z == ApproachLim) {
+	//		actionPattern_ = ActionPattern::Leave;
+	//	}
+	//	break;
+	//case ActionPattern::Leave://後退パターン
+	//	//発射カウントをデクリメント
+	//	DiffusionAtkCount--;
+	//	//時が満ちたら
+	//	if (DiffusionAtkCount == 0) {
+	//		//生存時のみ発射
+	//		if (alive) { DiffusionAttack(); }
+	//		//再びカウントできるように初期化
+	//		DiffusionAtkCount = DiffusionAtkInterval;
+	//	}
 
-		//---後退---//
-		XMFLOAT3 positionBack = obj->GetPosition();
-		positionBack.z += ApproachSp;
-		positionBack.y -= ApproachSp;
-		obj->SetPosition(positionBack);
+	//	//---後退---//
+	//	XMFLOAT3 positionBack = obj->GetPosition();
+	//	positionBack.z += ApproachSp;
+	//	positionBack.y -= ApproachSp;
+	//	obj->SetPosition(positionBack);
 
-		//ある程度離れたら近づいてくる
-		if (positionBack.z == LeaveLim) {
-			actionPattern_ = ActionPattern::Approach;
-		}
-		break;
-	}
+	//	//ある程度離れたら近づいてくる
+	//	if (positionBack.z == LeaveLim) {
+	//		actionPattern_ = ActionPattern::Approach;
+	//	}
+	//	break;
 	//----------------------------------------------↑関数化しろボケ
+
+	//メンバ関数ポインタ対応した選択
+	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
+	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
+	//if (PauseNowSelect == 2) { pFunc = &GamePlayScene::PauseGoTitle; }
+	//メンバ関数ポインタ呼び出し
+	(this->*pFunc)();
 
 	//弾更新
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
