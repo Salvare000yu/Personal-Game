@@ -2,8 +2,11 @@
 #include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
+#include "DebugText.h"
 
 #include <DirectXMath.h>
+
+#include "GamePlayScene.h"
 
 void Boss::ApproachInit()
 {
@@ -19,7 +22,7 @@ void Boss::Attack()
 
 	//triggerkey
 	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-	
+
 	// 音声再生 鳴らしたいとき
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
@@ -51,9 +54,9 @@ void Boss::Approach()
 
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
-	position.z -= ApproachSp;
-	position.y += ApproachSp;
-	position.x += 3.f * sinf(time * 3.14159265358f);
+	position.z -= ApproachSpZ;
+	position.y += ApproachSpY;
+	position.x += 7.f * sinf(time * 3.14159265358f);
 	obj->SetPosition(position);
 
 	//ある程度近づいたら離れる
@@ -78,14 +81,22 @@ void Boss::Leave()
 
 	//---後退---//
 	XMFLOAT3 positionBack = obj->GetPosition();
-	positionBack.z += ApproachSp;
-	positionBack.y -= ApproachSp;
+	positionBack.z += LeaveSpZ;
+	positionBack.y -= LeaveSpY;
 	obj->SetPosition(positionBack);
 
 	//ある程度離れたら近づいてくる
 	if (positionBack.z == LeaveLim) {
 		actionPattern_ = ActionPattern::Approach;
 	}
+}
+
+void Boss::HpHalf()
+{
+	//まずこの位置に行く
+	XMFLOAT3 HomePosDef({ 0, 40, 200 });
+
+	obj->SetPosition({ 0, 40, 200 });
 }
 
 void Boss::DiffusionAttack()
@@ -160,65 +171,17 @@ void Boss::Update()
 		//rotation.x += 0.4f;
 		//obj->SetRotation({ rotation });
 
-		XMFLOAT3 position = obj->GetPosition();
+		//XMFLOAT3 position = obj->GetPosition();
 		//position.x += 5.f * sin(time * 3.14159265358f);
-		obj->SetPosition(position);
+		//obj->SetPosition(position);
+
 	}
-	//----------------------------------------------↓関数化しろボケ
-	//switch (actionPattern_) {
-	//case ActionPattern::Approach://近づくパターン
-	//default:
-	//	//---突撃---//
-	//	//発射カウントをデクリメント
-	//	AtkCount--;
-	//	//時が満ちたら
-	//	if (AtkCount == 0) {
-	//		//突撃時、生存時のみ発射
-	//		if (alive) { Attack(); }
-	//		//再びカウントできるように初期化
-	//		AtkCount = AtkInterval;
-	//	}
 
-	//	//敵の移動
-	//	XMFLOAT3 position = obj->GetPosition();
-	//	position.z -= ApproachSp;
-	//	position.y += ApproachSp;
-	//	position.x += 3.f * sinf(time * 3.14159265358f);
-	//	obj->SetPosition(position);
-
-	//	//ある程度近づいたら離れる
-	//	if (position.z == ApproachLim) {
-	//		actionPattern_ = ActionPattern::Leave;
-	//	}
-	//	break;
-	//case ActionPattern::Leave://後退パターン
-	//	//発射カウントをデクリメント
-	//	DiffusionAtkCount--;
-	//	//時が満ちたら
-	//	if (DiffusionAtkCount == 0) {
-	//		//生存時のみ発射
-	//		if (alive) { DiffusionAttack(); }
-	//		//再びカウントできるように初期化
-	//		DiffusionAtkCount = DiffusionAtkInterval;
-	//	}
-
-	//	//---後退---//
-	//	XMFLOAT3 positionBack = obj->GetPosition();
-	//	positionBack.z += ApproachSp;
-	//	positionBack.y -= ApproachSp;
-	//	obj->SetPosition(positionBack);
-
-	//	//ある程度離れたら近づいてくる
-	//	if (positionBack.z == LeaveLim) {
-	//		actionPattern_ = ActionPattern::Approach;
-	//	}
-	//	break;
-	//----------------------------------------------↑関数化しろボケ
-
-	//メンバ関数ポインタ対応した選択
+	//メンバ関数ポインタ対応したボスの動きをする
 	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
-	//if (PauseNowSelect == 2) { pFunc = &GamePlayScene::PauseGoTitle; }
+	if (actionPattern_ == ActionPattern::HpHalf) { pFunc = &Boss::HpHalf; }
+
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
 

@@ -301,7 +301,7 @@ void GamePlayScene::PlayerMove()
 	//----------↓移動制限
 	const float PlayerMoveLimX = 190;
 
-	const float PlayerMaxMoveLimY = 100;//下に行ける範囲
+	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
 	const float PlayerMinMoveLimY = 200;//上に行ける範囲
 
 	const float PlayerMaxMoveLimZ = 290;//後ろ
@@ -1048,6 +1048,7 @@ void GamePlayScene::Update()
 			//更新
 			sp_enemyhpbar->Update();
 			sp_enemyhpbarwaku->Update();
+
 		}
 
 		player_->Update();
@@ -1191,8 +1192,8 @@ void GamePlayScene::DrawUI()
 			timer->TimerPlay();
 		}
 		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", timer->time);
-		DebugText::GetInstance()->Print(tmp, 150, 220, 5);
+		sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
+		DebugText::GetInstance()->Print(tmp, 150, 220, 3);
 	}
 
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ

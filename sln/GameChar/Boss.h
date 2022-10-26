@@ -14,6 +14,7 @@ class Boss:public BaseObject
 	enum class ActionPattern {
 		Approach,//ãﬂÇ√Ç¢ÇƒÇ≠ÇÈ
 		Leave,//ó£ÇÍÇÈ
+		HpHalf,//Hpîºï™à»â∫Ç…Ç»Ç¡ÇΩÇÁ
 	};
 
 public:
@@ -31,6 +32,7 @@ public:
 	void Attack();
 	void Approach();
 	void Leave();
+	void HpHalf();
 	//ägéUçUåÇ
 	void DiffusionAttack();
 
@@ -42,7 +44,11 @@ public:
 	float time;
 
 	//ãﬂÇ√Ç≠ë¨Ç≥
-	const float ApproachSp = 1;
+	const float ApproachSpZ = 1;
+	const float ApproachSpY = 2;
+	//ó£ÇÍÇÈë¨Ç≥
+	const float LeaveSpZ = 1;
+	const float LeaveSpY = 2;
 	//ãﬂÇ√ÇØÇÈãóó£
 	const float ApproachLim = -50;
 	//ó£ÇÍÇÁÇÍÇÈãóó£
@@ -81,4 +87,5 @@ private:
 	float DiffusionAtkCount = 0;
 
 	Model* eBulModel = nullptr;
+
 };

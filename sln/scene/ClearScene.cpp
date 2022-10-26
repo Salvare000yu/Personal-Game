@@ -3,7 +3,7 @@
 #include "GameSound.h"
 #include "Input.h"
 #include "DebugText.h"
-#include "GamePlayScene.h"
+//#include "GamePlayScene.h"
 #include "TitleScene.h"
 #include "Timer.h"
 
