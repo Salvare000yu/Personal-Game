@@ -13,6 +13,18 @@ class SelectScene :public BaseScene
 {
 public:
 
+	enum class SelectPattern {
+		def,
+		operationTOstart,
+		operationTOtitle,
+		startTOtitle,
+		startTOoperation,
+		titleTOoperation,
+		titleTOstart,
+	};
+
+	SelectPattern selectPattern_ = SelectPattern::def;
+
 	void Initialize() override;
 
 	void SelectOper();
@@ -53,5 +65,20 @@ private:
 
 	int WaitKeyEnter = 0;//Enterで操作説明がめん..
 	bool OperWindOpenFlag = false;//開いていない
+
+	float WaitKeyEase=0;//イーズのキー待機時間
+
+	bool CursorMoveNowFlag = false;//移動中は何もするな false:動いてない
+
+	//-----------セレクトシーン0から
+	bool SSOp0_1Flag = false;//1に移動開始フラグ
+	bool SSOp0_2Flag = false;//0から2に
+	bool SSStart1_2Flag = false;//1から2に
+	bool SSStart1_0Flag = false;//1から0に
+	bool SStitle2_1Flag = false;//2から1に
+
+	const float EaseValDef = 20;
+	float EaseVal = EaseValDef;//イーズ値
+	float DecEaseVal = 0.5;//イーズ値減らす値
 };
 

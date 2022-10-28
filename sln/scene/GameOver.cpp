@@ -37,6 +37,7 @@ void GameOver::Initialize()
 
 	// âπê∫ì«Ç›çûÇ›
 	GameSound::GetInstance()->LoadWave("D_rhythmaze_119.wav");
+	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
 	// âπê∫çƒê∂
 	GameSound::GetInstance()->PlayWave("D_rhythmaze_119.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
@@ -95,6 +96,8 @@ void GameOver::Update()
 	input->PadVibrationDef();
 	if (PadTriggerA|| TriggerEnter)     // 1Ç™âüÇ≥ÇÍÇƒÇ¢ÇΩÇÁ
 	{
+
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		//êUìÆ
 		input->PadVibration();
 		// âπê∫í‚é~

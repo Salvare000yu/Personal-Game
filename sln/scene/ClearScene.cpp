@@ -38,6 +38,7 @@ void ClearScene::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("verROOP_tukawanakutemoiiYO.wav");
+	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
 	// 音声再生
 	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
@@ -68,8 +69,6 @@ void ClearScene::Initialize()
 	//}
 
 #pragma endregion 描画初期化処理
-
-	int counter = 0; // アニメーションの経過時間カウンター
 }
 
 void ClearScene::Finalize()
@@ -99,6 +98,8 @@ void ClearScene::Update()
 
 	if (TriggerEnter || PadTriggerA)     // エンターキーが押されていたら
 	{
+
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		//振動
 		input->PadVibration();
 		// 音声停止

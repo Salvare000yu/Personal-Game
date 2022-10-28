@@ -136,6 +136,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("bossdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
+	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 	// 音声再生 鳴らしたいとき
 	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
@@ -246,6 +247,7 @@ void GamePlayScene::Initialize()
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//e
 	////p1からスタート
 	//splineStartIndex = 1;
+
 }
 
 void GamePlayScene::Finalize()
@@ -655,6 +657,7 @@ void GamePlayScene::PauseConti()
 	//継続
 	if (TriggerEnter || PadTriggerA)
 	{
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		PauseFlag = false;
 	}
 
@@ -691,6 +694,7 @@ void GamePlayScene::PauseOper()
 	//操作説明画面開く
 	if (TriggerEnter || PadTriggerA)
 	{
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		OperWindOpenFlag = true;
 		OperationWind();
 
@@ -733,6 +737,7 @@ void GamePlayScene::PauseGoTitle()
 	//タイトルへ戻る
 	if (TriggerEnter || PadTriggerA)
 	{
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();//振動
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");

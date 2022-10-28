@@ -48,7 +48,7 @@ void SmallEnemy::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 5.0f, 5.0f, 5.0f });
+	obj->SetScale({ 6.0f, 6.0f, 6.0f });
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 	//êŠ
 
@@ -99,7 +99,7 @@ void SmallEnemy::Update()
 	//‚ª–‚¿‚½‚ç
 	if (AtkCount == 0) {
 		//¶‘¶‚Ì‚İ”­Ë
-		if (alive) { Attack(); }
+		Attack();
 		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
 		AtkCount = AtkInterval;
 	}

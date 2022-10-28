@@ -43,6 +43,7 @@ void TitleScene::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
+	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
 	// 音声再生
 	GameSound::GetInstance()->PlayWave("A_rhythmaze_125.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
@@ -114,6 +115,8 @@ void TitleScene::Update()
 	
 	if (TriggerEnter ||PadTriggerA)     // スペースキーが押されていたら
 	{
+
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");

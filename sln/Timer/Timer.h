@@ -6,7 +6,8 @@ public:
 
 	static Timer* GetInstance();
 
-	void TimerPlay(bool TimeResetFlag = true);//真なら進めてる
+	void TimerPlay(bool TimeResetFlag = true);
+	//真なら進めてる
 
 	float time;
 
