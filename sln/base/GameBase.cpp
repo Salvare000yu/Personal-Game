@@ -1,6 +1,7 @@
 ﻿//フレームワーク旧
 #include "GameBase.h"
 #include "../PostEffect.h"
+#include "ParticleManager.h"
 #include <memory>
 
 void GameBase::Run()
@@ -72,6 +73,8 @@ void GameBase::Initialize()
 	//オーディオの初期化
 	gameSound = GameSound::GetInstance();
 	gameSound->Initialize();
+
+	ParticleManager::GetInstance()->Initialize(dxBase->GetDevice());
 
 	//3dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxBase->GetDevice(), camera);

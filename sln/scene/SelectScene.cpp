@@ -66,7 +66,7 @@ void SelectScene::SelectOper()
 
 	XMFLOAT3 SSOp0_1pos = sp_SSNow->GetPosition();
 
-	if (WaitKeyEase <= 20) { WaitKeyEase++; }//毎フレ足す
+	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false && WaitKeyEase >= 2)//まってから入力受付
 	{
@@ -147,7 +147,7 @@ void SelectScene::SelectStart()
 
 	XMFLOAT3 SSStartPos = sp_SSNow->GetPosition();
 
-	if (WaitKeyEase <= 20) { WaitKeyEase++; }//毎フレ足す
+	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
 		if (TriggerRight || PadTriggerRight) {
@@ -256,7 +256,7 @@ void SelectScene::SelectTitle()
 
 	XMFLOAT3 SStitle2_1 = sp_SSNow->GetPosition();
 
-	if (WaitKeyEase <= 20) { WaitKeyEase++; }//毎フレ足す
+	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
 		//if (TriggerRight || PadTriggerRight) {

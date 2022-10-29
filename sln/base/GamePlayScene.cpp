@@ -4,8 +4,9 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
-#include "../DxBase.h"
 #include "Timer.h"
+#include "DxBase.h"
+#include "ParticleManager.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -208,12 +209,14 @@ void GamePlayScene::Initialize()
 	sp_gotitle->SetSize({ 300.f,100.f });
 	sp_operation->SetSize({ 300.f,100.f });
 
-
 	sp_playerhpbarwaku->TransferVertexBuffer();
 	sp_openpause->TransferVertexBuffer();
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
+
+	// パーティクル初期化
+	ParticleManager::GetInstance()->SetCamera(camera.get());
 
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -546,6 +549,9 @@ void GamePlayScene::CollisionAll()
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
 					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
 					sEnemyMurdersNum++;//撃破数
+					// パーティクルの発生
+					XMFLOAT3 sePos = se->GetPosition();
+					ParticleManager::GetInstance()->CreateParticle(sePos, 200, 30, 10);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -873,9 +879,6 @@ void GamePlayScene::Update()
 		//	}
 		//}
 
-		//くらったらクールタイム
-		CoolTime();
-
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
@@ -962,6 +965,9 @@ void GamePlayScene::Update()
 
 		//	sprite_back->SetPosition(position);
 		//}
+
+		//くらったらクールタイム
+		CoolTime();
 		CollisionAll();
 		DrawUI();
 		//パッド右スティックカメラ視点
@@ -972,6 +978,8 @@ void GamePlayScene::Update()
 		// カメラの更新
 		camera->Update();
 		UpdateCamera();
+		// パーティクル更新
+		ParticleManager::GetInstance()->Update();
 
 		if (pRotDef == false) { //一度だけ
 			input->PadVibrationDef();
@@ -1103,8 +1111,9 @@ void GamePlayScene::Draw()
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);
 
-	//パーティクル描画
-	//particleMan->Draw(cmdList);
+	// パーティクル描画
+	DxBase* dxBase=DxBase::GetInstance();
+	ParticleManager::GetInstance()->Draw(dxBase->GetCmdList());
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();

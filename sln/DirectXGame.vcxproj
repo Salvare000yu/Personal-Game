@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -156,17 +156,18 @@
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionPrimitive.cpp" />
     <ClCompile Include="GameChar\PlayerFireLine.cpp" />
+    <ClCompile Include="Particle\ParticleManager.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="GameChar\BossBullet.cpp" />
     <ClCompile Include="fbx\FbxObject3d.cpp" />
     <ClCompile Include="scene\GameOver.cpp" />
     <ClCompile Include="GameSound\GameSound.cpp" />
     <ClCompile Include="2d\DebugText.cpp" />
-    <ClCompile Include="DxBase.cpp" />
+    <ClCompile Include="base\DxBase.cpp" />
     <ClCompile Include="fbx\FbxLoader.cpp" />
     <ClCompile Include="fbx\FbxModel.cpp" />
     <ClCompile Include="base\GameBase.cpp" />
-    <ClCompile Include="scene\GamePlayScene.cpp" />
+    <ClCompile Include="base\GamePlayScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -235,6 +236,32 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleGS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Resources\shaders\PosteffectPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -267,6 +294,7 @@
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\OBJShaderHeader.hlsli" />
+    <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\PostEffect.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
@@ -277,13 +305,14 @@
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionPrimitive.h" />
     <ClInclude Include="GameChar\PlayerFireLine.h" />
+    <ClInclude Include="Particle\ParticleManager.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="GameChar\BossBullet.h" />
     <ClInclude Include="fbx\FbxObject3d.h" />
     <ClInclude Include="scene\GameOver.h" />
     <ClInclude Include="GameSound\GameSound.h" />
     <ClInclude Include="2d\DebugText.h" />
-    <ClInclude Include="DxBase.h" />
+    <ClInclude Include="base\DxBase.h" />
     <ClInclude Include="fbx\FbxLoader.h" />
     <ClInclude Include="fbx\FbxModel.h" />
     <ClInclude Include="base\GameBase.h" />

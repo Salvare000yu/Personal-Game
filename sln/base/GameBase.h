@@ -2,7 +2,7 @@
 
 #include "Input.h"
 #include "WinApp.h"
-#include "../DxBase.h"
+#include "DxBase.h"
 #include "Object3d.h"
 #include "Model.h"
 #include "Sprite.h"

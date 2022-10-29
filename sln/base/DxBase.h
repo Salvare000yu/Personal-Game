@@ -5,7 +5,6 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
-#include "imgui/imgui.h"
 
 #include <DirectXMath.h>
 

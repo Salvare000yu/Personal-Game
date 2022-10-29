@@ -99,7 +99,7 @@ void SmallEnemy::Update()
 	//‚ª–‚¿‚½‚ç
 	if (AtkCount == 0) {
 		//¶‘¶‚Ì‚İ”­Ë
-		Attack();
+		if (alive) { Attack(); }
 		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
 		AtkCount = AtkInterval;
 	}
