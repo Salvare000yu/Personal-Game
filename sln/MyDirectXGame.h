@@ -29,8 +29,5 @@ public:
     void Draw() override;
 
 private:
-    ////ƒV[ƒ“
-    //InterfaceScene* scene_ = nullptr;
-    //‚¢‚Â‚©‚¯‚·ª
 };
 

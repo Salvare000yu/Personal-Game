@@ -42,6 +42,7 @@ public:
     virtual void Draw();
 
     virtual bool IsEndReq() { return endReq_; }
+
 protected:
     bool endReq_ = false;
     //ƒ|ƒCƒ“ƒ^Œn‚±‚±

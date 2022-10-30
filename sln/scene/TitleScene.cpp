@@ -18,6 +18,8 @@ void TitleScene::Initialize()
 {
 #pragma region 描画初期化処理
 
+	WinApp* winApp = WinApp::GetInstance();
+
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
@@ -55,9 +57,17 @@ void TitleScene::Initialize()
 
 	// スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/title_prac.png");
+	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/GameTitleName.png");
+	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/Title_oper.png");
 
 	// スプライトの生成
 	sprite1.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_gametitlename.reset(Sprite::Create(2, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+
+	//スプライトポジション
+	sp_gametitlename->SetPosition({ winApp->window_width,NamePosYCenter,0 });
+
 	//for (int i = 0; i < 1; i++)
 	//{
 	//    int texNumber = 1;
@@ -100,24 +110,50 @@ void TitleScene::Finalize()
 //	delete postEffect;
 }
 
-void TitleScene::Update()
+void TitleScene::BeforeUpdate()
 {
-	Input* input = Input::GetInstance();
-	Timer* timer = Timer::GetInstance();
-	//時間リセット。タイトルに戻る度。
-	timer->TimerPlay(false);
+	//window縦横取得したいとき使う
+	WinApp* winApp = WinApp::GetInstance();
 
-	//押した瞬間のみ
-	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押した瞬間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	
-	if (TriggerEnter ||PadTriggerA)     // スペースキーが押されていたら
+	//中心を取る
+	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	XMFLOAT2 NameTexSize = sp_gametitlename->GetTexSize();
+
+	NamePosXCenter = (winApp->window_width / 2) - (NameTexSize.x / 2);//画像左上にセットされるから中央を取る
+	NamePosYCenter = (winApp->window_height / 2) - (NameTexSize.y / 2);//〃;
+
+	if (NamePos.x > NamePosXCenter)
 	{
+		NamePos.x -= sp;
+		sp *= 1.05;
+	}
+	else { MoveStartFlag = false; }
 
-		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		input->PadVibration();
+	sp_gametitlename->SetPosition({ NamePos });
+	//XMFLOAT2 NameSize = sp_gametitlename->GetSize();
+	//NameSize.x--;
+	//NameSize.y--;
+	//sp_gametitlename->SetSize({NameSize});
+	//sp_gametitlename->TransferVertexBuffer();
+
+	//sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
+	sp_gametitlename->Update();
+}
+
+void TitleScene::SceneChange()
+{
+	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	NamePos.x -= StartSp;
+	StartSp *= 1.05;
+	sp_gametitlename->SetPosition({ NamePos });
+
+	Input* input = Input::GetInstance();
+
+	if (--SceneChangeVibCount == 0) {
+		input->PadVibrationDef();
+	}
+	if (NamePos.x<-1280) {
+		Input* input = Input::GetInstance();
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//シーン切り替え
@@ -125,17 +161,53 @@ void TitleScene::Update()
 		sceneManager_->SetNextScene(scene);
 	}
 
+	sp_gametitlename->Update();
+}
+
+void TitleScene::Update()
+{
+	Input* input = Input::GetInstance();
+	Timer* timer = Timer::GetInstance();
+
 	//セレクトから振動少し続ける
 	if (--VibCount == 0) {
 		input->PadVibrationDef();
 	}
 
-	DrawUI();
-
-	//スプライト更新
 	sprite1->Update();
-	//postEffect->Update();
+	if (MoveStartFlag == true) { BeforeUpdate(); }
 
+	if (MoveStartFlag == false&& SceneChangeFlag==false)
+	{
+
+		//時間リセット。タイトルに戻る度。
+		timer->TimerPlay(false);
+
+		//押した瞬間のみ
+		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+		const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+		//パッド押した瞬間
+		const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+
+		if (TriggerEnter || PadTriggerA)     // スペースキーが押されていたら
+		{
+			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+			SceneChangeFlag = true;//チェンジ移動フラグ立てる
+			input->PadVibration();
+		}
+
+		DrawUI();
+
+		//スプライト更新
+		//if (アニメーション終わったら) {
+		//	sp_titleoper->Update();
+		//	}
+			//postEffect->Update();
+	}
+
+	if (SceneChangeFlag == true) {
+		SceneChange();//チェンジ移動開始
+	}
 }
 
 void TitleScene::Draw()
@@ -145,9 +217,16 @@ void TitleScene::Draw()
 	//// スプライト描画
 	sprite1->Draw();
 
+	sp_gametitlename->Draw();
+
+	if (MoveStartFlag == false)
+	{
+		sp_titleoper->Draw();
+	}
+
 }
 
 void TitleScene::DrawUI()
 {
-	DebugText::GetInstance()->Print("[ENTERorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
+	//DebugText::GetInstance()->Print("[ENTERorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
 }
