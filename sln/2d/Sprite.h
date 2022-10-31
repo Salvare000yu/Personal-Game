@@ -70,11 +70,14 @@ public:
 
 	const DirectX::XMFLOAT2& GetTexSize() { return texSize_; }
 
+	const DirectX::XMFLOAT4& GetColor() { return color_; }
+
 	void SetPosition(const DirectX::XMFLOAT3& position) { position_ = position; }
 	void SetRotation(float rotation) { rotation_ = rotation; }
 	void SetSize(const DirectX::XMFLOAT2& size) { size_ = size; }
 	void SetTexLeftTop(const DirectX::XMFLOAT2& texLeftTop) { texLeftTop_ = texLeftTop; }
 	void SetTexSize(const DirectX::XMFLOAT2& texSize) { texSize_ = texSize; }
+	void SetColor(const DirectX::XMFLOAT4& color) { color_ = color; }
 
 	//private:
 public:

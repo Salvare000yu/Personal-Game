@@ -318,6 +318,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
 	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;
+
 	// 加算ブレンディング
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlend = D3D12_BLEND_ONE;
@@ -486,7 +487,7 @@ void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, floa
 	r * cosf(thata),
 	r * sinf(thata) * sinf(phi) };
 
-		Add(15, pos, vel, XMFLOAT3(vel.x / -10, vel.y / -10, vel.z / -10), startScale, 0);
+		Add(20, pos, vel, XMFLOAT3(vel.x / -10, vel.y / -10, vel.z / -10), startScale, 0);
 	}
 
 }

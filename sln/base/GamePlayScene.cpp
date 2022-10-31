@@ -56,7 +56,7 @@ void GamePlayScene::Initialize()
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
 	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
-	mod_smallenemy.reset(Model::LoadFromOBJ("smallenemy_kari"));
+	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
 	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
 	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
@@ -138,6 +138,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
+	GameSound::GetInstance()->LoadWave("personalgame_bosswarning.wav");
 	// 音声再生 鳴らしたいとき
 	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 	// 3Dオブジェクトの数
@@ -159,6 +160,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(11, L"Resources/Operation.png");
 	SpriteBase::GetInstance()->LoadTexture(12, L"Resources/operation_wind.png");
 	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
+	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -174,6 +176,7 @@ void GamePlayScene::Initialize()
 	sp_operation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_operation_wind.reset(Sprite::Create(12, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -239,7 +242,7 @@ void GamePlayScene::Initialize()
 	//);
 
 	//int counter = 0; // アニメーションの経過時間カウンター
-	
+
 	//// スプライン曲線
 	////posints = { start, start, p2, p3, end, end }
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
@@ -280,6 +283,61 @@ void GamePlayScene::SmallEnemyAppear()
 	}
 	//雑魚敵登録
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
+}
+
+void GamePlayScene::BeforeBossAppear()
+{
+	//演出中時のみtrue
+	BeforeBossAppearNow = true;
+
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+	//SP_BossWarning.w -= 0.01;
+	
+	switch(beforeBossPattern_)
+	{
+	case BeforeBossPattern::def:
+		if (AlertSoundFlag == true) {
+			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
+			AlertSoundFlag = false;
+		}
+		SP_BossWarning.w -= 0.03;
+		if (SP_BossWarning.w < 0.0) {
+			beforeBossPattern_ = BeforeBossPattern::inc;
+		}
+		break;
+	case BeforeBossPattern::inc:
+		SP_BossWarning.w += 0.03;
+		if (SP_BossWarning.w > 1.0) {
+			beforeBossPattern_ = BeforeBossPattern::dec;
+			AlertSoundFlag = true;
+			BBPaternCount++;//繰り返す回数
+		}
+			break;
+
+	case BeforeBossPattern::dec:
+		if (AlertSoundFlag == true) {
+			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
+			AlertSoundFlag = false;
+		}
+		SP_BossWarning.w -= 0.03;
+		if (SP_BossWarning.w < 0.0) {
+			beforeBossPattern_ = BeforeBossPattern::inc;
+		}
+			break;
+	}
+
+	//--繰り返す回数0~------消えてからボス戦へ
+	if (BBPaternCount==2&& beforeBossPattern_==BeforeBossPattern::inc)
+	{
+		BeforeBossAppearFlag = true;
+		BeforeBossAppearNow = true;
+	}
+
+	sp_beforeboss->SetColor(SP_BossWarning);
+
+	//char tmp[32]{};
+	//sprintf_s(tmp, 32, "%2.f", SP_BossWarning.w);
+	//DebugText::GetInstance()->Print(tmp, 430, 490, 3);
 }
 
 void GamePlayScene::PlayerDeath()
@@ -474,7 +532,7 @@ void GamePlayScene::CollisionAll()
 {
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum&& BeforeBossAppearFlag == true) {
 		{
 
 			Sphere pBulForm;//球
@@ -551,7 +609,7 @@ void GamePlayScene::CollisionAll()
 					sEnemyMurdersNum++;//撃破数
 					// パーティクルの発生
 					XMFLOAT3 sePos = se->GetPosition();
-					ParticleManager::GetInstance()->CreateParticle(sePos, 200, 30, 10);
+					ParticleManager::GetInstance()->CreateParticle(sePos, 100, 10, 5);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -852,7 +910,7 @@ void GamePlayScene::Update()
 			// カメラreセット
 			//Object3d::SetCamera(camera.get());
 		}
-
+		
 		////タゲ移動
 		//if (inputUp || inputDown || inputRight || inputLeft)
 		//{
@@ -1028,17 +1086,26 @@ void GamePlayScene::Update()
 				smallEnemy->Update();
 			}
 		}
+
 		//撃破数達成でボス戦
 		if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-			//ボス戦突入のお知らせです
-			BossEnemyAdvent = true;
 			//残っている雑魚敵はもういらない
 			for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
 				se->SetAlive(false);//消す
 			}
 
-			for (std::unique_ptr<Boss>& boss : boss_) {
-				boss->Update();//敵更新
+			if (BeforeBossAppearFlag == false)
+			{
+				BeforeBossAppear();
+			}
+			//ボス戦前の演出
+			if (BeforeBossAppearFlag == true)
+			{//演出終わったら
+				//ボス戦突入のお知らせです
+				BossEnemyAdvent = true;
+				for (std::unique_ptr<Boss>& boss : boss_) {
+					boss->Update();//敵更新
+				}
 			}
 		}
 		// FBX Update
@@ -1055,6 +1122,7 @@ void GamePlayScene::Update()
 		sp_gotitle->Update();
 		sp_operation->Update();
 		sp_sight->Update();
+		sp_beforeboss->Update();
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
@@ -1091,7 +1159,7 @@ void GamePlayScene::Draw()
 	}
 
 	//敵描画
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum&& BeforeBossAppearFlag == true) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
@@ -1106,13 +1174,14 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
+
 	//smallEnemy_->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);
 
 	// パーティクル描画
-	DxBase* dxBase=DxBase::GetInstance();
+	DxBase* dxBase = DxBase::GetInstance();
 	ParticleManager::GetInstance()->Draw(dxBase->GetCmdList());
 
 	//3dオブジェ描画後処理
@@ -1147,7 +1216,15 @@ void GamePlayScene::Draw()
 
 	}
 	else if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
+
 	if (OperWindOpenFlag == true) { sp_operation_wind->Draw(); }
+
+	//ボス戦前 ポーズ中は見せない
+	if (BeforeBossAppearNow == true && PauseFlag == false)
+	{
+		sp_beforeboss->Draw();
+	}
+
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();

@@ -219,7 +219,7 @@ void TitleScene::Draw()
 
 	sp_gametitlename->Draw();
 
-	if (MoveStartFlag == false)
+	if (MoveStartFlag == false&& SceneChangeFlag==false)
 	{
 		sp_titleoper->Draw();
 	}

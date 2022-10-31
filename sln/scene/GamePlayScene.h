@@ -22,6 +22,12 @@ class GamePlayScene :public BaseScene,public BaseObject
 {
 
 	DirectX::XMFLOAT2 cameraMoveVel{};
+
+	enum class BeforeBossPattern {
+		def,
+		inc,
+		dec,
+	};
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -58,6 +64,8 @@ public:
 
 	void SmallEnemyAppear();
 
+	void BeforeBossAppear();
+
 	void PlayerDeath();
 
 	void PlayerMove();
@@ -92,6 +100,8 @@ public:
 	std::vector<XMVECTOR> points;
 	size_t splineStartIndex;
 
+	BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
+
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
@@ -107,6 +117,7 @@ private:
 	std::unique_ptr < Sprite> sp_operation = nullptr;
 	std::unique_ptr < Sprite> sp_operation_wind = nullptr;
 	std::unique_ptr < Sprite> sp_sight = nullptr;
+	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -166,9 +177,17 @@ private:
 	float BossTermsEMurdersNum = 6;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
+	//ボス出現前演出フラグ
+	bool BeforeBossAppearFlag = false;
+	//true:今やってる
+	bool BeforeBossAppearNow = false;
 	
 	int randShakeDef = 0;
 	int randShakeNow=randShakeDef;
+
+	int BBPaternCount = 0;//1→0で++
+
+	bool AlertSoundFlag = true;//警告音繰り返しに一回のみ
 
 	//↓-----ポーズ関連-----↓//
 	bool PauseFlag = false;//ポーズしていない
