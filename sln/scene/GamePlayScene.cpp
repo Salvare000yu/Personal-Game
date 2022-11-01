@@ -601,7 +601,7 @@ void GamePlayScene::CollisionAll()
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x + 7.f;//—]—T‚ðŽ‚½‚¹‚é•ª{
+				smallenemyForm.radius = se->GetScale().x + 5.f;//—]—T‚ðŽ‚½‚¹‚é•ª{
 
 				// “–‚½‚Á‚½‚çÁ‚¦‚é
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
@@ -609,7 +609,7 @@ void GamePlayScene::CollisionAll()
 					sEnemyMurdersNum++;//Œ‚”j”
 					// ƒp[ƒeƒBƒNƒ‹‚Ì”­¶
 					XMFLOAT3 sePos = se->GetPosition();
-					ParticleManager::GetInstance()->CreateParticle(sePos, 100, 10, 5);
+					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 60, 5);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;

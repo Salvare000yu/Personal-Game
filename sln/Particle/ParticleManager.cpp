@@ -487,7 +487,7 @@ void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, floa
 	r * cosf(thata),
 	r * sinf(thata) * sinf(phi) };
 
-		Add(20, pos, vel, XMFLOAT3(vel.x / -10, vel.y / -10, vel.z / -10), startScale, 0);
+		Add(40, pos, vel, XMFLOAT3(vel.x / +10, vel.y / +10, vel.z / +10), startScale, 0);
 	}
 
 }
