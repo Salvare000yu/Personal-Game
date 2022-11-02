@@ -11,6 +11,7 @@
 
 class TitleScene :public BaseScene
 {
+
 public:
 
 	void Initialize() override;
@@ -20,6 +21,8 @@ public:
 	void BeforeUpdate();
 
 	void SceneChange();
+
+	void UpDown();
 
 	void Update() override;
 
@@ -33,6 +36,14 @@ public:
 	float StartSp=1.5;
 
 	bool SceneChangeFlag = false;//シーンチェンジ開始前
+
+	//---タイトル常時動く
+	enum class UpDownPattern {
+		def,
+		Up,
+		Down,
+	};
+	UpDownPattern upDownPattern_ = UpDownPattern::def;
 
 private:
 
@@ -51,5 +62,12 @@ private:
 
 	float NamePosXCenter = 0;
 	float NamePosYCenter = 0;
+
+	//これ超えたらパターン変える　最大最小
+	const float NamePosMoveMax = 7;
+	const float NamePosMoveMin = -7;
+	//上げ下げする値
+	const float NamePosYUpDownDef = 0.2;//デフォ
+	float NamePosYUpDown = NamePosYUpDownDef;
 };
 

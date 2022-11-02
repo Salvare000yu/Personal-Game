@@ -26,3 +26,8 @@ void Timer::TimerPlay(bool TimeResetFlag)
         TimeResetFlag = true;
     }
 }
+
+void Timer::TitleEaseFrame()
+{
+    titleEaseFrame+=1.f;
+}

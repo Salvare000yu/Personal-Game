@@ -370,6 +370,4 @@ void SelectScene::DrawUI()
 	//char tmp[32]{};
 	//sprintf_s(tmp, 32, "%2.f", WaitKeyEase);
 	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-
-
 }

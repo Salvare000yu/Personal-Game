@@ -96,17 +96,6 @@ void TitleScene::Initialize()
 
 void TitleScene::Finalize()
 {
-
-	//スプライト解放
-	//delete sprite;
-
-	//3dオブジェクト解放
-	//delete object3d_1;
-	//delete object3d_2;
-	//delete object3d_3;
-	//delete model_1;
-	//delete model_2;
-
 //	delete postEffect;
 }
 
@@ -127,7 +116,9 @@ void TitleScene::BeforeUpdate()
 		NamePos.x -= sp;
 		sp *= 1.05;
 	}
-	else { MoveStartFlag = false; }
+	else { 
+		MoveStartFlag = false; 
+	}
 
 	sp_gametitlename->SetPosition({ NamePos });
 	//XMFLOAT2 NameSize = sp_gametitlename->GetSize();
@@ -152,7 +143,7 @@ void TitleScene::SceneChange()
 	if (--SceneChangeVibCount == 0) {
 		input->PadVibrationDef();
 	}
-	if (NamePos.x<-1280) {
+	if (NamePos.x < -1280) {
 		Input* input = Input::GetInstance();
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
@@ -161,6 +152,41 @@ void TitleScene::SceneChange()
 		sceneManager_->SetNextScene(scene);
 	}
 
+	sp_gametitlename->Update();
+}
+
+void TitleScene::UpDown()
+{
+	Timer* timer = Timer::GetInstance();
+	timer->TitleEaseFrame();
+	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	NamePosYUpDown*=0.99;
+	switch (upDownPattern_)
+	{
+	case UpDownPattern::def:
+		NamePos.y += NamePosYUpDown;
+		if(NamePos.y>= NamePosMoveMax){ 
+			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+			upDownPattern_ = UpDownPattern::Down; 
+		}
+		break;
+	case UpDownPattern::Up:
+		NamePos.y += NamePosYUpDown;
+		if (NamePos.y >= NamePosMoveMax) { 
+			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+			upDownPattern_ = UpDownPattern::Down; 
+		}
+		break;
+	case UpDownPattern::Down:
+		NamePos.y -= NamePosYUpDown;
+		if(NamePos.y<=NamePosMoveMin){
+			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+			upDownPattern_ = UpDownPattern::Up; 
+		}
+		break;
+	}
+
+	sp_gametitlename->SetPosition({ NamePos });
 	sp_gametitlename->Update();
 }
 
@@ -177,12 +203,12 @@ void TitleScene::Update()
 	sprite1->Update();
 	if (MoveStartFlag == true) { BeforeUpdate(); }
 
-	if (MoveStartFlag == false&& SceneChangeFlag==false)
+	if (MoveStartFlag == false && SceneChangeFlag == false)
 	{
-
+		//UpDown();
 		//時間リセット。タイトルに戻る度。
 		timer->TimerPlay(false);
-
+		
 		//押した瞬間のみ
 		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 		const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
@@ -196,18 +222,19 @@ void TitleScene::Update()
 			input->PadVibration();
 		}
 
-		DrawUI();
+		UpDown();
 
 		//スプライト更新
 		//if (アニメーション終わったら) {
 		//	sp_titleoper->Update();
 		//	}
-			//postEffect->Update();
+		//postEffect->Update();
 	}
 
 	if (SceneChangeFlag == true) {
 		SceneChange();//チェンジ移動開始
 	}
+	DrawUI();
 }
 
 void TitleScene::Draw()
@@ -219,7 +246,7 @@ void TitleScene::Draw()
 
 	sp_gametitlename->Draw();
 
-	if (MoveStartFlag == false&& SceneChangeFlag==false)
+	if (MoveStartFlag == false && SceneChangeFlag == false)
 	{
 		sp_titleoper->Draw();
 	}
@@ -229,4 +256,11 @@ void TitleScene::Draw()
 void TitleScene::DrawUI()
 {
 	//DebugText::GetInstance()->Print("[ENTERorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
+	//if (MoveStartFlag == true) { DebugText::GetInstance()->Print("MoveStartF:true", 300, 100, 3.0f); }
+	//else { DebugText::GetInstance()->Print("MoveStartF:false", 300, 100, 3.0f); }
+
+	//if (SceneChangeFlag == true) { DebugText::GetInstance()->Print("SceneChangeF:true", 300, 200, 3.0f);
+	//}
+	//else { DebugText::GetInstance()->Print("SceneChangeF:false", 300, 200, 3.0f); }
+
 }
