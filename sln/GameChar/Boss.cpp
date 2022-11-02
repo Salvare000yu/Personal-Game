@@ -15,30 +15,6 @@ void Boss::ApproachInit()
 	DiffusionAtkCount = DiffusionAtkInterval;
 }
 
-void Boss::Attack()
-{
-	//ÉLÅ[ì¸óÕégÇ§
-	//Input* input = Input::GetInstance();
-
-	//triggerkey
-	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-
-	// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
-	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
-
-	//íeî≠éÀ
-	XMFLOAT3 position = obj->GetPosition();
-	//íeê∂ê¨
-	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
-	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-	madeBullet->Initialize();
-	madeBullet->SetModel(eBulModel);
-	madeBullet->SetPosition(position);
-
-	//íeìoò^
-	bullets_.push_back(std::move(madeBullet));
-}
-
 void Boss::Approach()
 {
 	//---ìÀåÇ---//
@@ -74,7 +50,13 @@ void Boss::Leave()
 	//éûÇ™ñûÇøÇΩÇÁ
 	if (DiffusionAtkCount == 0) {
 		//ê∂ë∂éûÇÃÇ›î≠éÀ
-		if (alive) { DiffusionAttack(); }
+		if (alive) {
+			if (even_odd_NumFlag == true)//äÔêîíe
+			{
+				DiffusionAttack();
+			}
+			else {DiffusionAttackEavenNumber();}
+		}
 		//çƒÇ—ÉJÉEÉìÉgÇ≈Ç´ÇÈÇÊÇ§Ç…èâä˙âª
 		DiffusionAtkCount = DiffusionAtkInterval;
 	}
@@ -87,6 +69,8 @@ void Boss::Leave()
 
 	//Ç†ÇÈíˆìxó£ÇÍÇΩÇÁãﬂÇ√Ç¢ÇƒÇ≠ÇÈ
 	if (positionBack.z == LeaveLim) {
+		if (even_odd_NumFlag == true) { even_odd_NumFlag = false; }
+		else { even_odd_NumFlag = true; }
 		actionPattern_ = ActionPattern::Approach;
 	}
 }
@@ -99,6 +83,30 @@ void Boss::HpHalf()
 	obj->SetPosition({ 0, 40, 200 });
 }
 
+void Boss::Attack()
+{
+	//ÉLÅ[ì¸óÕégÇ§
+	//Input* input = Input::GetInstance();
+
+	//triggerkey
+	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
+
+	// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
+
+	//íeî≠éÀ
+	XMFLOAT3 position = obj->GetPosition();
+	//íeê∂ê¨
+	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+	madeBullet->Initialize();
+	madeBullet->SetModel(eBulModel);
+	madeBullet->SetPosition(position);
+	madeBullet->SetScale({ 15.f, 15.f, 15.f });
+
+	//íeìoò^
+	bullets_.push_back(std::move(madeBullet));
+}
 void Boss::DiffusionAttack()
 {
 	// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
@@ -142,6 +150,59 @@ void Boss::DiffusionAttack()
 	bullets_.push_back(std::move(madeBullet_center));
 	bullets_.push_back(std::move(madeBullet_L));
 	bullets_.push_back(std::move(madeBullet_R));
+}
+void Boss::DiffusionAttackEavenNumber()
+{
+	// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
+
+	//íeî≠éÀ
+	XMFLOAT3 position = obj->GetPosition();
+	//íeê∂ê¨
+	std::unique_ptr<BossBullet> madeBullet_L1 = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_L2 = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_R1 = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_R2 = std::make_unique<BossBullet>();
+	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+	madeBullet_L1->Initialize();
+	madeBullet_L2->Initialize();
+	madeBullet_R1->Initialize();
+	madeBullet_R2->Initialize();
+
+	madeBullet_L1->SetModel(eBulModel);
+	madeBullet_L2->SetModel(eBulModel);
+	madeBullet_R1->SetModel(eBulModel);
+	madeBullet_R2->SetModel(eBulModel);
+
+	madeBullet_L1->SetPosition(position);
+	madeBullet_L2->SetPosition(position);
+	madeBullet_R1->SetPosition(position);
+	madeBullet_R2->SetPosition(position);
+
+	// velocityÇéZèo
+	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-3, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-0.5, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(0.5, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_R2 = DirectX::XMVectorSet(3, 0, 1, 0);
+	XMFLOAT3 xmfloat3velocity_L1;
+	XMFLOAT3 xmfloat3velocity_L2;
+	XMFLOAT3 xmfloat3velocity_R1;
+	XMFLOAT3 xmfloat3velocity_R2;
+	XMStoreFloat3(&xmfloat3velocity_L1, XMVector3Transform(vecvelocity_L1, obj->GetMatRot()));
+	XMStoreFloat3(&xmfloat3velocity_L2, XMVector3Transform(vecvelocity_L2, obj->GetMatRot()));
+	XMStoreFloat3(&xmfloat3velocity_R1, XMVector3Transform(vecvelocity_R1, obj->GetMatRot()));
+	XMStoreFloat3(&xmfloat3velocity_R2, XMVector3Transform(vecvelocity_R2, obj->GetMatRot()));
+
+	madeBullet_L1->SetVelocity(xmfloat3velocity_L1);
+	madeBullet_L2->SetVelocity(xmfloat3velocity_L2);
+	madeBullet_R1->SetVelocity(xmfloat3velocity_R1);
+	madeBullet_R2->SetVelocity(xmfloat3velocity_R2);
+
+	//íeìoò^
+	bullets_.push_back(std::move(madeBullet_L1));
+	bullets_.push_back(std::move(madeBullet_L2));
+	bullets_.push_back(std::move(madeBullet_R1));
+	bullets_.push_back(std::move(madeBullet_R2));
 }
 
 void Boss::Initialize()

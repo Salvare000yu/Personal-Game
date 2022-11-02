@@ -35,6 +35,8 @@ public:
 	void HpHalf();
 	//ŠgUUŒ‚
 	void DiffusionAttack();
+	//ŠgU‹ô”’e
+	void DiffusionAttackEavenNumber();
 
 	//‹ß‚Ã‚­ˆ—‰Šú‰»
 	void ApproachInit();
@@ -85,6 +87,8 @@ private:
 	//UŒ‚—pƒJƒEƒ“ƒg
 	float AtkCount = 0;
 	float DiffusionAtkCount = 0;
+
+	bool even_odd_NumFlag = true;//Šï”’e
 
 	Model* eBulModel = nullptr;
 

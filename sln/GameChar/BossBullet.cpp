@@ -22,7 +22,7 @@ void BossBullet::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 12.0f, 12.0f, 12.0f });
+	obj->SetScale({ 10.0f, 10.0f, 10.0f });
 	//êŠ
 	//obj->SetPosition({ position });
 
