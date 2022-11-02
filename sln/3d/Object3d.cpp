@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "../PostEffect.h"
+#include "PostEffect.h"
   
 #pragma comment(lib, "d3dcompiler.lib")
 

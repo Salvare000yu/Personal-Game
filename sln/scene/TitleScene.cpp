@@ -8,7 +8,7 @@
 
 #include "Timer.h"
 
-#include "../PostEffect.h"
+#include "PostEffect.h"
 
 //PostEffect* postEffect = nullptr;
 

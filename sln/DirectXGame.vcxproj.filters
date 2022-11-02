@@ -57,13 +57,13 @@
     <ClCompile Include="base\WinApp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="MyDirectXGame.cpp">
+    <ClCompile Include="base\MyDirectXGame.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="base\GameBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="base\GamePlayScene.cpp">
+    <ClCompile Include="scene\GamePlayScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scene\TitleScene.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="fbx\FbxObject3d.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="PostEffect.cpp">
+    <ClCompile Include="PostEffect\PostEffect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
@@ -250,7 +250,7 @@
     <ClInclude Include="3d\WinApp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="MyDirectXGame.h">
+    <ClInclude Include="base\MyDirectXGame.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="base\GameBase.h">
@@ -280,7 +280,7 @@
     <ClInclude Include="safe_delete.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PostEffect.h">
+    <ClInclude Include="PostEffect\PostEffect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">

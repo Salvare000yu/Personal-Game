@@ -8,7 +8,7 @@
 #include "WinApp.h"
 #include "TitleScene.h"
 
-#include "../PostEffect.h"
+#include "PostEffect.h"
 
 using namespace DirectX;
 

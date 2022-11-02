@@ -18,7 +18,7 @@
 
 #include "../safe_delete.h"
 
-#include "../PostEffect.h"
+#include "PostEffect.h"
 
 #include <DirectXMath.h>
 
@@ -58,10 +58,10 @@ void GamePlayScene::Initialize()
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
 	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
-	mod_enemybullet.reset(Model::LoadFromOBJ("EnemBul"));
+	mod_enemybullet.reset(Model::LoadFromOBJ("enemyBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
-	mod_firingline.reset(Model::LoadFromOBJ("firing line"));
+	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
@@ -1255,7 +1255,7 @@ void GamePlayScene::Draw()
 void GamePlayScene::DrawUI()
 {
 	//条件なし常に表示
-	DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
+	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
 	//DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
 	//DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
 	//DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
@@ -1291,21 +1291,21 @@ void GamePlayScene::DrawUI()
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
 		//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
 	}
-	else {//ボス戦じゃないときのみ表示
-		//雑魚敵撃破数関連
-		{
-			DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
+	//else {//ボス戦じゃないときのみ表示
+	//	//雑魚敵撃破数関連
+	//	{
+	//		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
 
-			char tmp[32]{};
-			sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
-			DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-		}
-		{
-			DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
+	//		char tmp[32]{};
+	//		sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
+	//		DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+	//	}
+	//	{
+	//		DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
 
-			char tmp[32]{};
-			sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
-			DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-		}
-	}
+	//		char tmp[32]{};
+	//		sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
+	//		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+	//	}
+	//}
 }

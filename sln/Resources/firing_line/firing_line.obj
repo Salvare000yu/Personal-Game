@@ -1,6 +1,6 @@
 # Blender 3.3.1
 # www.blender.org
-mtllib firing line.mtl
+mtllib firing_line.mtl
 o 立方体
 v 1.000000 -1.000000 -1.029300
 v 1.000000 1.000000 -1.029300

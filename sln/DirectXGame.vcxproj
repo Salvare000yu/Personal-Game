@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -167,7 +167,7 @@
     <ClCompile Include="fbx\FbxLoader.cpp" />
     <ClCompile Include="fbx\FbxModel.cpp" />
     <ClCompile Include="base\GameBase.cpp" />
-    <ClCompile Include="base\GamePlayScene.cpp" />
+    <ClCompile Include="scene\GamePlayScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -178,12 +178,12 @@
     <ClCompile Include="scene\BaseScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="3d\Model.cpp" />
-    <ClCompile Include="MyDirectXGame.cpp" />
+    <ClCompile Include="base\MyDirectXGame.cpp" />
     <ClCompile Include="3d\Object3d.cpp" />
     <ClCompile Include="GameChar\Boss.cpp" />
     <ClCompile Include="GameChar\Player.cpp" />
     <ClCompile Include="GameChar\PlayerBullet.cpp" />
-    <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="PostEffect\PostEffect.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
     <ClCompile Include="GameChar\SmallEnemy.cpp" />
     <ClCompile Include="GameChar\SmallEnemyBullet.cpp" />
@@ -328,13 +328,13 @@
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="scene\BaseScene.h" />
     <ClInclude Include="3d\Model.h" />
-    <ClInclude Include="MyDirectXGame.h" />
+    <ClInclude Include="base\MyDirectXGame.h" />
     <ClInclude Include="3d\Object3d.h" />
     <ClInclude Include="PipelineSet.h" />
     <ClInclude Include="GameChar\Boss.h" />
     <ClInclude Include="GameChar\Player.h" />
     <ClInclude Include="GameChar\PlayerBullet.h" />
-    <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="PostEffect\PostEffect.h" />
     <ClInclude Include="safe_delete.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="GameChar\SmallEnemy.h" />
