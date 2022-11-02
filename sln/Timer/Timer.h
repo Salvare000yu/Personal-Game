@@ -7,7 +7,6 @@ public:
 	static Timer* GetInstance();
 
 	void TimerPlay(bool TimeResetFlag = true);
-	void TitleEaseFrame();
 	//^‚È‚çi‚ß‚Ä‚é
 
 	float frame = 0.f;

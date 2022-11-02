@@ -47,7 +47,7 @@ public:
 	inline void SetSEBulModel(Model* model) { seBulModel = model; }
 
 	//ƒtƒŒ[ƒ€‚²‚Æ‚É”­Ë
-	static const int AtkInterval = 60;
+	static const int AtkInterval = 90;
 
 private:
 	////-----------------model

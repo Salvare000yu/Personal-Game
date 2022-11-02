@@ -254,6 +254,9 @@ void GamePlayScene::Initialize()
 	////p1からスタート
 	//splineStartIndex = 1;
 
+	//時間リセット。タイトルに戻る度。
+	Timer* timer = Timer::GetInstance();
+	timer->TimerPlay(false);
 }
 
 void GamePlayScene::Finalize()

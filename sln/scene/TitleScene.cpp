@@ -157,8 +157,6 @@ void TitleScene::SceneChange()
 
 void TitleScene::UpDown()
 {
-	Timer* timer = Timer::GetInstance();
-	timer->TitleEaseFrame();
 	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
 	NamePosYUpDown*=0.99;
 	switch (upDownPattern_)
@@ -193,7 +191,6 @@ void TitleScene::UpDown()
 void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
-	Timer* timer = Timer::GetInstance();
 
 	//セレクトから振動少し続ける
 	if (--VibCount == 0) {
@@ -205,9 +202,6 @@ void TitleScene::Update()
 
 	if (MoveStartFlag == false && SceneChangeFlag == false)
 	{
-		//UpDown();
-		//時間リセット。タイトルに戻る度。
-		timer->TimerPlay(false);
 		
 		//押した瞬間のみ
 		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);

@@ -107,21 +107,41 @@ void Boss::DiffusionAttack()
 	//íeî≠éÀ
 	XMFLOAT3 position = obj->GetPosition();
 	//íeê∂ê¨
-	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_center = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_L = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet> madeBullet_R = std::make_unique<BossBullet>();
 	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-	madeBullet->Initialize();
-	madeBullet->SetModel(eBulModel);
-	madeBullet->SetPosition(position);
+	madeBullet_center->Initialize();
+	madeBullet_L->Initialize();
+	madeBullet_R->Initialize();
+
+	madeBullet_center->SetModel(eBulModel);
+	madeBullet_L->SetModel(eBulModel);
+	madeBullet_R->SetModel(eBulModel);
+
+	madeBullet_center->SetPosition(position);
+	madeBullet_L->SetPosition(position);
+	madeBullet_R->SetPosition(position);
 
 	// velocityÇéZèo
-	DirectX::XMVECTOR vecvelocity = DirectX::XMVectorSet(0, 0, 3, 0);
-	XMFLOAT3 xmfloat3velocity;
-	XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-2, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(2, 0, 1, 0);
+	XMFLOAT3 xmfloat3velocity_center;
+	XMFLOAT3 xmfloat3velocity_L;
+	XMFLOAT3 xmfloat3velocity_R;
+	XMStoreFloat3(&xmfloat3velocity_center, XMVector3Transform(vecvelocity_center, obj->GetMatRot()));
+	XMStoreFloat3(&xmfloat3velocity_L, XMVector3Transform(vecvelocity_L, obj->GetMatRot()));
+	XMStoreFloat3(&xmfloat3velocity_R, XMVector3Transform(vecvelocity_R, obj->GetMatRot()));
 
-	madeBullet->SetVelocity(xmfloat3velocity);
+	madeBullet_center->SetVelocity(xmfloat3velocity_center);
+	madeBullet_L->SetVelocity(xmfloat3velocity_L);
+	madeBullet_R->SetVelocity(xmfloat3velocity_R);
 
 	//íeìoò^
-	bullets_.push_back(std::move(madeBullet));
+	bullets_.push_back(std::move(madeBullet_center));
+	bullets_.push_back(std::move(madeBullet_L));
+	bullets_.push_back(std::move(madeBullet_R));
 }
 
 void Boss::Initialize()
