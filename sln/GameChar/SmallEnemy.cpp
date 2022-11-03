@@ -7,6 +7,8 @@
 #include <DirectXMath.h>
 #include <random>
 
+using namespace DirectX;
+
 void SmallEnemy::Attack()
 {
 	//キー入力使う
@@ -86,7 +88,7 @@ void SmallEnemy::Update()
 	for (int i = 0; i < 1; i++)
 	{
 		XMFLOAT3 smEnemPos = obj->GetPosition();
-		smEnemPos.z -= 4;
+		smEnemPos.z -= 6;
 		obj->SetPosition(smEnemPos);
 
 		//発射カウントをデクリメント

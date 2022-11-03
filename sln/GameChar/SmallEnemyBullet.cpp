@@ -22,7 +22,7 @@ void SmallEnemyBullet::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 6.0f, 6.0f, 6.0f });
+	obj->SetScale({ 8.0f, 8.0f, 8.0f });
 	//êŠ
 	//obj->SetPosition({ position });
 

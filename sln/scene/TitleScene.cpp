@@ -158,32 +158,33 @@ void TitleScene::SceneChange()
 void TitleScene::UpDown()
 {
 	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	NamePosYUpDown*=0.99;
-	switch (upDownPattern_)
-	{
-	case UpDownPattern::def:
-		NamePos.y += NamePosYUpDown;
-		if(NamePos.y>= NamePosMoveMax){ 
-			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-			upDownPattern_ = UpDownPattern::Down; 
-		}
-		break;
-	case UpDownPattern::Up:
-		NamePos.y += NamePosYUpDown;
-		if (NamePos.y >= NamePosMoveMax) { 
-			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-			upDownPattern_ = UpDownPattern::Down; 
-		}
-		break;
-	case UpDownPattern::Down:
-		NamePos.y -= NamePosYUpDown;
-		if(NamePos.y<=NamePosMoveMin){
-			NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-			upDownPattern_ = UpDownPattern::Up; 
-		}
-		break;
-	}
-
+	//NamePosYUpDown*=0.99;
+	//switch (upDownPattern_)
+	//{
+	//case UpDownPattern::def:
+	//	NamePos.y += NamePosYUpDown;
+	//	if(NamePos.y>= NamePosMoveMax){ 
+	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+	//		upDownPattern_ = UpDownPattern::Down; 
+	//	}
+	//	break;
+	//case UpDownPattern::Up:
+	//	NamePos.y += NamePosYUpDown;
+	//	if (NamePos.y >= NamePosMoveMax) { 
+	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+	//		upDownPattern_ = UpDownPattern::Down; 
+	//	}
+	//	break;
+	//case UpDownPattern::Down:
+	//	NamePos.y -= NamePosYUpDown;
+	//	if(NamePos.y<=NamePosMoveMin){
+	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
+	//		upDownPattern_ = UpDownPattern::Up; 
+	//	}
+	//	break;
+	time=frame / 60;
+	NamePos.y += sinf(time*6.f);
+	frame++;
 	sp_gametitlename->SetPosition({ NamePos });
 	sp_gametitlename->Update();
 }

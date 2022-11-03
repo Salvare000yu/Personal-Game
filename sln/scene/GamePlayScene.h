@@ -158,6 +158,9 @@ private:
 	//敵HP
 	const float BossMaxHP = 1000;//てきさいだいHP 
 	float NowBossHP = BossMaxHP;//現在の敵HP
+	//敵防御力
+	const float BossDefenseDef = 10;
+	float BossDefense = BossDefenseDef;
 
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP
@@ -174,7 +177,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数
-	float BossTermsEMurdersNum = 1;
+	float BossTermsEMurdersNum = 10;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

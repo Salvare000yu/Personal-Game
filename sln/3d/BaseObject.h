@@ -12,9 +12,7 @@ protected:
 
 	bool alive = true;
 
-
 public:
-
 	inline void SetAlive(bool Alive) { alive = Alive; }
 
 	inline void SetPosition(const DirectX::XMFLOAT3& position) { obj->SetPosition(position); }
@@ -25,6 +23,9 @@ public:
 
 	inline void SetRotation(const DirectX::XMFLOAT3& rotation) { obj->SetRotation(rotation); }
 	inline const DirectX::XMFLOAT3& GetRotation() { return obj->GetRotation(); }
+
+	inline void SetColor(const DirectX::XMFLOAT4& color) { obj->SetColor(color); }
+	inline const DirectX::XMFLOAT4& GetColor() { return obj->GetColor(); }
 
 	//ƒ‚ƒfƒ‹‰Šú‰»ŠÖ”
 	inline void SetModel(Model* model ) { obj->SetModel(model); }

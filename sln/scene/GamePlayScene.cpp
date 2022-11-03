@@ -554,10 +554,15 @@ void GamePlayScene::CollisionAll()
 
 					// 当たったら消える
 					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
-
+						XMFLOAT3 boPos = bo->GetPosition();
+						
 						pb->SetAlive(false);
 
-						NowBossHP -= pBulPower;
+						//bo->SetColor({ 1,0,0,1 });
+						if ((NowBossHP - (pBulPower - BossDefense))>0) {
+							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
+						}
+						NowBossHP -= (pBulPower- BossDefense);
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 
@@ -612,7 +617,7 @@ void GamePlayScene::CollisionAll()
 					sEnemyMurdersNum++;//撃破数
 					// パーティクルの発生
 					XMFLOAT3 sePos = se->GetPosition();
-					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 100, 5);
+					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 80, 5);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -856,7 +861,6 @@ void GamePlayScene::Pause()
 
 void GamePlayScene::Update()
 {
-
 	Input* input = Input::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
@@ -1124,7 +1128,7 @@ void GamePlayScene::Update()
 		sp_continuation->Update();
 		sp_gotitle->Update();
 		sp_operation->Update();
-		sp_sight->Update();
+		//sp_sight->Update();
 		sp_beforeboss->Update();
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
@@ -1209,7 +1213,7 @@ void GamePlayScene::Draw()
 		sp_playerhpbar->Draw();
 		sp_playerhpbarwaku->Draw();
 		sp_openpause->Draw();
-		sp_sight->Draw();
+		//sp_sight->Draw();
 	}
 	if (PauseFlag == true) {
 		sp_pause->Draw();

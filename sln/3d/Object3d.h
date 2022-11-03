@@ -39,6 +39,7 @@ public: // サブクラス
 	struct ConstBufferDataB0
 	{
 		XMMATRIX mat;	// ３Ｄ変換行列
+		XMFLOAT4 color;
 	};
 
 private: // 定数
@@ -190,6 +191,8 @@ public: // メンバ関数
 
 	const XMMATRIX& GetMatRot() { return matRot; }
 
+	//色取得
+	const XMFLOAT4& GetColor() { return color_; }
 
 	/// <summary>
 	/// 座標の設定
@@ -198,6 +201,9 @@ public: // メンバ関数
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+	//色セット
+	void SetColor(XMFLOAT4 color) { this->color_ = color; }
 
 	/// <summary>
 	/// スケールの設定
@@ -221,7 +227,7 @@ private: // メンバ変数
 	//行列 定数バッファ
 	ComPtr<ID3D12Resource> constBuffB0;
 	// 色
-	//XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 color_ = { 1,1,1,1 };
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角
