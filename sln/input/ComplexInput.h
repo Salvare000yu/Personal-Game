@@ -8,6 +8,7 @@ public:
 	bool RightMove();
 	bool UpMove();
 	bool DownMove();
+	bool DecisionByEnter();
 	bool LeftMove();
 };
 

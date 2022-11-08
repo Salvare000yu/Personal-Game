@@ -708,12 +708,13 @@ void GamePlayScene::CollisionAll()
 void GamePlayScene::PauseConti()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
 	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
@@ -733,7 +734,7 @@ void GamePlayScene::PauseConti()
 	}
 
 	//継続
-	if (TriggerEnter || PadTriggerA)
+	if (cInput->DecisionByEnter())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		PauseFlag = false;
@@ -743,11 +744,12 @@ void GamePlayScene::PauseConti()
 void GamePlayScene::PauseOper()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
 	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
@@ -770,14 +772,14 @@ void GamePlayScene::PauseOper()
 		}
 	}
 	//操作説明画面開く
-	if (TriggerEnter || PadTriggerA)
+	if (cInput->DecisionByEnter())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		OperWindOpenFlag = true;
 		OperationWind();
 
 		WaitKeyEnter++;
-		if ((TriggerEnter || PadTriggerA) && WaitKeyEnter >= 2) {
+		if ((cInput->DecisionByEnter()) && WaitKeyEnter >= 2) {
 			OperWindOpenFlag = false;
 			WaitKeyEnter = 0;
 		}
@@ -790,11 +792,12 @@ void GamePlayScene::OperationWind()
 void GamePlayScene::PauseGoTitle()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	const bool TriggerUp = input->TriggerKey(DIK_UP);
 	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
 	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
@@ -813,7 +816,7 @@ void GamePlayScene::PauseGoTitle()
 	}
 
 	//タイトルへ戻る
-	if (TriggerEnter || PadTriggerA)
+	if ((cInput->DecisionByEnter()))
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();//振動

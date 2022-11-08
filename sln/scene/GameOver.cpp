@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
+#include "ComplexInput.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "TitleScene.h"
@@ -94,12 +95,13 @@ void GameOver::Finalize()
 void GameOver::Retry()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
 	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
 	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
@@ -113,7 +115,7 @@ void GameOver::Retry()
 		}
 	}
 
-	if ((TriggerEnter || PadTriggerA) && CursorMoveNowFlag == false)
+	if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
@@ -160,12 +162,13 @@ void GameOver::Retry()
 void GameOver::GoTitle()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
 	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
 	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
@@ -179,7 +182,7 @@ void GameOver::GoTitle()
 		}
 	}
 
-	if ((TriggerEnter || PadTriggerA) && CursorMoveNowFlag == false)
+	if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
@@ -228,9 +231,9 @@ void GameOver::Update()
 {
 	Input* input = Input::GetInstance();
 	//const bool input1 = input->TriggerKey(DIK_1);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押した瞬間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	input->PadVibrationDef();
 
 	//メンバ関数ポインタ対応した選択

@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
+#include "ComplexInput.h"
+#include "ComplexInput.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "SelectScene.h"
@@ -55,12 +57,13 @@ void SelectScene::SelectOper()
 {
 
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
 	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
 	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
@@ -81,14 +84,14 @@ void SelectScene::SelectOper()
 	//操作説明画面
 	if (SSOp0_1Flag == false)
 	{
-		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
+		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			OperWindOpenFlag = true;
 			OperationWind();
 
 			WaitKeyEnter++;
-			if ((TriggerEnter || PadTriggerA) && WaitKeyEnter >= 2 && CursorMoveNowFlag == false) {
+			if ((cInput->DecisionByEnter()) && WaitKeyEnter >= 2 && CursorMoveNowFlag == false) {
 				OperWindOpenFlag = false;
 				WaitKeyEnter = 0;
 			}
@@ -136,12 +139,13 @@ void SelectScene::OperationWind()
 void SelectScene::SelectStart()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
 	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
 	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
@@ -167,7 +171,7 @@ void SelectScene::SelectStart()
 	//プレイシーンへ
 	if (SSStart1_2Flag == false&& SSStart1_0Flag==false)
 	{
-		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
+		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();
@@ -245,12 +249,13 @@ void SelectScene::SelectStart()
 void SelectScene::SelectTitle()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//押した瞬間
 	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
 	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	//パッド押している間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
 	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
@@ -270,7 +275,7 @@ void SelectScene::SelectTitle()
 	//タイトルシーンへ
 	if (SStitle2_1Flag==false)
 	{
-		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
+		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();

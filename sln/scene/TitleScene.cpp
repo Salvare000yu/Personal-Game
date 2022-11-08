@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
+#include "ComplexInput.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "SelectScene.h"
@@ -192,6 +193,7 @@ void TitleScene::UpDown()
 void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//セレクトから振動少し続ける
 	if (--VibCount == 0) {
@@ -206,11 +208,11 @@ void TitleScene::Update()
 		
 		//押した瞬間のみ
 		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-		const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+		//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 		//パッド押した瞬間
-		const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+		//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
-		if (TriggerEnter || PadTriggerA)     // スペースキーが押されていたら
+		if ((cInput->DecisionByEnter()))     // スペースキーが押されていたら
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			SceneChangeFlag = true;//チェンジ移動フラグ立てる

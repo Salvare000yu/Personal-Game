@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
+#include "ComplexInput.h"
 #include "DebugText.h"
 //#include "GamePlayScene.h"
 #include "TitleScene.h"
@@ -88,15 +89,16 @@ void ClearScene::Finalize()
 void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	//const bool input1 = input->TriggerKey(DIK_1);
-	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
 	
 	//パッド押した瞬間
-	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
 	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 
-	if (TriggerEnter || PadTriggerA)     // エンターキーが押されていたら
+	if ((cInput->DecisionByEnter()))     // エンターキーが押されていたら
 	{
 
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);

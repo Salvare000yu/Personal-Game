@@ -65,3 +65,18 @@ bool ComplexInput::DownMove()
 	else { false; }
 
 }
+
+bool ComplexInput::DecisionByEnter()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	if (TriggerEnter || PadTriggerA) {
+		return true;
+	}
+	else { false; }
+
+}
