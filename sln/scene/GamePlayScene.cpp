@@ -682,8 +682,9 @@ void GamePlayScene::CollisionAll()
 					seBulForm.radius = seb->GetScale().z + 1;//余裕
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
+						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
 						pDamFlag = true;
-						NowpHp -= seBulPower;//自機ダメージ
+						NowpHp -= seBulPow;//自機ダメージ
 						charParameters->SetNowpHp(NowpHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
