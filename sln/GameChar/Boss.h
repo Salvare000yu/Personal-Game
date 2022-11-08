@@ -67,10 +67,16 @@ public:
 	static const int AtkInterval = 10;
 	static const int DiffusionAtkInterval =20;
 
+	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
 
 	inline void SetEBulModel(Model* model) { eBulModel = model; }
+
+	//ボス防御力
+	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
+	const float& GetBossDefense() { return BossDefense; }
+	//-----------------↑げったーせったー↑------------------//
 
 private:
 
@@ -91,5 +97,9 @@ private:
 	bool even_odd_NumFlag = true;//奇数弾
 
 	Model* eBulModel = nullptr;
+
+	//防御力
+	const float BossDefenseDef = 10;
+	float BossDefense = BossDefenseDef;
 
 };

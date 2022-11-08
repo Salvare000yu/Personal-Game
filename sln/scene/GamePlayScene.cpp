@@ -430,7 +430,7 @@ void GamePlayScene::CoolTime()
 	if (pDamFlag == true) {
 
 		if (--pShakeTimer_ >= 0) {// 0まで減らす			
-			DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+			//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
 			input->PadVibration();
 
@@ -528,8 +528,9 @@ void GamePlayScene::CollisionAll()
 	CharParameters* charParameters = CharParameters::GetInstance();
 
 	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
-	float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
+	float BossDefense = boss_.front()->GetBossDefense();//ボス防御力取得 先頭要素
 	float NowpHp = charParameters->GetNowpHp();//自機体力取得
+	float pBulPow = player_->GetpBulPow();//自機弾威力
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定
@@ -557,10 +558,10 @@ void GamePlayScene::CollisionAll()
 						pb->SetAlive(false);
 
 						//bo->SetColor({ 1,0,0,1 });
-						if ((NowBoHp - (pBulPower - BossDefense))>0) {
+						if ((NowBoHp - (pBulPow - BossDefense))>0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
-						NowBoHp -= (pBulPower- BossDefense);
+						NowBoHp -= (pBulPow - BossDefense);
 						charParameters->SetNowBoHp(NowBoHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
@@ -886,7 +887,7 @@ void GamePlayScene::Update()
 
 		CharParameters* charParameters = CharParameters::GetInstance();
 		float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
-		float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
+		float BossDefense = boss_.front()->GetBossDefense();//ボス防御力取得
 		float NowpHp = charParameters->GetNowpHp();//自機体力取得
 
 		//キー操作押している間

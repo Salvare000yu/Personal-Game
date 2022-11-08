@@ -23,9 +23,6 @@ public:
 	//現在ボスHP
 	void SetNowBoHp(float NowBossHP) { this->NowBossHP = NowBossHP; }
 	const float& GetNowBoHp() { return NowBossHP; }
-	//ボス防御力
-	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
-	const float& GetBossDefense() { return BossDefense; }
 	//プレイヤー現在HP
 	void SetNowpHp(float NowPlayerHP) { this->NowPlayerHP = NowPlayerHP; }
 	const float& GetNowpHp() { return NowPlayerHP; }
@@ -44,9 +41,6 @@ private:
 	//敵HP
 	const float BossMaxHP = 1000;//てきさいだいHP 
 	float NowBossHP = BossMaxHP;//現在の敵HP
-	//敵防御力
-	const float BossDefenseDef = 10;
-	float BossDefense = BossDefenseDef;
 
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP

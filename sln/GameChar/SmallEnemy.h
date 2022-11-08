@@ -41,10 +41,16 @@ public:
 
 	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
+	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
 	const std::list<std::unique_ptr<SmallEnemyBullet>>& GetBullets() { return bullets_; }
 
 	inline void SetSEBulModel(Model* model) { seBulModel = model; }
+
+	//通常弾威力
+	void SetBulPow(float seBulPower) { this->seBulPower = seBulPower; }
+	const float& GetBulPow() { return seBulPower; }
+	//-----------------↑げったーせったー↑------------------//
 
 	//フレームごとに発射
 	static const int AtkInterval = 90;
@@ -70,4 +76,8 @@ private:
 	//攻撃用カウント
 	float AtkCount = 0;
 	Model* seBulModel = nullptr;
+
+	//通常弾威力
+	const float seBulPowerMax = 100;
+	float seBulPower = seBulPowerMax;
 };

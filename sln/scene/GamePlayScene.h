@@ -144,8 +144,6 @@ private:
 	//G‹›“GoŒ»—pƒJƒEƒ“ƒg
 	float SEneAppCount = 0;
 
-	//©‹@’Êí’eˆĞ—Í
-	const float pBulPower = 50;
 	//“G’Êí’eˆĞ—Í
 	const float eBulPower = 200;
 	//G‹›“G’Êí’eˆĞ—Í

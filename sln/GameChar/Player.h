@@ -75,5 +75,16 @@ public:
 	static const int32_t AtkInterval = 10;
 	//攻撃インターバルタイマー
 	int32_t AtkInterval_ = AtkInterval;
+
+	//-------------------↓げったーせったー↓-------------------//
+	//弾威力
+	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
+	const float& GetpBulPow() { return pBulPower; }
+	//-------------------↑げったーせったー↑-------------------//
+
+private:
+	//自機通常弾威力
+	const float pBulPowerMax = 50;
+	float pBulPower = pBulPowerMax;
 };
 
