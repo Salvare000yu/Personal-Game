@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
+#include "ComplexInput.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "Timer.h"
@@ -344,17 +345,19 @@ void GamePlayScene::PlayerDeath()
 void GamePlayScene::PlayerMove()
 {
 	Input* input = Input::GetInstance();
-	const bool inputW = input->PushKey(DIK_W);
-	const bool inputS = input->PushKey(DIK_S);
-	const bool inputA = input->PushKey(DIK_A);
-	const bool inputD = input->PushKey(DIK_D);
+	ComplexInput* cInput = ComplexInput::GetInstance();
+
+	//const bool inputW = input->PushKey(DIK_W);
+	//const bool inputS = input->PushKey(DIK_S);
+	//const bool inputA = input->PushKey(DIK_A);
+	//const bool inputD = input->PushKey(DIK_D);
 	//const bool inputQ = input->PushKey(DIK_Q);
 	//const bool inputZ = input->PushKey(DIK_Z);
 	//パッド押している間
-	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
-	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
-	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
-	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
+	//const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
+	//const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
+	//const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
+	//const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	//----------↓移動制限
 	const float PlayerMoveLimX = 190;
@@ -377,17 +380,17 @@ void GamePlayScene::PlayerMove()
 	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
-	if (inputW || inputS || inputA || inputD || PadInputUP || PadInputDOWN || PadInputLEFT || PadInputRIGHT)// inputQ || inputZ ||
+	if (cInput->LeftMove() || cInput->RightMove() || cInput->UpMove() || cInput->DownMove())// inputQ || inputZ ||
 	{
 		//------プレイヤーも同じ移動------//
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
-		if ((inputS) || PadInputDOWN) { PlayerPos.y -= moveSpeed; }
+		if (cInput->DownMove()) { PlayerPos.y -= moveSpeed; }
 
-		if ((inputW) || PadInputUP) { PlayerPos.y += moveSpeed; }
+		if (cInput->UpMove()) { PlayerPos.y += moveSpeed; }
 
-		if ((inputA) || PadInputLEFT) {
+		if (cInput->LeftMove()) {
 
 			PlayerPos.x -= moveSpeed;
 
@@ -398,7 +401,7 @@ void GamePlayScene::PlayerMove()
 			//OldInputFlag = TRUE;
 		}
 
-		if ((inputD) || PadInputRIGHT) {
+		if (cInput->RightMove()) {
 
 			PlayerPos.x += moveSpeed;
 

@@ -155,6 +155,7 @@
     <ClCompile Include="camera\CameraTracking.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="input\ComplexInput.cpp" />
     <ClCompile Include="GameChar\PlayerFireLine.cpp" />
     <ClCompile Include="CharParameters\CharParameters.cpp" />
     <ClCompile Include="Particle\ParticleManager.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="camera\CameraTracking.h" />
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Collision\CollisionPrimitive.h" />
+    <ClInclude Include="input\ComplexInput.h" />
     <ClInclude Include="GameChar\PlayerFireLine.h" />
     <ClInclude Include="CharParameters\CharParameters.h" />
     <ClInclude Include="Particle\ParticleManager.h" />
