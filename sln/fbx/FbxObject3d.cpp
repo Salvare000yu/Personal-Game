@@ -1,6 +1,6 @@
 #include "FbxObject3d.h"
 #include <d3dcompiler.h>
-#include "../PostEffect.h"
+#include "PostEffect.h"
 
 #include "FbxLoader.h"
 #pragma comment(lib, "d3dcompiler.lib")

@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "DxBase.h"
 #include "ParticleManager.h"
+#include "CharParameters.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -145,14 +146,10 @@ void GamePlayScene::Initialize()
 	//const int OBJECT_NUM = 2;
 
 	//Object3d object3ds[OBJECT_NUM];
-
+	CharParameters* charParameters = CharParameters::GetInstance();
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
-	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
-	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
-	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
-	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/OpenPause.png");
 	SpriteBase::GetInstance()->LoadTexture(8, L"Resources/pause.png");
 	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/continuation.png");
@@ -165,10 +162,6 @@ void GamePlayScene::Initialize()
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_enemyhpbar.reset(Sprite::Create(3, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_openpause.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_pause.reset(Sprite::Create(8, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_continuation.reset(Sprite::Create(9, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -183,16 +176,13 @@ void GamePlayScene::Initialize()
 
 	//sprite_back.push_back(sprite_back);
 
+	charParameters->Initialize();
+
 	//window縦横取得したいとき使う
 	WinApp* winApp = WinApp::GetInstance();
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	//sp_guide->SetPosition({ 0,0,0 });
-	sp_enemyhpbar->SetPosition({ 140,-80,0 });
-	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ -70,500,0 });
-	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
-	sp_openpause->SetPosition({ 1050,600,0 });
 	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
 	sp_sight->SetPosition({ 0,0,0 });
 
@@ -200,19 +190,17 @@ void GamePlayScene::Initialize()
 	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//上
 	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//真ん中
 	sp_gotitle->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 150 ,0 });//下
-
+	sp_openpause->SetPosition({ 1050,600,0 });
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
-	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
 	sp_openpause->SetSize({ 210.f,130.f });
 	sp_continuation->SetSize({ 300.f,100.f });
 	sp_gotitle->SetSize({ 300.f,100.f });
 	sp_operation->SetSize({ 300.f,100.f });
 
-	sp_playerhpbarwaku->TransferVertexBuffer();
 	sp_openpause->TransferVertexBuffer();
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
@@ -257,6 +245,10 @@ void GamePlayScene::Initialize()
 	//時間リセット。タイトルに戻る度。
 	Timer* timer = Timer::GetInstance();
 	timer->TimerPlay(false);
+
+	//パラメータ関連を初期化する
+	charParameters->SetNowBoHp({ charParameters->GetboMaxHp()});//ボス体力
+	charParameters->SetNowpHp({ charParameters->GetpMaxHp()});//自機体力
 }
 
 void GamePlayScene::Finalize()
@@ -533,6 +525,12 @@ void GamePlayScene::PadStickCamera()
 
 void GamePlayScene::CollisionAll()
 {
+	CharParameters* charParameters = CharParameters::GetInstance();
+
+	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
+	float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
+	float NowpHp = charParameters->GetNowpHp();//自機体力取得
+
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum&& BeforeBossAppearFlag == true) {
@@ -559,14 +557,15 @@ void GamePlayScene::CollisionAll()
 						pb->SetAlive(false);
 
 						//bo->SetColor({ 1,0,0,1 });
-						if ((NowBossHP - (pBulPower - BossDefense))>0) {
+						if ((NowBoHp - (pBulPower - BossDefense))>0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
-						NowBossHP -= (pBulPower- BossDefense);
+						NowBoHp -= (pBulPower- BossDefense);
+						charParameters->SetNowBoHp(NowBoHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 
-						if (NowBossHP <= 0) {
+						if (NowBoHp <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
 							bo->SetAlive(false);
 						}
@@ -649,11 +648,12 @@ void GamePlayScene::CollisionAll()
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 
 						pDamFlag = true;
-						NowPlayerHP -= eBulPower;//自機ダメージ
+						NowpHp -= eBulPower;//自機ダメージ
+						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						bob->SetAlive(false);
-						if (NowPlayerHP <= 0) {//HP0で死亡
+						if (NowpHp <= 0) {//HP0で死亡
 							PlayerDeath();
 						}
 						break;
@@ -682,11 +682,12 @@ void GamePlayScene::CollisionAll()
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
 						pDamFlag = true;
-						NowPlayerHP -= seBulPower;//自機ダメージ
+						NowpHp -= seBulPower;//自機ダメージ
+						charParameters->SetNowpHp(NowpHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						seb->SetAlive(false);
-						if (NowPlayerHP <= 0) {//HP0で死亡
+						if (NowpHp <= 0) {//HP0で死亡
 							PlayerDeath();
 						}
 						break;
@@ -861,6 +862,7 @@ void GamePlayScene::Pause()
 
 void GamePlayScene::Update()
 {
+
 	Input* input = Input::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
@@ -881,6 +883,11 @@ void GamePlayScene::Update()
 
 		Input* input = Input::GetInstance();
 		DxBase* dxBase = DxBase::GetInstance();
+
+		CharParameters* charParameters = CharParameters::GetInstance();
+		float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
+		float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
+		float NowpHp = charParameters->GetNowpHp();//自機体力取得
 
 		//キー操作押している間
 		// 座標操作
@@ -904,13 +911,15 @@ void GamePlayScene::Update()
 		const bool TriggerR = input->TriggerKey(DIK_R);
 		const bool Trigger2 = input->TriggerKey(DIK_2);
 
+		float pMaxHp = charParameters->GetpMaxHp();
+		float boMaxHp = charParameters->GetboMaxHp();
 		if (TriggerR) {//デバック用　適当に　いつかは消す
 			camera->SetTarget({  });
 			camera->SetEye({  });
 			player_->SetAlive(true);
-			NowPlayerHP = PlayerMaxHP;
+			NowpHp = pMaxHp;
 			boss_.front()->SetAlive(true);
-			NowBossHP = BossMaxHP;
+			NowBoHp = boMaxHp;
 			sEnemyMurdersNum = 0;
 			BossEnemyAdvent = false;
 
@@ -947,44 +956,13 @@ void GamePlayScene::Update()
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
-			//サイズ変更
-			sp_enemyhpbar->size_.x = NowBossHP;
-			sp_enemyhpbar->TransferVertexBuffer();
+			charParameters->boHpSizeChange();
 		}
 
 		//自機のHPバー
-		sp_playerhpbar->size_.x = NowPlayerHP;
-		sp_playerhpbar->TransferVertexBuffer();
+		charParameters->pHpSizeChange();
 
-		//サイズ変更によるズレ--いつか消すから仮
-		{
-			XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
-			if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
-				pHpBar.x += 30;
-				BarPosControlOnlyOnceFlag3 = true;
-			}
-			if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
-				pHpBar.x += 20;
-				BarPosControlOnlyOnceFlag1 = true;
-			}
-			if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
-				pHpBar.x += 20;
-				BarPosControlOnlyOnceFlag4 = true;
-			}
-			if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
-				pHpBar.x += 10;
-				BarPosControlOnlyOnceFlag5 = true;
-			}
-			if (NowPlayerHP <= 300 && BarPosControlOnlyOnceFlag6 == false) {
-				pHpBar.x += 10;
-				BarPosControlOnlyOnceFlag6 = true;
-			}
-			if (NowPlayerHP <= 200 && BarPosControlOnlyOnceFlag7 == false) {
-				pHpBar.x += 10;
-				BarPosControlOnlyOnceFlag7 = true;
-			}
-			sp_playerhpbar->SetPosition(pHpBar);
-		}
+		charParameters->BarGetDislodged();
 
 		//天球回転
 		XMFLOAT3 rotation = obj_worlddome->GetRotation();
@@ -1121,8 +1099,7 @@ void GamePlayScene::Update()
 		//スプライト更新
 		sprite_back->Update();
 		//sp_guide->Update();
-		sp_playerhpbar->Update();
-		sp_playerhpbarwaku->Update();
+		charParameters->pHpUpdate();
 		sp_openpause->Update();
 		sp_pause->Update();
 		sp_continuation->Update();
@@ -1133,10 +1110,7 @@ void GamePlayScene::Update()
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
 		{
-			//更新
-			sp_enemyhpbar->Update();
-			sp_enemyhpbarwaku->Update();
-
+			charParameters->boHpUpdate();
 		}
 
 		player_->Update();
@@ -1150,6 +1124,7 @@ void GamePlayScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
 
+	CharParameters* charParameters = CharParameters::GetInstance();
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
@@ -1166,7 +1141,7 @@ void GamePlayScene::Draw()
 	}
 
 	//敵描画
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum&& BeforeBossAppearFlag == true) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum && BeforeBossAppearFlag == true) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
@@ -1210,8 +1185,7 @@ void GamePlayScene::Draw()
 	if (PauseFlag == false)
 	{
 		//sp_guide->Draw();
-		sp_playerhpbar->Draw();
-		sp_playerhpbarwaku->Draw();
+		charParameters->pHpDraw();
 		sp_openpause->Draw();
 		//sp_sight->Draw();
 	}
@@ -1222,7 +1196,7 @@ void GamePlayScene::Draw()
 		sp_operation->Draw();
 
 	}
-	else if (BossEnemyAdvent == true) { sp_enemyhpbar->Draw(); sp_enemyhpbarwaku->Draw(); }//ボス戦時のみ表示
+	else if (BossEnemyAdvent == true) { charParameters->boHpDraw(); }//ボス戦時のみ表示
 
 	if (OperWindOpenFlag == true) { sp_operation_wind->Draw(); }
 
@@ -1261,6 +1235,7 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
+	CharParameters* charParameters = CharParameters::GetInstance();
 	//条件なし常に表示
 	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
 	//DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
@@ -1315,4 +1290,6 @@ void GamePlayScene::DrawUI()
 	//		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
 	//	}
 	//}
+
+	charParameters->DrawUI();
 }

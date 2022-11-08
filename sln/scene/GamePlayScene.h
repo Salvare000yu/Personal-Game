@@ -106,10 +106,6 @@ private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	//std::unique_ptr < Sprite> sp_guide = nullptr;
-	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
-	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
-	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
-	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;
 	std::unique_ptr < Sprite> sp_continuation = nullptr;
@@ -154,25 +150,6 @@ private:
 	const float eBulPower = 200;
 	//G‹›“G’Êí’eˆĞ—Í
 	const float seBulPower = 100;
-
-	//“GHP
-	const float BossMaxHP = 1000;//‚Ä‚«‚³‚¢‚¾‚¢HP 
-	float NowBossHP = BossMaxHP;//Œ»İ‚Ì“GHP
-	//“G–hŒä—Í
-	const float BossDefenseDef = 10;
-	float BossDefense = BossDefenseDef;
-
-	//©‹@HP
-	const float PlayerMaxHP = 1000;//‚¶‚«‚³‚¢‚¾‚¢HP
-	float NowPlayerHP = PlayerMaxHP;//Œ»İ‚Ì©‹@HP
-	//ƒo[‚Ì‚¸‚ê]]‚¢‚Â‚©Á‚·
-	bool BarPosControlOnlyOnceFlag1 = false;
-	bool BarPosControlOnlyOnceFlag2 = false;
-	bool BarPosControlOnlyOnceFlag3 = false;
-	bool BarPosControlOnlyOnceFlag4 = false;
-	bool BarPosControlOnlyOnceFlag5 = false;
-	bool BarPosControlOnlyOnceFlag6 = false;
-	bool BarPosControlOnlyOnceFlag7 = false;
 
 	//“GŒ‚”j”
 	float sEnemyMurdersNum = 0;
