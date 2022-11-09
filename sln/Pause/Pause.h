@@ -2,6 +2,7 @@
 #include "BaseObject.h"
 #include "Object3d.h"
 #include "Sprite.h"
+#include "BaseScene.h"
 
 class Pause :public BaseScene, public BaseObject
 {
@@ -12,13 +13,30 @@ public:
 	//ポーズしているとき
 	void PauseNow();
 	//タイトルへ
+	void Update()override;
+	void Draw()override;
+	void DrawUI()override;
+	void Finalize()override;
 	void PauseGoTitle();
+	void SpUpdate();
+	void SpOpenPauseDraw();
+	void SpFlagTrueNowDraw();
+	void SpOperWindDraw();
 	//操作説明画面を開いている
 	void OperationWind();
 	//プレイ続行
 	void PauseConti();
 	//操作説明画面を開く
 	void PauseOper();
+
+	//-------------↓げったーせったー↓--------------//
+	//ポーズしてるかどうか
+	void SetPauseFlag(bool PauseFlag) { this->PauseFlag = PauseFlag; }
+	const bool& GetPauseFlag() { return PauseFlag; }
+	//操作説明画面開いているかどうか
+	void SetOpWindOpenFlag(bool OperWindOpenFlag) { this->OperWindOpenFlag = OperWindOpenFlag; }
+	const bool& GetOpWindOpenFlag() { return OperWindOpenFlag; }
+	//-------------↑げったーせったー↑--------------//
 
 private:
 	std::unique_ptr < Sprite> sp_openpause = nullptr;

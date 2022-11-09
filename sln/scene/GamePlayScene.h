@@ -51,13 +51,6 @@ public:
 
 	void CollisionAll();
 
-	void PauseConti();////ゲーム続行
-	void PauseOper();
-	void OperationWind();
-	//操作説明画面へ
-	void PauseGoTitle();//タイトルへ戻る
-	void Pause();//ポーズ
-
 	void Update() override;
 
 	void Draw() override;
@@ -107,12 +100,6 @@ private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
 	//std::unique_ptr < Sprite> sp_guide = nullptr;
-	std::unique_ptr < Sprite> sp_openpause = nullptr;
-	std::unique_ptr < Sprite> sp_pause = nullptr;
-	std::unique_ptr < Sprite> sp_continuation = nullptr;
-	std::unique_ptr < Sprite> sp_gotitle = nullptr;
-	std::unique_ptr < Sprite> sp_operation = nullptr;
-	std::unique_ptr < Sprite> sp_operation_wind = nullptr;
 	std::unique_ptr < Sprite> sp_sight = nullptr;
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 
@@ -165,18 +152,6 @@ private:
 	int BBPaternCount = 0;//1→0で++
 
 	bool AlertSoundFlag = true;//警告音繰り返しに一回のみ
-
-	//↓-----ポーズ関連-----↓//
-	bool PauseFlag = false;//ポーズしていない
-	const float PauseSelectSizeDef = 300.0f;
-	const float PauseSelectSize = 350.0f;
-	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
-	void  (GamePlayScene::* pFunc)();
-
-	int WaitKey0 = 0;//０だけでポーズ開閉できるように
-	int WaitKeyEnter = 0;//Enterで操作説明がめん..
-	bool OperWindOpenFlag = false;//開いていない
-	//↑-----ポーズ関連-----↑//
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 

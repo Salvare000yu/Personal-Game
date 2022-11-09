@@ -9,6 +9,7 @@
 #include "DxBase.h"
 #include "ParticleManager.h"
 #include "CharParameters.h"
+#include "Pause.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -148,6 +149,9 @@ void GamePlayScene::Initialize()
 
 	//Object3d object3ds[OBJECT_NUM];
 	CharParameters* charParameters = CharParameters::GetInstance();
+
+	Pause* pause = Pause::GetInstance();
+	pause->Initialize();
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
@@ -667,6 +671,7 @@ void GamePlayScene::CollisionAll()
 
 void GamePlayScene::Update()
 {
+	Pause* pause = Pause::GetInstance();
 
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
@@ -676,16 +681,17 @@ void GamePlayScene::Update()
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
 	if (cInput->PauseOpenClose()) {
-		PauseFlag = true;
+		pause->SetPauseFlag(true);
 	}
-	if (PauseFlag == true) {
-		Pause();
-		UpdateMouse();ポーズしてるときもマウス更新　元はPause関数内
+	if (pause->GetPauseFlag()==true) {
+		pause->PauseNow();
+		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
+
 	}
 
 	//ポーズでないとき～
 	//この外はポーズ中も実行
-	if (PauseFlag == false)
+	if (pause->GetPauseFlag() == false)
 	{
 
 		Input* input = Input::GetInstance();
@@ -864,11 +870,9 @@ void GamePlayScene::Update()
 		sprite_back->Update();
 		//sp_guide->Update();
 		charParameters->pHpUpdate();
-		sp_openpause->Update();
-		sp_pause->Update();
-		sp_continuation->Update();
-		sp_gotitle->Update();
-		sp_operation->Update();
+
+		pause->SpUpdate();
+
 		//sp_sight->Update();
 		sp_beforeboss->Update();
 		//敵のHPバー
@@ -884,6 +888,7 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
+	Pause* pause = Pause::GetInstance();
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
@@ -946,26 +951,23 @@ void GamePlayScene::Draw()
 	SpriteBase::GetInstance()->PreDraw();
 
 	//---------------お手前スプライト描画
-	if (PauseFlag == false)
+	if (pause->GetPauseFlag() == false)
 	{
 		//sp_guide->Draw();
 		charParameters->pHpDraw();
-		sp_openpause->Draw();
+		pause->SpOpenPauseDraw();
 		//sp_sight->Draw();
 	}
-	if (PauseFlag == true) {
-		sp_pause->Draw();
-		sp_continuation->Draw();
-		sp_gotitle->Draw();
-		sp_operation->Draw();
+	if (pause->GetPauseFlag() == true) {
+		pause->SpFlagTrueNowDraw();
 
 	}
 	else if (BossEnemyAdvent == true) { charParameters->boHpDraw(); }//ボス戦時のみ表示
 
-	if (OperWindOpenFlag == true) { sp_operation_wind->Draw(); }
+	if (pause->GetOpWindOpenFlag() == true) { pause->SpOperWindDraw(); }
 
 	//ボス戦前 ポーズ中は見せない
-	if (BeforeBossAppearNow == true && PauseFlag == false)
+	if (BeforeBossAppearNow == true && pause->GetPauseFlag() == false)
 	{
 		sp_beforeboss->Draw();
 	}
@@ -999,6 +1001,7 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
+	Pause* pause = Pause::GetInstance();
 	CharParameters* charParameters = CharParameters::GetInstance();
 	//条件なし常に表示
 	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
@@ -1024,7 +1027,7 @@ void GamePlayScene::DrawUI()
 	//時間計測
 	{
 		Timer* timer = Timer::GetInstance();
-		if (PauseFlag == false)
+		if (pause->GetPauseFlag() == false)
 		{
 			timer->TimerPlay();
 		}

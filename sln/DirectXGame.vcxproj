@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -159,6 +159,7 @@
     <ClCompile Include="GameChar\PlayerFireLine.cpp" />
     <ClCompile Include="CharParameters\CharParameters.cpp" />
     <ClCompile Include="Particle\ParticleManager.cpp" />
+    <ClCompile Include="Pause\Pause.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="GameChar\BossBullet.cpp" />
     <ClCompile Include="fbx\FbxObject3d.cpp" />
@@ -310,6 +311,7 @@
     <ClInclude Include="GameChar\PlayerFireLine.h" />
     <ClInclude Include="CharParameters\CharParameters.h" />
     <ClInclude Include="Particle\ParticleManager.h" />
+    <ClInclude Include="Pause\Pause.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="GameChar\BossBullet.h" />
     <ClInclude Include="fbx\FbxObject3d.h" />
