@@ -548,7 +548,7 @@ void GamePlayScene::CollisionAll()
 						
 						pb->SetAlive(false);
 
-						//bo->SetColor({ 1,0,0,1 });
+						bo->SetColor({ 1,0,0,1 });
 						if ((NowBoHp - (pBulPow - BossDefense))>0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
@@ -935,18 +935,6 @@ void GamePlayScene::Update()
 			sceneManager_->SetNextScene(scene);
 		}
 		//----------------↑シーン切り替え関連↑---------------//
-
-		//バックスプライト動
-		//SPmove SPbackmoveobj;
-		//for (int i = 0; i < 1; i++)
-		//{
-		//	XMFLOAT3 position = sprite_back->GetPosition();
-
-		//	position.x += 5;
-		//	if (position.x == 0) { position.x = -11400; }
-
-		//	sprite_back->SetPosition(position);
-		//}
 
 		//くらったらクールタイム
 		CoolTime();

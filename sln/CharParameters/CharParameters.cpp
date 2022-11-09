@@ -32,20 +32,26 @@ void CharParameters::Initialize()
 	sp_playerhpbar->SetPosition({ -70,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
 	//スプライトサイズ
-	sp_playerhpbarwaku->size_.x = PlayerMaxHP;
-	sp_playerhpbarwaku->TransferVertexBuffer();
-
+	//sp_playerhpbarwaku->size_.x = PlayerMaxHP;
+	//sp_playerhpbarwaku->TransferVertexBuffer();
+	BarPosControlOnlyOnceFlag1 = false;
+	BarPosControlOnlyOnceFlag2 = false;
+	BarPosControlOnlyOnceFlag3 = false;
+	BarPosControlOnlyOnceFlag4 = false;
+	BarPosControlOnlyOnceFlag5 = false;
+	BarPosControlOnlyOnceFlag6 = false;
+	BarPosControlOnlyOnceFlag7 = false;
 }
 
 void CharParameters::pHpSizeChange()
 {
-	sp_playerhpbar->size_.x = NowPlayerHP;
+	sp_playerhpbar->size_.x = sp_playerhpbar->texSize_.x * (float)NowPlayerHP / PlayerMaxHP;
 	sp_playerhpbar->TransferVertexBuffer();
 }
 void CharParameters::boHpSizeChange()
 {
 	//サイズ変更
-	sp_enemyhpbar->size_.x = NowBossHP;
+	sp_enemyhpbar->size_.x = sp_enemyhpbar->texSize_.x * (float)NowBossHP / BossMaxHP;
 	sp_enemyhpbar->TransferVertexBuffer();
 }
 
@@ -64,11 +70,11 @@ void CharParameters::BarGetDislodged()
 			BarPosControlOnlyOnceFlag3 = true;
 		}
 		if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
-			pHpBar.x += 20;
+			pHpBar.x += 10;
 			BarPosControlOnlyOnceFlag1 = true;
 		}
 		if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
-			pHpBar.x += 20;
+			pHpBar.x += 10;
 			BarPosControlOnlyOnceFlag4 = true;
 		}
 		if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
