@@ -90,17 +90,9 @@ void ClearScene::Update()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//const bool input1 = input->TriggerKey(DIK_1);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	
-	//パッド押した瞬間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-
-	float clearColor[] = { 0.1f,0.25f, 0.5f,0.0f }; // 青っぽい色
 
 	if ((cInput->DecisionByEnter()))     // エンターキーが押されていたら
 	{
-
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		//振動
 		input->PadVibration();
@@ -111,20 +103,7 @@ void ClearScene::Update()
 		sceneManager_->SetNextScene(scene);
 	}
 
-	// 座標操作
-	const bool inputUp = input->PushKey(DIK_UP);
-	const bool inputDown = input->PushKey(DIK_DOWN);
-	const bool inputRight = input->PushKey(DIK_RIGHT);
-	const bool inputLeft = input->PushKey(DIK_LEFT);
-
 	DrawUI();
-
-	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
-
-	////3dobj
-	//object3d_1->Update();
-	//object3d_2->Update();
-	//object3d_3->Update();
 
 	//スプライト更新
 	sprite->Update();
@@ -143,8 +122,6 @@ void ClearScene::Draw()
 
 	////3dオブジェ描画
 	//object3d_1->Draw();
-	//object3d_2->Draw();
-	//object3d_3->Draw();
 
 	////3dオブジェ描画後処理
 	//Object3d::PostDraw();

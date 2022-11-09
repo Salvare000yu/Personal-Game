@@ -58,14 +58,6 @@ void SelectScene::SelectOper()
 
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
-	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
-	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSOp0_1pos = sp_SSNow->GetPosition();
 
@@ -73,7 +65,7 @@ void SelectScene::SelectOper()
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false && WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (TriggerRight || PadTriggerRight) {//1を次は選択
+		if (cInput->tRightArrow()) {//1を次は選択
 			selectPattern_ = SelectPattern::operationTOstart;//[操作説明からスタートへ]に変更
 		}
 		//if (TriggerLeft || PadTriggerLeft) {
@@ -140,27 +132,19 @@ void SelectScene::SelectStart()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
-	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
-	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSStartPos = sp_SSNow->GetPosition();
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
-		if (TriggerRight || PadTriggerRight) {
+		if (cInput->tRightArrow()) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOtitle;//[スタートからタイトル]に変更
 			}
 		}
-		if (TriggerLeft || PadTriggerLeft) {
+		if (cInput->tLeftArrow()) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOoperation;//[スタートから操作説明へ]に変更
@@ -250,14 +234,6 @@ void SelectScene::SelectTitle()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
-	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
-	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SStitle2_1 = sp_SSNow->GetPosition();
 
@@ -267,7 +243,7 @@ void SelectScene::SelectTitle()
 		//if (TriggerRight || PadTriggerRight) {
 		//	NowSelect = 0;
 		//}
-		if (TriggerLeft || PadTriggerLeft) {
+		if (cInput->tLeftArrow()) {
 			selectPattern_ = SelectPattern::titleTOstart;//[タイトルからスタートへ]に変更
 		}
 	}

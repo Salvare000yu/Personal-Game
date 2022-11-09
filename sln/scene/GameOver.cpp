@@ -96,21 +96,13 @@ void GameOver::Retry()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
-	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
-	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSOp0_1pos = sp_Now->GetPosition();
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (TriggerRight || PadTriggerRight) {//1を次は選択
+		if (cInput->tRightArrow()) {//1を次は選択
 			selectPattern_ = SelectPattern::goTitle;//[リトライからタイトルへ]に変更
 		}
 	}
@@ -163,21 +155,13 @@ void GameOver::GoTitle()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
-	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
-	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSOp1_0pos = sp_Now->GetPosition();
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (TriggerLeft || PadTriggerLeft) {//1を次は選択
+		if (cInput->tLeftArrow()) {//1を次は選択
 			selectPattern_ = SelectPattern::retry;//[タイトルへからリトライ]に変更
 		}
 	}
@@ -230,10 +214,6 @@ void GameOver::GoTitle()
 void GameOver::Update()
 {
 	Input* input = Input::GetInstance();
-	//const bool input1 = input->TriggerKey(DIK_1);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押した瞬間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	input->PadVibrationDef();
 
 	//メンバ関数ポインタ対応した選択
@@ -242,34 +222,8 @@ void GameOver::Update()
 
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
-
-	//if (PadTriggerA|| TriggerEnter)     // 1が押されていたら
-	//{
-
-	//	GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-	//	//振動
-	//	input->PadVibration();
-	//	// 音声停止
-	//	GameSound::GetInstance()->SoundStop("D_rhythmaze_119.wav");
-	//	//シーン切り替え
-	//	BaseScene* scene = new TitleScene();
-	//	sceneManager_->SetNextScene(scene);
-	//}
-
-	// 座標操作
-	//const bool inputUp = input->PushKey(DIK_UP);
-	//const bool inputDown = input->PushKey(DIK_DOWN);
-	//const bool inputRight = input->PushKey(DIK_RIGHT);
-	//const bool inputLeft = input->PushKey(DIK_LEFT);
 	
 	DrawUI();
-
-	//DebugText::GetInstance()->Print("nihon kougakuin!", 200, 200, 2.0f);
-
-	////3dobj
-	//object3d_1->Update();
-	//object3d_2->Update();
-	//object3d_3->Update();
 
 	//スプライト更新
 	gameover->Update();
@@ -294,8 +248,6 @@ void GameOver::Draw()
 
 	////3dオブジェ描画
 	//object3d_1->Draw();
-	//object3d_2->Draw();
-	//object3d_3->Draw();
 
 	////3dオブジェ描画後処理
 	//Object3d::PostDraw();

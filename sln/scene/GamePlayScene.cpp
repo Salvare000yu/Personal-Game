@@ -344,20 +344,8 @@ void GamePlayScene::PlayerDeath()
 
 void GamePlayScene::PlayerMove()
 {
-	Input* input = Input::GetInstance();
+	//Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-
-	//const bool inputW = input->PushKey(DIK_W);
-	//const bool inputS = input->PushKey(DIK_S);
-	//const bool inputA = input->PushKey(DIK_A);
-	//const bool inputD = input->PushKey(DIK_D);
-	//const bool inputQ = input->PushKey(DIK_Q);
-	//const bool inputZ = input->PushKey(DIK_Z);
-	//パッド押している間
-	//const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
-	//const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
-	//const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
-	//const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	//----------↓移動制限
 	const float PlayerMoveLimX = 190;
@@ -707,27 +695,18 @@ void GamePlayScene::CollisionAll()
 
 void GamePlayScene::PauseConti()
 {
-	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//押した瞬間
-	const bool TriggerUp = input->TriggerKey(DIK_UP);
-	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
-	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
 	//選択中サイズでっかく
 	sp_continuation->SetSize({ PauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
-	if (TriggerDown || PadTriggerDown) {//1を次は選択
+	if (cInput->tDownArrow()) {//1を次は選択
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 1;
 	}
-	if (TriggerUp || PadTriggerUp) {//上で2
+	if (cInput->tUpArrow()) {//上で2
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 2;
@@ -743,15 +722,7 @@ void GamePlayScene::PauseConti()
 }
 void GamePlayScene::PauseOper()
 {
-	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	const bool TriggerUp = input->TriggerKey(DIK_UP);
-	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
-	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
 	//選択中サイズでっかく
 	sp_operation->SetSize({ PauseSelectSize,100.f });
@@ -760,12 +731,12 @@ void GamePlayScene::PauseOper()
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false)
 	{
-		if (TriggerDown || PadTriggerDown) {//下で2
+		if (cInput->tDownArrow()) {//下で2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 2;
 		}
-		if (TriggerUp || PadTriggerUp) {//上で0
+		if (cInput->tUpArrow()) {//上で0
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 0;
@@ -791,25 +762,19 @@ void GamePlayScene::OperationWind()
 }
 void GamePlayScene::PauseGoTitle()
 {
+
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	const bool TriggerUp = input->TriggerKey(DIK_UP);
-	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-	//パッド押している間
-	//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
-	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
 
 	//選択中サイズでっかく
 	sp_gotitle->SetSize({ PauseSelectSize,100.f });
 	sp_gotitle->TransferVertexBuffer();
-	if (TriggerDown || PadTriggerDown) {//下で0
+	if (cInput->tDownArrow()) {//下で0
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 0;
 	}
-	if (TriggerUp || PadTriggerUp) {//上で1
+	if (cInput->tUpArrow()) {//上で1
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 1;
@@ -832,12 +797,8 @@ void GamePlayScene::PauseGoTitle()
 void GamePlayScene::Pause()
 {
 
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	Input* input = Input::GetInstance();
-	const bool TriggerUp = input->TriggerKey(DIK_UP);
-	const bool TriggerDown = input->TriggerKey(DIK_DOWN);
-	const bool Trigger0 = input->TriggerKey(DIK_0);
-	//パッドトリガー
-	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 	input->PadVibrationDef();
 	// マウス情報の更新
 	UpdateMouse();
@@ -861,7 +822,7 @@ void GamePlayScene::Pause()
 	//閉じる
 	WaitKey0++;//同じボタンでとじれるように
 	//操作説明画面見てるときは押しても閉じない
-	if (((Trigger0 || PadTriggerStart) && WaitKey0 >= 2) && OperWindOpenFlag == false) {
+	if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
 		PauseFlag = false;
 		WaitKey0 = 0;
 	}
@@ -872,12 +833,13 @@ void GamePlayScene::Update()
 {
 
 	Input* input = Input::GetInstance();
+	ComplexInput* cInput = ComplexInput::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	if (Trigger0 || PadTriggerStart) {
+	if (cInput->PauseOpenClose()) {
 		PauseFlag = true;
 	}
 	if (PauseFlag == true) {
@@ -898,11 +860,6 @@ void GamePlayScene::Update()
 		float NowpHp = charParameters->GetNowpHp();//自機体力取得
 
 		//キー操作押している間
-		// 座標操作
-		const bool inputUp = input->PushKey(DIK_UP);
-		const bool inputDown = input->PushKey(DIK_DOWN);
-		const bool inputRight = input->PushKey(DIK_RIGHT);
-		const bool inputLeft = input->PushKey(DIK_LEFT);
 
 		const bool inputT = input->PushKey(DIK_T);
 		const bool inputE = input->PushKey(DIK_E);
@@ -934,32 +891,6 @@ void GamePlayScene::Update()
 			// カメラreセット
 			//Object3d::SetCamera(camera.get());
 		}
-		
-		////タゲ移動
-		//if (inputUp || inputDown || inputRight || inputLeft)
-		//{
-		//	constexpr float tagmove = 5;
-		//	if (inputUp) {
-		//		XMFLOAT3 position = sp_guide->GetPosition();
-		//		position.y -= tagmove;
-		//		sp_guide->SetPosition({ position });
-		//	}
-		//	if (inputDown) {
-		//		XMFLOAT3 position = sp_guide->GetPosition();
-		//		position.y += tagmove;
-		//		sp_guide->SetPosition({ position });
-		//	}
-		//	if (inputRight) {
-		//		XMFLOAT3 position = sp_guide->GetPosition();
-		//		position.x += tagmove;
-		//		sp_guide->SetPosition({ position });
-		//	}
-		//	if (inputLeft) {
-		//		XMFLOAT3 position = sp_guide->GetPosition();
-		//		position.x -= tagmove;
-		//		sp_guide->SetPosition({ position });
-		//	}
-		//}
 
 		//敵のHPバー
 		if (BossEnemyAdvent == true)
