@@ -151,24 +151,12 @@ void GamePlayScene::Initialize()
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
-	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/OpenPause.png");
-	SpriteBase::GetInstance()->LoadTexture(8, L"Resources/pause.png");
-	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/continuation.png");
-	SpriteBase::GetInstance()->LoadTexture(10, L"Resources/GoTitle.png");
-	SpriteBase::GetInstance()->LoadTexture(11, L"Resources/Operation.png");
-	SpriteBase::GetInstance()->LoadTexture(12, L"Resources/operation_wind.png");
 	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_openpause.reset(Sprite::Create(7, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_pause.reset(Sprite::Create(8, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_continuation.reset(Sprite::Create(9, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_gotitle.reset(Sprite::Create(10, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_operation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_operation_wind.reset(Sprite::Create(12, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
@@ -179,33 +167,17 @@ void GamePlayScene::Initialize()
 
 	charParameters->Initialize();
 
-	//window縦横取得したいとき使う
-	WinApp* winApp = WinApp::GetInstance();
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	//sp_guide->SetPosition({ 0,0,0 });
 	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
 	sp_sight->SetPosition({ 0,0,0 });
 
-	float gotitlePosY = winApp->window_width / 2;
-	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//上
-	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//真ん中
-	sp_gotitle->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 150 ,0 });//下
-	sp_openpause->SetPosition({ 1050,600,0 });
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
-	sp_openpause->SetSize({ 210.f,130.f });
-	sp_continuation->SetSize({ 300.f,100.f });
-	sp_gotitle->SetSize({ 300.f,100.f });
-	sp_operation->SetSize({ 300.f,100.f });
-
-	sp_openpause->TransferVertexBuffer();
-	sp_continuation->TransferVertexBuffer();
-	sp_gotitle->TransferVertexBuffer();
-	sp_operation->TransferVertexBuffer();
 
 	// パーティクル初期化
 	ParticleManager::GetInstance()->SetCamera(camera.get());
@@ -693,142 +665,6 @@ void GamePlayScene::CollisionAll()
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
-void GamePlayScene::PauseConti()
-{
-	ComplexInput* cInput = ComplexInput::GetInstance();
-
-	//選択中サイズでっかく
-	sp_continuation->SetSize({ PauseSelectSize,100.f });
-	sp_continuation->TransferVertexBuffer();
-
-	if (cInput->tDownArrow()) {//1を次は選択
-		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
-		sp_continuation->TransferVertexBuffer();
-		PauseNowSelect = 1;
-	}
-	if (cInput->tUpArrow()) {//上で2
-		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
-		sp_continuation->TransferVertexBuffer();
-		PauseNowSelect = 2;
-	}
-
-	//継続
-	if (cInput->DecisionByEnter())
-	{
-		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		PauseFlag = false;
-	}
-
-}
-void GamePlayScene::PauseOper()
-{
-	ComplexInput* cInput = ComplexInput::GetInstance();
-
-	//選択中サイズでっかく
-	sp_operation->SetSize({ PauseSelectSize,100.f });
-	sp_operation->TransferVertexBuffer();
-
-	//操作説明開いてないときのみ
-	if (OperWindOpenFlag == false)
-	{
-		if (cInput->tDownArrow()) {//下で2
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 2;
-		}
-		if (cInput->tUpArrow()) {//上で0
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
-			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 0;
-		}
-	}
-	//操作説明画面開く
-	if (cInput->DecisionByEnter())
-	{
-		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		OperWindOpenFlag = true;
-		OperationWind();
-
-		WaitKeyEnter++;
-		if ((cInput->DecisionByEnter()) && WaitKeyEnter >= 2) {
-			OperWindOpenFlag = false;
-			WaitKeyEnter = 0;
-		}
-	}
-}
-void GamePlayScene::OperationWind()
-{
-	sp_operation_wind->Update();
-}
-void GamePlayScene::PauseGoTitle()
-{
-
-	Input* input = Input::GetInstance();
-	ComplexInput* cInput = ComplexInput::GetInstance();
-
-	//選択中サイズでっかく
-	sp_gotitle->SetSize({ PauseSelectSize,100.f });
-	sp_gotitle->TransferVertexBuffer();
-	if (cInput->tDownArrow()) {//下で0
-		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
-		sp_gotitle->TransferVertexBuffer();
-		PauseNowSelect = 0;
-	}
-	if (cInput->tUpArrow()) {//上で1
-		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
-		sp_gotitle->TransferVertexBuffer();
-		PauseNowSelect = 1;
-	}
-
-	//タイトルへ戻る
-	if ((cInput->DecisionByEnter()))
-	{
-		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		input->PadVibration();//振動
-		// 音声停止
-		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
-		//シーン切り替え
-		BaseScene* scene = new TitleScene();
-		sceneManager_->SetNextScene(scene);
-	}
-
-}
-
-void GamePlayScene::Pause()
-{
-
-	ComplexInput* cInput = ComplexInput::GetInstance();
-	Input* input = Input::GetInstance();
-	input->PadVibrationDef();
-	// マウス情報の更新
-	UpdateMouse();
-
-	/*
-	////選択中表示　デバッグ用
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", PauseNowSelect);
-		DebugText::GetInstance()->Print(tmp, 430, 460, 5);
-	}*/
-
-	//メンバ関数ポインタ対応した選択
-	if (PauseNowSelect == 0) { pFunc = &GamePlayScene::PauseConti; }
-	if (PauseNowSelect == 1) { pFunc = &GamePlayScene::PauseOper; }
-	if (PauseNowSelect == 2) { pFunc = &GamePlayScene::PauseGoTitle; }
-
-	//メンバ関数ポインタ呼び出し
-	(this->*pFunc)();
-
-	//閉じる
-	WaitKey0++;//同じボタンでとじれるように
-	//操作説明画面見てるときは押しても閉じない
-	if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
-		PauseFlag = false;
-		WaitKey0 = 0;
-	}
-
-}
-
 void GamePlayScene::Update()
 {
 
@@ -844,6 +680,7 @@ void GamePlayScene::Update()
 	}
 	if (PauseFlag == true) {
 		Pause();
+		UpdateMouse();ポーズしてるときもマウス更新　元はPause関数内
 	}
 
 	//ポーズでないとき～
