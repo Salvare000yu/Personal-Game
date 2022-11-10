@@ -36,6 +36,9 @@ public:
 	//操作説明画面開いているかどうか
 	void SetOpWindOpenFlag(bool OperWindOpenFlag) { this->OperWindOpenFlag = OperWindOpenFlag; }
 	const bool& GetOpWindOpenFlag() { return OperWindOpenFlag; }
+	//タイトル戻るフラグ
+	void SetSceneChangeTitleFlag(bool SceneChangeTitleFlag) { this->SceneChangeTitleFlag = SceneChangeTitleFlag; }
+	const bool& GetSceneChangeTitleFlag() { return SceneChangeTitleFlag; }
 	//-------------↑げったーせったー↑--------------//
 
 private:
@@ -55,5 +58,7 @@ private:
 	int WaitKey0 = 0;//０だけでポーズ開閉できるように
 	int WaitKeyEnter = 0;//Enterで操作説明がめん..
 	bool OperWindOpenFlag = false;//開いていない
+
+	bool SceneChangeTitleFlag = false;//タイトルへ
 };
 

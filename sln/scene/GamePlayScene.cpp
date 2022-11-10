@@ -687,6 +687,16 @@ void GamePlayScene::Update()
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
+		if (pause->GetSceneChangeTitleFlag() == true) {
+			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+			input->PadVibration();//振動
+			// 音声停止
+			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
+			//シーン切り替え
+			BaseScene* scene = new TitleScene();
+			sceneManager_->SetNextScene(scene);
+		}
+
 	}
 
 	//ポーズでないとき～

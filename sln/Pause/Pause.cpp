@@ -22,9 +22,6 @@ void Pause::Initialize()
 	//windowc‰¡Žæ“¾‚µ‚½‚¢‚Æ‚«Žg‚¤
 	WinApp* winApp = WinApp::GetInstance();
 
-	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
-	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
-
 	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/OpenPause.png");
 	SpriteBase::GetInstance()->LoadTexture(8, L"Resources/pause.png");
 	SpriteBase::GetInstance()->LoadTexture(9, L"Resources/Operation.png");
@@ -56,6 +53,10 @@ void Pause::Initialize()
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
+
+	SceneChangeTitleFlag = false;
+	PauseFlag = false;
+	//PauseNowSelect = 0;
 }
 
 void Pause::PauseNow()
@@ -191,13 +192,7 @@ void Pause::PauseGoTitle()
 	//ƒ^ƒCƒgƒ‹‚Ö–ß‚é
 	if ((cInput->DecisionByEnter()))
 	{
-		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		input->PadVibration();//U“®
-		// ‰¹º’âŽ~
-		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
-		//ƒV[ƒ“Ø‚è‘Ö‚¦
-		BaseScene* scene = new TitleScene();
-		sceneManager_->SetNextScene(scene);
+		SceneChangeTitleFlag = true;
 	}
 }
 
