@@ -670,7 +670,11 @@ void GamePlayScene::CollisionAll()
 }
 
 void GamePlayScene::Update()
-{
+{/*
+	XMFLOAT4 pColor = player_->GetColor();
+	pColor = { 1,0,0,1 };
+	player_->SetColor(pColor);*/
+
 	Pause* pause = Pause::GetInstance();
 
 	Input* input = Input::GetInstance();
@@ -789,6 +793,8 @@ void GamePlayScene::Update()
 		}
 		//----------------↑シーン切り替え関連↑---------------//
 
+		//プレイヤー移動
+		PlayerMove();
 		//くらったらクールタイム
 		CoolTime();
 		CollisionAll();
@@ -809,9 +815,6 @@ void GamePlayScene::Update()
 			player_->SetRotation({});
 			pRotDef = true;
 		}
-
-		//プレイヤー移動
-		PlayerMove();
 
 		//// スプライン曲線で移動
 		//{

@@ -54,9 +54,10 @@ void Pause::Initialize()
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
 
+	//–ˆ‰ñƒŠƒZƒbƒg
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
-	//PauseNowSelect = 0;
+	PauseNowSelect = 0;
 }
 
 void Pause::PauseNow()
