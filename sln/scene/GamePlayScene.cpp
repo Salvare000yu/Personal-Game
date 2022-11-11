@@ -157,12 +157,16 @@ void GamePlayScene::Initialize()
 	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
 	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
+	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
+	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -669,6 +673,38 @@ void GamePlayScene::CollisionAll()
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
+bool GamePlayScene::GameReady()
+{
+	XMFLOAT4 ReadyCol = sp_ready->GetColor();
+	XMFLOAT4 GOCol = sp_ready_go->GetColor();
+	//プレイヤー側でレディー中はAttackしないようにする
+	bool pReadyFlag = player_->GetReadyNow();
+
+	if (ReadyCol.w > 0.0)
+	{
+		ReadyCol.w -= 0.005;
+		sp_ready->SetColor({ ReadyCol });
+		sp_ready->Update();
+	}
+
+	if (ReadyCol.w < 0.0) {
+		ready_GOFlag = true;
+		GOCol.w -= 0.01;
+		sp_ready_go->SetColor({ GOCol });
+		sp_ready_go->Update();
+	}
+
+	if (GOCol.w < 0.0) { 
+		//アタック開始してよき
+		pReadyFlag = false;
+		player_->SetReadyNow(pReadyFlag);
+
+		return false; 
+	}
+
+	return true;
+}
+
 void GamePlayScene::Update()
 {/*
 	XMFLOAT4 pColor = player_->GetColor();
@@ -684,7 +720,7 @@ void GamePlayScene::Update()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	if (cInput->PauseOpenClose()) {
+	if (cInput->PauseOpenClose()&& (GameReady() == false)) {
 		pause->SetPauseFlag(true);
 	}
 	if (pause->GetPauseFlag()==true) {
@@ -735,25 +771,6 @@ void GamePlayScene::Update()
 
 		float pMaxHp = charParameters->GetpMaxHp();
 		float boMaxHp = charParameters->GetboMaxHp();
-		if (TriggerR) {//デバック用　適当に　いつかは消す
-			camera->SetTarget({  });
-			camera->SetEye({  });
-			player_->SetAlive(true);
-			NowpHp = pMaxHp;
-			boss_.front()->SetAlive(true);
-			NowBoHp = boMaxHp;
-			sEnemyMurdersNum = 0;
-			BossEnemyAdvent = false;
-
-			// カメラreセット
-			//Object3d::SetCamera(camera.get());
-		}
-
-		//敵のHPバー
-		if (BossEnemyAdvent == true)
-		{
-			charParameters->boHpSizeChange();
-		}
 
 		//自機のHPバー
 		charParameters->pHpSizeChange();
@@ -765,39 +782,9 @@ void GamePlayScene::Update()
 		rotation.y += 0.3f;
 		obj_worlddome->SetRotation({ rotation });
 
-		if (BossEnemyAdvent == false)
-		{
-			//時が満ちたら
-			if (SEneAppCount == 0) {
-				//雑魚敵来る
-				SmallEnemyAppear();
-				//再びカウントできるように初期化
-				SEneAppCount = SEneAppInterval;
-			}
-		}
-		//雑魚敵カウントをデクリメント
-		SEneAppCount--;
-
-		//----------------↓シーン切り替え関連↓----------------//
-		//敵撃破でクリア
-		if (!boss_.front()->GetAlive()) {
-			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-			BaseScene* scene = new ClearScene();
-			sceneManager_->SetNextScene(scene);
-		}
-		//自機HP0でゲームオーバー
-		if (!player_->GetAlive()) {
-			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-			BaseScene* scene = new GameOver();
-			sceneManager_->SetNextScene(scene);
-		}
-		//----------------↑シーン切り替え関連↑---------------//
-
-		//プレイヤー移動
+		//プレイヤー移動-上に書くと移動かくつかない
 		PlayerMove();
-		//くらったらクールタイム
-		CoolTime();
-		CollisionAll();
+
 		DrawUI();
 		//パッド右スティックカメラ視点
 		PadStickCamera();
@@ -807,8 +794,6 @@ void GamePlayScene::Update()
 		// カメラの更新
 		camera->Update();
 		UpdateCamera();
-		// パーティクル更新
-		ParticleManager::GetInstance()->Update();
 
 		if (pRotDef == false) { //一度だけ
 			input->PadVibrationDef();
@@ -816,68 +801,12 @@ void GamePlayScene::Update()
 			pRotDef = true;
 		}
 
-		//// スプライン曲線で移動
-		//{
-		//	frame++;
-		//	float timeRate = (float)frame / 120.f;
-
-		//	if (timeRate >= 1.0f)
-		//	{
-		//		if (splineStartIndex < points.size() - 3) {
-		//			splineStartIndex++;
-		//			timeRate -= 1.0f;
-		//			frame = 0;
-		//		}
-		//		else
-		//		{
-		//			timeRate = 1.0f;
-		//		}
-		//	}
-
-		//	// ベクターをフロートに変換
-		//	XMFLOAT3 splineFloat;
-		//	XMStoreFloat3(&splineFloat, SplinePosition(points, splineStartIndex, timeRate));
-
-		//	player_->SetPosition(splineFloat);
-		//}
-
 		//3dobjUPDATE
 		object3d_1->Update();
 		obj_worlddome->Update();
 		//obj_sword->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
-		//雑魚敵更新
-		if (BossEnemyAdvent == false)
-		{
-			for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-				smallEnemy->Update();
-			}
-		}
-
-		//撃破数達成でボス戦
-		if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-			//残っている雑魚敵はもういらない
-			for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
-				se->SetAlive(false);//消す
-			}
-
-			if (BeforeBossAppearFlag == false)
-			{
-				BeforeBossAppear();
-			}
-			//ボス戦前の演出
-			if (BeforeBossAppearFlag == true)
-			{//演出終わったら
-				//ボス戦突入のお知らせです
-				BossEnemyAdvent = true;
-				for (std::unique_ptr<Boss>& boss : boss_) {
-					boss->Update();//敵更新
-				}
-			}
-		}
-		// FBX Update
-		//fbxObject_1->Update();
 
 		//スプライト更新
 		sprite_back->Update();
@@ -886,15 +815,133 @@ void GamePlayScene::Update()
 
 		pause->SpUpdate();
 
-		//sp_sight->Update();
-		sp_beforeboss->Update();
-		//敵のHPバー
-		if (BossEnemyAdvent == true)
-		{
-			charParameters->boHpUpdate();
-		}
-
 		player_->Update();
+
+		if (GameReady() == false)
+		{
+			PlayTimer();
+
+			if (TriggerR) {//デバック用　適当に　いつかは消す
+				camera->SetTarget({  });
+				camera->SetEye({  });
+				player_->SetAlive(true);
+				NowpHp = pMaxHp;
+				boss_.front()->SetAlive(true);
+				NowBoHp = boMaxHp;
+				sEnemyMurdersNum = 0;
+				BossEnemyAdvent = false;
+
+				// カメラreセット
+				//Object3d::SetCamera(camera.get());
+			}
+
+			//敵のHPバー
+			if (BossEnemyAdvent == true)
+			{
+				charParameters->boHpSizeChange();
+			}
+
+			if (BossEnemyAdvent == false)
+			{
+				//時が満ちたら
+				if (SEneAppCount == 0) {
+					//雑魚敵来る
+					SmallEnemyAppear();
+					//再びカウントできるように初期化
+					SEneAppCount = SEneAppInterval;
+				}
+			}
+			//雑魚敵カウントをデクリメント
+			SEneAppCount--;
+
+			//----------------↓シーン切り替え関連↓----------------//
+			//敵撃破でクリア
+			if (!boss_.front()->GetAlive()) {
+				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
+				BaseScene* scene = new ClearScene();
+				sceneManager_->SetNextScene(scene);
+			}
+			//自機HP0でゲームオーバー
+			if (!player_->GetAlive()) {
+				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
+				BaseScene* scene = new GameOver();
+				sceneManager_->SetNextScene(scene);
+			}
+			//----------------↑シーン切り替え関連↑---------------//
+
+			//くらったらクールタイム
+			CoolTime();
+			CollisionAll();
+	
+			// パーティクル更新
+			ParticleManager::GetInstance()->Update();
+
+			//// スプライン曲線で移動
+			//{
+			//	frame++;
+			//	float timeRate = (float)frame / 120.f;
+
+			//	if (timeRate >= 1.0f)
+			//	{
+			//		if (splineStartIndex < points.size() - 3) {
+			//			splineStartIndex++;
+			//			timeRate -= 1.0f;
+			//			frame = 0;
+			//		}
+			//		else
+			//		{
+			//			timeRate = 1.0f;
+			//		}
+			//	}
+
+			//	// ベクターをフロートに変換
+			//	XMFLOAT3 splineFloat;
+			//	XMStoreFloat3(&splineFloat, SplinePosition(points, splineStartIndex, timeRate));
+
+			//	player_->SetPosition(splineFloat);
+			//}
+
+			//雑魚敵更新
+			if (BossEnemyAdvent == false)
+			{
+				for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+					smallEnemy->Update();
+				}
+			}
+
+			//撃破数達成でボス戦
+			if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+				//残っている雑魚敵はもういらない
+				for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
+					se->SetAlive(false);//消す
+				}
+
+				if (BeforeBossAppearFlag == false)
+				{
+					BeforeBossAppear();
+				}
+				//ボス戦前の演出
+				if (BeforeBossAppearFlag == true)
+				{//演出終わったら
+					//ボス戦突入のお知らせです
+					BossEnemyAdvent = true;
+					for (std::unique_ptr<Boss>& boss : boss_) {
+						boss->Update();//敵更新
+					}
+				}
+			}
+			// FBX Update
+			//fbxObject_1->Update();
+
+			//sp_sight->Update();
+			sp_beforeboss->Update();
+			//敵のHPバー
+			if (BossEnemyAdvent == true)
+			{
+				charParameters->boHpUpdate();
+			}
+
+		}
 	}//ここまでポーズしてないとき
 
 }
@@ -985,6 +1032,13 @@ void GamePlayScene::Draw()
 		sp_beforeboss->Draw();
 	}
 
+	//開始前中のみ
+	if (GameReady() == true)
+	{
+		sp_ready->Draw();
+		if (ready_GOFlag == true) { sp_ready_go->Draw(); };
+	}
+
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
    // sprite->Draw();
@@ -1014,7 +1068,6 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
-	Pause* pause = Pause::GetInstance();
 	CharParameters* charParameters = CharParameters::GetInstance();
 	//条件なし常に表示
 	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
@@ -1036,18 +1089,6 @@ void GamePlayScene::DrawUI()
 	//	DebugText::GetInstance()->Print("Alive", 100, 270, 3);
 	//}
 	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
-
-	//時間計測
-	{
-		Timer* timer = Timer::GetInstance();
-		if (pause->GetPauseFlag() == false)
-		{
-			timer->TimerPlay();
-		}
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
-		DebugText::GetInstance()->Print(tmp, 150, 220, 3);
-	}
 
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
 		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
@@ -1072,4 +1113,20 @@ void GamePlayScene::DrawUI()
 	//}
 
 	charParameters->DrawUI();
+}
+
+void GamePlayScene::PlayTimer()
+{
+	Pause* pause = Pause::GetInstance();
+	//時間計測
+	{
+		Timer* timer = Timer::GetInstance();
+		if (pause->GetPauseFlag() == false)
+		{
+			timer->TimerPlay();
+		}
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
+		DebugText::GetInstance()->Print(tmp, 150, 220, 3);
+	}
 }

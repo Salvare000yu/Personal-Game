@@ -51,10 +51,14 @@ public:
 
 	void CollisionAll();
 
+	bool GameReady();
+
 	void Update() override;
 
 	void Draw() override;
 	void DrawUI() override;
+
+	void PlayTimer();
 
 	void SmallEnemyAppear();
 
@@ -102,6 +106,8 @@ private:
 	//std::unique_ptr < Sprite> sp_guide = nullptr;
 	std::unique_ptr < Sprite> sp_sight = nullptr;
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
+	std::unique_ptr < Sprite> sp_ready = nullptr;
+	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -126,6 +132,9 @@ private:
 
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
+
+	//GOをだすフラグ
+	bool ready_GOFlag = false;//false非表示
 
 	float frame = 0;
 

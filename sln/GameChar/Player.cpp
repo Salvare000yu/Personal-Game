@@ -22,31 +22,32 @@ void Player::Attack()
 	//íeî≠éÀ
 	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
 
-		XMFLOAT3 PlayerPos = obj->GetPosition();
-		//íeê∂ê¨
-		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
-		//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-		madeBullet->Initialize();
-		madeBullet->SetModel(pBulModel);
-		madeBullet->SetPosition(PlayerPos);
+		if (ReadyNowFlag == false) {
+			XMFLOAT3 PlayerPos = obj->GetPosition();
+			//íeê∂ê¨
+			std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+			//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+			madeBullet->Initialize();
+			madeBullet->SetModel(pBulModel);
+			madeBullet->SetPosition(PlayerPos);
 
-		// velocityÇéZèo íeî≠éÀë¨ìxz
-		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 15, 0);
-		XMFLOAT3 xmfloat3velocity;
-		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+			// velocityÇéZèo íeî≠éÀë¨ìxz
+			DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 15, 0);
+			XMFLOAT3 xmfloat3velocity;
+			XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
-		madeBullet->SetVelocity(xmfloat3velocity);
+			madeBullet->SetVelocity(xmfloat3velocity);
 
-		// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
-		GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
+			// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
+			GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
 
-		//íeìoò^
-		bullets_.push_back(std::move(madeBullet));
+			//íeìoò^
+			bullets_.push_back(std::move(madeBullet));
 
-		//input->PadVibrationDef();
+			//input->PadVibrationDef();
 
-		AttackIntervalFlag = true;
-
+			AttackIntervalFlag = true;
+		}
 	}
 	if (AttackIntervalFlag == true)
 	{

@@ -80,11 +80,17 @@ public:
 	//弾威力
 	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
 	const float& GetpBulPow() { return pBulPower; }
+	//プレイ中かどうか
+	void SetReadyNow(bool ReadyNowFlag) { this->ReadyNowFlag = ReadyNowFlag; }
+	const bool& GetReadyNow() { return ReadyNowFlag; }
 	//-------------------↑げったーせったー↑-------------------//
 
 private:
 	//自機通常弾威力
 	const float pBulPowerMax = 50;
 	float pBulPower = pBulPowerMax;
+
+	//playのReady中かどうか
+	bool ReadyNowFlag = true;//true：やってる
 };
 
