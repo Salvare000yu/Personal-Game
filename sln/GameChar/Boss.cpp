@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "GameSound.h"
 #include "DebugText.h"
+#include "ParticleManager.h"
 
 #include <DirectXMath.h>
 
@@ -205,6 +206,14 @@ void Boss::DiffusionAttackEavenNumber()
 	bullets_.push_back(std::move(madeBullet_R2));
 }
 
+void Boss::Death() {
+
+	XMFLOAT3 boPos = obj->GetPosition();
+	boPos.y += -1.0;
+	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
+	obj->SetPosition(boPos);
+}
+
 void Boss::Initialize()
 {
 
@@ -262,6 +271,11 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
 	if (actionPattern_ == ActionPattern::HpHalf) { pFunc = &Boss::HpHalf; }
+	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
+
+	if (isDeath == true) {
+		actionPattern_ = ActionPattern::Death;
+	}
 
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();

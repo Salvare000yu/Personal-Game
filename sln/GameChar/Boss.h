@@ -15,6 +15,7 @@ class Boss:public BaseObject
 		Approach,//‹ß‚Ã‚¢‚Ä‚­‚é
 		Leave,//—£‚ê‚é
 		HpHalf,//Hp”¼•ªˆÈ‰º‚É‚È‚Á‚½‚ç
+		Death,//€–S
 	};
 
 public:
@@ -37,6 +38,8 @@ public:
 	void DiffusionAttack();
 	//ŠgU‹ô”’e
 	void DiffusionAttackEavenNumber();
+
+	void Death();
 
 	//‹ß‚Ã‚­ˆ—‰Šú‰»
 	void ApproachInit();
@@ -76,6 +79,10 @@ public:
 	//ƒ{ƒX–hŒä—Í
 	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
 	const float& GetBossDefense() { return BossDefense; }
+
+	//ƒ{ƒX¶€
+	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
+	const float& GetisDeath() { return isDeath; }
 	//-----------------ª‚°‚Á‚½[‚¹‚Á‚½[ª------------------//
 
 private:
@@ -101,5 +108,8 @@ private:
 	//–hŒä—Í
 	const float BossDefenseDef = 10;
 	float BossDefense = BossDefenseDef;
+
+	//falseF‚Ü‚¾€‚ñ‚Å‚È‚¢
+	bool isDeath = false;
 
 };

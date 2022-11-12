@@ -315,6 +315,13 @@ void GamePlayScene::BeforeBossAppear()
 	//sprintf_s(tmp, 32, "%2.f", SP_BossWarning.w);
 	//DebugText::GetInstance()->Print(tmp, 430, 490, 3);
 }
+void GamePlayScene::BossDeathEfect()
+{
+	if (boss_.front()->GetPosition().y < object3d_1->GetPosition().y)
+	{
+		boss_.front()->SetAlive(false);
+	}
+}
 
 void GamePlayScene::PlayerDeath()
 {
@@ -528,7 +535,7 @@ void GamePlayScene::CollisionAll()
 						
 						pb->SetAlive(false);
 
-						bo->SetColor({ 1,0,0,1 });
+						//bo->SetColor({ 1,0,0,1 });
 						if ((NowBoHp - (pBulPow - BossDefense))>0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
@@ -539,7 +546,8 @@ void GamePlayScene::CollisionAll()
 
 						if (NowBoHp <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
-							bo->SetAlive(false);
+							bo->SetisDeath(true);
+							
 						}
 
 						break;
@@ -930,6 +938,12 @@ void GamePlayScene::Update()
 					}
 				}
 			}
+
+			if (boss_.front()->GetisDeath() == true)
+			{
+				BossDeathEfect();
+			}
+
 			// FBX Update
 			//fbxObject_1->Update();
 
