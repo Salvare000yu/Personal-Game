@@ -209,9 +209,12 @@ void Boss::DiffusionAttackEavenNumber()
 void Boss::Death() {
 
 	XMFLOAT3 boPos = obj->GetPosition();
-	boPos.y += -1.0;
+	XMFLOAT3 boRot = obj->GetRotation();
+	boRot.y += +1.0;//ƒxƒNƒgƒ‹‚É‚µ‚æ
+	boPos.y += -0.5;
 	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 	obj->SetPosition(boPos);
+	obj->SetRotation(boRot);
 }
 
 void Boss::Initialize()

@@ -935,13 +935,13 @@ void GamePlayScene::Update()
 					BossEnemyAdvent = true;
 					for (std::unique_ptr<Boss>& boss : boss_) {
 						boss->Update();//“GXV
+
+						if (boss->GetisDeath() == true)
+						{
+							BossDeathEfect();
+						}
 					}
 				}
-			}
-
-			if (boss_.front()->GetisDeath() == true)
-			{
-				BossDeathEfect();
 			}
 
 			// FBX Update
