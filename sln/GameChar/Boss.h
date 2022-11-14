@@ -112,4 +112,12 @@ private:
 	//false：まだ死んでない
 	bool isDeath = false;
 
+	XMFLOAT3 boPosDeath = {};
+	bool GetPosFlag = true;//一度きりの座標読み込み
+	const float NecesFrame = 180.0f;//かかる時間
+	float Nowframe = 0;//現在フレ
+	XMFLOAT3 MoveSp = {};//移動速度
+	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
+	XMFLOAT3 NowPos = {};//その時の位置
+
 };

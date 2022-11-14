@@ -208,13 +208,29 @@ void Boss::DiffusionAttackEavenNumber()
 
 void Boss::Death() {
 
-	XMFLOAT3 boPos = obj->GetPosition();
-	XMFLOAT3 boRot = obj->GetRotation();
-	boRot.y += +1.0;//ベクトルにしよ
-	boPos.y += -0.5;
+	Nowframe++;
+
+	if(GetPosFlag==true)
+	{
+		//最初の位置
+		boPosDeath = obj->GetPosition();
+		GetPosFlag = false;
+	}
+	//XMFLOAT3 boRot = obj->GetRotation();
+	//移動速度＝（指定座標-最初位置）/かかる時間
+	MoveSp.x = (TargetPos.x - boPosDeath.x) / NecesFrame;
+	MoveSp.y = (TargetPos.y - boPosDeath.y) / NecesFrame;
+	MoveSp.z = (TargetPos.z - boPosDeath.z) / NecesFrame;
+	//その時の位置＝最初位置＋移動速度＊経過時間
+	NowPos.x = boPosDeath.x + MoveSp.x * Nowframe;
+	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;
+	NowPos.z = boPosDeath.z + MoveSp.z * Nowframe;
+
+	//boRot.y += +1.0;
+	//boPos.y += -0.5;
 	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
-	obj->SetPosition(boPos);
-	obj->SetRotation(boRot);
+	obj->SetPosition(NowPos);//その時の位置
+	//obj->SetRotation(boRot);
 }
 
 void Boss::Initialize()
@@ -289,6 +305,12 @@ void Boss::Update()
 	}
 
 	obj->Update();
+
+	//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "BDeathFrame : %2.f", Nowframe);
+	//	DebugText::GetInstance()->Print(tmp, 150, 290, 3);
+	//}
 }
 
 void Boss::Draw()
