@@ -230,6 +230,10 @@ void GamePlayScene::Initialize()
 	//パラメータ関連を初期化する
 	charParameters->SetNowBoHp({ charParameters->GetboMaxHp()});//ボス体力
 	charParameters->SetNowpHp({ charParameters->GetpMaxHp()});//自機体力
+
+	//今あるパーティクルを削除する
+	ParticleManager::GetInstance()->DeleteParticles();
+
 }
 
 void GamePlayScene::Finalize()
@@ -373,7 +377,6 @@ void GamePlayScene::PlayerMove()
 				rotation.z += 1.f;
 			}
 
-			//OldInputFlag = TRUE;
 		}
 
 		if (cInput->RightMove()) {
@@ -384,18 +387,7 @@ void GamePlayScene::PlayerMove()
 				rotation.z -= 1.f;
 			}
 
-			//OldInputFlag = TRUE;
 		}
-		//if (inputQ) {
-
-		//	PlayerPos.y += moveSpeed;
-		//}
-
-		//if (inputZ) {
-
-
-		//	PlayerPos.y -= moveSpeed;
-		//}
 		player_->SetPosition(PlayerPos);
 		player_->SetRotation(rotation);
 	}
@@ -529,6 +521,8 @@ void GamePlayScene::CollisionAll()
 					enemyForm.center = XMLoadFloat3(&bo->GetPosition());
 					enemyForm.radius = bo->GetScale().x;
 
+					if (bo->GetisDeath())continue;
+
 					// 当たったら消える
 					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
 						XMFLOAT3 boPos = bo->GetPosition();
@@ -547,6 +541,10 @@ void GamePlayScene::CollisionAll()
 						if (NowBoHp <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
 							bo->SetisDeath(true);
+							//残っている雑魚敵はもういらない
+							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
+								bob->SetAlive(false);//消す
+							}
 							
 						}
 
@@ -685,6 +683,8 @@ bool GamePlayScene::GameReady()
 {
 	XMFLOAT4 ReadyCol = sp_ready->GetColor();
 	XMFLOAT4 GOCol = sp_ready_go->GetColor();
+	XMFLOAT2 GOSize = sp_ready_go->GetSize();
+	XMFLOAT3 GOPos = sp_ready_go->GetPosition();
 	//プレイヤー側でレディー中はAttackしないようにする
 	bool pReadyFlag = player_->GetReadyNow();
 
@@ -698,7 +698,14 @@ bool GamePlayScene::GameReady()
 	if (ReadyCol.w < 0.0) {
 		ready_GOFlag = true;
 		GOCol.w -= 0.01;
+		GOSize.x += 7;
+		GOSize.y += 7;
+		GOPos.x -= 3.2;
+		GOPos.y -= 3.2;
+		sp_ready_go->SetSize({ GOSize });
+		sp_ready_go->TransferVertexBuffer();
 		sp_ready_go->SetColor({ GOCol });
+		sp_ready_go->SetPosition({ GOPos });
 		sp_ready_go->Update();
 	}
 
@@ -950,7 +957,7 @@ void GamePlayScene::Update()
 			//sp_sight->Update();
 			sp_beforeboss->Update();
 			//敵のHPバー
-			if (BossEnemyAdvent == true)
+			if (BossEnemyAdvent == true&& NowBoHp > 0)
 			{
 				charParameters->boHpUpdate();
 			}
@@ -1009,6 +1016,8 @@ void GamePlayScene::Draw()
 	DxBase* dxBase = DxBase::GetInstance();
 	ParticleManager::GetInstance()->Draw(dxBase->GetCmdList());
 
+	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
+
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
 
@@ -1036,7 +1045,9 @@ void GamePlayScene::Draw()
 		pause->SpFlagTrueNowDraw();
 
 	}
-	else if (BossEnemyAdvent == true) { charParameters->boHpDraw(); }//ボス戦時のみ表示
+	else if (BossEnemyAdvent == true&& NowBoHp > 0) {
+		charParameters->boHpDraw(); 
+	}//ボス戦時のみ表示
 
 	if (pause->GetOpWindOpenFlag() == true) { pause->SpOperWindDraw(); }
 

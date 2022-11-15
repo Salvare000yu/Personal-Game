@@ -88,6 +88,9 @@ public: // ƒƒ“ƒoŠÖ”
 	/// </summary>
 	/// <returns></returns>
 	void Initialize(ID3D12Device* device);
+
+	void DeleteParticles();
+
 	/// <summary>
 	/// –ˆƒtƒŒ[ƒ€ˆ—
 	/// </summary>

@@ -209,6 +209,8 @@ void Boss::DiffusionAttackEavenNumber()
 void Boss::Death() {
 
 	Nowframe++;
+	ParticleFrame++;
+	PartTimeInterval = ParticleFrame / 40;
 
 	if(GetPosFlag==true)
 	{
@@ -216,6 +218,7 @@ void Boss::Death() {
 		boPosDeath = obj->GetPosition();
 		GetPosFlag = false;
 	}
+
 	//XMFLOAT3 boRot = obj->GetRotation();
 	//移動速度＝（指定座標-最初位置）/かかる時間
 	MoveSp.x = (TargetPos.x - boPosDeath.x) / NecesFrame;
@@ -230,6 +233,15 @@ void Boss::Death() {
 	//boPos.y += -0.5;
 	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 	obj->SetPosition(NowPos);//その時の位置
+
+	//一定時間ごとにパーティクル
+	if (PartTimeInterval == 1) {
+		// 音声再生 鳴らしたいとき
+		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.3f);
+		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
+		PartTimeInterval = 0;
+		ParticleFrame = 0;
+	}
 	//obj->SetRotation(boRot);
 }
 
@@ -246,6 +258,7 @@ void Boss::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
+	GameSound::GetInstance()->LoadWave("destruction1.wav");
 
 	//近づくパターン初期化
 	ApproachInit();

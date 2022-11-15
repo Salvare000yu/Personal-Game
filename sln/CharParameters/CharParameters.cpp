@@ -122,14 +122,15 @@ void CharParameters::boHpDraw()
 
 void CharParameters::DrawUI()
 {
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", NowPlayerHP);
-		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	}
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", NowBossHP);
-		DebugText::GetInstance()->Print(tmp, 430, 460, 3);
-	}
+	////Ž©‹@‚Æ“G‚Ì‘Ì—Í
+	//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%2.f", NowPlayerHP);
+	//	DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+	//}
+	//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%2.f", NowBossHP);
+	//	DebugText::GetInstance()->Print(tmp, 430, 460, 3);
+	//}
 }

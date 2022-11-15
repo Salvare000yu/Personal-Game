@@ -74,6 +74,11 @@ void ParticleManager::Initialize(ID3D12Device* device)
 	}
 }
 
+void ParticleManager::DeleteParticles()
+{
+	particles.clear();
+}
+
 void ParticleManager::Update()
 {
 	HRESULT result;

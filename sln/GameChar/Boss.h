@@ -120,4 +120,7 @@ private:
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
 	XMFLOAT3 NowPos = {};//その時の位置
 
+	float PartTimeInterval;
+	float ParticleFrame = 39;//パーティクル出すフレ
+
 };
