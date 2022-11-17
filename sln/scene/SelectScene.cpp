@@ -57,7 +57,14 @@ void SelectScene::SelectOper()
 {
 
 	Input* input = Input::GetInstance();
-	ComplexInput* cInput = ComplexInput::GetInstance();
+	//押した瞬間
+	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
+	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド押している間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
+	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSOp0_1pos = sp_SSNow->GetPosition();
 
@@ -65,7 +72,7 @@ void SelectScene::SelectOper()
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false && WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (cInput->tRightArrow()) {//1を次は選択
+		if (TriggerRight || PadTriggerRight) {//1を次は選択
 			selectPattern_ = SelectPattern::operationTOstart;//[操作説明からスタートへ]に変更
 		}
 		//if (TriggerLeft || PadTriggerLeft) {
@@ -76,14 +83,14 @@ void SelectScene::SelectOper()
 	//操作説明画面
 	if (SSOp0_1Flag == false)
 	{
-		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
+		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			OperWindOpenFlag = true;
 			OperationWind();
 
 			WaitKeyEnter++;
-			if ((cInput->DecisionByEnter()) && WaitKeyEnter >= 2 && CursorMoveNowFlag == false) {
+			if ((TriggerEnter || PadTriggerA) && WaitKeyEnter >= 2 && CursorMoveNowFlag == false) {
 				OperWindOpenFlag = false;
 				WaitKeyEnter = 0;
 			}
@@ -92,7 +99,7 @@ void SelectScene::SelectOper()
 
 	{//次関数へ
 		//イーズ値入れて目標座標超える予定なら
-		if((SSOp0_1pos.x + (EaseVal - DecEaseVal))> (sp_SSstart->GetPosition().x - 50))
+		if ((SSOp0_1pos.x + (EaseVal - DecEaseVal)) > (sp_SSstart->GetPosition().x - 50))
 		{
 			CursorMoveNowFlag = false;//自由にしてよい
 			EaseVal = EaseValDef;//イーズ値初期化
@@ -131,20 +138,27 @@ void SelectScene::OperationWind()
 void SelectScene::SelectStart()
 {
 	Input* input = Input::GetInstance();
-	ComplexInput* cInput = ComplexInput::GetInstance();
+	//押した瞬間
+	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
+	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド押している間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
+	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SSStartPos = sp_SSNow->GetPosition();
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
-		if (cInput->tRightArrow()) {
+		if (TriggerRight || PadTriggerRight) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOtitle;//[スタートからタイトル]に変更
 			}
 		}
-		if (cInput->tLeftArrow()) {
+		if (TriggerLeft || PadTriggerLeft) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOoperation;//[スタートから操作説明へ]に変更
@@ -153,9 +167,9 @@ void SelectScene::SelectStart()
 	}
 
 	//プレイシーンへ
-	if (SSStart1_2Flag == false&& SSStart1_0Flag==false)
+	if (SSStart1_2Flag == false && SSStart1_0Flag == false)
 	{
-		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
+		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();
@@ -233,7 +247,14 @@ void SelectScene::SelectStart()
 void SelectScene::SelectTitle()
 {
 	Input* input = Input::GetInstance();
-	ComplexInput* cInput = ComplexInput::GetInstance();
+	//押した瞬間
+	const bool TriggerRight = input->TriggerKey(DIK_RIGHT);
+	const bool TriggerLeft = input->TriggerKey(DIK_LEFT);
+	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	//パッド押している間
+	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
+	const bool PadTriggerLeft = input->TriggerButton(static_cast<int>(Button::LEFT));
+	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
 
 	XMFLOAT3 SStitle2_1 = sp_SSNow->GetPosition();
 
@@ -243,15 +264,15 @@ void SelectScene::SelectTitle()
 		//if (TriggerRight || PadTriggerRight) {
 		//	NowSelect = 0;
 		//}
-		if (cInput->tLeftArrow()) {
+		if (TriggerLeft || PadTriggerLeft) {
 			selectPattern_ = SelectPattern::titleTOstart;//[タイトルからスタートへ]に変更
 		}
 	}
 
 	//タイトルシーンへ
-	if (SStitle2_1Flag==false)
+	if (SStitle2_1Flag == false)
 	{
-		if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
+		if (TriggerEnter || PadTriggerA && CursorMoveNowFlag == false)
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();
@@ -351,4 +372,17 @@ void SelectScene::DrawUI()
 	//char tmp[32]{};
 	//sprintf_s(tmp, 32, "%2.f", WaitKeyEase);
 	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+
+	// 	////イージング中入力待機時間的な
+	//char tmp[32]{};
+	//sprintf_s(tmp, 32, "%2.f", );
+	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+	//if (CursorMoveNowFlag == true) {
+	//	DebugText::GetInstance()->Print("true", 430, 430, 3);
+	//}
+	//else {
+
+	//	DebugText::GetInstance()->Print("false", 430, 430, 3);
+	//}
+
 }

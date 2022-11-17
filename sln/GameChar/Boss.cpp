@@ -237,7 +237,7 @@ void Boss::Death() {
 	//一定時間ごとにパーティクル
 	if (PartTimeInterval == 1) {
 		// 音声再生 鳴らしたいとき
-		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.3f);
+		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
 		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
 		PartTimeInterval = 0;
 		ParticleFrame = 0;
