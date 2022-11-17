@@ -17,7 +17,8 @@ bool ComplexInput::LeftMove()
 	if (inputA || PadInputLEFT) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
 
@@ -32,7 +33,8 @@ bool ComplexInput::RightMove()
 	if (inputD || PadInputRight) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
 
@@ -47,7 +49,8 @@ bool ComplexInput::UpMove()
 	if (inputW || PadInputUp) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
 
@@ -62,7 +65,8 @@ bool ComplexInput::DownMove()
 	if (inputS || PadInputDown) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
 
@@ -77,7 +81,8 @@ bool ComplexInput::tUpArrow()
 	if (TriggerUp || PadInputUp) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
 bool ComplexInput::tDownArrow()
@@ -91,7 +96,8 @@ bool ComplexInput::tDownArrow()
 	if (TriggerDown || PadInputDown) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 }
 bool ComplexInput::tRightArrow()
 {
@@ -104,7 +110,8 @@ bool ComplexInput::tRightArrow()
 	if (TriggerRight || PadInputRight) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 }
 bool ComplexInput::tLeftArrow()
 {
@@ -117,7 +124,8 @@ bool ComplexInput::tLeftArrow()
 	if (TriggerLeft || PadInputLeft) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 }
 
 bool ComplexInput::DecisionByEnter()
@@ -130,8 +138,9 @@ bool ComplexInput::DecisionByEnter()
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 	if (TriggerEnter || PadTriggerA) {
 		return true;
-	}
-	else { false; }
+	} 
+	
+	return false;
 }
 
 bool ComplexInput::PauseOpenClose()
@@ -145,6 +154,7 @@ bool ComplexInput::PauseOpenClose()
 	if (Trigger0 || PadTriggerStart) {
 		return true;
 	}
-	else { false; }
+
+	return false;
 
 }
