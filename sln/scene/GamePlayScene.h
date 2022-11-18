@@ -110,6 +110,7 @@ private:
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
+	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -166,5 +167,7 @@ private:
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
+	//黒画像を強くする値
+	const float colordec = 0.005;
 };
 

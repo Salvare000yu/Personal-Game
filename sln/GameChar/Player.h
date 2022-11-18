@@ -92,5 +92,6 @@ private:
 
 	//play‚ÌReady’†‚©‚Ç‚¤‚©
 	bool ReadyNowFlag = true;//trueF‚â‚Á‚Ä‚é
+
 };
 

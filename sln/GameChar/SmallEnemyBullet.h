@@ -55,4 +55,9 @@ public:
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
+private:
+
+	float tmp;
+	short angle;
+
 };

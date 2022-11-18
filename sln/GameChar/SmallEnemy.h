@@ -80,4 +80,5 @@ private:
 	//’Êí’eˆĞ—Í
 	const float seBulPowerMax = 100;
 	float seBulPower = seBulPowerMax;
+
 };

@@ -3,6 +3,7 @@
 #include "Object3d.h"
 #include "Input.h"
 #include "DebugText.h"
+#include "Player.h"
 
 #include <DirectXMath.h>
 
@@ -31,11 +32,11 @@ void SmallEnemyBullet::Initialize()
 void SmallEnemyBullet::Update()
 {
 
-	XMFLOAT3 position = obj->GetPosition();
-	position.x -= velocity.x;
-	position.y -= velocity.y;
-	position.z -= velocity.z;
-	obj->SetPosition(position);
+	XMFLOAT3 sePos = obj->GetPosition();
+	sePos.x -= velocity.x;
+	sePos.y -= velocity.y;
+	sePos.z -= velocity.z;
+	obj->SetPosition(sePos);
 
 	//if (TriggerR) {//ƒŠƒZƒbƒg
 	//	obj_playerbullet->SetPosition({ 0,40,-170 });

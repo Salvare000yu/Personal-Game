@@ -356,12 +356,13 @@ void SelectScene::DrawUI()
 	//char tmp[32]{};
 	//sprintf_s(tmp, 32, "%2.f", );
 	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	if (CursorMoveNowFlag == true) {
-		DebugText::GetInstance()->Print("true", 430, 430, 3);
-	}
-	else {
+	
+	//if (CursorMoveNowFlag == true) {
+	//	DebugText::GetInstance()->Print("true", 430, 430, 3);
+	//}
+	//else {
 
-		DebugText::GetInstance()->Print("false", 430, 430, 3);
-	}
+	//	DebugText::GetInstance()->Print("false", 430, 430, 3);
+	//}
 
 }

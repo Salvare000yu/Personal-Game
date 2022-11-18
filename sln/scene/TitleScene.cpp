@@ -195,6 +195,18 @@ void TitleScene::Update()
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
+	//------------------------デバッグ用！！！！！！
+	const bool InputSPACE = input->PushKey(DIK_SPACE);
+	const bool InputENTER = input->PushKey(DIK_RETURN);
+	if (InputSPACE && InputENTER) {
+		// 音声停止
+		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
+		//シーン切り替え
+		BaseScene* scene = new GamePlayScene();
+		sceneManager_->SetNextScene(scene);
+	}
+	//------------------------デバッグ用！！！！！！
+
 	//セレクトから振動少し続ける
 	if (--VibCount == 0) {
 		input->PadVibrationDef();

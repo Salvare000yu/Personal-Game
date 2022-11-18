@@ -159,6 +159,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
+	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/BlackWindow.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -167,6 +168,7 @@ void GamePlayScene::Initialize()
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -180,6 +182,9 @@ void GamePlayScene::Initialize()
 	//sp_guide->SetPosition({ 0,0,0 });
 	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
 	sp_sight->SetPosition({ 0,0,0 });
+
+	//スプライトカラー
+	sp_blackwindow->SetColor({ 1, 1, 1, 0 });
 
 	//---------スプライトサイズ---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
@@ -228,8 +233,8 @@ void GamePlayScene::Initialize()
 	timer->TimerPlay(false);
 
 	//パラメータ関連を初期化する
-	charParameters->SetNowBoHp({ charParameters->GetboMaxHp()});//ボス体力
-	charParameters->SetNowpHp({ charParameters->GetpMaxHp()});//自機体力
+	charParameters->SetNowBoHp({ charParameters->GetboMaxHp() });//ボス体力
+	charParameters->SetNowpHp({ charParameters->GetpMaxHp() });//自機体力
 
 	//今あるパーティクルを削除する
 	ParticleManager::GetInstance()->DeleteParticles();
@@ -272,8 +277,8 @@ void GamePlayScene::BeforeBossAppear()
 
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 	//SP_BossWarning.w -= 0.01;
-	
-	switch(beforeBossPattern_)
+
+	switch (beforeBossPattern_)
 	{
 	case BeforeBossPattern::def:
 		if (AlertSoundFlag == true) {
@@ -292,7 +297,7 @@ void GamePlayScene::BeforeBossAppear()
 			AlertSoundFlag = true;
 			BBPaternCount++;//繰り返す回数
 		}
-			break;
+		break;
 
 	case BeforeBossPattern::dec:
 		if (AlertSoundFlag == true) {
@@ -303,11 +308,11 @@ void GamePlayScene::BeforeBossAppear()
 		if (SP_BossWarning.w < 0.0) {
 			beforeBossPattern_ = BeforeBossPattern::inc;
 		}
-			break;
+		break;
 	}
 
 	//--繰り返す回数0~------消えてからボス戦へ
-	if (BBPaternCount==2&& beforeBossPattern_==BeforeBossPattern::inc)
+	if (BBPaternCount == 2 && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
 		BeforeBossAppearFlag = true;
 		BeforeBossAppearNow = true;
@@ -321,10 +326,16 @@ void GamePlayScene::BeforeBossAppear()
 }
 void GamePlayScene::BossDeathEfect()
 {
+	XMFLOAT4 color=sp_blackwindow->GetColor();
+	color.w += colordec;
+	sp_blackwindow->SetColor(color);
+
 	if (boss_.front()->GetPosition().y < object3d_1->GetPosition().y)
 	{
 		boss_.front()->SetAlive(false);
 	}
+
+	sp_blackwindow->Update();
 }
 
 void GamePlayScene::PlayerDeath()
@@ -504,7 +515,7 @@ void GamePlayScene::CollisionAll()
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum&& BeforeBossAppearFlag == true) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum && BeforeBossAppearFlag == true) {
 		{
 
 			Sphere pBulForm;//球
@@ -526,11 +537,11 @@ void GamePlayScene::CollisionAll()
 					// 当たったら消える
 					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
 						XMFLOAT3 boPos = bo->GetPosition();
-						
+
 						pb->SetAlive(false);
 
 						//bo->SetColor({ 1,0,0,1 });
-						if ((NowBoHp - (pBulPow - BossDefense))>0) {
+						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
 						NowBoHp -= (pBulPow - BossDefense);
@@ -545,7 +556,7 @@ void GamePlayScene::CollisionAll()
 							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
 								bob->SetAlive(false);//消す
 							}
-							
+
 						}
 
 						break;
@@ -709,12 +720,12 @@ bool GamePlayScene::GameReady()
 		sp_ready_go->Update();
 	}
 
-	if (GOCol.w < 0.0) { 
+	if (GOCol.w < 0.0) {
 		//アタック開始してよき
 		pReadyFlag = false;
 		player_->SetReadyNow(pReadyFlag);
 
-		return false; 
+		return false;
 	}
 
 	return true;
@@ -735,10 +746,10 @@ void GamePlayScene::Update()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	if (cInput->PauseOpenClose()&& (GameReady() == false)) {
+	if (cInput->PauseOpenClose() && (GameReady() == false)) {
 		pause->SetPauseFlag(true);
 	}
-	if (pause->GetPauseFlag()==true) {
+	if (pause->GetPauseFlag() == true) {
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
@@ -887,7 +898,7 @@ void GamePlayScene::Update()
 			//くらったらクールタイム
 			CoolTime();
 			CollisionAll();
-	
+
 			// パーティクル更新
 			ParticleManager::GetInstance()->Update();
 
@@ -957,7 +968,7 @@ void GamePlayScene::Update()
 			//sp_sight->Update();
 			sp_beforeboss->Update();
 			//敵のHPバー
-			if (BossEnemyAdvent == true&& NowBoHp > 0)
+			if (BossEnemyAdvent == true && NowBoHp > 0)
 			{
 				charParameters->boHpUpdate();
 			}
@@ -1045,8 +1056,8 @@ void GamePlayScene::Draw()
 		pause->SpFlagTrueNowDraw();
 
 	}
-	else if (BossEnemyAdvent == true&& NowBoHp > 0) {
-		charParameters->boHpDraw(); 
+	else if (BossEnemyAdvent == true && NowBoHp > 0) {
+		charParameters->boHpDraw();
 	}//ボス戦時のみ表示
 
 	if (pause->GetOpWindOpenFlag() == true) { pause->SpOperWindDraw(); }
@@ -1062,6 +1073,12 @@ void GamePlayScene::Draw()
 	{
 		sp_ready->Draw();
 		if (ready_GOFlag == true) { sp_ready_go->Draw(); };
+	}
+
+	for (auto& bo : boss_) {
+		if (bo->GetisDeath() == true) {
+			sp_blackwindow->Draw();
+		}
 	}
 
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
