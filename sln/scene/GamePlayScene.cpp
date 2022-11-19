@@ -160,6 +160,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
 	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/BlackWindow.png");
+	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/dame_ef.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -169,6 +170,7 @@ void GamePlayScene::Initialize()
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_dame_ef.reset(Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -407,6 +409,7 @@ void GamePlayScene::PlayerMove()
 void GamePlayScene::CoolTime()
 {
 	Input* input = Input::GetInstance();
+	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 
@@ -426,9 +429,26 @@ void GamePlayScene::CoolTime()
 				input->PadVibrationDef();
 				pDamFlag = false;
 			}//0なったらくらい状態解除
+
+			pDamCol.w -= 0.03;
+			
+			if (pDamCol.w > 0&& DamEfRedFlag==false) {
+				sp_dame_ef->Update();
+			}
+			else {
+				DamEfRedFlag = true;
+			}
 		}
-		else { pShakeTimer_ = pShakeTime; }
+		else { 
+			pShakeTimer_ = pShakeTime; 
+		}
 	}
+	else {
+		//ダメージ終わったら赤のダメージ画像色戻す
+		DamEfRedFlag = false;
+		pDamCol.w = 1;
+	}
+	sp_dame_ef->SetColor(pDamCol);
 	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
 	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
 
@@ -974,6 +994,7 @@ void GamePlayScene::Update()
 			}
 
 		}
+
 	}//ここまでポーズしてないとき
 
 }
@@ -1079,6 +1100,10 @@ void GamePlayScene::Draw()
 		if (bo->GetisDeath() == true) {
 			sp_blackwindow->Draw();
 		}
+	}
+
+	if (pDamFlag == true) {
+		sp_dame_ef->Draw();
 	}
 
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());

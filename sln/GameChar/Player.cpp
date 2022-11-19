@@ -117,6 +117,7 @@ void Player::Initialize()
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("shot.wav");
+
 }
 
 void Player::Update()

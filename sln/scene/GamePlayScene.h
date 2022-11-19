@@ -111,6 +111,7 @@ private:
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
+	std::unique_ptr < Sprite> sp_dame_ef = nullptr;
 
 	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
@@ -169,5 +170,8 @@ private:
 
 	//黒画像を強くする値
 	const float colordec = 0.005;
+
+	//ダメージ画面端赤く　false：やってない
+	bool DamEfRedFlag = false;
 };
 
