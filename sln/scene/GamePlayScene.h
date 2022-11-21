@@ -171,7 +171,11 @@ private:
 	//黒画像を強くする値
 	const float colordec = 0.005;
 
-	//ダメージ画面端赤く　false：やってない
+	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;
+
+	//自機移動中かどうか false:してない
+	bool isLMove = false;
+	bool isRMove = false;
 };
 

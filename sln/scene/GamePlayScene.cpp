@@ -378,9 +378,13 @@ void GamePlayScene::PlayerMove()
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
-		if (cInput->DownMove()) { PlayerPos.y -= moveSpeed; }
+		if (cInput->DownMove()) { 
+			PlayerPos.y -= moveSpeed; 
+		}
 
-		if (cInput->UpMove()) { PlayerPos.y += moveSpeed; }
+		if (cInput->UpMove()) { 
+			PlayerPos.y += moveSpeed;
+		}
 
 		if (cInput->LeftMove()) {
 
@@ -389,7 +393,7 @@ void GamePlayScene::PlayerMove()
 			if (rotation.z <= 10) {
 				rotation.z += 1.f;
 			}
-
+			isLMove = true;//左移動中
 		}
 
 		if (cInput->RightMove()) {
@@ -399,11 +403,24 @@ void GamePlayScene::PlayerMove()
 			if (rotation.z >= -10) {
 				rotation.z -= 1.f;
 			}
-
+			isRMove = true;//右移動中
 		}
-		player_->SetPosition(PlayerPos);
-		player_->SetRotation(rotation);
 	}
+	else 
+	{
+		isLMove = false; 
+		isRMove = false;
+	}
+
+	if (rotation.z>0&&isLMove==false) {
+		rotation.z -= 1.f;
+	}
+	if (rotation.z < 0 && isRMove == false) {
+		rotation.z += 1.f;
+	}
+
+	player_->SetPosition(PlayerPos);
+	player_->SetRotation(rotation);
 }
 
 void GamePlayScene::CoolTime()
@@ -430,12 +447,14 @@ void GamePlayScene::CoolTime()
 				pDamFlag = false;
 			}//0なったらくらい状態解除
 
+			//画像薄くしてく
 			pDamCol.w -= 0.03;
-			
+			//0より大きい間かつまだ一回もやってないとき
 			if (pDamCol.w > 0&& DamEfRedFlag==false) {
 				sp_dame_ef->Update();
 			}
 			else {
+				//繰り返さないように
 				DamEfRedFlag = true;
 			}
 		}
@@ -471,12 +490,12 @@ void GamePlayScene::UpdateMouse()
 void GamePlayScene::UpdateCamera()
 {
 	// カメラの距離
-	constexpr float camLen = 64.f;
+	//constexpr float camLen = 64.f;
 	// カメラの高さ
 	//constexpr float camHeight = camLen * 10.5f;
 
 	// 自機からカメラ注視点までの距離
-	constexpr float player2targetLen = camLen * 2.f;
+	//constexpr float player2targetLen = camLen * 2.f;
 
 	// 自機の視線ベクトル
 	{

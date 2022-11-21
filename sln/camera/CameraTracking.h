@@ -22,7 +22,7 @@ private:
 	XMFLOAT3 trackingTargetToCameraTarget = { 0.f,20.f,0.f };
 
 	// ƒJƒƒ‰‚Ì‹“_‚©‚ç’‹“_‚Ü‚Å‚Ì‹——£
-	float eyeToCameraTargetLength = 70;
+	float eyeToCameraTargetLength = 60;
 
 
 };
