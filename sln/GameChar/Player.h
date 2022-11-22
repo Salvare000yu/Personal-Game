@@ -53,6 +53,10 @@ public:
 	//攻撃
 	void Attack();
 
+	void Move();
+
+	void PlayerDeath();
+
 	void FiringLine();
 
 	std::unique_ptr<Camera> camera; //カメラ
@@ -83,14 +87,38 @@ public:
 	//プレイ中かどうか
 	void SetReadyNow(bool ReadyNowFlag) { this->ReadyNowFlag = ReadyNowFlag; }
 	const bool& GetReadyNow() { return ReadyNowFlag; }
+	//自機体力が0より少ないか多いか
+	void SetPHpLessThan0(bool isPHpLessThan0) { this->isPHpLessThan0 = isPHpLessThan0; }
+	const bool& GetPHpLessThan0() { return isPHpLessThan0; }
+	//自機安否確認
+	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
+	const bool& GetpDeath() { return PlayerDeathFlag; }
 	//-------------------↑げったーせったー↑-------------------//
 
 private:
 	//自機通常弾威力
-	const float pBulPowerMax = 50;
+	const float pBulPowerMax = 110;
 	float pBulPower = pBulPowerMax;
 
 	//playのReady中かどうか
 	bool ReadyNowFlag = true;//true：やってる
+	//自機体力が0より少ないとき false:　０より多い
+	bool isPHpLessThan0 = false;
+
+	const float pDeathRot = 0.2f;
+
+	XMFLOAT3 pPosDeath = {};
+	float Nowframe = 0;//現在フレ
+	const float NecesFrame = 180.0f;//かかる時間
+	XMFLOAT3 MoveSp = {};//移動速度
+	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
+	XMFLOAT3 NowPos = {};//その時の位置
+
+	float PartTimeInterval;
+	float ParticleFrame = 39;//パーティクル出すフレ
+
+	bool GetPosFlag = true;//一度きりの座標読み込み
+
+	bool PlayerDeathFlag = false;//自機死亡　false:ご存命
 };
 

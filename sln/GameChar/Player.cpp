@@ -2,6 +2,8 @@
 //#include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
+#include "CharParameters.h"
+#include "ParticleManager.h"
 
 #include <DirectXMath.h>
 
@@ -84,44 +86,9 @@ void Player::Attack()
 
 }
 
-void Player::FiringLine()
+void Player::Move()
 {
 
-	//いろいろ生成
-	firingline_.reset(new PlayerFireLine());
-	//いろいろキャラ初期化
-	firingline_ = std::make_unique<PlayerFireLine>();
-	firingline_->Initialize();
-	firingline_->SetModel(pFiringLine);
-
-	XMFLOAT3 PlayerPos = obj->GetPosition();
-	firingline_->SetPosition(PlayerPos);
-
-	XMFLOAT3 PlayerRot = obj->GetRotation();
-	firingline_->SetRotation(PlayerRot);
-
-	firingline_->SetScale({ 0.5f,0.5f,10.f });
-}
-
-void Player::Initialize()
-{
-	//定義とか仮おいておこう
-
-	//作る
-	obj.reset(Object3d::Create());
-	//-----↓任意↓-----//
-	//大きさ
-	obj->SetScale({ 3.0f, 3.0f, 3.0f });
-	//場所
-	obj->SetPosition({ 0,40,-170 });
-
-	// 音声読み込み
-	GameSound::GetInstance()->LoadWave("shot.wav");
-
-}
-
-void Player::Update()
-{
 	Input* input = Input::GetInstance();
 	const bool inputW = input->PushKey(DIK_W);
 	const bool inputS = input->PushKey(DIK_S);
@@ -146,11 +113,6 @@ void Player::Update()
 	const bool PadInputRIGHT = input->PushButton(static_cast<int>(Button::RIGHT));
 
 	const bool TriggerR = input->TriggerKey(DIK_R);
-
-	//消滅フラグ立ったらその弾は死して拝せよ
-	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
-		return !bullet->GetAlive();
-		});
 
 	XMFLOAT3 rotation = obj->GetRotation();
 	//XMFLOAT3 position = obj->GetPosition();
@@ -205,17 +167,120 @@ void Player::Update()
 		rotation.x++;
 		obj->SetRotation(rotation);
 	}
+}
 
-	//発射処理
-	if (alive) { Attack(); }
+void Player::PlayerDeath()
+{
+	Nowframe++;
+	ParticleFrame++;
+	PartTimeInterval = ParticleFrame / 40;
+
+	if (GetPosFlag == true)
+	{
+		//最初の位置
+		pPosDeath = obj->GetPosition();
+		GetPosFlag = false;
+	}
+
+	//移動速度＝（指定座標-最初位置）/かかる時間
+	MoveSp.x = (TargetPos.x - pPosDeath.x) / NecesFrame;
+	MoveSp.y = (TargetPos.y - pPosDeath.y) / NecesFrame;
+	MoveSp.z = (TargetPos.z - pPosDeath.z) / NecesFrame;
+	//その時の位置＝最初位置＋移動速度＊経過時間
+	NowPos.x = pPosDeath.x + MoveSp.x * Nowframe;
+	NowPos.y = pPosDeath.y + MoveSp.y * Nowframe;
+	NowPos.z = pPosDeath.z + MoveSp.z * Nowframe;
+
+	obj->SetPosition(NowPos);//その時の位置
+
+	//一定時間ごとにパーティクル
+	if (PartTimeInterval == 1) {
+		// 音声再生 鳴らしたいとき
+		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
+		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
+		PartTimeInterval = 0;
+		ParticleFrame = 0;
+	}
+
+	//回転
+	XMFLOAT3 pRot = obj->GetRotation();
+	pRot.z += pDeathRot;
+	obj->SetRotation(pRot);
+
+	if (obj->GetPosition().y < TargetPos.y)
+	{
+		//目標到達で死亡フラグオン
+		PlayerDeathFlag = true;
+	}
+}
+
+void Player::FiringLine()
+{
+
+	//いろいろ生成
+	firingline_.reset(new PlayerFireLine());
+	//いろいろキャラ初期化
+	firingline_ = std::make_unique<PlayerFireLine>();
+	firingline_->Initialize();
+	firingline_->SetModel(pFiringLine);
+
+	XMFLOAT3 PlayerPos = obj->GetPosition();
+	firingline_->SetPosition(PlayerPos);
+
+	XMFLOAT3 PlayerRot = obj->GetRotation();
+	firingline_->SetRotation(PlayerRot);
+
+	firingline_->SetScale({ 0.5f,0.5f,10.f });
+}
+
+void Player::Initialize()
+{
+	//定義とか仮おいておこう
+
+	//作る
+	obj.reset(Object3d::Create());
+	//-----↓任意↓-----//
+	//大きさ
+	obj->SetScale({ 3.0f, 3.0f, 3.0f });
+	//場所
+	obj->SetPosition({ 0,40,-170 });
+
+	// 音声読み込み
+	GameSound::GetInstance()->LoadWave("shot.wav");
+
+}
+
+void Player::Update()
+{
+	CharParameters* charParameters = CharParameters::GetInstance();
+	//自機体力が0を下回ったら
+	float pHp = charParameters->GetNowpHp();
+	if (pHp <= 0) {
+		isPHpLessThan0 = true;
+	}
+
+	//消滅フラグ立ったらその弾は死して拝せよ
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		return !bullet->GetAlive();
+		});
+
+	//発射処理 生きててHp0以上なら
+	if (alive&& isPHpLessThan0==false) { Attack(); }
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
 
-	FiringLine();
-
-	firingline_->Update();
+	//生きててHp０いじょうなら
+	if (alive && isPHpLessThan0 == false) {
+		FiringLine();
+		firingline_->Update();
+		Move();
+	}
+	else {
+		//0以下なったら
+		PlayerDeath();
+	}
 
 	obj->Update();
 
@@ -233,5 +298,7 @@ void Player::Draw()
 		obj->Draw();
 	}
 
-	firingline_->Draw();
+	if (alive && isPHpLessThan0 == false) {
+		firingline_->Draw();
+	}
 }

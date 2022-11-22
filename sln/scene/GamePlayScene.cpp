@@ -328,7 +328,7 @@ void GamePlayScene::BeforeBossAppear()
 }
 void GamePlayScene::BossDeathEfect()
 {
-	XMFLOAT4 color=sp_blackwindow->GetColor();
+	XMFLOAT4 color = sp_blackwindow->GetColor();
 	color.w += colordec;
 	sp_blackwindow->SetColor(color);
 
@@ -338,12 +338,13 @@ void GamePlayScene::BossDeathEfect()
 	}
 
 	sp_blackwindow->Update();
-}
 
-void GamePlayScene::PlayerDeath()
-{
-	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
-	player_->SetAlive(false);
+	//ボス撃破でクリア　Update内だと一瞬画面見えちゃうからここに
+	if (!boss_.front()->GetAlive()) {
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
+		BaseScene* scene = new ClearScene();
+		sceneManager_->SetNextScene(scene);
+	}
 }
 
 void GamePlayScene::PlayerMove()
@@ -378,11 +379,11 @@ void GamePlayScene::PlayerMove()
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 2.f;
 
-		if (cInput->DownMove()) { 
-			PlayerPos.y -= moveSpeed; 
+		if (cInput->DownMove()) {
+			PlayerPos.y -= moveSpeed;
 		}
 
-		if (cInput->UpMove()) { 
+		if (cInput->UpMove()) {
 			PlayerPos.y += moveSpeed;
 		}
 
@@ -406,13 +407,14 @@ void GamePlayScene::PlayerMove()
 			isRMove = true;//右移動中
 		}
 	}
-	else 
+	else
 	{
-		isLMove = false; 
+		isLMove = false;
 		isRMove = false;
 	}
 
-	if (rotation.z>0&&isLMove==false) {
+	//入力ないとき戻す
+	if (rotation.z > 0 && isLMove == false) {
 		rotation.z -= 1.f;
 	}
 	if (rotation.z < 0 && isRMove == false) {
@@ -423,43 +425,56 @@ void GamePlayScene::PlayerMove()
 	player_->SetRotation(rotation);
 }
 
+void GamePlayScene::Shake() {
+
+	Input* input = Input::GetInstance();
+
+	if (--pShakeTimer_ >= 0) {// 0まで減らす			
+		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+
+		input->PadVibration();
+
+		//pos揺らす
+		XMFLOAT3 pos = player_->GetPosition();
+		randShakeNow = 8 + 1;//a~b
+		pos.x = pos.x + rand() % randShakeNow - 4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+		pos.y = pos.y + rand() % randShakeNow - 4;
+		player_->SetPosition(pos);
+
+		if (pShakeTimer_ <= 0) {
+			input->PadVibrationDef();
+			pDamFlag = false;
+		}//0なったらくらい状態解除
+
+	}
+	else {
+		pShakeTimer_ = pShakeTime;
+	}
+
+	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
+	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
+
+}
 void GamePlayScene::CoolTime()
 {
-	Input* input = Input::GetInstance();
+	//Input* input = Input::GetInstance();
 	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 
-		if (--pShakeTimer_ >= 0) {// 0まで減らす			
-			//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+		Shake();//振動させる
 
-			input->PadVibration();
+		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
-			//pos揺らす
-			XMFLOAT3 pos = player_->GetPosition();
-			randShakeNow = 8 + 1;//a~b
-			pos.x = pos.x + rand() % randShakeNow - 4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
-			pos.y = pos.y + rand() % randShakeNow - 4;
-			player_->SetPosition(pos);
-
-			if (pShakeTimer_ <= 0) {
-				input->PadVibrationDef();
-				pDamFlag = false;
-			}//0なったらくらい状態解除
-
-			//画像薄くしてく
-			pDamCol.w -= 0.03;
-			//0より大きい間かつまだ一回もやってないとき
-			if (pDamCol.w > 0&& DamEfRedFlag==false) {
-				sp_dame_ef->Update();
-			}
-			else {
-				//繰り返さないように
-				DamEfRedFlag = true;
-			}
+		//画像薄くしてく
+		pDamCol.w -= 0.03;
+		//0より大きい間かつまだ一回もやってないとき
+		if (pDamCol.w > 0 && DamEfRedFlag == false) {
+			sp_dame_ef->Update();
 		}
-		else { 
-			pShakeTimer_ = pShakeTime; 
+		else {
+			//繰り返さないように
+			DamEfRedFlag = true;
 		}
 	}
 	else {
@@ -468,6 +483,7 @@ void GamePlayScene::CoolTime()
 		pDamCol.w = 1;
 	}
 	sp_dame_ef->SetColor(pDamCol);
+
 	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
 	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
 
@@ -681,9 +697,6 @@ void GamePlayScene::CollisionAll()
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						bob->SetAlive(false);
-						if (NowpHp <= 0) {//HP0で死亡
-							PlayerDeath();
-						}
 						break;
 					}
 
@@ -716,9 +729,6 @@ void GamePlayScene::CollisionAll()
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						seb->SetAlive(false);
-						if (NowpHp <= 0) {//HP0で死亡
-							PlayerDeath();
-						}
 						break;
 					}
 
@@ -847,8 +857,11 @@ void GamePlayScene::Update()
 		rotation.y += 0.3f;
 		obj_worlddome->SetRotation({ rotation });
 
-		//プレイヤー移動-上に書くと移動かくつかない
-		PlayerMove();
+		if (player_->GetPHpLessThan0() == false)
+		{
+			//プレイヤー移動-上に書くと移動かくつかない
+			PlayerMove();
+		}
 
 		DrawUI();
 		//パッド右スティックカメラ視点
@@ -919,13 +932,12 @@ void GamePlayScene::Update()
 			//雑魚敵カウントをデクリメント
 			SEneAppCount--;
 
-			//----------------↓シーン切り替え関連↓----------------//
-			//敵撃破でクリア
-			if (!boss_.front()->GetAlive()) {
-				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-				BaseScene* scene = new ClearScene();
-				sceneManager_->SetNextScene(scene);
+			//自機側で死亡確認したら消す
+			if (player_->GetpDeath() == true) {
+				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
+				player_->SetAlive(false);
 			}
+			//----------------↓シーン切り替え関連↓----------------//
 			//自機HP0でゲームオーバー
 			if (!player_->GetAlive()) {
 				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
@@ -1196,6 +1208,12 @@ void GamePlayScene::DrawUI()
 	//		sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
 	//		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
 	//	}
+	//}
+
+	//{//振動時間
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%d", pShakeTimer_);
+	//	DebugText::GetInstance()->Print(tmp, 430, 430, 3);
 	//}
 
 	charParameters->DrawUI();

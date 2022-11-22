@@ -66,9 +66,9 @@ public:
 
 	void BossDeathEfect();
 
-	void PlayerDeath();
-
 	void PlayerMove();
+
+	void Shake();
 
 	void CoolTime();
 
@@ -169,7 +169,7 @@ private:
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
 	//黒画像を強くする値
-	const float colordec = 0.005;
+	const float colordec = 0.006;
 
 	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;
