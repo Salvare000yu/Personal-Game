@@ -181,9 +181,9 @@ void Player::Shake() {
 
 		//pos—h‚ç‚·
 		XMFLOAT3 pos = obj->GetPosition();
-		randShakeNow = 4 + 1;//a~b
-		pos.x = pos.x + rand() % randShakeNow - 2;//a~b‚Ü‚Å‚ÌrandShakeNow‚ÌÅ‘å’l‚©‚ç”¼•ª‚ðˆø‚¢‚Ä•‰‚Ì”‚àŠÜ‚Þ‚æ‚¤‚É
-		pos.y = pos.y + rand() % randShakeNow - 2;
+		randShakeNow = 2 + 1;//a~b
+		pos.x = pos.x + rand() % randShakeNow - 1;//a~b‚Ü‚Å‚ÌrandShakeNow‚ÌÅ‘å’l‚©‚ç”¼•ª‚ðˆø‚¢‚Ä•‰‚Ì”‚àŠÜ‚Þ‚æ‚¤‚É
+		pos.y = pos.y + rand() % randShakeNow - 1;
 		obj->SetPosition(pos);
 
 		if (pShakeTimer_ <= 0) {
@@ -261,7 +261,7 @@ void Player::FiringLine()
 	firingline_->SetModel(pFiringLine);
 
 	XMFLOAT3 PlayerPos = obj->GetPosition();
-	firingline_->SetPosition(PlayerPos);
+	firingline_->SetPosition({ PlayerPos.x,PlayerPos.y,PlayerPos.z });
 
 	XMFLOAT3 PlayerRot = obj->GetRotation();
 	firingline_->SetRotation(PlayerRot);

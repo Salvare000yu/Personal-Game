@@ -765,8 +765,12 @@ void GamePlayScene::Update()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	if (cInput->PauseOpenClose() && (GameReady() == false)) {
-		pause->SetPauseFlag(true);
+	CharParameters* charParameters = CharParameters::GetInstance();
+
+	if (charParameters->GetNowpHp() > 0&& charParameters->GetNowBoHp()>0) {
+		if (cInput->PauseOpenClose() && (GameReady() == false)) {
+			pause->SetPauseFlag(true);
+		}
 	}
 	if (pause->GetPauseFlag() == true) {
 		pause->PauseNow();
