@@ -68,8 +68,6 @@ public:
 
 	void PlayerMove();
 
-	void Shake();
-
 	void CoolTime();
 
 	XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);

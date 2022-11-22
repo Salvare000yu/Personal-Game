@@ -78,6 +78,6 @@ private:
 	Model* seBulModel = nullptr;
 
 	//í èÌíeà–óÕ
-	const float seBulPowerMax = 100;
+	const float seBulPowerMax = 1100;
 	float seBulPower = seBulPowerMax;
 };

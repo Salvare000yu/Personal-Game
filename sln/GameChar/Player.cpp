@@ -169,6 +169,34 @@ void Player::Move()
 	}
 }
 
+void Player::Shake() {
+
+	CharParameters* charParameters = CharParameters::GetInstance();
+	Input* input = Input::GetInstance();
+
+	if (--pShakeTimer_ >= 0) {// 0まで減らす			
+		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
+
+		input->PadVibration();
+
+		//pos揺らす
+		XMFLOAT3 pos = obj->GetPosition();
+		randShakeNow = 4 + 1;//a~b
+		pos.x = pos.x + rand() % randShakeNow - 2;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+		pos.y = pos.y + rand() % randShakeNow - 2;
+		obj->SetPosition(pos);
+
+		if (pShakeTimer_ <= 0) {
+			input->PadVibrationDef();
+		}
+
+	}
+	else {
+		pShakeTimer_ = pShakeTime;
+		charParameters->SetispDam(false);
+	}
+
+}
 void Player::PlayerDeath()
 {
 	Nowframe++;
@@ -195,11 +223,19 @@ void Player::PlayerDeath()
 
 	//一定時間ごとにパーティクル
 	if (PartTimeInterval == 1) {
+		ExplosionFlag = true;
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
+		ParticleManager::GetInstance()->CreateParticle(NowPos, 50, 30, 10);
 		PartTimeInterval = 0;
 		ParticleFrame = 0;
+	}
+
+	if (ExplosionFlag == true) {
+		Shake();
+		if (pShakeTimer_ <= 0) {
+			ExplosionFlag = false;
+		}
 	}
 
 	//回転
@@ -280,6 +316,15 @@ void Player::Update()
 	else {
 		//0以下なったら
 		PlayerDeath();
+	}
+
+	//自機が喰らってる状態になったら
+	if (charParameters->GetispDam() == true) {
+		//HP0以下ならやらないように　死亡演出やってるもんね
+		if (charParameters->GetNowpHp() > 0)
+		{
+			Shake();
+		}
 	}
 
 	obj->Update();

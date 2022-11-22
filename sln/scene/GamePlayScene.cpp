@@ -425,44 +425,12 @@ void GamePlayScene::PlayerMove()
 	player_->SetRotation(rotation);
 }
 
-void GamePlayScene::Shake() {
-
-	Input* input = Input::GetInstance();
-
-	if (--pShakeTimer_ >= 0) {// 0まで減らす			
-		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
-
-		input->PadVibration();
-
-		//pos揺らす
-		XMFLOAT3 pos = player_->GetPosition();
-		randShakeNow = 8 + 1;//a~b
-		pos.x = pos.x + rand() % randShakeNow - 4;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
-		pos.y = pos.y + rand() % randShakeNow - 4;
-		player_->SetPosition(pos);
-
-		if (pShakeTimer_ <= 0) {
-			input->PadVibrationDef();
-			pDamFlag = false;
-		}//0なったらくらい状態解除
-
-	}
-	else {
-		pShakeTimer_ = pShakeTime;
-	}
-
-	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
-	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
-
-}
 void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
 	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
-
-		Shake();//振動させる
 
 		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
@@ -693,6 +661,7 @@ void GamePlayScene::CollisionAll()
 
 						pDamFlag = true;
 						NowpHp -= eBulPower;//自機ダメージ
+						charParameters->SetispDam(true);
 						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
@@ -725,6 +694,7 @@ void GamePlayScene::CollisionAll()
 						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
 						pDamFlag = true;
 						NowpHp -= seBulPow;//自機ダメージ
+						charParameters->SetispDam(true);//自機くらい
 						charParameters->SetNowpHp(NowpHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
@@ -1135,6 +1105,10 @@ void GamePlayScene::Draw()
 
 	if (pDamFlag == true) {
 		sp_dame_ef->Draw();
+	}
+	//向こうでダメージくらい状態解除したらこっちでも同様
+	if (charParameters->GetispDam() == false) {
+		pDamFlag = false;
 	}
 
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());

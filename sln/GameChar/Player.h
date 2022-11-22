@@ -55,6 +55,8 @@ public:
 
 	void Move();
 
+	void Shake();
+
 	void PlayerDeath();
 
 	void FiringLine();
@@ -79,6 +81,11 @@ public:
 	static const int32_t AtkInterval = 10;
 	//攻撃インターバルタイマー
 	int32_t AtkInterval_ = AtkInterval;
+
+	//揺れる時間
+	static const int32_t pShakeTime = 60 / 2;
+	//揺れたいまー
+	int32_t pShakeTimer_ = pShakeTime;
 
 	//-------------------↓げったーせったー↓-------------------//
 	//弾威力
@@ -105,7 +112,7 @@ private:
 	//自機体力が0より少ないとき false:　０より多い
 	bool isPHpLessThan0 = false;
 
-	const float pDeathRot = 0.2f;
+	const float pDeathRot = 0.4f;
 
 	XMFLOAT3 pPosDeath = {};
 	float Nowframe = 0;//現在フレ
@@ -120,5 +127,12 @@ private:
 	bool GetPosFlag = true;//一度きりの座標読み込み
 
 	bool PlayerDeathFlag = false;//自機死亡　false:ご存命
+
+	//揺れ
+	int randShakeDef = 0;
+	int randShakeNow = randShakeDef;
+
+	//自機死亡演出時　false:爆発してない
+	bool ExplosionFlag = false;
 };
 

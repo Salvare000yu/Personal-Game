@@ -26,6 +26,9 @@ public:
 	//プレイヤー現在HP
 	void SetNowpHp(float NowPlayerHP) { this->NowPlayerHP = NowPlayerHP; }
 	const float& GetNowpHp() { return NowPlayerHP; }
+	//プレイヤー喰らった
+	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
+	const bool& GetispDam() { return ispDam; }
 	//プレイヤーHPMax
 	const float& GetpMaxHp() { return PlayerMaxHP; }
 	//ボスHPMax
@@ -45,6 +48,10 @@ private:
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
+
+	//自機がダメージ喰らった false:喰らってない
+	bool ispDam = false;
+
 	//バーのずれ‐‐いつか消す
 	bool BarPosControlOnlyOnceFlag1 = false;
 	bool BarPosControlOnlyOnceFlag2 = false;
