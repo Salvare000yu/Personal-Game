@@ -103,6 +103,7 @@ void GameOver::Retry()
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
 		if (cInput->tRightArrow() || cInput->tRightMove()) {//1を次は選択
+			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			selectPattern_ = SelectPattern::goTitle;//[リトライからタイトルへ]に変更
 		}
 	}
@@ -134,7 +135,6 @@ void GameOver::Retry()
 		//0から1へ移動
 		if (SSOp0_1Flag == true)
 		{
-			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			SSOp0_1pos.x += EaseVal;
 			EaseVal -= DecEaseVal;
 			sp_Now->SetPosition({ SSOp0_1pos.x,sp_gotitle->GetPosition().y - 50,0 });
@@ -162,6 +162,7 @@ void GameOver::GoTitle()
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
 		if (cInput->tLeftArrow() || cInput->tLeftMove()) {//1を次は選択
+			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			selectPattern_ = SelectPattern::retry;//[タイトルへからリトライ]に変更
 		}
 	}
@@ -193,7 +194,6 @@ void GameOver::GoTitle()
 		//0から1へ移動
 		if (SSOp0_1Flag == true)
 		{
-			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			SSOp1_0pos.x -= EaseVal;
 			EaseVal -= DecEaseVal;
 			sp_Now->SetPosition({ SSOp1_0pos.x,sp_gotitle->GetPosition().y - 50,0 });

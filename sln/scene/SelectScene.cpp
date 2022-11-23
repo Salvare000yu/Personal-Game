@@ -63,9 +63,9 @@ void SelectScene::SelectOper()
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	//操作説明開いてないときのみ
-	if (OperWindOpenFlag == false && WaitKeyEase >= 2)//まってから入力受付
+	if ( WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (cInput->tRightArrow() || cInput->tRightMove()) {//1を次は選択
+		if ((cInput->tRightArrow() || cInput->tRightMove())&&OperWindOpenFlag == false) {//1を次は選択
 			selectPattern_ = SelectPattern::operationTOstart;//[操作説明からスタートへ]に変更
 		}
 		//if (TriggerLeft || PadTriggerLeft) {
@@ -138,15 +138,17 @@ void SelectScene::SelectStart()
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
-		if (cInput->tRightArrow() || cInput->tRightMove()) {
+		if ((cInput->tRightArrow() || cInput->tRightMove())) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
+				CursorMoveNowFlag = true;//動いてるから入力ダメよ
 				selectPattern_ = SelectPattern::startTOtitle;//[スタートからタイトル]に変更
 			}
 		}
-		if (cInput->tLeftArrow() || cInput->tLeftMove()) {
+		if ((cInput->tLeftArrow() || cInput->tLeftMove())) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
+				CursorMoveNowFlag = true;//動いてるから入力ダメよ
 				selectPattern_ = SelectPattern::startTOoperation;//[スタートから操作説明へ]に変更
 			}
 		}
@@ -197,7 +199,6 @@ void SelectScene::SelectStart()
 		//1から2へ移動
 		if (SSStart1_2Flag == true)
 		{
-			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			SSStartPos.x += EaseVal;
 			EaseVal -= DecEaseVal;
 			sp_SSNow->SetPosition({ SSStartPos.x,sp_SSstart->GetPosition().y - 50,0 });
@@ -207,7 +208,6 @@ void SelectScene::SelectStart()
 	//1から0へ移動
 		if (SSStart1_0Flag == true)
 		{
-			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			SSStartPos.x -= EaseVal;
 			EaseVal -= DecEaseVal;
 			sp_SSNow->SetPosition({ SSStartPos.x,sp_SSstart->GetPosition().y - 50,0 });
@@ -238,12 +238,12 @@ void SelectScene::SelectTitle()
 	XMFLOAT3 SStitle2_1 = sp_SSNow->GetPosition();
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
-	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
+	if (WaitKeyEase >= 2 )
 	{
 		//if (TriggerRight || PadTriggerRight) {
 		//	NowSelect = 0;
 		//}
-		if (cInput->tLeftArrow() || cInput->tLeftMove()) {
+		if ((cInput->tLeftArrow() || cInput->tLeftMove()) && CursorMoveNowFlag == false) {
 			selectPattern_ = SelectPattern::titleTOstart;//[タイトルからスタートへ]に変更
 		}
 	}
