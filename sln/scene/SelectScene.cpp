@@ -65,7 +65,7 @@ void SelectScene::SelectOper()
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false && WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (cInput->tRightArrow()) {//1を次は選択
+		if (cInput->tRightArrow() || cInput->tRightMove()) {//1を次は選択
 			selectPattern_ = SelectPattern::operationTOstart;//[操作説明からスタートへ]に変更
 		}
 		//if (TriggerLeft || PadTriggerLeft) {
@@ -138,13 +138,13 @@ void SelectScene::SelectStart()
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	if (WaitKeyEase >= 2 && CursorMoveNowFlag == false)
 	{
-		if (cInput->tRightArrow()) {
+		if (cInput->tRightArrow() || cInput->tRightMove()) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOtitle;//[スタートからタイトル]に変更
 			}
 		}
-		if (cInput->tLeftArrow()) {
+		if (cInput->tLeftArrow() || cInput->tLeftMove()) {
 			if (WaitKeyEase >= 2)//入力待ち
 			{
 				selectPattern_ = SelectPattern::startTOoperation;//[スタートから操作説明へ]に変更
@@ -243,7 +243,7 @@ void SelectScene::SelectTitle()
 		//if (TriggerRight || PadTriggerRight) {
 		//	NowSelect = 0;
 		//}
-		if (cInput->tLeftArrow()) {
+		if (cInput->tLeftArrow() || cInput->tLeftMove()) {
 			selectPattern_ = SelectPattern::titleTOstart;//[タイトルからスタートへ]に変更
 		}
 	}

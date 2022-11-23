@@ -69,6 +69,71 @@ bool ComplexInput::DownMove()
 	return false;
 
 }
+//trigger↓
+bool ComplexInput::tLeftMove()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool triggerA = input->TriggerKey(DIK_A);
+	//パッド
+	const bool PadTriggerLEFT = input->TriggerButton(static_cast<int>(Button::LEFT));
+	if (triggerA || PadTriggerLEFT) {
+		return true;
+	}
+
+	return false;
+
+}
+
+bool ComplexInput::tRightMove()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool triggerD = input->TriggerKey(DIK_D);
+	//パッド
+	const bool PadTriggerRight = input->TriggerButton(static_cast<int>(Button::RIGHT));
+	if (triggerD || PadTriggerRight) {
+		return true;
+	}
+
+	return false;
+
+}
+
+bool ComplexInput::tUpMove()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool triggerW = input->TriggerKey(DIK_W);
+	//パッド
+	const bool PadTriggerUp = input->TriggerButton(static_cast<int>(Button::UP));
+	if (triggerW || PadTriggerUp) {
+		return true;
+	}
+
+	return false;
+
+}
+
+bool ComplexInput::tDownMove()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool triggerS = input->TriggerKey(DIK_S);
+	//パッド
+	const bool PadTriggerDown = input->TriggerButton(static_cast<int>(Button::DOWN));
+	if (triggerS || PadTriggerDown) {
+		return true;
+	}
+
+	return false;
+
+}
+
 
 bool ComplexInput::tUpArrow()
 {

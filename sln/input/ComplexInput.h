@@ -11,6 +11,14 @@ public:
 	bool UpMove();
 	bool DownMove();
 
+	bool tLeftMove();
+
+	bool tRightMove();
+
+	bool tUpMove();
+
+	bool tDownMove();
+
 	//ƒgƒŠƒK[–îˆóŒn
 	bool tUpArrow();
 	bool tDownArrow();

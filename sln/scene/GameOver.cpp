@@ -102,7 +102,7 @@ void GameOver::Retry()
 
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (cInput->tRightArrow()) {//1を次は選択
+		if (cInput->tRightArrow() || cInput->tRightMove()) {//1を次は選択
 			selectPattern_ = SelectPattern::goTitle;//[リトライからタイトルへ]に変更
 		}
 	}
@@ -161,7 +161,7 @@ void GameOver::GoTitle()
 
 	if (WaitKeyEase >= 2)//まってから入力受付
 	{
-		if (cInput->tLeftArrow()) {//1を次は選択
+		if (cInput->tLeftArrow() || cInput->tLeftMove()) {//1を次は選択
 			selectPattern_ = SelectPattern::retry;//[タイトルへからリトライ]に変更
 		}
 	}

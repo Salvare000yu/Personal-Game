@@ -112,12 +112,12 @@ void Pause::PauseConti()
 	sp_continuation->SetSize({ PauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
-	if (cInput->tDownArrow()) {//1を次は選択
+	if (cInput->tDownArrow()||cInput->tDownMove()) {//1を次は選択
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 1;
 	}
-	if (cInput->tUpArrow()) {//上で2
+	if (cInput->tUpArrow() || cInput->tUpMove()) {//上で2
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 2;
@@ -141,12 +141,12 @@ void Pause::PauseOper()
 	//操作説明開いてないときのみ
 	if (OperWindOpenFlag == false)
 	{
-		if (cInput->tDownArrow()) {//下で2
+		if (cInput->tDownArrow() || cInput->tDownMove()) {//下で2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 2;
 		}
-		if (cInput->tUpArrow()) {//上で0
+		if (cInput->tUpArrow() || cInput->tUpMove()) {//上で0
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 0;
@@ -179,12 +179,12 @@ void Pause::PauseGoTitle()
 	//選択中サイズでっかく
 	sp_gotitle->SetSize({ PauseSelectSize,100.f });
 	sp_gotitle->TransferVertexBuffer();
-	if (cInput->tDownArrow()) {//下で0
+	if (cInput->tDownArrow() || cInput->tDownMove()) {//下で0
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 0;
 	}
-	if (cInput->tUpArrow()) {//上で1
+	if (cInput->tUpArrow() || cInput->tUpMove()) {//上で1
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 1;

@@ -145,7 +145,6 @@ void TitleScene::SceneChange()
 		input->PadVibrationDef();
 	}
 	if (NamePos.x < -1280) {
-		Input* input = Input::GetInstance();
 		// ‰¹º’â~
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//ƒV[ƒ“Ø‚è‘Ö‚¦

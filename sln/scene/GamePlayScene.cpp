@@ -922,7 +922,11 @@ void GamePlayScene::Update()
 
 			//くらったらクールタイム
 			CoolTime();
-			CollisionAll();
+
+			if (player_->GetPHpLessThan0() == false)
+			{
+				CollisionAll();
+			}
 
 			// パーティクル更新
 			ParticleManager::GetInstance()->Update();
