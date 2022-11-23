@@ -63,9 +63,10 @@ void SelectScene::SelectOper()
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
 	//操作説明開いてないときのみ
-	if ( WaitKeyEase >= 2)//まってから入力受付
+	if (WaitKeyEase >= 2)//まってから入力受付
 	{
-		if ((cInput->tRightArrow() || cInput->tRightMove())&&OperWindOpenFlag == false) {//1を次は選択
+		if ((cInput->tRightArrow() || cInput->tRightMove()) && OperWindOpenFlag == false) {//1を次は選択
+			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			selectPattern_ = SelectPattern::operationTOstart;//[操作説明からスタートへ]に変更
 		}
 		//if (TriggerLeft || PadTriggerLeft) {
@@ -106,7 +107,6 @@ void SelectScene::SelectOper()
 		//0から1へ移動
 		if (SSOp0_1Flag == true)
 		{
-			CursorMoveNowFlag = true;//動いてるから入力ダメよ
 			SSOp0_1pos.x += EaseVal;
 			EaseVal -= DecEaseVal;
 			sp_SSNow->SetPosition({ SSOp0_1pos.x,sp_SSoper->GetPosition().y - 50,0 });
@@ -238,7 +238,7 @@ void SelectScene::SelectTitle()
 	XMFLOAT3 SStitle2_1 = sp_SSNow->GetPosition();
 
 	if (WaitKeyEase < 20) { WaitKeyEase++; }//毎フレ足す
-	if (WaitKeyEase >= 2 )
+	if (WaitKeyEase >= 2)
 	{
 		//if (TriggerRight || PadTriggerRight) {
 		//	NowSelect = 0;
@@ -356,7 +356,7 @@ void SelectScene::DrawUI()
 	//char tmp[32]{};
 	//sprintf_s(tmp, 32, "%2.f", );
 	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	
+
 	//if (CursorMoveNowFlag == true) {
 	//	DebugText::GetInstance()->Print("true", 430, 430, 3);
 	//}
