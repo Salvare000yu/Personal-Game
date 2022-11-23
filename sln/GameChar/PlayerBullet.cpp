@@ -12,7 +12,7 @@ void PlayerBullet::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 5.f, 5.f, 5.f });
+	obj->SetScale({ 8.f, 8.f, 8.f });
 	//êŠ
 
 	//obj->SetPosition({ BulletPos });

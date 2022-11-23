@@ -34,7 +34,7 @@ void Player::Attack()
 			madeBullet->SetPosition(PlayerPos);
 
 			// velocity‚ðŽZo ’e”­ŽË‘¬“xz
-			DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 18, 0);
+			DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 25, 0);
 			XMFLOAT3 xmfloat3velocity;
 			XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 

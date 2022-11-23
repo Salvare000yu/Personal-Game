@@ -1213,6 +1213,6 @@ void GamePlayScene::PlayTimer()
 		}
 		char tmp[32]{};
 		sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
-		DebugText::GetInstance()->Print(tmp, 150, 220, 3);
+		DebugText::GetInstance()->Print(tmp, 150, 220, 1);
 	}
 }
