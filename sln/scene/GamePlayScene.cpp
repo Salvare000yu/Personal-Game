@@ -767,12 +767,20 @@ void GamePlayScene::Update()
 
 	CharParameters* charParameters = CharParameters::GetInstance();
 
-	if (charParameters->GetNowpHp() > 0&& charParameters->GetNowBoHp()>0) {
-		if (cInput->PauseOpenClose() && (GameReady() == false)) {
-			pause->SetPauseFlag(true);
+	if (pause->WaitKey0 < 10&& pause->GetPauseFlag() == false) {
+		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
+	}
+	if (pause->WaitKey0 >= 2) {
+		if (charParameters->GetNowpHp() > 0 && charParameters->GetNowBoHp() > 0) {
+			if (cInput->PauseOpenClose() && (GameReady() == false)&& pause->GetPauseFlag() == false) {
+				pause->EveryInit();
+				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+				pause->SetPauseFlag(true);
+			}
 		}
 	}
 	if (pause->GetPauseFlag() == true) {
+		
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
@@ -1005,6 +1013,16 @@ void GamePlayScene::Update()
 		}
 
 	}//ここまでポーズしてないとき
+
+	//-------常にデバテキ↓
+	// 
+	//Pause* pause = Pause::GetInstance();
+	if (pause->GetPauseFlag() == false) {
+		DebugText::GetInstance()->Print("pause:false", 100, 440, 2);
+	}
+	else {
+		DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
+	}
 
 }
 

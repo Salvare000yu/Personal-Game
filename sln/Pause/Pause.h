@@ -10,6 +10,7 @@ public:
 	static Pause* GetInstance();
 
 	void Initialize()override;
+	void EveryInit();
 	//ポーズしているとき
 	void PauseNow();
 	//タイトルへ
@@ -41,6 +42,7 @@ public:
 	const bool& GetSceneChangeTitleFlag() { return SceneChangeTitleFlag; }
 	//-------------↑げったーせったー↑--------------//
 
+	int WaitKey0 = 0;//０だけでポーズ開閉できるように
 private:
 	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;
@@ -55,7 +57,6 @@ private:
 	float PauseNowSelect = 0;//0:続ける 1:操作説明　2:タイトル
 	void  (Pause::* pFunc)();
 
-	int WaitKey0 = 0;//０だけでポーズ開閉できるように
 	int WaitKeyEnter = 0;//Enterで操作説明がめん..
 	bool OperWindOpenFlag = false;//開いていない
 

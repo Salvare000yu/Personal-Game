@@ -54,10 +54,15 @@ void Pause::Initialize()
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
 
+}
+
+void Pause::EveryInit()
+{
 	//毎回リセット
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
 	PauseNowSelect = 0;
+	WaitKey0 = 0;
 }
 
 void Pause::PauseNow()
@@ -85,11 +90,10 @@ void Pause::PauseNow()
 
 	//閉じる
 	WaitKey0++;//同じボタンでとじれるように
-	//操作説明画面見てるときは押しても閉じない
-	if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
-		PauseFlag = false;
-		WaitKey0 = 0;
-	}
+	////操作説明画面見てるときは押しても閉じない
+	//if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
+	//	PauseFlag = false;
+	//}
 
 }
 void Pause::Update()
@@ -139,7 +143,7 @@ void Pause::PauseOper()
 	sp_operation->TransferVertexBuffer();
 
 	//操作説明開いてないときのみ
-	if (OperWindOpenFlag == false)
+	if (OperWindOpenFlag == false!= cInput->DecisionByEnter())
 	{
 		if (cInput->tDownArrow() || cInput->tDownMove()) {//下で2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
