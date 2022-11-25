@@ -53,7 +53,11 @@ void Pause::Initialize()
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
-
+	//–ˆ‰ñƒŠƒZƒbƒg
+	SceneChangeTitleFlag = false;
+	PauseFlag = false;
+	PauseNowSelect = 0;
+	WaitKey0 = 0;
 }
 
 void Pause::EveryInit()

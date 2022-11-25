@@ -881,19 +881,19 @@ void GamePlayScene::Update()
 		{
 			PlayTimer();
 
-			if (TriggerR) {//デバック用　適当に　いつかは消す
-				camera->SetTarget({  });
-				camera->SetEye({  });
-				player_->SetAlive(true);
-				NowpHp = pMaxHp;
-				boss_.front()->SetAlive(true);
-				NowBoHp = boMaxHp;
-				sEnemyMurdersNum = 0;
-				BossEnemyAdvent = false;
+			//if (TriggerR) {//デバック用　適当に　いつかは消す
+			//	camera->SetTarget({  });
+			//	camera->SetEye({  });
+			//	player_->SetAlive(true);
+			//	NowpHp = pMaxHp;
+			//	boss_.front()->SetAlive(true);
+			//	NowBoHp = boMaxHp;
+			//	sEnemyMurdersNum = 0;
+			//	BossEnemyAdvent = false;
 
-				// カメラreセット
-				//Object3d::SetCamera(camera.get());
-			}
+			//	// カメラreセット
+			//	//Object3d::SetCamera(camera.get());
+			//}
 
 			//敵のHPバー
 			if (BossEnemyAdvent == true)
@@ -1017,12 +1017,12 @@ void GamePlayScene::Update()
 	//-------常にデバテキ↓
 	// 
 	//Pause* pause = Pause::GetInstance();
-	if (pause->GetPauseFlag() == false) {
-		DebugText::GetInstance()->Print("pause:false", 100, 440, 2);
-	}
-	else {
-		DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
-	}
+	//if (pause->GetPauseFlag() == false) {
+	//	DebugText::GetInstance()->Print("pause:false", 100, 440, 2);
+	//}
+	//else {
+	//	DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
+	//}
 
 }
 
