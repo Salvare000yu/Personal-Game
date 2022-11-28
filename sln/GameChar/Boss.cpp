@@ -4,6 +4,7 @@
 #include "GameSound.h"
 #include "DebugText.h"
 #include "ParticleManager.h"
+#include "CharParameters.h"
 
 #include <DirectXMath.h>
 
@@ -76,12 +77,41 @@ void Boss::Leave()
 	}
 }
 
+void Boss::HpHalfPatStart()
+{
+	Nowframe++;
+
+	if (GetPosFlag == true)
+	{
+		//最初の位置
+		HpHalfMomentPos = obj->GetPosition();
+		GetPosFlag = false;
+	}
+
+	//移動速度＝（指定座標-最初位置）/かかる時間
+	MoveSp.x = (TargetHpHalfPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
+	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesHpHalfFrame;
+	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesHpHalfFrame;
+	//その時の位置＝最初位置＋移動速度＊経過時間
+	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
+	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
+	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
+
+	obj->SetPosition({ NowPos });
+
+	if (Nowframe == NecesHpHalfFrame) {
+		Nowframe = 0;
+		GetPosFlag = true;
+		HpHalfMomentPos = {};
+		MoveSp = {};
+		NowPos = {};
+
+		isHpHalfPattern = true;//この処理全部終了したからもうやんない
+		actionPattern_ = ActionPattern::HpHalf;
+	}
+}
 void Boss::HpHalf()
 {
-	//まずこの位置に行く
-	XMFLOAT3 HomePosDef({ 0, 40, 200 });
-
-	obj->SetPosition({ 0, 40, 200 });
 }
 
 void Boss::Attack()
@@ -133,7 +163,7 @@ void Boss::DiffusionAttack()
 	madeBullet_R->SetPosition(position);
 
 	// velocityを算出
-	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1.2, 0);
 	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-2, 0, 1, 0);
 	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(2, 0, 1, 0);
 	XMFLOAT3 xmfloat3velocity_center;
@@ -267,6 +297,7 @@ void Boss::Initialize()
 void Boss::Update()
 {
 	Input* input = Input::GetInstance();
+	CharParameters* charParameters = CharParameters::GetInstance();
 
 	const bool input3 = input->PushKey(DIK_3);
 
@@ -302,11 +333,16 @@ void Boss::Update()
 	//メンバ関数ポインタ対応したボスの動きをする
 	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
-	if (actionPattern_ == ActionPattern::HpHalf) { pFunc = &Boss::HpHalf; }
+	if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }
 	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
+	if (actionPattern_ == ActionPattern::HpHalf) { pFunc = &Boss::HpHalf; }
 
 	if (isDeath == true) {
 		actionPattern_ = ActionPattern::Death;
+	}
+	if(isHpHalfPattern==false)
+	if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
+		actionPattern_ = ActionPattern::HpHalfPatStart;
 	}
 
 	//メンバ関数ポインタ呼び出し

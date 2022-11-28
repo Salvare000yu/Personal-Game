@@ -80,4 +80,10 @@ private:
 	//通常弾威力
 	const float seBulPowerMax = 100;
 	float seBulPower = seBulPowerMax;
+
+	bool GetPosFlag = true;//一度きりの座標読み込み
+	XMFLOAT3 NowPos;//その時の弾位置
+	XMFLOAT3 sePosMoment;//発射時の雑魚敵位置
+	XMFLOAT3 MoveSp;//弾移動速度
+	float Nowframe = 0;//現在フレ
 };

@@ -14,7 +14,8 @@ class Boss:public BaseObject
 	enum class ActionPattern {
 		Approach,//近づいてくる
 		Leave,//離れる
-		HpHalf,//Hp半分以下になったら
+		HpHalfPatStart,//Hp半分以下になったらタゲまで移動
+		HpHalf,
 		Death,//死亡
 	};
 
@@ -33,6 +34,7 @@ public:
 	void Attack();
 	void Approach();
 	void Leave();
+	void HpHalfPatStart();
 	void HpHalf();
 	//拡散攻撃
 	void DiffusionAttack();
@@ -123,4 +125,12 @@ private:
 	float PartTimeInterval;
 	float ParticleFrame = 39;//パーティクル出すフレ
 
+	//-------↓HPHALF↓------//
+	bool isHpHalfPattern = false;//hp半分以下行動してない
+
+	XMFLOAT3 HpHalfMomentPos = {};
+	//まずこの位置に行く
+	XMFLOAT3 TargetHpHalfPos = { 0, 40, 200 };
+	const float NecesHpHalfFrame = 180.0f;//HP半分時このフレーム分移動まで時間かかる
+	//-------↑HPHALF↑------//
 };

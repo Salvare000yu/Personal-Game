@@ -21,13 +21,31 @@ void SmallEnemy::Attack()
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.1f);
 
 	//弾発射
-	XMFLOAT3 position = obj->GetPosition();
+	XMFLOAT3 sePos = obj->GetPosition();
 	//弾生成
 	std::unique_ptr<SmallEnemyBullet> madeBullet = std::make_unique<SmallEnemyBullet>();
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeBullet->Initialize();
 	madeBullet->SetModel(seBulModel);
-	madeBullet->SetPosition(position);
+	madeBullet->SetPosition(sePos);
+
+	//Nowframe++;
+	//if (GetPosFlag == true)
+	//{
+	//	//最初の位置
+	//	sePosMoment = obj->GetPosition();
+	//	GetPosFlag = false;
+	//}
+	////移動速度＝（指定座標-最初位置）/かかる時間
+	//MoveSp.x = (0 - sePosMoment.x) / 20;
+	//MoveSp.y = (40 - sePosMoment.y) / 20;
+	//MoveSp.z = (-170 - sePosMoment.z) / 20;
+	////その時の位置＝最初位置＋移動速度＊経過時間
+	//NowPos.x = sePosMoment.x + MoveSp.x * Nowframe;
+	//NowPos.y = sePosMoment.y + MoveSp.y * Nowframe;
+	//NowPos.z = sePosMoment.z + MoveSp.z * Nowframe;
+
+	//madeBullet->SetPosition(NowPos);//その時の位置
 
 	//弾登録
 	bullets_.push_back(std::move(madeBullet));
@@ -61,6 +79,11 @@ void SmallEnemy::Initialize()
 
 	AtkCount = AtkInterval;
 
+	//Nowframe = 0;//現在フレ
+	//GetPosFlag = true;//一度きり座標読み取りフラグ
+	//NowPos={};//その時の弾位置
+	//sePosMoment={};//発射時の雑魚敵位置
+	//MoveSp={};//弾移動速度
 }
 
 void SmallEnemy::Update()
@@ -101,7 +124,9 @@ void SmallEnemy::Update()
 	//時が満ちたら
 	if (AtkCount == 0) {
 		//生存時のみ発射
-		if (alive) { Attack(); }
+		if (alive) {
+		Attack(); 
+		}
 		//再びカウントできるように初期化
 		AtkCount = AtkInterval;
 	}
