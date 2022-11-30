@@ -111,6 +111,13 @@ void SmallEnemy::Update()
 	//弾更新
 	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
 
+		//その時のターゲット座標
+		//一度きり
+		if (bullet->ShotTagMomFlag == true) {
+			bullet->ShotTagMoment = shotTag->GetPosition();
+			bullet->ShotTagMomFlag = false;
+		}
+
 		bullet->Update();
 
 		bullet->Nowframe++;
@@ -125,16 +132,16 @@ void SmallEnemy::Update()
 		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
 		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
 		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
-		bullet->MoveSp.x = (shotTag->GetPosition().x - bullet->sePosMoment.x);
-		bullet->MoveSp.y = (shotTag->GetPosition().y - bullet->sePosMoment.y);
-		bullet->MoveSp.z = (shotTag->GetPosition().z - bullet->sePosMoment.z);
+		bullet->MoveSp.x = (bullet->ShotTagMoment.x - bullet->sePosMoment.x);
+		bullet->MoveSp.y = (bullet->ShotTagMoment.y - bullet->sePosMoment.y);
+		bullet->MoveSp.z = (bullet->ShotTagMoment.z - bullet->sePosMoment.z);
 
 		//XMVECTORに変換してxmvecMoveSpにいれる
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
 		//normalize
 		xmvecMoveSp= XMVector3Normalize(xmvecMoveSp);
 		// 大きさを任意値に
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 5.f);
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
 		// FLOAT3に変換
 		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
 

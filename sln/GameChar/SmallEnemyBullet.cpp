@@ -27,11 +27,17 @@ void SmallEnemyBullet::Initialize()
 	//場所
 	//obj->SetPosition({ position });
 
+	//-------↓狙い弾↓-------//
 	Nowframe = 0;//現在フレ
 	GetPosFlag = true;//一度きり座標読み取りフラグ
 	NowPos = {};//その時の弾位置
 	sePosMoment = {};//発射時の雑魚敵位置
 	MoveSp = {};//弾移動速度
+
+	ShotTagMomFlag=true;
+	ShotTagMoment={};
+
+	//-------↑狙い弾↑-------//
 }
 
 void SmallEnemyBullet::Update()

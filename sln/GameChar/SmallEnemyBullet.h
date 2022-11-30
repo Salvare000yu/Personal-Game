@@ -61,6 +61,9 @@ public:
 	XMFLOAT3 sePosMoment;//発射時の雑魚敵位置
 	XMFLOAT3 MoveSp;//弾移動速度
 
+	bool ShotTagMomFlag = true;//一度きりのターゲット座標読み込み
+	XMFLOAT3 ShotTagMoment{};
+
 private:
 
 	float tmp;

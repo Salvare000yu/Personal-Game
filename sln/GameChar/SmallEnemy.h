@@ -83,5 +83,5 @@ private:
 	const float seBulPowerMax = 100;
 	float seBulPower = seBulPowerMax;
 
-	BaseObject* shotTag;
+	BaseObject* shotTag;//弾うつターゲット
 };

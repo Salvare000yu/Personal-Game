@@ -914,7 +914,9 @@ void GamePlayScene::Update()
 			//ŽG‹›“GƒJƒEƒ“ƒg‚ðƒfƒNƒŠƒƒ“ƒg
 			SEneAppCount--;
 
+			//ŽG‹›“G‚ÌŒ‚‚Â’e‚ªƒvƒŒƒCƒ„[‚Ì‚¢‚½êŠ‚É”ò‚ñ‚Å‚¢‚­
 			for (auto& se : smallEnemys_) {
+				//ƒ^[ƒQƒbƒg
 				se->SetShotTag(player_.get());
 			}
 
