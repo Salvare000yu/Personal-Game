@@ -41,6 +41,8 @@ public:
 	inline void SetPBulModel(Model* model) { pBulModel=model; }
 	inline void SetPFiringLine(Model* model) { pFiringLine = model; }
 
+	/*static Player* GetInstance();*/
+
 	//‰Šú‰»
 	void Initialize() override;
 

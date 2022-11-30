@@ -2,6 +2,7 @@
 #include "BaseObject.h"
 #include "Object3d.h"
 #include "Sprite.h"
+#include "Player.h"
 
 class CharParameters :public BaseObject
 {
@@ -23,13 +24,13 @@ public:
 	//現在ボスHP
 	void SetNowBoHp(float NowBossHP) { this->NowBossHP = NowBossHP; }
 	const float& GetNowBoHp() { return NowBossHP; }
-	//プレイヤー現在HP
+	//自機現在HP
 	void SetNowpHp(float NowPlayerHP) { this->NowPlayerHP = NowPlayerHP; }
 	const float& GetNowpHp() { return NowPlayerHP; }
-	//プレイヤー喰らった
+	//自機喰らった
 	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
 	const bool& GetispDam() { return ispDam; }
-	//プレイヤーHPMax
+	//自機HPMax
 	const float& GetpMaxHp() { return PlayerMaxHP; }
 	//ボスHPMax
 	const float& GetboMaxHp() { return BossMaxHP; }

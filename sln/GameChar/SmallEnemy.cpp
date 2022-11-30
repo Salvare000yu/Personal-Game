@@ -29,24 +29,6 @@ void SmallEnemy::Attack()
 	madeBullet->SetModel(seBulModel);
 	madeBullet->SetPosition(sePos);
 
-	//Nowframe++;
-	//if (GetPosFlag == true)
-	//{
-	//	//最初の位置
-	//	sePosMoment = obj->GetPosition();
-	//	GetPosFlag = false;
-	//}
-	////移動速度＝（指定座標-最初位置）/かかる時間
-	//MoveSp.x = (0 - sePosMoment.x) / 20;
-	//MoveSp.y = (40 - sePosMoment.y) / 20;
-	//MoveSp.z = (-170 - sePosMoment.z) / 20;
-	////その時の位置＝最初位置＋移動速度＊経過時間
-	//NowPos.x = sePosMoment.x + MoveSp.x * Nowframe;
-	//NowPos.y = sePosMoment.y + MoveSp.y * Nowframe;
-	//NowPos.z = sePosMoment.z + MoveSp.z * Nowframe;
-
-	//madeBullet->SetPosition(NowPos);//その時の位置
-
 	//弾登録
 	bullets_.push_back(std::move(madeBullet));
 }
@@ -79,11 +61,11 @@ void SmallEnemy::Initialize()
 
 	AtkCount = AtkInterval;
 
-	//Nowframe = 0;//現在フレ
-	//GetPosFlag = true;//一度きり座標読み取りフラグ
-	//NowPos={};//その時の弾位置
-	//sePosMoment={};//発射時の雑魚敵位置
-	//MoveSp={};//弾移動速度
+	Nowframe = 0;//現在フレ
+	GetPosFlag = true;//一度きり座標読み取りフラグ
+	NowPos={};//その時の弾位置
+	sePosMoment={};//発射時の雑魚敵位置
+	MoveSp={};//弾移動速度
 }
 
 void SmallEnemy::Update()
@@ -133,7 +115,36 @@ void SmallEnemy::Update()
 
 	//弾更新
 	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
+
 		bullet->Update();
+
+		Nowframe++;
+		if (GetPosFlag == true)
+		{
+			//最初の位置
+			sePosMoment = obj->GetPosition();
+			GetPosFlag = false;
+		}
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		MoveSp.x = (0 - sePosMoment.x);
+		MoveSp.y = (40 - sePosMoment.y);
+		MoveSp.z = (-170 - sePosMoment.z);
+
+		//XMVECTORに変換してxmvecMoveSpにいれる
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&MoveSp);
+		//normalize
+		xmvecMoveSp= XMVector3Normalize(xmvecMoveSp);
+		// 大きさを任意値に
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 10.f);
+		// FLOAT3に変換
+		XMStoreFloat3(&MoveSp, xmvecMoveSp);
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		NowPos.x = sePosMoment.x + MoveSp.x * Nowframe;
+		NowPos.y = sePosMoment.y + MoveSp.y * Nowframe;
+		NowPos.z = sePosMoment.z + MoveSp.z * Nowframe;
+
+		bullet->SetPosition(NowPos);//その時の位置
 	}
 
 	obj->Update();

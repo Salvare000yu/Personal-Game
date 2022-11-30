@@ -27,7 +27,7 @@ private:
 
 	//float frame = 0;
 
-	XMFLOAT3 velocity{ 0,0,12 };
+	XMFLOAT3 velocity{ 0,0,0 };
 
 public:
 	//‰Šú‰»

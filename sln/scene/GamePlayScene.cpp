@@ -80,7 +80,7 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	//------object3dƒXƒP[ƒ‹------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
-	obj_worlddome->SetScale({ 10.0f, 10.0f, 10.0f });
+	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
 	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });

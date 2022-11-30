@@ -9,6 +9,12 @@
 
 using namespace DirectX;
 
+//Player* Player::GetInstance()
+//{
+//	static Player instance;
+//	return &instance;
+//}
+
 void Player::Attack()
 {
 	//ƒL[“ü—Íg‚¤
