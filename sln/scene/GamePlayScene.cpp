@@ -914,6 +914,10 @@ void GamePlayScene::Update()
 			//雑魚敵カウントをデクリメント
 			SEneAppCount--;
 
+			for (auto& se : smallEnemys_) {
+				se->SetShotTag(player_.get());
+			}
+
 			//自機側で死亡確認したら消す
 			if (player_->GetpDeath() == true) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);

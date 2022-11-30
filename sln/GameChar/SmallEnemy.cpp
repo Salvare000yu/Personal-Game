@@ -61,11 +61,6 @@ void SmallEnemy::Initialize()
 
 	AtkCount = AtkInterval;
 
-	Nowframe = 0;//現在フレ
-	GetPosFlag = true;//一度きり座標読み取りフラグ
-	NowPos={};//その時の弾位置
-	sePosMoment={};//発射時の雑魚敵位置
-	MoveSp={};//弾移動速度
 }
 
 void SmallEnemy::Update()
@@ -118,33 +113,37 @@ void SmallEnemy::Update()
 
 		bullet->Update();
 
-		Nowframe++;
-		if (GetPosFlag == true)
+		bullet->Nowframe++;
+		if (bullet->GetPosFlag == true)
 		{
 			//最初の位置
-			sePosMoment = obj->GetPosition();
-			GetPosFlag = false;
+			bullet->sePosMoment = obj->GetPosition();
+			bullet->GetPosFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
-		MoveSp.x = (0 - sePosMoment.x);
-		MoveSp.y = (40 - sePosMoment.y);
-		MoveSp.z = (-170 - sePosMoment.z);
+		// //絶対当たる
+		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
+		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
+		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
+		bullet->MoveSp.x = (shotTag->GetPosition().x - bullet->sePosMoment.x);
+		bullet->MoveSp.y = (shotTag->GetPosition().y - bullet->sePosMoment.y);
+		bullet->MoveSp.z = (shotTag->GetPosition().z - bullet->sePosMoment.z);
 
 		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecMoveSp = XMLoadFloat3(&MoveSp);
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
 		//normalize
 		xmvecMoveSp= XMVector3Normalize(xmvecMoveSp);
 		// 大きさを任意値に
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 10.f);
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 5.f);
 		// FLOAT3に変換
-		XMStoreFloat3(&MoveSp, xmvecMoveSp);
+		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
-		NowPos.x = sePosMoment.x + MoveSp.x * Nowframe;
-		NowPos.y = sePosMoment.y + MoveSp.y * Nowframe;
-		NowPos.z = sePosMoment.z + MoveSp.z * Nowframe;
+		bullet->NowPos.x = bullet->sePosMoment.x + bullet->MoveSp.x * bullet->Nowframe;
+		bullet->NowPos.y = bullet->sePosMoment.y + bullet->MoveSp.y * bullet->Nowframe;
+		bullet->NowPos.z = bullet->sePosMoment.z + bullet->MoveSp.z * bullet->Nowframe;
 
-		bullet->SetPosition(NowPos);//その時の位置
+		bullet->SetPosition(bullet->NowPos);//その時の位置
 	}
 
 	obj->Update();
