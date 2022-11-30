@@ -9,6 +9,13 @@
 
 class SmallEnemy:public BaseObject
 {
+	//捌けパターン
+	enum class RetirePat {
+		Right,
+		Left,
+		def,
+	};
+
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -34,10 +41,13 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	//消えるまで
-	static const int32_t BulVanishTime = 60*5+20;//寿命
-
+	static const int32_t BulVanishTime = 60*7;//寿命
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
+
+	//左右に捌ける
+	static const int32_t RetireFrameDef = 120;
+	int32_t RetireFrame = RetireFrameDef;
 
 	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
@@ -56,6 +66,8 @@ public:
 
 	//フレームごとに発射
 	static const int AtkInterval = 90;
+
+	RetirePat retirePat_ = RetirePat::def;
 
 private:
 	////-----------------model
@@ -84,4 +96,11 @@ private:
 	float seBulPower = seBulPowerMax;
 
 	BaseObject* shotTag;//弾うつターゲット
+
+	//ここまで来たら止まって捌ける
+	const int PosZMax = 270;
+	//捌け開始
+	bool isRetire = false;
+	//向かってくる間だけ
+	bool isSeApproach = true;
 };

@@ -85,15 +85,46 @@ void SmallEnemy::Update()
 		return !bullet->GetAlive();
 		});
 
-	for (int i = 0; i < 1; i++)
-	{
-		XMFLOAT3 smEnemPos = obj->GetPosition();
-		smEnemPos.z -= 6;
-		obj->SetPosition(smEnemPos);
-
-		//発射カウントをデクリメント
-		AtkCount--;
+	XMFLOAT3 sePos = obj->GetPosition();
+	//登場は奥から向かってくる
+	if (isSeApproach == true) {
+		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
+			sePos.z -= 6;
+		}
+		else {
+			RetireFrame--;//滞在時間
+			if (RetireFrame < 0) {
+				//捌け開始
+				isRetire = true;
+				isSeApproach = false;
+			}
+		}
 	}
+	
+	if (isRetire == true) {
+		//自機より右にいるか左にいるかでどちらに捌けるか変わる
+		if (obj->GetPosition().x < shotTag->GetPosition().x) {
+			retirePat_=RetirePat::Left;
+			//左パターンへ
+			isRetire = false;
+		}
+		else {
+			retirePat_=RetirePat::Right;
+			//右パターンへ
+			isRetire = false;
+		}
+	}
+	if (retirePat_ == RetirePat::Right) {
+		sePos.x += 3;
+	}
+	if (retirePat_ == RetirePat::Left) {
+		sePos.x -= 3;
+	}
+
+	obj->SetPosition(sePos);
+
+	//発射カウントをデクリメント
+	AtkCount--;
 
 	//時間経過消滅
 	if (--vanishTimer_ <= 0) { alive = false; }
@@ -102,7 +133,7 @@ void SmallEnemy::Update()
 	if (AtkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
-		Attack(); 
+			Attack();
 		}
 		//再びカウントできるように初期化
 		AtkCount = AtkInterval;
@@ -139,8 +170,8 @@ void SmallEnemy::Update()
 		//XMVECTORに変換してxmvecMoveSpにいれる
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
 		//normalize
-		xmvecMoveSp= XMVector3Normalize(xmvecMoveSp);
-		// 大きさを任意値に
+		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
+		// 大きさを任意値に(速度)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
 		// FLOAT3に変換
 		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);

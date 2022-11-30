@@ -377,7 +377,7 @@ void GamePlayScene::PlayerMove()
 	{
 		//------ƒvƒŒƒCƒ„[‚à“¯‚¶ˆÚ“®------//
 		//bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 2.f;
+		constexpr float moveSpeed = 3.f;
 
 		if (cInput->DownMove()) {
 			PlayerPos.y -= moveSpeed;
