@@ -122,12 +122,14 @@ private:
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
 	std::unique_ptr < Model> mod_enemy = nullptr;
 	std::unique_ptr < Model> mod_firingline = nullptr;
+	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 
 	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
 	std::unique_ptr < Object3d> obj_worlddome = nullptr;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
+	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1 = nullptr;

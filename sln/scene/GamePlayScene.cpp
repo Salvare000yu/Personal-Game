@@ -65,6 +65,7 @@ void GamePlayScene::Initialize()
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
+	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
@@ -72,27 +73,32 @@ void GamePlayScene::Initialize()
 	obj_sword.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
+	obj_tunnel.reset(Object3d::Create());
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
 	obj_sword->SetModel(mod_sword.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
+	obj_tunnel->SetModel(mod_tunnel.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
 	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
+	obj_tunnel->SetScale({ 2.0f, 2.0f, 2.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
 	obj_kaberight->SetPosition({ 310,-200,0 });
 	obj_kabeleft->SetPosition({ -310,-200,0 });
+	obj_tunnel->SetPosition({ 0,40,-170 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,90,0 });
 	obj_kabeleft->SetRotation({ 0,-90,0 });
+	obj_tunnel->SetRotation({ 0,-90,0 });
 
 	//いろいろ生成
 	player_.reset(new Player());
@@ -1030,6 +1036,8 @@ void GamePlayScene::Update()
 	//	DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
 	//}
 
+	obj_tunnel->Update();
+
 }
 
 void GamePlayScene::Draw()
@@ -1068,6 +1076,7 @@ void GamePlayScene::Draw()
 	//obj_sword->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
+	obj_tunnel->Draw();
 
 	//自キャラ描画
 	player_->Draw();
