@@ -1036,7 +1036,7 @@ void GamePlayScene::Update()
 	//	DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
 	//}
 
-	obj_tunnel->Update();
+	//obj_tunnel->Update();
 
 }
 
@@ -1076,7 +1076,7 @@ void GamePlayScene::Draw()
 	//obj_sword->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
-	obj_tunnel->Draw();
+	//obj_tunnel->Draw();
 
 	//Ž©ƒLƒƒƒ‰•`‰æ
 	player_->Draw();
