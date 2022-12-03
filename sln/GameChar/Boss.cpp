@@ -41,6 +41,50 @@ void Boss::Approach()
 	if (position.z == ApproachLim) {
 		actionPattern_ = ActionPattern::Leave;
 	}
+
+	//弾一つずつ
+	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+		//その時のターゲット座標
+	//一度きり
+		if (bullet->ShotTagMomFlag == true) {
+			bullet->ShotTagMoment = shotTag->GetPosition();
+			bullet->ShotTagMomFlag = false;
+		}
+
+		bullet->Update();
+
+		bullet->Nowframe++;
+		if (bullet->GetPosFlag == true)
+		{
+			//最初の位置
+			bullet->boPosMoment = obj->GetPosition();
+			bullet->GetPosFlag = false;
+		}
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		// //絶対当たる
+		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
+		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
+		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
+		bullet->MoveSp.x = (bullet->ShotTagMoment.x - bullet->boPosMoment.x);
+		bullet->MoveSp.y = (bullet->ShotTagMoment.y - bullet->boPosMoment.y);
+		bullet->MoveSp.z = (bullet->ShotTagMoment.z - bullet->boPosMoment.z);
+
+		//XMVECTORに変換してxmvecMoveSpにいれる
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
+		//normalize
+		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
+		// 大きさを任意値に(速度)
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
+		// FLOAT3に変換
+		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		bullet->NowPos.x = bullet->boPosMoment.x + bullet->MoveSp.x * bullet->Nowframe;
+		bullet->NowPos.y = bullet->boPosMoment.y + bullet->MoveSp.y * bullet->Nowframe;
+		bullet->NowPos.z = bullet->boPosMoment.z + bullet->MoveSp.z * bullet->Nowframe;
+
+		bullet->SetPosition(bullet->NowPos);//その時の位置
+	}
 }
 
 void Boss::Leave()

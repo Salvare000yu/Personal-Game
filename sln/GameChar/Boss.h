@@ -85,6 +85,9 @@ public:
 	//ボス生死
 	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
 	const float& GetisDeath() { return isDeath; }
+
+	//狙い弾　打つ相手
+	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 	//-----------------↑げったーせったー↑------------------//
 
 private:
@@ -133,4 +136,6 @@ private:
 	XMFLOAT3 TargetHpHalfPos = { 0, 40, 200 };
 	const float NecesHpHalfFrame = 180.0f;//HP半分時このフレーム分移動まで時間かかる
 	//-------↑HPHALF↑------//
+
+	BaseObject* shotTag;//弾うつターゲット
 };

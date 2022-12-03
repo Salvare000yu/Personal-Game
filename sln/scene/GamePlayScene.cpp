@@ -920,12 +920,17 @@ void GamePlayScene::Update()
 			//ŽG‹›“GƒJƒEƒ“ƒg‚ðƒfƒNƒŠƒƒ“ƒg
 			SEneAppCount--;
 
+			//------‘_‚¢’e«
 			//ŽG‹›“G‚ÌŒ‚‚Â’e‚ªƒvƒŒƒCƒ„[‚Ì‚¢‚½êŠ‚É”ò‚ñ‚Å‚¢‚­
 			for (auto& se : smallEnemys_) {
 				//ƒ^[ƒQƒbƒg
 				se->SetShotTag(player_.get());
 			}
-
+			for (auto& bo : boss_) {
+				bo->SetShotTag(player_.get());
+			}
+			//------‘_‚¢’eª
+			
 			//Ž©‹@‘¤‚ÅŽ€–SŠm”F‚µ‚½‚çÁ‚·
 			if (player_->GetpDeath() == true) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
