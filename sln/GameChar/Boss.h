@@ -33,6 +33,7 @@ public:
 
 	//çUåÇ
 	void Attack();
+	void PAimBul();
 	void Approach();
 	void Leave();
 	void HpHalfPatStart();

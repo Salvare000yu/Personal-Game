@@ -42,47 +42,6 @@ void Boss::Approach()
 		actionPattern_ = ActionPattern::Leave;
 	}
 
-	//弾一つずつ
-	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
-		//その時のターゲット座標
-	//一度きり
-		if (aimBullet->ShotTagMomFlag == true) {
-			aimBullet->ShotTagMoment = shotTag->GetPosition();
-			aimBullet->ShotTagMomFlag = false;
-		}
-
-		aimBullet->Nowframe++;
-		if (aimBullet->GetPosFlag == true)
-		{
-			//最初の位置
-			aimBullet->boPosMoment = obj->GetPosition();
-			aimBullet->GetPosFlag = false;
-		}
-		//移動速度＝（指定座標-最初位置）/かかる時間
-		// //絶対当たる
-		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
-		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
-		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
-		aimBullet->MoveSp.x = (aimBullet->ShotTagMoment.x - aimBullet->boPosMoment.x);
-		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
-		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
-
-		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->MoveSp);
-		//normalize
-		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
-		// 大きさを任意値に(速度)
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
-		// FLOAT3に変換
-		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
-
-		//その時の位置＝最初位置＋移動速度＊経過時間
-		aimBullet->NowPos.x = aimBullet->boPosMoment.x + aimBullet->MoveSp.x * aimBullet->Nowframe;
-		aimBullet->NowPos.y = aimBullet->boPosMoment.y + aimBullet->MoveSp.y * aimBullet->Nowframe;
-		aimBullet->NowPos.z = aimBullet->boPosMoment.z + aimBullet->MoveSp.z * aimBullet->Nowframe;
-
-		aimBullet->SetPosition(aimBullet->NowPos);//その時の位置
-	}
 }
 
 void Boss::Leave()
@@ -179,6 +138,50 @@ void Boss::Attack()
 
 	//弾登録
 	aimBullets_.push_back(std::move(madeAimBullet));
+}
+void Boss::PAimBul()
+{
+	//弾一つずつ
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
+		//その時のターゲット座標
+	//一度きり
+		if (aimBullet->ShotTagMomFlag == true) {
+			aimBullet->ShotTagMoment = shotTag->GetPosition();
+			aimBullet->ShotTagMomFlag = false;
+		}
+
+		aimBullet->Nowframe++;
+		if (aimBullet->GetPosFlag == true)
+		{
+			//最初の位置
+			aimBullet->boPosMoment = obj->GetPosition();
+			aimBullet->GetPosFlag = false;
+		}
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		// //絶対当たる
+		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
+		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
+		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
+		aimBullet->MoveSp.x = (aimBullet->ShotTagMoment.x - aimBullet->boPosMoment.x);
+		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
+		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
+
+		//XMVECTORに変換してxmvecMoveSpにいれる
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->MoveSp);
+		//normalize
+		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
+		// 大きさを任意値に(速度)
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
+		// FLOAT3に変換
+		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		aimBullet->NowPos.x = aimBullet->boPosMoment.x + aimBullet->MoveSp.x * aimBullet->Nowframe;
+		aimBullet->NowPos.y = aimBullet->boPosMoment.y + aimBullet->MoveSp.y * aimBullet->Nowframe;
+		aimBullet->NowPos.z = aimBullet->boPosMoment.z + aimBullet->MoveSp.z * aimBullet->Nowframe;
+
+		aimBullet->SetPosition(aimBullet->NowPos);//その時の位置
+	}
 }
 void Boss::DiffusionAttack()
 {
@@ -400,6 +403,9 @@ void Boss::Update()
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//狙い弾
 		aimBullet->Update();
 	}
+
+	//狙い弾
+	PAimBul();
 
 	obj->Update();
 

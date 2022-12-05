@@ -122,7 +122,7 @@ void GamePlayScene::Initialize()
 		boss->Initialize();
 		boss->SetModel(mod_enemy.get());
 		boss->SetBulModel(mod_enemybullet.get());
-		boss->SetAimBulModel(mod_enemybullet.get());
+		boss->SetAimBulModel(mod_enemybullet.get());//‘_‚¢’e
 	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
