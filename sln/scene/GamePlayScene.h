@@ -119,6 +119,7 @@ private:
 	std::unique_ptr < Model> mod_smallenemy = nullptr;//G‹›“G
 	std::unique_ptr < Model> mod_playerbullet = nullptr;//©‹@’e
 	std::unique_ptr < Model> mod_enemybullet = nullptr;//“G’e
+	std::unique_ptr < Model> mod_bossaimbullet = nullptr;//“G‘_‚¢’e
 	std::unique_ptr < Model> mod_player = nullptr;// ©‹@
 	std::unique_ptr < Model> mod_enemy = nullptr;
 	std::unique_ptr < Model> mod_firingline = nullptr;
@@ -148,7 +149,7 @@ private:
 	//“GŒ‚”j”
 	float sEnemyMurdersNum = 0;
 	//ƒ{ƒXí‚Ü‚Å‚Ì“GEŠQ•K—v”
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 4;
 	//ƒ{ƒXoŒ»ğŒ’B¬I
 	bool BossEnemyAdvent = false;
 	//ƒ{ƒXoŒ»‘O‰‰oƒtƒ‰ƒO

@@ -134,7 +134,6 @@ void Boss::Attack()
 	madeAimBullet->Initialize();
 	madeAimBullet->SetModel(AimBulModel);
 	madeAimBullet->SetPosition(position);
-	madeAimBullet->SetScale({ 15.f, 15.f, 15.f });
 
 	//’e“o˜^
 	aimBullets_.push_back(std::move(madeAimBullet));

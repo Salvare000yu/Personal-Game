@@ -47,7 +47,7 @@ private:
 	float NowBossHP = BossMaxHP;//現在の敵HP
 
 	//自機HP
-	const float PlayerMaxHP = 100000;//じきさいだいHP
+	const float PlayerMaxHP = 1000;//じきさいだいHP
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
 
 	//自機がダメージ喰らった false:喰らってない
