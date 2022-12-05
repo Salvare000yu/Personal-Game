@@ -87,6 +87,11 @@ public:
 	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
 	const float& GetBossDefense() { return BossDefense; }
 
+	//’Êí’eˆĞ—Í
+	const float& GetBulPow() { return BulPow; }
+	//‘_‚¢’eˆĞ—Í
+	const float& GetAimBulPow() { return AimBulPow; }
+
 	//ƒ{ƒX¶€
 	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
 	const float& GetisDeath() { return isDeath; }
@@ -119,6 +124,10 @@ private:
 	//–hŒä—Í
 	const float BossDefenseDef = 10;
 	float BossDefense = BossDefenseDef;
+
+	//“G’Êí’eˆĞ—Í
+	const float BulPow = 200;
+	const float AimBulPow = 150;
 
 	//falseF‚Ü‚¾€‚ñ‚Å‚È‚¢
 	bool isDeath = false;

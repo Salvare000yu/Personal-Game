@@ -145,9 +145,6 @@ private:
 	//G‹›“GoŒ»—pƒJƒEƒ“ƒg
 	float SEneAppCount = 0;
 
-	//“G’Êí’eˆĞ—Í
-	const float eBulPower = 200;
-
 	//“GŒ‚”j”
 	float sEnemyMurdersNum = 0;
 	//ƒ{ƒXí‚Ü‚Å‚Ì“GEŠQ•K—v”

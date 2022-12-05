@@ -667,7 +667,7 @@ void GamePlayScene::CollisionAll()
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 
 						pDamFlag = true;
-						NowpHp -= eBulPower;//自機ダメージ
+						NowpHp -= bo->GetBulPow();//自機ダメージ
 						charParameters->SetispDam(true);
 						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
 
@@ -679,7 +679,37 @@ void GamePlayScene::CollisionAll()
 				}
 			}
 		}
+	}
+	//[自機]と[ボス狙い弾]の当たり判定
+	{
 
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z + 2;
+
+		if (player_->GetAlive()) {
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
+				for (auto& boaimbul : bo->GetAimBullets()) {
+					Sphere aimBulForm;
+					aimBulForm.center = XMLoadFloat3(&boaimbul->GetPosition());
+					aimBulForm.radius = boaimbul->GetScale().z + 2.f;
+
+					if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
+
+						pDamFlag = true;
+						NowpHp -= bo->GetAimBulPow();//自機ダメージ
+						charParameters->SetispDam(true);
+						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
+
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						boaimbul->SetAlive(false);
+						break;
+					}
+
+				}
+			}
+		}
 
 	}
 
@@ -713,6 +743,7 @@ void GamePlayScene::CollisionAll()
 			}
 		}
 	}
+
 	//------------------------------↑当たり判定ZONE↑-----------------------------//
 }
 
