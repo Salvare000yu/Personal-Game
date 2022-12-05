@@ -43,47 +43,45 @@ void Boss::Approach()
 	}
 
 	//弾一つずつ
-	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
 		//その時のターゲット座標
 	//一度きり
-		if (bullet->ShotTagMomFlag == true) {
-			bullet->ShotTagMoment = shotTag->GetPosition();
-			bullet->ShotTagMomFlag = false;
+		if (aimBullet->ShotTagMomFlag == true) {
+			aimBullet->ShotTagMoment = shotTag->GetPosition();
+			aimBullet->ShotTagMomFlag = false;
 		}
 
-		bullet->Update();
-
-		bullet->Nowframe++;
-		if (bullet->GetPosFlag == true)
+		aimBullet->Nowframe++;
+		if (aimBullet->GetPosFlag == true)
 		{
 			//最初の位置
-			bullet->boPosMoment = obj->GetPosition();
-			bullet->GetPosFlag = false;
+			aimBullet->boPosMoment = obj->GetPosition();
+			aimBullet->GetPosFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		// //絶対当たる
 		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
 		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
 		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
-		bullet->MoveSp.x = (bullet->ShotTagMoment.x - bullet->boPosMoment.x);
-		bullet->MoveSp.y = (bullet->ShotTagMoment.y - bullet->boPosMoment.y);
-		bullet->MoveSp.z = (bullet->ShotTagMoment.z - bullet->boPosMoment.z);
+		aimBullet->MoveSp.x = (aimBullet->ShotTagMoment.x - aimBullet->boPosMoment.x);
+		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
+		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
 
 		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->MoveSp);
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
 		// 大きさを任意値に(速度)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
 		// FLOAT3に変換
-		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
+		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
-		bullet->NowPos.x = bullet->boPosMoment.x + bullet->MoveSp.x * bullet->Nowframe;
-		bullet->NowPos.y = bullet->boPosMoment.y + bullet->MoveSp.y * bullet->Nowframe;
-		bullet->NowPos.z = bullet->boPosMoment.z + bullet->MoveSp.z * bullet->Nowframe;
+		aimBullet->NowPos.x = aimBullet->boPosMoment.x + aimBullet->MoveSp.x * aimBullet->Nowframe;
+		aimBullet->NowPos.y = aimBullet->boPosMoment.y + aimBullet->MoveSp.y * aimBullet->Nowframe;
+		aimBullet->NowPos.z = aimBullet->boPosMoment.z + aimBullet->MoveSp.z * aimBullet->Nowframe;
 
-		bullet->SetPosition(bullet->NowPos);//その時の位置
+		aimBullet->SetPosition(aimBullet->NowPos);//その時の位置
 	}
 }
 
@@ -172,15 +170,15 @@ void Boss::Attack()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	std::unique_ptr<BossAimBul> madeAimBullet = std::make_unique<BossAimBul>();
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-	madeBullet->Initialize();
-	madeBullet->SetModel(eBulModel);
-	madeBullet->SetPosition(position);
-	madeBullet->SetScale({ 15.f, 15.f, 15.f });
+	madeAimBullet->Initialize();
+	madeAimBullet->SetModel(AimBulModel);
+	madeAimBullet->SetPosition(position);
+	madeAimBullet->SetScale({ 15.f, 15.f, 15.f });
 
 	//弾登録
-	bullets_.push_back(std::move(madeBullet));
+	aimBullets_.push_back(std::move(madeAimBullet));
 }
 void Boss::DiffusionAttack()
 {
@@ -198,9 +196,9 @@ void Boss::DiffusionAttack()
 	madeBullet_L->Initialize();
 	madeBullet_R->Initialize();
 
-	madeBullet_center->SetModel(eBulModel);
-	madeBullet_L->SetModel(eBulModel);
-	madeBullet_R->SetModel(eBulModel);
+	madeBullet_center->SetModel(BulModel);
+	madeBullet_L->SetModel(BulModel);
+	madeBullet_R->SetModel(BulModel);
 
 	madeBullet_center->SetPosition(position);
 	madeBullet_L->SetPosition(position);
@@ -244,10 +242,10 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R1->Initialize();
 	madeBullet_R2->Initialize();
 
-	madeBullet_L1->SetModel(eBulModel);
-	madeBullet_L2->SetModel(eBulModel);
-	madeBullet_R1->SetModel(eBulModel);
-	madeBullet_R2->SetModel(eBulModel);
+	madeBullet_L1->SetModel(BulModel);
+	madeBullet_L2->SetModel(BulModel);
+	madeBullet_R1->SetModel(BulModel);
+	madeBullet_R2->SetModel(BulModel);
 
 	madeBullet_L1->SetPosition(position);
 	madeBullet_L2->SetPosition(position);
@@ -357,6 +355,9 @@ void Boss::Update()
 	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
+	aimBullets_.remove_if([](std::unique_ptr<BossAimBul>& aimBullet) {
+		return !aimBullet->GetAlive();
+		});
 
 	//黄金の回転
 	for (int i = 0; i < 1; i++)
@@ -396,6 +397,9 @@ void Boss::Update()
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//狙い弾
+		aimBullet->Update();
+	}
 
 	obj->Update();
 
@@ -411,6 +415,9 @@ void Boss::Draw()
 	//弾
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Draw();
+	}
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//狙い弾
+		aimBullet->Draw();
 	}
 
 	if (alive) {

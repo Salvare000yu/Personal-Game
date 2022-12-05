@@ -3,6 +3,7 @@
 #include "Object3d.h"
 #include "Camera.h"
 #include "BossBullet.h"
+#include "BossAimBul.h"
 #include "BaseObject.h"
 
 #include <memory>
@@ -67,6 +68,7 @@ public:
 	ActionPattern actionPattern_ = ActionPattern::Approach;
 
 	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
+	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
@@ -75,8 +77,10 @@ public:
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
+	const std::list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
 
-	inline void SetEBulModel(Model* model) { eBulModel = model; }
+	inline void SetBulModel(Model* model) { BulModel = model; }
+	inline void SetAimBulModel(Model* model) { AimBulModel = model; }
 
 	//ボス防御力
 	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
@@ -108,7 +112,8 @@ private:
 
 	bool even_odd_NumFlag = true;//奇数弾
 
-	Model* eBulModel = nullptr;
+	Model* BulModel = nullptr;
+	Model* AimBulModel = nullptr;
 
 	//防御力
 	const float BossDefenseDef = 10;

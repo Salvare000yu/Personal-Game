@@ -116,12 +116,13 @@ void GamePlayScene::Initialize()
 	//camera->SetEye(eye);
 
 	boss_.emplace_front();
-	for (std::unique_ptr<Boss>& boss : boss_)
+	for (std::unique_ptr<Boss>& boss : boss_)//É{ÉX
 	{
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
 		boss->SetModel(mod_enemy.get());
-		boss->SetEBulModel(mod_enemybullet.get());
+		boss->SetBulModel(mod_enemybullet.get());
+		boss->SetAimBulModel(mod_enemybullet.get());
 	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");

@@ -1,4 +1,4 @@
-#include "BossBullet.h"
+#include "BossAimBul.h"
 #include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -6,18 +6,18 @@
 
 #include <DirectXMath.h>
 
-BossBullet* BossBullet::GetInstance()
+BossAimBul* BossAimBul::GetInstance()
 {
-	static BossBullet instance;
+	static BossAimBul instance;
 
 	return &instance;
 }
 
 //bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚ÌŽž‚ÌƒvƒŒƒCƒ„[pos‚É•\Ž¦‚·‚é‚æ‚¤‚É‚·‚é
-void BossBullet::Initialize()
+void BossAimBul::Initialize()
 {
 	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
-	
+
 	//ì‚é
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
@@ -26,9 +26,21 @@ void BossBullet::Initialize()
 	//êŠ
 	//obj->SetPosition({ position });
 
+	//-------«‘_‚¢’e«-------//
+	Nowframe = 0;//Œ»ÝƒtƒŒ
+	GetPosFlag = true;//ˆê“x‚«‚èÀ•W“Ç‚ÝŽæ‚èƒtƒ‰ƒO
+	NowPos = {};//‚»‚ÌŽž‚Ì’eˆÊ’u
+	boPosMoment = {};//”­ŽËŽž‚ÌŽG‹›“GˆÊ’u
+	MoveSp = {};//’eˆÚ“®‘¬“x
+
+	ShotTagMomFlag = true;
+	ShotTagMoment = {};
+
+	//-------ª‘_‚¢’eª-------//
+
 }
 
-void BossBullet::Update()
+void BossAimBul::Update()
 {
 
 	XMFLOAT3 position = obj->GetPosition();
@@ -47,7 +59,7 @@ void BossBullet::Update()
 	obj->Update();
 }
 
-void BossBullet::Draw()
+void BossAimBul::Draw()
 {
 	obj->Draw();
 }

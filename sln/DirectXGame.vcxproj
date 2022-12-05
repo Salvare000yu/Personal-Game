@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3d\BaseObject.cpp" />
+    <ClCompile Include="GameChar\BossAimBul.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="camera\CameraTracking.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
@@ -298,6 +299,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\BaseObject.h" />
+    <ClInclude Include="GameChar\BossAimBul.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\CameraTracking.h" />
     <ClInclude Include="Collision\Collision.h" />
