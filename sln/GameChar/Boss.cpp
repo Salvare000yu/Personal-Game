@@ -121,6 +121,20 @@ void Boss::HpHalfPatStart()
 }
 void Boss::HpHalf()
 {
+	//敵の移動
+	XMFLOAT3 position = obj->GetPosition();
+
+	HpHalf_rad = HpHalf_Angle *3.1415926535f/180.0f;
+
+	addX = cos(HpHalf_rad) * HpHalf_Length;
+	addY = sin(HpHalf_rad) * HpHalf_Length;
+
+	position.x =0+addX;
+	position.y =40+addY;
+	obj->SetPosition(position);
+
+	HpHalf_Angle += 2.0f;
+	HpHalf_Length += 0.2f;
 }
 
 void Boss::Attack()
@@ -303,9 +317,9 @@ void Boss::Death() {
 
 	//XMFLOAT3 boRot = obj->GetRotation();
 	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (TargetPos.x - boPosDeath.x) / NecesFrame;
+	MoveSp.x = (boPosDeath.x - boPosDeath.x) / NecesFrame;//指定座標Xは死んだ場所から真下に落ちるように死んだX座標
 	MoveSp.y = (TargetPos.y - boPosDeath.y) / NecesFrame;
-	MoveSp.z = (TargetPos.z - boPosDeath.z) / NecesFrame;
+	MoveSp.z = (boPosDeath.z - boPosDeath.z) / NecesFrame;//〃
 	//その時の位置＝最初位置＋移動速度＊経過時間
 	NowPos.x = boPosDeath.x + MoveSp.x * Nowframe;
 	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;

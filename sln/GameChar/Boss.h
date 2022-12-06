@@ -135,6 +135,17 @@ private:
 	float PartTimeInterval;
 	float ParticleFrame = 39;//パーティクル出すフレ
 
+	//------HP半分以下円運動↓
+	float HpHalf_Angle = 20;
+	float HpHalf_rad = 100;
+
+	const float HpHalf_LengthDef = 10;//円運動の半径の長さ
+	float HpHalf_Length = HpHalf_LengthDef;
+	//移動値
+	float addX;
+	float addY;
+	//------HP半分以下円運動↑
+
 	//-------↓HPHALF↓------//
 	bool isHpHalfPattern = false;//hp半分以下行動してない
 
@@ -145,4 +156,5 @@ private:
 	//-------↑HPHALF↑------//
 
 	BaseObject* shotTag;//弾うつターゲット
+
 };
