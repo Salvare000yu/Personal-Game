@@ -16,7 +16,8 @@ class Boss:public BaseObject
 		Approach,//近づいてくる
 		Leave,//離れる
 		HpHalfPatStart,//Hp半分以下になったらタゲまで移動
-		HpHalf,
+		CircularMotionMove,//ぐるぐる
+		LeaveFirstPos,//元の場所へ一旦引く
 		Death,//死亡
 	};
 
@@ -33,11 +34,13 @@ public:
 
 	//攻撃
 	void Attack();
+
 	void PAimBul();
 	void Approach();
 	void Leave();
 	void HpHalfPatStart();
-	void HpHalf();
+	void CircularMotionMove();
+	void LeaveFirstPos();
 	//拡散攻撃
 	void DiffusionAttack();
 	//拡散偶数弾
@@ -73,6 +76,7 @@ public:
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
+	static const int AtkInterval_LeaveFirst = 20;
 	static const int DiffusionAtkInterval =20;
 
 	//-----------------↓げったーせったー↓------------------//
@@ -124,6 +128,9 @@ private:
 	//false：まだ死んでない
 	bool isDeath = false;
 
+	//死んだとき一度
+	bool IsFirst_Death = false;
+
 	XMFLOAT3 boPosDeath = {};
 	bool GetPosFlag = true;//一度きりの座標読み込み
 	const float NecesFrame = 190.0f;//かかる時間
@@ -136,14 +143,18 @@ private:
 	float ParticleFrame = 39;//パーティクル出すフレ
 
 	//------HP半分以下円運動↓
-	float HpHalf_Angle = 20;
-	float HpHalf_rad = 100;
+	const float HpHalf_AngleDef = 20;
+	float HpHalf_Angle = HpHalf_AngleDef;
+	const float HpHalf_radDef = 100;
+	float HpHalf_rad = HpHalf_radDef;
 
 	const float HpHalf_LengthDef = 10;//円運動の半径の長さ
 	float HpHalf_Length = HpHalf_LengthDef;
 	//移動値
-	float addX;
-	float addY;
+	const float addXDef=0;
+	float addX= addXDef;
+	const float addYDef = 0;
+	float addY = addYDef;
 	//------HP半分以下円運動↑
 
 	//-------↓HPHALF↓------//
@@ -153,6 +164,8 @@ private:
 	//まずこの位置に行く
 	XMFLOAT3 TargetHpHalfPos = { 0, 40, 200 };
 	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
+
+	const float NecesLeaveFirstFrame = 180.f;
 	//-------↑HPHALF↑------//
 
 	BaseObject* shotTag;//弾うつターゲット

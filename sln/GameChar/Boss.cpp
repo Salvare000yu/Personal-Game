@@ -116,25 +116,94 @@ void Boss::HpHalfPatStart()
 		NowPos = {};
 
 		isHpHalfPattern = true;//この処理全部終了したからもうやんない
-		actionPattern_ = ActionPattern::HpHalf;
+		actionPattern_ = ActionPattern::CircularMotionMove;
 	}
 }
-void Boss::HpHalf()
+void Boss::CircularMotionMove()
 {
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
-
+	//弧度法
 	HpHalf_rad = HpHalf_Angle *3.1415926535f/180.0f;
 
+	//円の位置を三角関数でだす
 	addX = cos(HpHalf_rad) * HpHalf_Length;
 	addY = sin(HpHalf_rad) * HpHalf_Length;
 
+	//中心座標に移動量を足した値を座標に
 	position.x =0+addX;
 	position.y =40+addY;
+	position.z -= 0.2f;
+
 	obj->SetPosition(position);
 
-	HpHalf_Angle += 2.0f;
-	HpHalf_Length += 0.2f;
+	HpHalf_Angle += 5.0f;//角度　増やすと移動速くなる
+	HpHalf_Length += 0.3f;//渦を巻くように広げたい
+
+	//半径が一定以上で行動変える
+	if (HpHalf_Length >= 200) {
+		//---円運動類
+		HpHalf_Angle = HpHalf_AngleDef;
+		HpHalf_rad = HpHalf_radDef;
+		HpHalf_Length = HpHalf_LengthDef;
+		addX = addXDef;
+		addY = addYDef;
+
+		actionPattern_ = ActionPattern::LeaveFirstPos;
+	}
+
+	//発射カウントをデクリメント
+	AtkCount--;
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { Attack(); }//追尾弾
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
+}
+void Boss::LeaveFirstPos() 
+{
+	Nowframe++;
+
+	if (GetPosFlag == true)
+	{
+		//最初の位置
+		HpHalfMomentPos = obj->GetPosition();
+		GetPosFlag = false;
+	}
+
+	//移動速度＝（指定座標-最初位置）/かかる時間
+	MoveSp.x = (TargetHpHalfPos.x - HpHalfMomentPos.x) / NecesLeaveFirstFrame;
+	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesLeaveFirstFrame;
+	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesLeaveFirstFrame;
+	//その時の位置＝最初位置＋移動速度＊経過時間
+	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
+	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
+	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
+
+	obj->SetPosition({ NowPos });
+
+	//発射カウントをデクリメント
+	AtkCount--;
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { Attack(); }//追尾弾
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval_LeaveFirst;
+	}
+
+
+	if (Nowframe == NecesLeaveFirstFrame) {
+		Nowframe = 0;
+		GetPosFlag = true;
+		HpHalfMomentPos = {};
+		MoveSp = {};
+		NowPos = {};
+
+		actionPattern_ = ActionPattern::CircularMotionMove;
+	}
 }
 
 void Boss::Attack()
@@ -300,6 +369,8 @@ void Boss::DiffusionAttackEavenNumber()
 	bullets_.push_back(std::move(madeBullet_L2));
 	bullets_.push_back(std::move(madeBullet_R1));
 	bullets_.push_back(std::move(madeBullet_R2));
+
+	Nowframe = 0;
 }
 
 void Boss::Death() {
@@ -404,10 +475,15 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
 	if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }
 	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
-	if (actionPattern_ == ActionPattern::HpHalf) { pFunc = &Boss::HpHalf; }
+	if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }
+	if (actionPattern_ == ActionPattern::LeaveFirstPos) { pFunc = &Boss::LeaveFirstPos; }
 
 	if (isDeath == true) {
 		actionPattern_ = ActionPattern::Death;
+		if (IsFirst_Death == false) {
+			Nowframe = 0;
+			IsFirst_Death = true;
+		}
 	}
 	if(isHpHalfPattern==false)
 	if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
