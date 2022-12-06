@@ -187,9 +187,9 @@ void Player::Shake() {
 
 		//pos揺らす
 		XMFLOAT3 pos = obj->GetPosition();
-		randShakeNow = 2 + 1;//a~b
-		pos.x = pos.x + rand() % randShakeNow - 1;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
-		pos.y = pos.y + rand() % randShakeNow - 1;
+		randShakeNow = 1+ 1;//a~b
+		pos.x = pos.x + rand() % randShakeNow - 0.5f;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+		pos.y = pos.y + rand() % randShakeNow - 0.5f;
 		obj->SetPosition(pos);
 
 		if (pShakeTimer_ <= 0) {
@@ -209,6 +209,8 @@ void Player::PlayerDeath()
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
+	XMFLOAT3 position = obj->GetPosition();
+
 	if (GetPosFlag == true)
 	{
 		//最初の位置
@@ -217,9 +219,9 @@ void Player::PlayerDeath()
 	}
 
 	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (TargetPos.x - pPosDeath.x) / NecesFrame;
+	MoveSp.x = (pPosDeath.x - pPosDeath.x) / NecesFrame;//ここの指定座標は自機最初のX座標にして真下に落ちるようにする
 	MoveSp.y = (TargetPos.y - pPosDeath.y) / NecesFrame;
-	MoveSp.z = (TargetPos.z - pPosDeath.z) / NecesFrame;
+	MoveSp.z = (TargetPos.z - pPosDeath.z) / NecesFrame;//奥行きついたらここもそうする
 	//その時の位置＝最初位置＋移動速度＊経過時間
 	NowPos.x = pPosDeath.x + MoveSp.x * Nowframe;
 	NowPos.y = pPosDeath.y + MoveSp.y * Nowframe;

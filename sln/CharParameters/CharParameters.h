@@ -34,6 +34,9 @@ public:
 	const float& GetpMaxHp() { return PlayerMaxHP; }
 	//ボスHPMax
 	const float& GetboMaxHp() { return BossMaxHP; }
+	//ボス防御力
+	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
+	const float& GetBossDefense() { return BossDefense; }
 	//-----------------------↑げったーせったー↑-----------------------//
 
 private:
@@ -61,5 +64,9 @@ private:
 	bool BarPosControlOnlyOnceFlag5 = false;
 	bool BarPosControlOnlyOnceFlag6 = false;
 	bool BarPosControlOnlyOnceFlag7 = false;
+
+	//防御力
+	const float BossDefenseDef = 50;
+	float BossDefense = BossDefenseDef;
 };
 

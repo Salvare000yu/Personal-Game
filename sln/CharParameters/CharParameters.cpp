@@ -41,6 +41,12 @@ void CharParameters::Initialize()
 	BarPosControlOnlyOnceFlag5 = false;
 	BarPosControlOnlyOnceFlag6 = false;
 	BarPosControlOnlyOnceFlag7 = false;
+
+	//パラメータ関連初期化
+	BossDefense = BossDefenseDef;
+	NowBossHP = BossMaxHP;//
+	NowPlayerHP = PlayerMaxHP;//
+
 }
 
 void CharParameters::pHpSizeChange()

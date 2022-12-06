@@ -179,6 +179,7 @@ void GamePlayScene::Initialize()
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_dame_ef.reset(Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	//sp_.reset(Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 	//sp_guide->TransferVertexBuffer();
@@ -241,10 +242,6 @@ void GamePlayScene::Initialize()
 	//時間リセット。タイトルに戻る度。
 	Timer* timer = Timer::GetInstance();
 	timer->TimerPlay(false);
-
-	//パラメータ関連を初期化する
-	charParameters->SetNowBoHp({ charParameters->GetboMaxHp() });//ボス体力
-	charParameters->SetNowpHp({ charParameters->GetpMaxHp() });//自機体力
 
 	//今あるパーティクルを削除する
 	ParticleManager::GetInstance()->DeleteParticles();
@@ -537,11 +534,11 @@ void GamePlayScene::PadStickCamera()
 
 void GamePlayScene::CollisionAll()
 {
-	CharParameters* charParameters = CharParameters::GetInstance();
+	CharParameters* charParams = CharParameters::GetInstance();
 
-	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
-	float BossDefense = boss_.front()->GetBossDefense();//ボス防御力取得 先頭要素
-	float NowpHp = charParameters->GetNowpHp();//自機体力取得
+	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
+	float BossDefense = charParams->GetBossDefense();//ボス防御力取得 先頭要素
+	float NowpHp = charParams->GetNowpHp();//自機体力取得
 	float pBulPow = player_->GetpBulPow();//自機弾威力
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
@@ -576,7 +573,7 @@ void GamePlayScene::CollisionAll()
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
 						NowBoHp -= (pBulPow - BossDefense);
-						charParameters->SetNowBoHp(NowBoHp);//ボスHPセット
+						charParams->SetNowBoHp(NowBoHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 
@@ -669,8 +666,8 @@ void GamePlayScene::CollisionAll()
 
 						pDamFlag = true;
 						NowpHp -= bo->GetBulPow();//自機ダメージ
-						charParameters->SetispDam(true);
-						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
+						charParams->SetispDam(true);
+						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						bob->SetAlive(false);
@@ -700,8 +697,8 @@ void GamePlayScene::CollisionAll()
 
 						pDamFlag = true;
 						NowpHp -= bo->GetAimBulPow();//自機ダメージ
-						charParameters->SetispDam(true);
-						charParameters->SetNowpHp(NowpHp);//プレイヤーHPセット
+						charParams->SetispDam(true);
+						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						boaimbul->SetAlive(false);
@@ -732,8 +729,8 @@ void GamePlayScene::CollisionAll()
 						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
 						pDamFlag = true;
 						NowpHp -= seBulPow;//自機ダメージ
-						charParameters->SetispDam(true);//自機くらい
-						charParameters->SetNowpHp(NowpHp);//ボスHPセット
+						charParams->SetispDam(true);//自機くらい
+						charParams->SetNowpHp(NowpHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						seb->SetAlive(false);
@@ -804,13 +801,13 @@ void GamePlayScene::Update()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
-	CharParameters* charParameters = CharParameters::GetInstance();
+	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->WaitKey0 < 10&& pause->GetPauseFlag() == false) {
 		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 	}
 	if (pause->WaitKey0 >= 2) {
-		if (charParameters->GetNowpHp() > 0 && charParameters->GetNowBoHp() > 0) {
+		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {
 			if (cInput->PauseOpenClose() && (GameReady() == false)&& pause->GetPauseFlag() == false) {
 				pause->EveryInit();
 				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -845,7 +842,7 @@ void GamePlayScene::Update()
 
 		CharParameters* charParameters = CharParameters::GetInstance();
 		float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
-		float BossDefense = boss_.front()->GetBossDefense();//ボス防御力取得
+		float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
 		float NowpHp = charParameters->GetNowpHp();//自機体力取得
 
 		//キー操作押している間
@@ -1075,7 +1072,6 @@ void GamePlayScene::Update()
 	//}
 
 	//obj_tunnel->Update();
-
 }
 
 void GamePlayScene::Draw()

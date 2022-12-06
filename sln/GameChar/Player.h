@@ -106,7 +106,7 @@ public:
 
 private:
 	//自機通常弾威力
-	const float pBulPowerMax = 55;
+	const float pBulPowerMax = 100;
 	float pBulPower = pBulPowerMax;
 
 	//playのReady中かどうか
@@ -116,6 +116,7 @@ private:
 
 	const float pDeathRot = 0.4f;
 
+	//-----自機死亡演出
 	XMFLOAT3 pPosDeath = {};
 	float Nowframe = 0;//現在フレ
 	const float NecesFrame = 180.0f;//かかる時間

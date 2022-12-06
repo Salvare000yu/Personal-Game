@@ -80,6 +80,9 @@ void Boss::Leave()
 
 void Boss::HpHalfPatStart()
 {
+
+	CharParameters* charParams = CharParameters::GetInstance();
+
 	Nowframe++;
 
 	if (GetPosFlag == true)
@@ -87,6 +90,11 @@ void Boss::HpHalfPatStart()
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosFlag = false;
+
+		//防御力上がる
+		float Defence=charParams->GetBossDefense();
+		Defence += 30;
+		charParams->SetBossDefense(Defence);
 	}
 
 	//移動速度＝（指定座標-最初位置）/かかる時間

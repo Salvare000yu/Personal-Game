@@ -83,10 +83,6 @@ public:
 	inline void SetBulModel(Model* model) { BulModel = model; }
 	inline void SetAimBulModel(Model* model) { AimBulModel = model; }
 
-	//ボス防御力
-	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
-	const float& GetBossDefense() { return BossDefense; }
-
 	//通常弾威力
 	const float& GetBulPow() { return BulPow; }
 	//狙い弾威力
@@ -121,10 +117,6 @@ private:
 	Model* BulModel = nullptr;
 	Model* AimBulModel = nullptr;
 
-	//防御力
-	const float BossDefenseDef = 10;
-	float BossDefense = BossDefenseDef;
-
 	//敵通常弾威力
 	const float BulPow = 200;
 	const float AimBulPow = 150;
@@ -149,7 +141,7 @@ private:
 	XMFLOAT3 HpHalfMomentPos = {};
 	//まずこの位置に行く
 	XMFLOAT3 TargetHpHalfPos = { 0, 40, 200 };
-	const float NecesHpHalfFrame = 180.0f;//HP半分時このフレーム分移動まで時間かかる
+	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
 	//-------↑HPHALF↑------//
 
 	BaseObject* shotTag;//弾うつターゲット
