@@ -15,6 +15,7 @@ void Boss::ApproachInit()
 	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
 	AtkCount = AtkInterval;
 	DiffusionAtkCount = DiffusionAtkInterval;
+	Circular_AtkCount = Circular_AtkInterval;
 }
 
 void Boss::Approach()
@@ -93,7 +94,7 @@ void Boss::HpHalfPatStart()
 
 		//防御力上がる
 		float Defence=charParams->GetBossDefense();
-		Defence += 30;
+		Defence += 15;
 		charParams->SetBossDefense(Defence);
 	}
 
@@ -178,17 +179,22 @@ void Boss::CircularMotionMove()
 	}
 
 	//発射カウントをデクリメント
-	AtkCount--;
+	Circular_AtkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (Circular_AtkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }//追尾弾
+
+		//だんだん弾の発射間隔速く
+		Circular_AtkInterval-=2;
+
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
+		Circular_AtkCount = Circular_AtkInterval;
 	}
 }
 void Boss::LeaveFirstPos() 
 {
+
 	Nowframe++;
 
 	if (GetPosFlag == true)
@@ -197,9 +203,9 @@ void Boss::LeaveFirstPos()
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosFlag = false;
 	}
-
+	XMFLOAT3 pPos = shotTag->GetPosition();
 	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (TargetHpHalfPos.x - HpHalfMomentPos.x) / NecesLeaveFirstFrame;
+	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesLeaveFirstFrame;
 	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesLeaveFirstFrame;
 	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesLeaveFirstFrame;
 	//その時の位置＝最初位置＋移動速度＊経過時間
@@ -219,13 +225,15 @@ void Boss::LeaveFirstPos()
 		AtkCount = AtkInterval_LeaveFirst;
 	}
 
-
 	if (Nowframe == NecesLeaveFirstFrame) {
 		Nowframe = 0;
 		GetPosFlag = true;
 		HpHalfMomentPos = {};
 		MoveSp = {};
 		NowPos = {};
+
+		//弾の発射間隔を元に戻す
+		Circular_AtkInterval = Circular_AtkIntervalDef;
 
 		actionPattern_ = ActionPattern::CircularMotionMove;
 	}

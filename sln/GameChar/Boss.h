@@ -115,6 +115,7 @@ private:
 	//攻撃用カウント
 	float AtkCount = 0;
 	float DiffusionAtkCount = 0;
+	float Circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -156,6 +157,9 @@ private:
 	const float addYDef = 0;
 	float addY = addYDef;
 	//------HP半分以下円運動↑
+
+	static const int Circular_AtkIntervalDef = 45;
+	int Circular_AtkInterval = Circular_AtkIntervalDef;
 
 	//-------↓HPHALF↓------//
 	bool isHpHalfPattern = false;//hp半分以下行動してない

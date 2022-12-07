@@ -106,7 +106,7 @@ public:
 
 private:
 	//©‹@’Êí’eˆĞ—Í
-	const float pBulPowerMax = 200;
+	const float pBulPowerMax = 100;
 	float pBulPower = pBulPowerMax;
 
 	//play‚ÌReady’†‚©‚Ç‚¤‚©
