@@ -108,6 +108,30 @@ void Boss::HpHalfPatStart()
 
 	obj->SetPosition({ NowPos });
 
+	//発射カウントをデクリメント
+	DiffusionAtkCount--;
+	if (DiffusionAtkCount == 0) {
+		//生存時のみ発射
+		if (alive) {
+			if (even_odd_NumFlag == true)//奇数弾
+			{
+				DiffusionAttack();
+			}
+			else { DiffusionAttackEavenNumber(); }
+		}
+		//再びカウントできるように初期化
+		DiffusionAtkCount = DiffusionAtkInterval;
+	}
+	//発射カウントをデクリメント
+	AtkCount--;
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { Attack(); }//追尾弾
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
+
 	if (Nowframe == NecesHpHalfFrame) {
 		Nowframe = 0;
 		GetPosFlag = true;
@@ -130,10 +154,11 @@ void Boss::CircularMotionMove()
 	addX = cos(HpHalf_rad) * HpHalf_Length;
 	addY = sin(HpHalf_rad) * HpHalf_Length;
 
+	XMFLOAT3 pPos = shotTag->GetPosition();
 	//中心座標に移動量を足した値を座標に
-	position.x =0+addX;
+	position.x = pPos.x+addX;
 	position.y =40+addY;
-	position.z -= 0.2f;
+	position.z -= 0.15f;//地味に迫ってくる
 
 	obj->SetPosition(position);
 
@@ -141,7 +166,7 @@ void Boss::CircularMotionMove()
 	HpHalf_Length += 0.3f;//渦を巻くように広げたい
 
 	//半径が一定以上で行動変える
-	if (HpHalf_Length >= 200) {
+	if (HpHalf_Length >= 150) {
 		//---円運動類
 		HpHalf_Angle = HpHalf_AngleDef;
 		HpHalf_rad = HpHalf_radDef;
@@ -369,8 +394,6 @@ void Boss::DiffusionAttackEavenNumber()
 	bullets_.push_back(std::move(madeBullet_L2));
 	bullets_.push_back(std::move(madeBullet_R1));
 	bullets_.push_back(std::move(madeBullet_R2));
-
-	Nowframe = 0;
 }
 
 void Boss::Death() {
@@ -485,9 +508,10 @@ void Boss::Update()
 			IsFirst_Death = true;
 		}
 	}
-	if(isHpHalfPattern==false)
-	if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
-		actionPattern_ = ActionPattern::HpHalfPatStart;
+	if (isHpHalfPattern == false) {
+		if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
+			actionPattern_ = ActionPattern::HpHalfPatStart;
+		}
 	}
 
 	//メンバ関数ポインタ呼び出し
