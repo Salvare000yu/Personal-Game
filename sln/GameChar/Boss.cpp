@@ -10,6 +10,17 @@
 
 #include "GamePlayScene.h"
 
+void Boss::BossAppear()
+{
+	XMFLOAT3 pos=obj->GetPosition();
+	pos.z--;
+	obj->SetPosition(pos);
+
+	if (pos.z == 50) {
+		actionPattern_ = ActionPattern::Approach;
+	}
+}
+
 void Boss::ApproachInit()
 {
 	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
@@ -452,7 +463,7 @@ void Boss::Initialize()
 	//大きさ
 	obj->SetScale({ 20.0f, 20.0f, 20.0f });
 	//場所
-	obj->SetPosition({ -100,50,50 });
+	obj->SetPosition({ 0,50,500 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
@@ -502,6 +513,7 @@ void Boss::Update()
 	}
 
 	//メンバ関数ポインタ対応したボスの動きをする
+	if (actionPattern_ == ActionPattern::BossAppear) { pFunc = &Boss::BossAppear; }
 	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
 	if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }

@@ -13,6 +13,7 @@ class Boss:public BaseObject
 
 	//行動パターン enumclass
 	enum class ActionPattern {
+		BossAppear,
 		Approach,//近づいてくる
 		Leave,//離れる
 		HpHalfPatStart,//Hp半分以下になったらタゲまで移動
@@ -36,6 +37,7 @@ public:
 	void Attack();
 
 	void PAimBul();
+	void BossAppear();
 	void Approach();
 	void Leave();
 	void HpHalfPatStart();
@@ -69,7 +71,7 @@ public:
 	void  (Boss::* pFunc)();
 
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
-	ActionPattern actionPattern_ = ActionPattern::Approach;
+	ActionPattern actionPattern_ = ActionPattern::BossAppear;
 
 	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
 	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾

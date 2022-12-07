@@ -1035,13 +1035,14 @@ void GamePlayScene::Update()
 				{//演出終わったら
 					//ボス戦突入のお知らせです
 					BossEnemyAdvent = true;
-					for (std::unique_ptr<Boss>& boss : boss_) {
-						boss->Update();//敵更新
+				}
+				//条件達成でボス登場演出
+				for (std::unique_ptr<Boss>& boss : boss_) {
+					boss->Update();//敵更新
 
-						if (boss->GetisDeath() == true)
-						{
-							BossDeathEfect();
-						}
+					if (boss->GetisDeath() == true)
+					{
+						BossDeathEfect();
 					}
 				}
 			}
@@ -1098,7 +1099,7 @@ void GamePlayScene::Draw()
 	}
 
 	//敵描画
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum && BeforeBossAppearFlag == true) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
