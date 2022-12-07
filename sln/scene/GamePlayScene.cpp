@@ -93,8 +93,8 @@ void GamePlayScene::Initialize()
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
-	obj_kaberight->SetPosition({ 310,-200,0 });
-	obj_kabeleft->SetPosition({ -310,-200,0 });
+	obj_kaberight->SetPosition({ 360,-200,0 });
+	obj_kabeleft->SetPosition({ -360,-200,0 });
 	obj_tunnel->SetPosition({ 0,40,-170 });
 	//------object‰ñ“]------//
 	obj_kaberight->SetRotation({ 0,90,0 });

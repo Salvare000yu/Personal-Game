@@ -14,11 +14,14 @@ void Boss::BossAppear()
 {
 	XMFLOAT3 pos=obj->GetPosition();
 	pos.z--;
-	obj->SetPosition(pos);
 
 	if (pos.z == 50) {
 		actionPattern_ = ActionPattern::Approach;
 	}
+
+	pos.y += 2.f * sinf(time * 3.14159265358f);
+
+	obj->SetPosition(pos);
 }
 
 void Boss::ApproachInit()
@@ -463,7 +466,7 @@ void Boss::Initialize()
 	//‘å‚«‚³
 	obj->SetScale({ 20.0f, 20.0f, 20.0f });
 	//êŠ
-	obj->SetPosition({ 0,50,500 });
+	obj->SetPosition({ 0,0,260 });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
