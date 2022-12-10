@@ -172,7 +172,7 @@ void SmallEnemy::Update()
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
 		// ‘å‚«‚³‚ð”CˆÓ’l‚É(‘¬“x)
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 10.f);
 		// FLOAT3‚É•ÏŠ·
 		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
 

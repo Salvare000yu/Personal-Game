@@ -108,7 +108,7 @@ void Boss::HpHalfPatStart()
 
 		//–hŒä—Íã‚ª‚é
 		float Defence=charParams->GetBossDefense();
-		Defence += 15;
+		Defence += 20;
 		charParams->SetBossDefense(Defence);
 	}
 

@@ -105,8 +105,9 @@ public:
 	//-------------------↑げったーせったー↑-------------------//
 
 private:
-	//自機通常弾威力
-	const float pBulPowerMax = 100;
+	//自機通常弾威力 150
+	//const float pBulPowerMax = 100;
+	const float pBulPowerMax = 350;
 	float pBulPower = pBulPowerMax;
 
 	//playのReady中かどうか
