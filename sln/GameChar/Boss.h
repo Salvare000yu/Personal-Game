@@ -136,6 +136,7 @@ private:
 
 	XMFLOAT3 boPosDeath = {};
 	bool GetPosFlag = true;//一度きりの座標読み込み
+	bool GetPosDeathFlag = true;//一度きりの座標読み込み
 	const float NecesFrame = 190.0f;//かかる時間
 	float Nowframe = 0;//現在フレ
 	XMFLOAT3 MoveSp = {};//移動速度
@@ -168,7 +169,7 @@ private:
 
 	XMFLOAT3 HpHalfMomentPos = {};
 	//まずこの位置に行く
-	XMFLOAT3 TargetHpHalfPos = { 0, 40, 100 };
+	XMFLOAT3 TargetHpHalfPos = { 0, 60, 100 };
 	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
 
 	const float NecesLeaveFirstFrame = 180.f;

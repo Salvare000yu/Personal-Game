@@ -424,11 +424,11 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if(GetPosFlag==true)
+	if(GetPosDeathFlag==true)
 	{
 		//Å‰‚ÌˆÊ’u
 		boPosDeath = obj->GetPosition();
-		GetPosFlag = false;
+		GetPosDeathFlag = false;
 	}
 
 	//XMFLOAT3 boRot = obj->GetRotation();
