@@ -112,8 +112,9 @@ void Boss::HpHalfPatStart()
 		charParams->SetBossDefense(Defence);
 	}
 
+	XMFLOAT3 pPos = shotTag->GetPosition();
 	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (TargetHpHalfPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
+	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
 	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesHpHalfFrame;
 	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesHpHalfFrame;
 	//その時の位置＝最初位置＋移動速度＊経過時間
