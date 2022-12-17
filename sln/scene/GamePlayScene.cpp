@@ -68,6 +68,7 @@ void GamePlayScene::Initialize()
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
+	
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
@@ -75,6 +76,7 @@ void GamePlayScene::Initialize()
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
+
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
@@ -787,10 +789,7 @@ bool GamePlayScene::GameReady()
 }
 
 void GamePlayScene::Update()
-{/*
-	XMFLOAT4 pColor = player_->GetColor();
-	pColor = { 1,0,0,1 };
-	player_->SetColor(pColor);*/
+{
 
 	Pause* pause = Pause::GetInstance();
 

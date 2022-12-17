@@ -465,7 +465,7 @@ void Boss::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 20.0f, 20.0f, 20.0f });
+	obj->SetScale({ 27.0f, 27.0f, 27.0f });
 	//êŠ
 	obj->SetPosition({ 0,0,260 });
 

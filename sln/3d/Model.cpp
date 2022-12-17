@@ -14,6 +14,12 @@ using namespace DirectX;
 
 ID3D12Device* Model::device=nullptr;
 
+Model* Model::GetInstance()
+{
+	static Model instance;
+	return &instance;
+}
+
 Model* Model::LoadFromOBJ(const std::string& modelname)
 {
 

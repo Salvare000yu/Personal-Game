@@ -53,6 +53,8 @@ public:
 
 public://静的メンバ関数
 
+	static Model* GetInstance();
+
 	//OBJファイルから3Dモデルを読み込み
 	static Model* LoadFromOBJ(const std::string& modelname);
 
@@ -65,6 +67,9 @@ public://静的メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
 
 	static void SetDevice(ID3D12Device* device) { Model::device = device; }
+
+	void SetAlpha(float alpha) { this->material.alpha = alpha; }
+	const float& GetAlpha() { return material.alpha; }
 
 private:
 	//借りるデバイス
