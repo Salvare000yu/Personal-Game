@@ -68,7 +68,7 @@ void GamePlayScene::Initialize()
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
-	
+
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
@@ -90,7 +90,7 @@ void GamePlayScene::Initialize()
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
 	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
-	obj_tunnel->SetScale({ 2.0f, 2.0f, 2.0f });
+	obj_tunnel->SetScale({ 15.f, 15.f, 15.f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
@@ -802,12 +802,12 @@ void GamePlayScene::Update()
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	if (pause->WaitKey0 < 10&& pause->GetPauseFlag() == false) {
+	if (pause->WaitKey0 < 10 && pause->GetPauseFlag() == false) {
 		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 	}
 	if (pause->WaitKey0 >= 2) {
 		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {
-			if (cInput->PauseOpenClose() && (GameReady() == false)&& pause->GetPauseFlag() == false) {
+			if (cInput->PauseOpenClose() && (GameReady() == false) && pause->GetPauseFlag() == false) {
 				pause->EveryInit();
 				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 				pause->SetPauseFlag(true);
@@ -815,7 +815,7 @@ void GamePlayScene::Update()
 		}
 	}
 	if (pause->GetPauseFlag() == true) {
-		
+
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
@@ -897,11 +897,11 @@ void GamePlayScene::Update()
 		}
 
 		//3dobjUPDATE
-		object3d_1->Update();
+		//object3d_1->Update();
 		obj_worlddome->Update();
 		//obj_sword->Update();
-		obj_kaberight->Update();
-		obj_kabeleft->Update();
+		//obj_kaberight->Update();
+		//obj_kabeleft->Update();
 
 		//スプライト更新
 		sprite_back->Update();
@@ -959,7 +959,7 @@ void GamePlayScene::Update()
 				bo->SetShotTag(player_.get());
 			}
 			//------狙い弾↑
-			
+
 			//自機側で死亡確認したら消す
 			if (player_->GetpDeath() == true) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
@@ -1071,7 +1071,7 @@ void GamePlayScene::Update()
 	//	DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
 	//}
 
-	//obj_tunnel->Update();
+	obj_tunnel->Update();
 }
 
 void GamePlayScene::Draw()
@@ -1105,12 +1105,12 @@ void GamePlayScene::Draw()
 	}
 
 	//3dオブジェ描画
-	object3d_1->Draw();
+	//object3d_1->Draw();
 	obj_worlddome->Draw();
 	//obj_sword->Draw();
-	obj_kaberight->Draw();
-	obj_kabeleft->Draw();
-	//obj_tunnel->Draw();
+	//obj_kaberight->Draw();
+	//obj_kabeleft->Draw();
+	obj_tunnel->Draw();
 
 	//自キャラ描画
 	player_->Draw();
