@@ -95,8 +95,8 @@ void GamePlayScene::Initialize()
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
-	obj_kaberight->SetPosition({ 1250,-200,2000 });
-	obj_kabeleft->SetPosition({ -1250,-200,2000 });
+	obj_kaberight->SetPosition({ 1200,-200,2000 });
+	obj_kabeleft->SetPosition({ -1200,-200,2000 });
 	obj_tunnel->SetPosition({ 0,40,-170 });
 	//------object‰ñ“]------//
 	obj_kaberight->SetRotation({ 0,0,0 });
@@ -286,6 +286,13 @@ void GamePlayScene::BeforeBossAppear()
 
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 	//SP_BossWarning.w -= 0.01;
+
+	XMFLOAT3 LWallPos= obj_kabeleft->GetPosition();
+	XMFLOAT3 RWallPos= obj_kaberight->GetPosition();
+	LWallPos.x-= 5;
+	RWallPos.x+= 5;
+	obj_kabeleft->SetPosition(LWallPos);
+	obj_kaberight->SetPosition(RWallPos);
 
 	switch (beforeBossPattern_)
 	{

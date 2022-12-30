@@ -467,7 +467,7 @@ void Boss::Initialize()
 	//‘å‚«‚³
 	obj->SetScale({ 27.0f, 27.0f, 27.0f });
 	//êŠ
-	obj->SetPosition({ 0,0,260 });
+	obj->SetPosition({ 0,0,400 });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
