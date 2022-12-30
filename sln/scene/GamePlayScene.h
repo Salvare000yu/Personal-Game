@@ -149,7 +149,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 7
-	float BossTermsEMurdersNum = 7;
+	float BossTermsEMurdersNum = 1;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

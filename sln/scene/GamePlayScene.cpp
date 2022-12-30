@@ -88,19 +88,19 @@ void GamePlayScene::Initialize()
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
-	obj_kaberight->SetScale({ 200.0f, 200.0f, 10.0f });
-	obj_kabeleft->SetScale({ 200.0f, 200.0f, 10.0f });
-	obj_tunnel->SetScale({ 20.0f, 20.0f, 20.0f });
+	obj_kaberight->SetScale({ 100.0f, 100.0f, 10.0f });
+	obj_kabeleft->SetScale({ 100.0f, 100.0f, 10.0f });
+	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
-	obj_kaberight->SetPosition({ 360,-200,0 });
-	obj_kabeleft->SetPosition({ -360,-200,0 });
+	obj_kaberight->SetPosition({ 1250,-200,2000 });
+	obj_kabeleft->SetPosition({ -1250,-200,2000 });
 	obj_tunnel->SetPosition({ 0,40,-170 });
 	//------object回転------//
-	obj_kaberight->SetRotation({ 0,90,0 });
-	obj_kabeleft->SetRotation({ 0,-90,0 });
+	obj_kaberight->SetRotation({ 0,0,0 });
+	obj_kabeleft->SetRotation({ 0,0,0 });
 	obj_tunnel->SetRotation({ 0,-90,0 });
 
 	//いろいろ生成
@@ -360,7 +360,7 @@ void GamePlayScene::PlayerMove()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//----------↓移動制限
-	const float PlayerMoveLimX = 190;
+	const float PlayerMoveLimX = 300;
 
 	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
 	const float PlayerMinMoveLimY = 200;//上に行ける範囲
@@ -884,11 +884,18 @@ void GamePlayScene::Update()
 		charParameters->pHpSizeChange();
 
 		charParameters->BarGetDislodged();
-
-		//天球回転
-		XMFLOAT3 rotation = obj_worlddome->GetRotation();
-		rotation.y += 0.3f;
-		obj_worlddome->SetRotation({ rotation });
+		{
+			//天球回転
+			XMFLOAT3 rotation = obj_worlddome->GetRotation();
+			rotation.y += 0.3f;
+			obj_worlddome->SetRotation({ rotation });
+		}
+		{
+			//トンネル回転
+			XMFLOAT3 rotation = obj_tunnel->GetRotation();
+			rotation.x += 0.3f;
+			obj_tunnel->SetRotation({ rotation });
+		}
 
 		if (player_->GetPHpLessThan0() == false)
 		{
@@ -914,10 +921,10 @@ void GamePlayScene::Update()
 
 		//3dobjUPDATE
 		object3d_1->Update();
-		obj_worlddome->Update();
+		//obj_worlddome->Update();
 		//obj_sword->Update();
-		//obj_kaberight->Update();
-		//obj_kabeleft->Update();
+		obj_kaberight->Update();
+		obj_kabeleft->Update();
 
 		//スプライト更新
 		sprite_back->Update();
@@ -1102,7 +1109,7 @@ void GamePlayScene::Draw()
 	SpriteBase::GetInstance()->PreDraw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
-	//sprite_back->Draw();
+	sprite_back->Draw();
 
 
 	//3dオブジェ描画前処理
@@ -1122,10 +1129,10 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画
 	object3d_1->Draw();
-	obj_worlddome->Draw();
+	//obj_worlddome->Draw();
 	//obj_sword->Draw();
-	//obj_kaberight->Draw();
-	//obj_kabeleft->Draw();
+	obj_kaberight->Draw();
+	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
 
 	//自キャラ描画
