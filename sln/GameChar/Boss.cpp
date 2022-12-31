@@ -12,10 +12,19 @@
 
 void Boss::BossAppear()
 {
+
+	CharParameters* charParams = CharParameters::GetInstance();
+	const int DistanceFromThePlayer=500;//自機停止場所からこれだけ離れた場所に到達したら行動へ移る
+
 	XMFLOAT3 pos=obj->GetPosition();
 	pos.z--;
 
-	if (pos.z == 50) {
+	//if (pos.z < charParams->StopPos+ DistanceFromThePlayer) {
+	//	actionPattern_ = ActionPattern::Approach;
+	//}
+	
+	//移動完了確認しだい
+	if (charParams->pNextPlaceGoFlag == false) {
 		actionPattern_ = ActionPattern::Approach;
 	}
 
@@ -467,7 +476,7 @@ void Boss::Initialize()
 	//大きさ
 	obj->SetScale({ 27.0f, 27.0f, 27.0f });
 	//場所
-	obj->SetPosition({ 0,0,400 });
+	obj->SetPosition({ 0,0,3500 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");

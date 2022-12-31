@@ -39,6 +39,10 @@ public:
 	const float& GetBossDefense() { return BossDefense; }
 	//-----------------------↑げったーせったー↑-----------------------//
 
+	int StopPos = 1800;//自機次座標への移動の停止場所
+	//次の場所へ向かう　true：向かっている false:完了
+	bool pNextPlaceGoFlag = true;
+
 private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
@@ -68,5 +72,6 @@ private:
 	//防御力
 	const float BossDefenseDef = 50;
 	float BossDefense = BossDefenseDef;
+
 };
 

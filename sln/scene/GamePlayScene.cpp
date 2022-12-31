@@ -279,20 +279,36 @@ void GamePlayScene::SmallEnemyAppear()
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
+void GamePlayScene::DoorOpen()
+{
+	
+	int LDoorPosXRim = -2200;//左の壁開け終わる場所
+	int DoorMoveSp = 6;//ドアが開く速度
+
+	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
+	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
+
+	//左の壁が一定行ったら終わり
+	if (!(LDoorPos.x < LDoorPosXRim)) {
+		LDoorPos.x -= 6;
+		RDoorPos.x += 6;
+	}
+	else {
+		DoorOpenFlag = true;
+	}
+	obj_kabeleft->SetPosition(LDoorPos);
+	obj_kaberight->SetPosition(RDoorPos);
+}
+
 void GamePlayScene::BeforeBossAppear()
 {
 	//演出中時のみtrue
 	BeforeBossAppearNow = true;
 
+	const int BBPaternCountNum = 4;
+
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 	//SP_BossWarning.w -= 0.01;
-
-	XMFLOAT3 LWallPos= obj_kabeleft->GetPosition();
-	XMFLOAT3 RWallPos= obj_kaberight->GetPosition();
-	LWallPos.x-= 5;
-	RWallPos.x+= 5;
-	obj_kabeleft->SetPosition(LWallPos);
-	obj_kaberight->SetPosition(RWallPos);
 
 	switch (beforeBossPattern_)
 	{
@@ -328,7 +344,7 @@ void GamePlayScene::BeforeBossAppear()
 	}
 
 	//--繰り返す回数0~------消えてからボス戦へ
-	if (BBPaternCount == 2 && beforeBossPattern_ == BeforeBossPattern::inc)
+	if (BBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
 		BeforeBossAppearFlag = true;
 		BeforeBossAppearNow = true;
@@ -372,8 +388,8 @@ void GamePlayScene::PlayerMove()
 	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
 	const float PlayerMinMoveLimY = 200;//上に行ける範囲
 
-	const float PlayerMaxMoveLimZ = 290;//後ろ
-	const float PlayerMinMoveLimZ = 200;
+	//const float PlayerMaxMoveLimZ = 290;//後ろ
+	//const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 PlayerPos = player_->GetPosition();
 	XMFLOAT3 rotation = player_->GetRotation();
@@ -381,8 +397,8 @@ void GamePlayScene::PlayerMove()
 	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
 	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
 	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
-	PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
-	PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
+	//PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
+	//PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
 	player_->SetPosition(PlayerPos);
 	//----------↑移動制限
 
@@ -437,6 +453,35 @@ void GamePlayScene::PlayerMove()
 
 	player_->SetPosition(PlayerPos);
 	player_->SetRotation(rotation);
+
+}
+
+void GamePlayScene::pHeadingToTheNextPlace() 
+{
+	CharParameters* charParams = CharParameters::GetInstance();
+
+	XMFLOAT3 pPos = player_->GetPosition();
+
+	bool StopFlag = false;//停止してね
+
+	if (pNextPlaceGoSp < pNextPlaceGoSpMax) {
+		pNextPlaceGoSp += AccelVal;
+	}
+	if (pPos.z > charParams->StopPos) {//指定した場所超えたら
+		StopFlag = true;//止まれ
+	}
+
+	if (StopFlag == true) {
+		pNextPlaceGoSp -= DecelVal;
+
+		if ((pNextPlaceGoSp - DecelVal) < 0) {
+			charParams->pNextPlaceGoFlag = false;
+		}
+	}
+
+	pPos.z += pNextPlaceGoSp;
+
+	player_->SetPosition(pPos);
 }
 
 void GamePlayScene::CoolTime()
@@ -567,8 +612,8 @@ void GamePlayScene::CollisionAll()
 	float pBulPow = player_->GetpBulPow();//自機弾威力
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
-	//[自機の弾]と[ボス]の当たり判定
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum && BeforeBossAppearFlag == true) {
+	//[自機の弾]と[ボス]の当たり判定                  移動終わったら
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false) {
 		{
 
 			Sphere pBulForm;//球
@@ -1050,6 +1095,7 @@ void GamePlayScene::Update()
 
 			//撃破数達成でボス戦
 			if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+
 				//残っている雑魚敵はもういらない
 				for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
 					se->SetAlive(false);//消す
@@ -1059,6 +1105,7 @@ void GamePlayScene::Update()
 				{
 					BeforeBossAppear();
 				}
+
 				//ボス戦前の演出
 				if (BeforeBossAppearFlag == true)
 				{//演出終わったら
@@ -1073,6 +1120,12 @@ void GamePlayScene::Update()
 					{
 						BossDeathEfect();
 					}
+				}
+
+				if (DoorOpenFlag == false) { DoorOpen(); }
+				
+				if (charParams->pNextPlaceGoFlag == true) {
+					pHeadingToTheNextPlace();
 				}
 			}
 

@@ -62,6 +62,8 @@ public:
 
 	void SmallEnemyAppear();
 
+	void DoorOpen();
+	void pHeadingToTheNextPlace();
 	void BeforeBossAppear();
 
 	void BossDeathEfect();
@@ -175,5 +177,13 @@ private:
 	//自機移動中かどうか false:してない
 	bool isLMove = false;
 	bool isRMove = false;
+
+	bool DoorOpenFlag = false;//扉開けてない
+
+	//次の場所へ行くスピード
+	const float pNextPlaceGoSpMax = 10.f;
+	float pNextPlaceGoSp = 2.f;
+	float AccelVal = 0.03;//加速値
+	float DecelVal = 0.1;//減速値
 };
 
