@@ -58,15 +58,15 @@ public:
 	float time;
 
 	//近づく速さ
-	const float ApproachSpZ = 1;
-	const float ApproachSpY = 2;
+	const float ApproachSpZ = 1.f;
+	const float ApproachSpY = 2.f;
 	//離れる速さ
-	const float LeaveSpZ = 1;
-	const float LeaveSpY = 2;
+	const float LeaveSpZ = 1.f;
+	const float LeaveSpY = 2.f;
 	//近づける距離
-	const float ApproachLim = -50;
+	float ApproachLim;
 	//離れられる距離
-	const float LeaveLim = 90;
+	float LeaveLim = 90;
 
 	void  (Boss::* pFunc)();
 
@@ -176,5 +176,8 @@ private:
 	//-------↑HPHALF↑------//
 
 	BaseObject* shotTag;//弾うつターゲット
+
+	//登場から行動を開始に移った時の座標
+	XMFLOAT3 ActionStartPos;
 
 };

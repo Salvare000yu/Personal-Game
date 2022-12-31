@@ -14,17 +14,13 @@ void Boss::BossAppear()
 {
 
 	CharParameters* charParams = CharParameters::GetInstance();
-	const int DistanceFromThePlayer=500;//自機停止場所からこれだけ離れた場所に到達したら行動へ移る
 
 	XMFLOAT3 pos=obj->GetPosition();
 	pos.z--;
-
-	//if (pos.z < charParams->StopPos+ DistanceFromThePlayer) {
-	//	actionPattern_ = ActionPattern::Approach;
-	//}
 	
 	//移動完了確認しだい
 	if (charParams->pNextPlaceGoFlag == false) {
+		ActionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern_ = ActionPattern::Approach;
 	}
 
@@ -61,8 +57,12 @@ void Boss::Approach()
 	position.x += 7.f * sinf(time * 3.14159265358f);
 	obj->SetPosition(position);
 
+	//近づく制限は自機の場所に自機と離したい距離分間を開ける
+	const int SpaceDistance = 200;
+	ApproachLim = shotTag->GetPosition().z+ SpaceDistance;
+
 	//ある程度近づいたら離れる
-	if (position.z == ApproachLim) {
+	if (position.z < ApproachLim) {
 		actionPattern_ = ActionPattern::Leave;
 	}
 
@@ -94,8 +94,12 @@ void Boss::Leave()
 	positionBack.y -= LeaveSpY;
 	obj->SetPosition(positionBack);
 
+	//離れる制限は自機の場所に自機と離したい距離分間を開ける
+	const int SpaceDistance = 400;
+	LeaveLim = shotTag->GetPosition().z + SpaceDistance;
+
 	//ある程度離れたら近づいてくる
-	if (positionBack.z == LeaveLim) {
+	if (positionBack.z > ActionStartPos.z&& positionBack.y< ActionStartPos.y) {
 		if (even_odd_NumFlag == true) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
 		actionPattern_ = ActionPattern::Approach;
@@ -476,7 +480,7 @@ void Boss::Initialize()
 	//大きさ
 	obj->SetScale({ 27.0f, 27.0f, 27.0f });
 	//場所
-	obj->SetPosition({ 0,0,3500 });
+	obj->SetPosition({ 0,-70,3300 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
