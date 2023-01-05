@@ -20,6 +20,8 @@ void Player::Attack()
 	//キー入力使う
 	Input* input = Input::GetInstance();
 
+	CharParameters* charParameters = CharParameters::GetInstance();
+
 	//triggerkey
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	//パッド押した瞬間のみ
@@ -29,32 +31,34 @@ void Player::Attack()
 
 	//弾発射
 	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
+		//攻撃してよい状況なら
+		if (charParameters->pAtkPossibleFlag == true){
+			if (ReadyNowFlag == false) {
+				XMFLOAT3 PlayerPos = obj->GetPosition();
+				//弾生成
+				std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+				//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+				madeBullet->Initialize();
+				madeBullet->SetModel(pBulModel);
+				madeBullet->SetPosition(PlayerPos);
 
-		if (ReadyNowFlag == false) {
-			XMFLOAT3 PlayerPos = obj->GetPosition();
-			//弾生成
-			std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
-			//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-			madeBullet->Initialize();
-			madeBullet->SetModel(pBulModel);
-			madeBullet->SetPosition(PlayerPos);
+				// velocityを算出 弾発射速度z
+				DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 25, 0);
+				XMFLOAT3 xmfloat3velocity;
+				XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
-			// velocityを算出 弾発射速度z
-			DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 25, 0);
-			XMFLOAT3 xmfloat3velocity;
-			XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+				madeBullet->SetVelocity(xmfloat3velocity);
 
-			madeBullet->SetVelocity(xmfloat3velocity);
+				// 音声再生 鳴らしたいとき
+				GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
 
-			// 音声再生 鳴らしたいとき
-			GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
+				//弾登録
+				bullets_.push_back(std::move(madeBullet));
 
-			//弾登録
-			bullets_.push_back(std::move(madeBullet));
+				//input->PadVibrationDef();
 
-			//input->PadVibrationDef();
-
-			AttackIntervalFlag = true;
+				AttackIntervalFlag = true;
+			}
 		}
 	}
 	if (AttackIntervalFlag == true)
@@ -221,7 +225,7 @@ void Player::PlayerDeath()
 	//移動速度＝（指定座標-最初位置）/かかる時間
 	MoveSp.x = (pPosDeath.x - pPosDeath.x) / NecesFrame;//ここの指定座標は自機最初のX座標にして真下に落ちるようにする
 	MoveSp.y = (TargetPos.y - pPosDeath.y) / NecesFrame;
-	MoveSp.z = (TargetPos.z - pPosDeath.z) / NecesFrame;//奥行きついたらここもそうする
+	MoveSp.z = (pPosDeath.z - pPosDeath.z) / NecesFrame;//奥行きついたらここもそうする
 	//その時の位置＝最初位置＋移動速度＊経過時間
 	NowPos.x = pPosDeath.x + MoveSp.x * Nowframe;
 	NowPos.y = pPosDeath.y + MoveSp.y * Nowframe;

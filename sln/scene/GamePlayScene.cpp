@@ -302,6 +302,7 @@ void GamePlayScene::DoorOpen()
 
 void GamePlayScene::BeforeBossAppear()
 {
+
 	//演出中時のみtrue
 	BeforeBossAppearNow = true;
 
@@ -346,6 +347,7 @@ void GamePlayScene::BeforeBossAppear()
 	//--繰り返す回数0~------消えてからボス戦へ
 	if (BBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
+
 		BeforeBossAppearFlag = true;
 		BeforeBossAppearNow = true;
 	}
@@ -460,6 +462,9 @@ void GamePlayScene::pHeadingToTheNextPlace()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
+	//攻撃できないように
+	charParams->pAtkPossibleFlag = false;
+
 	XMFLOAT3 pPos = player_->GetPosition();
 
 	bool StopFlag = false;//停止してね
@@ -476,6 +481,9 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
+
+			//もう攻撃していいよ
+			charParams->pAtkPossibleFlag = true;
 		}
 	}
 
@@ -1101,16 +1109,14 @@ void GamePlayScene::Update()
 					se->SetAlive(false);//消す
 				}
 
-				if (BeforeBossAppearFlag == false)
-				{
-					BeforeBossAppear();
-				}
-
 				//ボス戦前の演出
 				if (BeforeBossAppearFlag == true)
 				{//演出終わったら
 					//ボス戦突入のお知らせです
 					BossEnemyAdvent = true;
+				}
+				else{
+					BeforeBossAppear();
 				}
 				//条件達成でボス登場演出
 				for (std::unique_ptr<Boss>& boss : boss_) {
@@ -1121,7 +1127,7 @@ void GamePlayScene::Update()
 						BossDeathEfect();
 					}
 				}
-
+				//扉を開ける
 				if (DoorOpenFlag == false) { DoorOpen(); }
 				
 				if (charParams->pNextPlaceGoFlag == true) {
