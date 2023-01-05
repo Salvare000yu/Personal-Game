@@ -169,7 +169,7 @@ private:
 
 	XMFLOAT3 HpHalfMomentPos = {};
 	//まずこの位置に行く
-	XMFLOAT3 TargetHpHalfPos = { 0, 60, 100 };
+	XMFLOAT3 TargetHpHalfPos;
 	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
 
 	const float NecesLeaveFirstFrame = 180.f;

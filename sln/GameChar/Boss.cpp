@@ -113,11 +113,17 @@ void Boss::HpHalfPatStart()
 
 	Nowframe++;
 
+	//自機の場所
+	XMFLOAT3 pPos = shotTag->GetPosition();
+
 	if (GetPosFlag == true)
 	{
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosFlag = false;
+
+		//指定座標どこか
+		TargetHpHalfPos = { 0,0,pPos.z+300 };
 
 		//防御力上がる
 		float Defence=charParams->GetBossDefense();
@@ -125,7 +131,6 @@ void Boss::HpHalfPatStart()
 		charParams->SetBossDefense(Defence);
 	}
 
-	XMFLOAT3 pPos = shotTag->GetPosition();
 	//移動速度＝（指定座標-最初位置）/かかる時間
 	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
 	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesHpHalfFrame;
