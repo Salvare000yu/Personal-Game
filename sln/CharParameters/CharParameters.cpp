@@ -46,6 +46,8 @@ void CharParameters::Initialize()
 	BossDefense = BossDefenseDef;
 	NowBossHP = BossMaxHP;//
 	NowPlayerHP = PlayerMaxHP;//
+	pNextPlaceGoFlag = true;
+	pAtkPossibleFlag = true;
 
 }
 

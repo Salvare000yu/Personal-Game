@@ -73,7 +73,7 @@ private:
 	bool BarPosControlOnlyOnceFlag7 = false;
 
 	//–hŒä—Í
-	const float BossDefenseDef = 50;
+	const float BossDefenseDef = 60;
 	float BossDefense = BossDefenseDef;
 
 };

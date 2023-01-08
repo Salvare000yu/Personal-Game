@@ -115,6 +115,8 @@ void Boss::HpHalfPatStart()
 
 	//自機の場所
 	XMFLOAT3 pPos = shotTag->GetPosition();
+	//指定座標で自機のZからどれくらい間をあけるか
+	const int SpaceDistance = 250;
 
 	if (GetPosFlag == true)
 	{
@@ -123,7 +125,7 @@ void Boss::HpHalfPatStart()
 		GetPosFlag = false;
 
 		//指定座標どこか
-		TargetHpHalfPos = { 0,0,pPos.z+300 };
+		TargetHpHalfPos = { 0,0,pPos.z+ SpaceDistance };
 
 		//防御力上がる
 		float Defence=charParams->GetBossDefense();
@@ -483,7 +485,7 @@ void Boss::Initialize()
 	obj.reset(Object3d::Create());
 	//-----↓任意↓-----//
 	//大きさ
-	obj->SetScale({ 27.0f, 27.0f, 27.0f });
+	obj->SetScale({ 50.0f, 50.0f, 50.0f });
 	//場所
 	obj->SetPosition({ 0,-70,3300 });
 

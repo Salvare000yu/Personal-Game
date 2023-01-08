@@ -339,6 +339,12 @@ void Player::Update()
 		}
 	}
 
+	//自機の弾威力がマイナス値にならない
+	//0以下なら１にする
+	if (pBulPower <= 0) {
+		pBulPower = 1;
+	}
+
 	obj->Update();
 
 }

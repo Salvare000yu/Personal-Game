@@ -57,7 +57,7 @@ void GamePlayScene::Initialize()
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
-	mod_kaberight.reset(Model::LoadFromOBJ("kabetaijin"));
+	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
 	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
@@ -88,19 +88,19 @@ void GamePlayScene::Initialize()
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
-	obj_kaberight->SetScale({ 100.0f, 100.0f, 10.0f });
-	obj_kabeleft->SetScale({ 100.0f, 100.0f, 10.0f });
+	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
+	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3dˆÊ’u------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
-	obj_kaberight->SetPosition({ 1200,-200,2000 });
-	obj_kabeleft->SetPosition({ -1200,-200,2000 });
+	obj_kaberight->SetPosition({ 490,340,2000 });
+	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,-170 });
 	//------object‰ñ“]------//
 	obj_kaberight->SetRotation({ 0,0,0 });
-	obj_kabeleft->SetRotation({ 0,0,0 });
+	obj_kabeleft->SetRotation({ 0,180,0 });
 	obj_tunnel->SetRotation({ 0,-90,0 });
 
 	//‚¢‚ë‚¢‚ë¶¬
@@ -944,16 +944,18 @@ void GamePlayScene::Update()
 		charParameters->pHpSizeChange();
 
 		charParameters->BarGetDislodged();
+
+		const float RotVul = 0.3f;
 		{
 			//“V‹…‰ñ“]
 			XMFLOAT3 rotation = obj_worlddome->GetRotation();
-			rotation.y += 0.3f;
+			rotation.y += RotVul;
 			obj_worlddome->SetRotation({ rotation });
 		}
 		{
 			//ƒgƒ“ƒlƒ‹‰ñ“]
 			XMFLOAT3 rotation = obj_tunnel->GetRotation();
-			rotation.x += 0.3f;
+			rotation.x += RotVul;
 			obj_tunnel->SetRotation({ rotation });
 		}
 
