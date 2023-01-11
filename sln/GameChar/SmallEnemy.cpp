@@ -55,9 +55,9 @@ void SmallEnemy::Initialize()
 	//êŠ
 
 	//SEneRandX = float(rand() % 60);
-	float SEneRandX = posXNum(random);
-	float SEneRandY = posYNum(random);
-	obj->SetPosition({ SEneRandX,SEneRandY,1000 });
+	//float SEneRandX = posXNum(random);
+	//float SEneRandY = posYNum(random);
+	//obj->SetPosition({ SEneRandX,SEneRandY,1000 });
 
 	AtkCount = AtkInterval;
 

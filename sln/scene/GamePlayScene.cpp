@@ -23,9 +23,51 @@
 
 #include "PostEffect.h"
 
+#include <fstream>
+#include <sstream>
+
 #include <DirectXMath.h>
 
 //using namespace DirectX;
+
+
+std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
+	bool commentFlag,
+	char divChar,
+	const std::string& commentStartStr)
+{
+	std::vector<std::vector<std::string>> csvData{};	// csvの中身を格納
+
+	std::ifstream ifs(csvFilePath);
+	if (!ifs)
+	{
+		return csvData;
+	}
+
+	std::string line{};
+	// 開いたファイルを一行読み込む(カーソルも動く)
+	while (std::getline(ifs, line))
+	{
+		// コメントが有効かつ行頭が//なら、その行は無視する
+		if (commentFlag && line.find(commentStartStr) == 0U)
+		{
+			continue;
+		}
+
+		// 行数を増やす
+		csvData.emplace_back();
+
+		std::istringstream stream(line);
+		std::string field;
+		// 読み込んだ行を','区切りで分割
+		while (std::getline(stream, field, divChar))
+		{
+			csvData.back().emplace_back(field);
+		}
+	}
+
+	return csvData;
+}
 
 void GamePlayScene::Initialize()
 {
@@ -68,7 +110,7 @@ void GamePlayScene::Initialize()
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
-	
+
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
@@ -97,7 +139,7 @@ void GamePlayScene::Initialize()
 	obj_sword->SetPosition({ 0,50,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
-	obj_tunnel->SetPosition({ 0,40,-170 });
+	obj_tunnel->SetPosition({ 0,40,2000 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
@@ -241,6 +283,8 @@ void GamePlayScene::Initialize()
 	////p1からスタート
 	//splineStartIndex = 1;
 
+	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
+
 	//時間リセット。タイトルに戻る度。
 	Timer* timer = Timer::GetInstance();
 	timer->TimerPlay(false);
@@ -281,7 +325,7 @@ void GamePlayScene::SmallEnemyAppear()
 
 void GamePlayScene::DoorOpen()
 {
-	
+
 	int LDoorPosXRim = -2200;//左の壁開け終わる場所
 	int DoorMoveSp = 6;//ドアが開く速度
 
@@ -458,7 +502,7 @@ void GamePlayScene::PlayerMove()
 
 }
 
-void GamePlayScene::pHeadingToTheNextPlace() 
+void GamePlayScene::pHeadingToTheNextPlace()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
@@ -647,10 +691,12 @@ void GamePlayScene::CollisionAll()
 						pb->SetAlive(false);
 
 						//bo->SetColor({ 1,0,0,1 });
+						//喰らってまだ生きてたら
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
-						NowBoHp -= (pBulPow - BossDefense);
+						Damage = pBulPow - BossDefense;
+						NowBoHp -= Damage;
 						charParams->SetNowBoHp(NowBoHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
@@ -878,12 +924,12 @@ void GamePlayScene::Update()
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	if (pause->WaitKey0 < 10&& pause->GetPauseFlag() == false) {
+	if (pause->WaitKey0 < 10 && pause->GetPauseFlag() == false) {
 		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 	}
 	if (pause->WaitKey0 >= 2) {
 		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {
-			if (cInput->PauseOpenClose() && (GameReady() == false)&& pause->GetPauseFlag() == false) {
+			if (cInput->PauseOpenClose() && (GameReady() == false) && pause->GetPauseFlag() == false) {
 				pause->EveryInit();
 				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 				pause->SetPauseFlag(true);
@@ -891,7 +937,7 @@ void GamePlayScene::Update()
 		}
 	}
 	if (pause->GetPauseFlag() == true) {
-		
+
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
@@ -905,6 +951,11 @@ void GamePlayScene::Update()
 			sceneManager_->SetNextScene(scene);
 		}
 
+	}
+
+	//与えるダメージが0以下だったら1にする
+	if (Damage <= 0) {
+		Damage = 1;
 	}
 
 	//ポーズでないとき～
@@ -1026,7 +1077,16 @@ void GamePlayScene::Update()
 				//時が満ちたら
 				if (SEneAppCount == 0) {
 					//雑魚敵来る
-					SmallEnemyAppear();
+					if (++seIndex >= csvData.size()) {
+						seIndex = 0;
+					}
+						SmallEnemyAppear();
+						float posx = std::stof(csvData[seIndex][0]);
+						float posy = std::stof(csvData[seIndex][1]);
+						float posz = std::stof(csvData[seIndex][2]);
+
+						smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
+					
 					//再びカウントできるように初期化
 					SEneAppCount = SEneAppInterval;
 				}
@@ -1044,7 +1104,7 @@ void GamePlayScene::Update()
 				bo->SetShotTag(player_.get());
 			}
 			//------狙い弾↑
-			
+
 			//自機側で死亡確認したら消す
 			if (player_->GetpDeath() == true) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
@@ -1117,7 +1177,7 @@ void GamePlayScene::Update()
 					//ボス戦突入のお知らせです
 					BossEnemyAdvent = true;
 				}
-				else{
+				else {
 					BeforeBossAppear();
 				}
 				//条件達成でボス登場演出
@@ -1131,7 +1191,7 @@ void GamePlayScene::Update()
 				}
 				//扉を開ける
 				if (DoorOpenFlag == false) { DoorOpen(); }
-				
+
 				if (charParams->pNextPlaceGoFlag == true) {
 					pHeadingToTheNextPlace();
 				}

@@ -185,5 +185,12 @@ private:
 	float pNextPlaceGoSp = 2.f;
 	float AccelVal = 0.03;//加速値
 	float DecelVal = 0.1;//減速値
+
+	//与える威力
+	int Damage;
+
+	std::vector<std::vector<std::string>> csvData;
+	//何行目まで出したか
+	int seIndex=-1;
 };
 
