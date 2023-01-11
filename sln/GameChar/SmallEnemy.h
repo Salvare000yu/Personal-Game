@@ -103,4 +103,5 @@ private:
 	bool isRetire = false;
 	//Œü‚©‚Á‚Ä‚­‚éŠÔ‚¾‚¯
 	bool isSeApproach = true;
+
 };

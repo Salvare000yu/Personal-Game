@@ -767,9 +767,9 @@ void GamePlayScene::CollisionAll()
 	}
 
 	//消滅フラグ立ったらその雑魚敵は死して拝せよ
-	smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
+	/*smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
 		return !smallEnemy->GetAlive();
-		});
+		});*/
 
 	//[自機]と[ボス弾]の当たり判定
 	{
