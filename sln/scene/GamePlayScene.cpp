@@ -759,7 +759,7 @@ void GamePlayScene::CollisionAll()
 					XMFLOAT3 sePos = se->GetPosition();
 					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 80, 5);
 					se->SetAlive(false);
-					pb->SetAlive(false);
+					pb-> SetAlive(false);
 					break;
 				}
 			}
@@ -1077,14 +1077,15 @@ void GamePlayScene::Update()
 				//時が満ちたら
 				if (SEneAppCount == 0) {
 					//雑魚敵来る
+					//csvの最後まで行った場合最初に戻す
 					if (++seIndex >= csvData.size()) {
 						seIndex = 0;
 					}
 						SmallEnemyAppear();
-						float posx = std::stof(csvData[seIndex][0]);
+						float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
 						float posy = std::stof(csvData[seIndex][1]);
 						float posz = std::stof(csvData[seIndex][2]);
-
+						//雑魚敵をcsv通りの場所に出す
 						smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
 					
 					//再びカウントできるように初期化

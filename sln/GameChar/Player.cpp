@@ -29,6 +29,9 @@ void Player::Attack()
 
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
 
+	//’e‘¬
+	const int pBulVel = 25;
+
 	//’e”­ŽË
 	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
 		//UŒ‚‚µ‚Ä‚æ‚¢ó‹µ‚È‚ç
@@ -43,7 +46,7 @@ void Player::Attack()
 				madeBullet->SetPosition(PlayerPos);
 
 				// velocity‚ðŽZo ’e”­ŽË‘¬“xz
-				DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, 25, 0);
+				DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, pBulVel, 0);
 				XMFLOAT3 xmfloat3velocity;
 				XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
@@ -278,7 +281,7 @@ void Player::FiringLine()
 	XMFLOAT3 PlayerRot = obj->GetRotation();
 	firingline_->SetRotation(PlayerRot);
 
-	firingline_->SetScale({ 0.5f,0.5f,10.f });
+	//firingline_->SetScale({ 0.5f,0.5f,10.f });
 }
 
 void Player::Initialize()
@@ -289,7 +292,7 @@ void Player::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 3.0f, 3.0f, 3.0f });
+	obj->SetScale({ 5.0f, 5.0f, 5.0f });
 	//êŠ
 	obj->SetPosition({ 0,40,-170 });
 
