@@ -77,7 +77,7 @@ public:
 	float time;
 
 	//指定フレームごとに雑魚出現
-	static const int SEneAppInterval = 80;
+	static const int SEneAppInterval = 60;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
@@ -126,6 +126,7 @@ private:
 	std::unique_ptr < Model> mod_enemy = nullptr;
 	std::unique_ptr < Model> mod_firingline = nullptr;
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
+	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
 	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
@@ -133,6 +134,7 @@ private:
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
+	std::unique_ptr < Object3d> obj_backwall = nullptr;
 
 	FbxModel* fbxModel_1 = nullptr;
 	FbxObject3d* fbxObject_1 = nullptr;
@@ -150,8 +152,8 @@ private:
 
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
-	//ボス戦までの敵殺害必要数 7
-	float BossTermsEMurdersNum = 4;
+	//ボス戦までの敵殺害必要数 10
+	float BossTermsEMurdersNum = 10;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

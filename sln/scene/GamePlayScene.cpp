@@ -109,6 +109,7 @@ void GamePlayScene::Initialize()
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
+	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 
 	//------3dオブジェクト生成------//
@@ -118,6 +119,7 @@ void GamePlayScene::Initialize()
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
+	obj_backwall.reset(Object3d::Create());
 
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
@@ -126,6 +128,7 @@ void GamePlayScene::Initialize()
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
+	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
@@ -140,6 +143,7 @@ void GamePlayScene::Initialize()
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,2000 });
+	obj_backwall->SetPosition({ 0,40,7000 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
@@ -217,7 +221,7 @@ void GamePlayScene::Initialize()
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5, 0.5 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -235,8 +239,9 @@ void GamePlayScene::Initialize()
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	//sp_guide->SetPosition({ 0,0,0 });
-	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2,0 });
-	sp_sight->SetPosition({ 0,0,0 });
+	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2+100,0 });
+	//sp_sight->SetSize({ 50,50 });
+	//sp_sight->TransferVertexBuffer();
 
 	//スプライトカラー
 	sp_blackwindow->SetColor({ 1, 1, 1, 0 });
@@ -359,7 +364,7 @@ void GamePlayScene::BeforeBossAppear()
 	{
 	case BeforeBossPattern::def:
 		if (AlertSoundFlag == true) {
-			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
+			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.2f, 0);
 			AlertSoundFlag = false;
 		}
 		SP_BossWarning.w -= 0.03;
@@ -429,10 +434,10 @@ void GamePlayScene::PlayerMove()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//----------↓移動制限
-	const float PlayerMoveLimX = 300;
+	const float PlayerMoveLimX = 400;
 
 	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
-	const float PlayerMinMoveLimY = 200;//上に行ける範囲
+	const float PlayerMinMoveLimY = 300;//上に行ける範囲
 
 	//const float PlayerMaxMoveLimZ = 290;//後ろ
 	//const float PlayerMinMoveLimZ = 200;
@@ -749,7 +754,7 @@ void GamePlayScene::CollisionAll()
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x + 5.f;//余裕を持たせる分＋
+				smallenemyForm.radius = se->GetScale().x+20;//余裕を持たせる分＋
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
@@ -1041,6 +1046,7 @@ void GamePlayScene::Update()
 
 		//スプライト更新
 		sprite_back->Update();
+		//sp_sight->Update();
 		//sp_guide->Update();
 		charParameters->pHpUpdate();
 
@@ -1201,7 +1207,6 @@ void GamePlayScene::Update()
 			// FBX Update
 			//fbxObject_1->Update();
 
-			//sp_sight->Update();
 			sp_beforeboss->Update();
 			//敵のHPバー
 			if (BossEnemyAdvent == true && NowBoHp > 0)
@@ -1224,6 +1229,7 @@ void GamePlayScene::Update()
 	//}
 
 	obj_tunnel->Update();
+	obj_backwall->Update();
 }
 
 void GamePlayScene::Draw()
@@ -1263,6 +1269,7 @@ void GamePlayScene::Draw()
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
+	obj_backwall->Draw();
 
 	//自キャラ描画
 	player_->Draw();
@@ -1374,7 +1381,7 @@ void GamePlayScene::DrawUI()
 	//DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
 	//DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
 	//DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
-	DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
+	//DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
 	//{
 	////自機座標
 	//	char tmp[32]{};
@@ -1389,10 +1396,10 @@ void GamePlayScene::DrawUI()
 	//}
 	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
 
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
-		DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
-		//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
-	}
+	//if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
+	//	DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
+	//	//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
+	//}
 	//else {//ボス戦じゃないときのみ表示
 	//	//雑魚敵撃破数関連
 	//	{
@@ -1422,16 +1429,16 @@ void GamePlayScene::DrawUI()
 
 void GamePlayScene::PlayTimer()
 {
-	Pause* pause = Pause::GetInstance();
-	//時間計測
-	{
-		Timer* timer = Timer::GetInstance();
-		if (pause->GetPauseFlag() == false)
-		{
-			timer->TimerPlay();
-		}
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
-		DebugText::GetInstance()->Print(tmp, 150, 220, 1);
-	}
+	//Pause* pause = Pause::GetInstance();
+	////時間計測
+	//{
+	//	Timer* timer = Timer::GetInstance();
+	//	if (pause->GetPauseFlag() == false)
+	//	{
+	//		timer->TimerPlay();
+	//	}
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
+	//	DebugText::GetInstance()->Print(tmp, 150, 220, 1);
+	//}
 }

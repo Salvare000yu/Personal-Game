@@ -30,7 +30,7 @@ void Player::Attack()
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
 
 	//’e‘¬
-	const int pBulVel = 25;
+	const int pBulVel = 40;
 
 	//’e”­ŽË
 	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
