@@ -669,8 +669,8 @@ void GamePlayScene::CollisionAll()
 	float pBulPow = player_->GetpBulPow();//自機弾威力
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
-	//[自機の弾]と[ボス]の当たり判定                  移動終わったら
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false) {
+	//[自機の弾]と[ボス]の当たり判定                  移動終わったら					自機の体力あるとき
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false&&(NowpHp > 0)) {
 		{
 
 			Sphere pBulForm;//球
@@ -782,8 +782,8 @@ void GamePlayScene::CollisionAll()
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
-
-		if (player_->GetAlive()) {
+		//ボスHPがあるとき
+		if (player_->GetAlive()&& (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
 				for (auto& bob : bo->GetBullets()) {
@@ -813,8 +813,8 @@ void GamePlayScene::CollisionAll()
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
-
-		if (player_->GetAlive()) {
+		//ボスのHPあるとき
+		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
 				for (auto& boaimbul : bo->GetAimBullets()) {
