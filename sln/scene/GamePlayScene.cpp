@@ -1008,12 +1008,6 @@ void GamePlayScene::Update()
 			rotation.y += RotVul;
 			obj_worlddome->SetRotation({ rotation });
 		}
-		{
-			//ƒgƒ“ƒlƒ‹‰ñ“]
-			XMFLOAT3 rotation = obj_tunnel->GetRotation();
-			rotation.x += RotVul;
-			obj_tunnel->SetRotation({ rotation });
-		}
 
 		if (player_->GetPHpLessThan0() == false)
 		{
