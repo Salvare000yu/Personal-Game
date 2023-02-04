@@ -19,6 +19,7 @@ class Boss:public BaseObject
 		HpHalfPatStart,//Hp”¼•ªˆÈ‰º‚É‚È‚Á‚½‚çƒ^ƒQ‚Ü‚ÅˆÚ“®
 		CircularMotionMove,//‚®‚é‚®‚é
 		LeaveFirstPos,//Œ³‚ÌêŠ‚Öˆê’Uˆø‚­
+		PlungeInto,//“Ë‚Á‚Ş
 		Death,//€–S
 	};
 
@@ -43,6 +44,7 @@ public:
 	void HpHalfPatStart();
 	void CircularMotionMove();
 	void LeaveFirstPos();
+	void PlungeInto();
 	//ŠgUUŒ‚
 	void DiffusionAttack();
 	//ŠgU‹ô”’e
@@ -174,6 +176,10 @@ private:
 
 	const float NecesLeaveFirstFrame = 180.f;
 	//-------ªHPHALFª------//
+
+	//2‰ñLeave‚ğ‚µ‚½‚ç“Ë‚Á‚Şs“®
+	const int PlungeCountDef = 2;
+	int PlungeCount= PlungeCountDef;
 
 	BaseObject* shotTag;//’e‚¤‚Âƒ^[ƒQƒbƒg
 

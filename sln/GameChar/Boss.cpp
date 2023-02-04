@@ -211,6 +211,7 @@ void Boss::CircularMotionMove()
 		addY = addYDef;
 
 		actionPattern_ = ActionPattern::LeaveFirstPos;
+
 	}
 
 	//発射カウントをデクリメント
@@ -237,6 +238,10 @@ void Boss::LeaveFirstPos()
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosFlag = false;
+
+		//LeaveFirstPos2回で突っ込む
+		PlungeCount--;
+
 	}
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//移動速度＝（指定座標-最初位置）/かかる時間
@@ -270,10 +275,22 @@ void Boss::LeaveFirstPos()
 		//弾の発射間隔を元に戻す
 		Circular_AtkInterval = Circular_AtkIntervalDef;
 
-		actionPattern_ = ActionPattern::CircularMotionMove;
+		if (PlungeCount == 0) {//LeaveFirstPosを指定回数したら突撃
+			actionPattern_ = ActionPattern::PlungeInto;
+		}
+		else {
+			actionPattern_ = ActionPattern::CircularMotionMove;
+		}
 	}
 }
+void Boss::PlungeInto()
+{
+	XMFLOAT3 position = obj->GetPosition();
+	position.z += 10;
+	obj->SetPosition(position);
+}
 
+//-------攻撃系
 void Boss::Attack()
 {
 	//キー入力使う
@@ -438,7 +455,7 @@ void Boss::DiffusionAttackEavenNumber()
 	bullets_.push_back(std::move(madeBullet_R1));
 	bullets_.push_back(std::move(madeBullet_R2));
 }
-
+//------攻撃系↑
 void Boss::Death() {
 
 	Nowframe++;
@@ -544,6 +561,7 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
 	if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }
 	if (actionPattern_ == ActionPattern::LeaveFirstPos) { pFunc = &Boss::LeaveFirstPos; }
+	if (actionPattern_ == ActionPattern::PlungeInto) { pFunc = &Boss::PlungeInto; }
 
 	if (isDeath == true) {
 		actionPattern_ = ActionPattern::Death;

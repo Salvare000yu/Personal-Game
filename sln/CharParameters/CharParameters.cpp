@@ -1,3 +1,4 @@
+//‚«‚á‚çŒÅ—L’l
 #include "CharParameters.h"
 #include "Object3d.h"
 #include "Input.h"
