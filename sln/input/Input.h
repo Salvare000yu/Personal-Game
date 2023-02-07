@@ -112,17 +112,17 @@ public://メンバ関数
 
 	enum MouseButton
 	{
-		LEFT = 0,
+		LEFT = 0,//0が左クリック
 		RIGHT = 1
 	};
 
-	/// <param name="mouseNumber">0で左クリック,1で右クリック</param>
+	//0で左クリック,1で右クリック
 	inline bool PushMouse(_In_ BYTE mouseNumber)
 	{
 		return (bool)mouse.rgbButtons[mouseNumber];
 	}
 
-	/// <param name="mouseNumber">0で左クリック,1で右クリック</param>
+	//0で左クリック,1で右クリック
 	inline bool TriggerMouse(_In_ BYTE mouseNumber)
 	{
 		return PushMouse(mouseNumber) && !(bool)mousePre.rgbButtons[mouseNumber];

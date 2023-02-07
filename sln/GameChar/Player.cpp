@@ -29,13 +29,19 @@ void Player::Attack()
 
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
 
+	//Input
+	const bool InputSPACE = input->PushKey(DIK_SPACE);
+	const bool PadInputRB = input->PushButton(static_cast<int>(Button::RB));
+	const bool InputMouseLEFT = input->PushMouse(0);
+
 	//’e‘¬
 	const int pBulVel = 40;
 
-	//’e”­Ë
-	if ((TriggerSPACE || PadTriggerRB || TriggerMouseLEFT) && AttackIntervalFlag == false) {
+	//’·‰Ÿ‚µ”­Ë
+	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
+	{
 		//UŒ‚‚µ‚Ä‚æ‚¢ó‹µ‚È‚ç
-		if (charParameters->pAtkPossibleFlag == true){
+		if (charParameters->pAtkPossibleFlag == true) {
 			if (ReadyNowFlag == false) {
 				XMFLOAT3 PlayerPos = obj->GetPosition();
 				//’e¶¬
@@ -194,7 +200,7 @@ void Player::Shake() {
 
 		//pos—h‚ç‚·
 		XMFLOAT3 pos = obj->GetPosition();
-		randShakeNow = 1+ 1;//a~b
+		randShakeNow = 1 + 1;//a~b
 		pos.x = pos.x + rand() % randShakeNow - 0.5f;//a~b‚Ü‚Å‚ÌrandShakeNow‚ÌÅ‘å’l‚©‚ç”¼•ª‚ğˆø‚¢‚Ä•‰‚Ì”‚àŠÜ‚Ş‚æ‚¤‚É
 		pos.y = pos.y + rand() % randShakeNow - 0.5f;
 		obj->SetPosition(pos);
@@ -316,7 +322,7 @@ void Player::Update()
 		});
 
 	//”­Ëˆ— ¶‚«‚Ä‚ÄHp0ˆÈã‚È‚ç
-	if (alive&& isPHpLessThan0==false) { Attack(); }
+	if (alive && isPHpLessThan0 == false) { Attack(); }
 	//’eXV
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();

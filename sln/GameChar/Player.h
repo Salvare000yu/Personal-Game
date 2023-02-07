@@ -80,7 +80,7 @@ public:
 	inline DirectX::XMVECTOR GetPosVec() { return position; }
 
 	//攻撃インターバル
-	static const int32_t AtkInterval = 10;
+	static const int32_t AtkInterval = 20;
 	//攻撃インターバルタイマー
 	int32_t AtkInterval_ = AtkInterval;
 
@@ -107,7 +107,7 @@ public:
 private:
 	//自機通常弾威力
 	//const float pBulPowerMax = 100;
-	const float pBulPowerMax = 100;
+	const float pBulPowerMax = 200;
 	float pBulPower = pBulPowerMax;
 
 	//playのReady中かどうか

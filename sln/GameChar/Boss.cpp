@@ -276,17 +276,68 @@ void Boss::LeaveFirstPos()
 		Circular_AtkInterval = Circular_AtkIntervalDef;
 
 		if (PlungeCount == 0) {//LeaveFirstPosを指定回数したら突撃
+			XMFLOAT3 boPos = obj->GetPosition();
+			WasPosMem = boPos;//突っ込み行動へ移行する前に最後にいた場所を記憶する
 			actionPattern_ = ActionPattern::PlungeInto;
 		}
 		else {
+			plungeIntoPattern_ = PlungeIntoPattern::Leave;
 			actionPattern_ = ActionPattern::CircularMotionMove;
 		}
 	}
 }
 void Boss::PlungeInto()
 {
+	CharParameters* charParameters = CharParameters::GetInstance();
+
 	XMFLOAT3 position = obj->GetPosition();
-	position.z += 10;
+
+	switch (plungeIntoPattern_)
+	{
+	
+	case PlungeIntoPattern::Leave://一度離れて
+		position.z += LeaveVel;
+
+		if (position.z >= LeavePos) {
+			plungeIntoPattern_ = PlungeIntoPattern::Wait;
+		}
+		break;
+
+	case PlungeIntoPattern::PlungeInto://突っ込んでくる
+		position.z -= PlungeVel;
+		if (position.z < charParameters->StopPos+750) {//突撃終わったら
+			//もう突っ込んだ
+			PlungeCompletFlag = true;
+			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
+		}
+		break;
+
+	case PlungeIntoPattern::Reverse://突っ込み終わったから戻れ
+		position.z += ReverseVel;
+		if (position.z >= WasPosMem.z) {//突っ込み前の場所超えたら
+			PlungeCount = PlungeCountDef;
+			actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
+		}
+		break;
+
+	case PlungeIntoPattern::Wait://待機してから行動
+		//---------------------予兆はここで シェイク
+		//待機時間デクリメント
+		PlungeIntoWaitCount--;
+
+		if (PlungeIntoWaitCount == 0) {
+			if (PlungeCompletFlag == false) {//突っ込み完了前なら
+				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
+			}
+			else {//突っ込み後
+				PlungeCompletFlag = false;//リセット
+				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
+			}
+		}
+		break;
+	}
+
 	obj->SetPosition(position);
 }
 

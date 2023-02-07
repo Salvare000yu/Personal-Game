@@ -23,6 +23,13 @@ class Boss:public BaseObject
 		Death,//死亡
 	};
 
+	enum class PlungeIntoPattern {
+		Leave,//前準備で離れる
+		PlungeInto,//突っ込む
+		Reverse,//戻ってくる
+		Wait,//時間空けてから行動
+	};
+
 public:
 
 	//初期化
@@ -82,6 +89,9 @@ public:
 	static const int AtkInterval = 10;
 	static const int AtkInterval_LeaveFirst = 20;
 	static const int DiffusionAtkInterval =20;
+
+	//一度離れてから突っ込む行動パターン　最初離れる
+	PlungeIntoPattern plungeIntoPattern_ = PlungeIntoPattern::Leave;
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
@@ -177,13 +187,31 @@ private:
 	const float NecesLeaveFirstFrame = 180.f;
 	//-------↑HPHALF↑------//
 
-	//2回Leaveをしたら突っ込む行動
-	const int PlungeCountDef = 2;
-	int PlungeCount= PlungeCountDef;
-
 	BaseObject* shotTag;//弾うつターゲット
 
 	//登場から行動を開始に移った時の座標
 	XMFLOAT3 ActionStartPos;
+
+	//-------PlungeInto
+	//2回Leaveをしたら突っ込む行動　　デフォ2
+	const int PlungeCountDef = 1;
+	int PlungeCount = PlungeCountDef;
+	//突っ込み行動へ移行する前に最後にいた場所を記憶する
+	XMFLOAT3 WasPosMem;
+	//離れる速度
+	const int LeaveVel = 20;
+	//Leaveの時どの程度下がるか
+	const int LeavePos = 5000;
+	//戻る速度
+	const int ReverseVel = 3;
+	//突っ込み待ち待機時間 でふぉ180
+	const int PlungeIntoWaitCountDef = 180;
+	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+	//突撃速度
+	const int PlungeVel = 50;
+	//突っ込み終わったか  false:まだ突っ込んでない
+	bool PlungeCompletFlag = false;
+	//
+	//-------PlungeInto
 
 };

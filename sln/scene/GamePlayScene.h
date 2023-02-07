@@ -49,9 +49,9 @@ public:
 
 	void PadStickCamera();
 
-	void CollisionAll();
+	void CollisionAll();//判定
 
-	bool GameReady();
+	bool GameReady();//開始合図
 
 	void Update() override;
 
@@ -60,10 +60,10 @@ public:
 
 	void PlayTimer();
 
-	void SmallEnemyAppear();
+	void SmallEnemyAppear();//雑魚敵出現
 
-	void DoorOpen();
-	void pHeadingToTheNextPlace();
+	void DoorOpen();//扉が開く
+	void pHeadingToTheNextPlace();//次の場所へ行く
 	void BeforeBossAppear();
 
 	void BossDeathEfect();

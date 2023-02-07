@@ -39,7 +39,7 @@ public:
 	const float& GetBossDefense() { return BossDefense; }
 	//-----------------------↑げったーせったー↑-----------------------//
 
-	int StopPos = 1800;//自機次座標への移動の停止場所
+	const int StopPos = 1800;//自機次座標への移動の停止場所
 	//次の場所へ向かう　true：向かっている false:完了
 	bool pNextPlaceGoFlag = true;
 
