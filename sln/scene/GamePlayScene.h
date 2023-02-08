@@ -53,6 +53,8 @@ public:
 
 	bool GameReady();//開始合図
 
+	void BodyDamCoolTime();//体ダメージクールタイム
+
 	void Update() override;
 
 	void Draw() override;
@@ -160,6 +162,12 @@ private:
 	bool BeforeBossAppearFlag = false;
 	//true:今やってる
 	bool BeforeBossAppearNow = false;
+
+	//ボスの体と衝突ダメージクールタイム false:喰らう前
+	bool BodyDamFlag = false;
+	//↑のクールタイムカウント
+	const int BodyDamCountDef = 30;
+	int BodyDamCount = BodyDamCountDef;
 	
 	int randShakeDef = 0;
 	int randShakeNow=randShakeDef;

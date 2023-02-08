@@ -105,6 +105,8 @@ public:
 	const float& GetBulPow() { return BulPow; }
 	//狙い弾威力
 	const float& GetAimBulPow() { return AimBulPow; }
+	//ボス本体にぶつかった時の威力
+	const float& GetBodyPow() { return BodyPow; }
 
 	//ボス生死
 	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
@@ -139,6 +141,9 @@ private:
 	//敵通常弾威力
 	const float BulPow = 200;
 	const float AimBulPow = 150;
+
+	//ボス本体の威力
+	const int BodyPow = 50;
 
 	//false：まだ死んでない
 	bool isDeath = false;

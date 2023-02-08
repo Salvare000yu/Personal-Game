@@ -670,7 +670,7 @@ void GamePlayScene::CollisionAll()
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定                  移動終わったら					自機の体力あるとき
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false&&(NowpHp > 0)) {
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
 		{
 
 			Sphere pBulForm;//球
@@ -754,7 +754,7 @@ void GamePlayScene::CollisionAll()
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x+20;//余裕を持たせる分＋
+				smallenemyForm.radius = se->GetScale().x + 20;//余裕を持たせる分＋
 
 				// 当たったら消える
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
@@ -764,7 +764,7 @@ void GamePlayScene::CollisionAll()
 					XMFLOAT3 sePos = se->GetPosition();
 					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 80, 5);
 					se->SetAlive(false);
-					pb-> SetAlive(false);
+					pb->SetAlive(false);
 					break;
 				}
 			}
@@ -776,14 +776,14 @@ void GamePlayScene::CollisionAll()
 		return !smallEnemy->GetAlive();
 		});*/
 
-	//[自機]と[ボス弾]の当たり判定
+		//[自機]と[ボス弾]の当たり判定
 	{
 
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
 		//ボスHPがあるとき
-		if (player_->GetAlive()&& (NowBoHp > 0)) {
+		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
 				for (auto& bob : bo->GetBullets()) {
@@ -871,8 +871,42 @@ void GamePlayScene::CollisionAll()
 		}
 	}
 
-	//------------------------------↑当たり判定ZONE↑-----------------------------//
+	//[ボス]と[自機]の当たり判定
+	{
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z + 2;
+
+		if (player_->GetAlive()) {
+			// 衝突判定をする
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
+				Sphere bossForm;
+				bossForm.center = XMLoadFloat3(&bo->GetPosition());
+				bossForm.radius = bo->GetScale().x;
+
+				if (bo->GetisDeath())continue;
+
+				//定期的にダメージ
+				if (BodyDamFlag == false) {
+					if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
+						pDamFlag = true;
+						float bodyPow = bo->GetBodyPow();//ボス体威力
+						NowpHp -= bodyPow;//自機にダメージ
+						charParams->SetispDam(true);//自機くらい
+						charParams->SetNowpHp(NowpHp);
+
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						BodyDamFlag = true;//クールたいむ
+						break;
+					}
+				}
+			}
+		}
+	}
 }
+
+//------------------------------↑当たり判定ZONE↑-----------------------------//
 
 bool GamePlayScene::GameReady()
 {
@@ -913,6 +947,17 @@ bool GamePlayScene::GameReady()
 	}
 
 	return true;
+}
+
+void GamePlayScene::BodyDamCoolTime()
+{
+	if (BodyDamFlag == true) {
+		BodyDamCount--;
+		if (BodyDamCount == 0) {
+			BodyDamCount = BodyDamCountDef;
+			BodyDamFlag = false;//もう一度喰らう
+		}
+	}
 }
 
 void GamePlayScene::Update()
@@ -1081,13 +1126,13 @@ void GamePlayScene::Update()
 					if (++seIndex >= csvData.size()) {
 						seIndex = 0;
 					}
-						SmallEnemyAppear();
-						float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
-						float posy = std::stof(csvData[seIndex][1]);
-						float posz = std::stof(csvData[seIndex][2]);
-						//雑魚敵をcsv通りの場所に出す
-						smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
-					
+					SmallEnemyAppear();
+					float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
+					float posy = std::stof(csvData[seIndex][1]);
+					float posz = std::stof(csvData[seIndex][2]);
+					//雑魚敵をcsv通りの場所に出す
+					smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
+
 					//再びカウントできるように初期化
 					SEneAppCount = SEneAppInterval;
 				}
@@ -1122,6 +1167,7 @@ void GamePlayScene::Update()
 
 			//くらったらクールタイム
 			CoolTime();
+			BodyDamCoolTime();//体継続ダメージ
 
 			if (player_->GetPHpLessThan0() == false)
 			{
