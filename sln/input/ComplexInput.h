@@ -25,6 +25,8 @@ public:
 	bool tRightArrow();
 	bool tLeftArrow();
 
+	bool PlayerDash();//自機ダッシュ
+
 	bool DecisionByEnter();//決定
 	bool PauseOpenClose();//ポーズ開閉
 };

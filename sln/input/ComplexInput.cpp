@@ -223,3 +223,22 @@ bool ComplexInput::PauseOpenClose()
 	return false;
 
 }
+
+bool ComplexInput::PlayerDash()
+{
+	Input* input = Input::GetInstance();
+
+	//キー押している間
+	const bool TriggerMouseRight = input->TriggerMouse(1);
+	const bool TrigerLShift = input->TriggerKey(DIK_LSHIFT);
+	const bool TrigerRShift = input->TriggerKey(DIK_RSHIFT);
+	//パッド
+	const bool PadInputX = input->TriggerButton(static_cast<int>(Button::X));
+
+	if (TriggerMouseRight || TrigerLShift|| TrigerRShift|| PadInputX) {
+		return true;
+	}
+
+	return false;
+
+}

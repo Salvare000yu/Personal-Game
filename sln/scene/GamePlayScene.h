@@ -71,6 +71,7 @@ public:
 	void BossDeathEfect();
 
 	void PlayerMove();
+	void PlayerDash();//ダッシュ
 
 	void CoolTime();
 
@@ -202,5 +203,18 @@ private:
 	std::vector<std::vector<std::string>> csvData;
 	//何行目まで出したか
 	int seIndex=-1;
+
+	//----自機ダッシュ 
+	//false:してない
+	bool DashFlag = false;
+	//ダッシュ時間
+	const int DashCountDef = 30;
+	int DashCount = DashCountDef;
+	//ダッシュ速度
+	XMFLOAT3 DashVel={0,0,0};
+	//ダッシュ方向決定したからもう受付しないからね false:まだ
+	bool DashAlreadyDecided = false;
+	
+	//----自機ダッシュ 
 };
 

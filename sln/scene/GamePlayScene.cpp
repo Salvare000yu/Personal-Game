@@ -1,4 +1,4 @@
-#include "GamePlayScene.h"
+ï»¿#include "GamePlayScene.h"
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
@@ -36,7 +36,7 @@ std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	char divChar,
 	const std::string& commentStartStr)
 {
-	std::vector<std::vector<std::string>> csvData{};	// csv‚Ì’†g‚ğŠi”[
+	std::vector<std::vector<std::string>> csvData{};	// csvã®ä¸­èº«ã‚’æ ¼ç´
 
 	std::ifstream ifs(csvFilePath);
 	if (!ifs)
@@ -45,21 +45,21 @@ std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	}
 
 	std::string line{};
-	// ŠJ‚¢‚½ƒtƒ@ƒCƒ‹‚ğˆês“Ç‚İ‚Ş(ƒJ[ƒ\ƒ‹‚à“®‚­)
+	// é–‹ã„ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸€è¡Œèª­ã¿è¾¼ã‚€(ã‚«ãƒ¼ã‚½ãƒ«ã‚‚å‹•ã)
 	while (std::getline(ifs, line))
 	{
-		// ƒRƒƒ“ƒg‚ª—LŒø‚©‚Âs“ª‚ª//‚È‚çA‚»‚Ìs‚Í–³‹‚·‚é
+		// ã‚³ãƒ¡ãƒ³ãƒˆãŒæœ‰åŠ¹ã‹ã¤è¡Œé ­ãŒ//ãªã‚‰ã€ãã®è¡Œã¯ç„¡è¦–ã™ã‚‹
 		if (commentFlag && line.find(commentStartStr) == 0U)
 		{
 			continue;
 		}
 
-		// s”‚ğ‘‚â‚·
+		// è¡Œæ•°ã‚’å¢—ã‚„ã™
 		csvData.emplace_back();
 
 		std::istringstream stream(line);
 		std::string field;
-		// “Ç‚İ‚ñ‚¾s‚ğ','‹æØ‚è‚Å•ªŠ„
+		// èª­ã¿è¾¼ã‚“ã è¡Œã‚’','åŒºåˆ‡ã‚Šã§åˆ†å‰²
 		while (std::getline(stream, field, divChar))
 		{
 			csvData.back().emplace_back(field);
@@ -79,23 +79,23 @@ void GamePlayScene::Initialize()
 	//camera->SetEye({ 0,48,-210 });
 	Object3d::SetCamera(camera.get());
 
-	// ƒ}ƒEƒXƒJ[ƒ\ƒ‹”ñ•\¦
+	// ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«éè¡¨ç¤º
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
 
-	//ƒfƒoƒCƒX‚ğƒZƒbƒg
+	//ãƒ‡ãƒã‚¤ã‚¹ã‚’ã‚»ãƒƒãƒˆ
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
-	// ƒJƒƒ‰ƒZƒbƒg
+	// ã‚«ãƒ¡ãƒ©ã‚»ãƒƒãƒˆ
 	//Object3d::SetCamera(camera.get());
 
-	//ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“¶¬
+	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
 	//FbxObject3d::CreateGraphicsPipeline();
 	//FbxObject3d::SetCamera(camera.get());
 
-	//g‚¤’è‹`‚Æ‚©@‰¼‚¨‚¢‚Æ‚­‚Ë
-	time = frame / 60.f;	// 60fps‘z’è
+	//ä½¿ã†å®šç¾©ã¨ã‹ã€€ä»®ãŠã„ã¨ãã­
+	time = frame / 60.f;	// 60fpsæƒ³å®š
 
-	//------obj‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^“Ç‚İ‚İ---
+	//------objã‹ã‚‰ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿---
 	model_1.reset(Model::LoadFromOBJ("ground"));
 	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
 	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
@@ -112,7 +112,7 @@ void GamePlayScene::Initialize()
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 
-	//------3dƒIƒuƒWƒFƒNƒg¶¬------//
+	//------3dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ------//
 	object3d_1.reset(Object3d::Create());
 	obj_worlddome.reset(Object3d::Create());
 	obj_sword.reset(Object3d::Create());
@@ -121,7 +121,7 @@ void GamePlayScene::Initialize()
 	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
 
-	//------3dƒIƒuƒWƒFƒNƒg‚É3dƒ‚ƒfƒ‹‚ğ•R‚Ã‚¯‚é------//
+	//------3dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«3dãƒ¢ãƒ‡ãƒ«ã‚’ç´ã¥ã‘ã‚‹------//
 	object3d_1->SetModel(model_1.get());
 	obj_worlddome->SetModel(mod_worlddome.get());
 	obj_sword->SetModel(mod_sword.get());
@@ -129,14 +129,14 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
-	//------object3dƒXƒP[ƒ‹------//
+	//------object3dã‚¹ã‚±ãƒ¼ãƒ«------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
 	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
-	//------object3dˆÊ’u------//
+	//------object3dä½ç½®------//
 	object3d_1->SetPosition({ 0,-150,0 });
 	obj_worlddome->SetPosition({ 0,200,150 });
 	obj_sword->SetPosition({ 0,50,0 });
@@ -144,14 +144,14 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,2000 });
 	obj_backwall->SetPosition({ 0,40,7000 });
-	//------object‰ñ“]------//
+	//------objectå›è»¢------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
 	obj_tunnel->SetRotation({ 0,-90,0 });
 
-	//‚¢‚ë‚¢‚ë¶¬
+	//ã„ã‚ã„ã‚ç”Ÿæˆ
 	player_.reset(new Player());
-	//‚¢‚ë‚¢‚ëƒLƒƒƒ‰‰Šú‰»
+	//ã„ã‚ã„ã‚ã‚­ãƒ£ãƒ©åˆæœŸåŒ–
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
@@ -165,31 +165,31 @@ void GamePlayScene::Initialize()
 	//camera->SetEye(eye);
 
 	boss_.emplace_front();
-	for (std::unique_ptr<Boss>& boss : boss_)//ƒ{ƒX
+	for (std::unique_ptr<Boss>& boss : boss_)//ãƒœã‚¹
 	{
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
 		boss->SetModel(mod_enemy.get());
 		boss->SetBulModel(mod_enemybullet.get());
-		boss->SetAimBulModel(mod_bossaimbullet.get());//‘_‚¢’e
+		boss->SetAimBulModel(mod_bossaimbullet.get());//ç‹™ã„å¼¾
 	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-	//----------FBX ƒIƒuƒWƒFƒNƒg¶¬‚Æƒ‚ƒfƒ‹‚ÌƒZƒbƒg-----------//
+	//----------FBX ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆã¨ãƒ¢ãƒ‡ãƒ«ã®ã‚»ãƒƒãƒˆ-----------//
 
 	//fbxObject_1 = new FbxObject3d;
 
 	//fbxObject_1->Initialize();
 
-	//------fbxƒZƒbƒg------//
+	//------fbxã‚»ãƒƒãƒˆ------//
 	//fbxObject_1->SetModel(fbxModel_1);
-	//------fbxƒXƒP[ƒ‹------//
+	//------fbxã‚¹ã‚±ãƒ¼ãƒ«------//
 	//fbxObject_1->SetScale({ 10.0f, 10.0f, 10.0f });
-	//------fbxˆÊ’u------//
+	//------fbxä½ç½®------//
 	//fbxObject_1->SetPosition({ 0,24,100 });
 	//fbxObject_1->PlayAnimation();
 
-	// ‰¹º“Ç‚İ‚İ
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	GameSound::GetInstance()->LoadWave("se_baaan1.wav");
 	GameSound::GetInstance()->LoadWave("bossdam_1.wav");
@@ -198,9 +198,9 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_bosswarning.wav");
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
-	// 3DƒIƒuƒWƒFƒNƒg‚Ì”
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ•°
 	//const int OBJECT_NUM = 2;
 
 	//Object3d object3ds[OBJECT_NUM];
@@ -208,7 +208,7 @@ void GamePlayScene::Initialize()
 
 	Pause* pause = Pause::GetInstance();
 	pause->Initialize();
-	// -----------------ƒXƒvƒ‰ƒCƒg‹¤’ÊƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// -----------------ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
 	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
@@ -218,7 +218,7 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/BlackWindow.png");
 	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/dame_ef.png");
 
-	// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5, 0.5 }, false, false));
@@ -236,23 +236,23 @@ void GamePlayScene::Initialize()
 
 	charParameters->Initialize();
 
-	//ƒXƒvƒ‰ƒCƒgƒ|ƒWƒVƒ‡ƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒã‚¸ã‚·ãƒ§ãƒ³
 	sprite_back->SetPosition({ -11400,0,0 });
 	//sp_guide->SetPosition({ 0,0,0 });
 	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2+100,0 });
 	//sp_sight->SetSize({ 50,50 });
 	//sp_sight->TransferVertexBuffer();
 
-	//ƒXƒvƒ‰ƒCƒgƒJƒ‰[
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚«ãƒ©ãƒ¼
 	sp_blackwindow->SetColor({ 1, 1, 1, 0 });
 
-	//---------ƒXƒvƒ‰ƒCƒgƒTƒCƒY---------//
+	//---------ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚µã‚¤ã‚º---------//
 	//XMFLOAT2 size = sp_guide->GetSize();
 	//sp_guide->GetSize();
 	//size.x=90;
 	//sp_guide->SetSize({200,0});
 
-	// ƒp[ƒeƒBƒNƒ‹‰Šú‰»
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«åˆæœŸåŒ–
 	ParticleManager::GetInstance()->SetCamera(camera.get());
 
 	//for (int i = 0; i < 1; i++)
@@ -260,7 +260,7 @@ void GamePlayScene::Initialize()
 	//    int texNumber = 1;
 	//    Sprite* sprite = Sprite::Create(spriteBase, texNumber, { 0,0 }, false, false);
 
-	//    // ƒXƒvƒ‰ƒCƒg‚ÌÀ•W•ÏX
+	//    // ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®åº§æ¨™å¤‰æ›´
 	//    sprite->SetPosition({ (float)(80),(float)(20),0 });
 	//    //sprite->SetRotation((float)(rand() % 360));
 	//    sprite->SetSize({ (float)(200), (float)(200) });
@@ -270,14 +270,14 @@ void GamePlayScene::Initialize()
 	//    sprites.push_back(sprite);
 	//}
 
-	//fbx ƒ‚ƒfƒ‹–¼w’è‚µ‚Äƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+	//fbx ãƒ¢ãƒ‡ãƒ«åæŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
 	//FbxLoader::GetInstance()->LoadModelFromFile(
 	//	"cube"
 	//);
 
-	//int counter = 0; // ƒAƒjƒ[ƒVƒ‡ƒ“‚ÌŒo‰ßŠÔƒJƒEƒ“ƒ^[
+	//int counter = 0; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®çµŒéæ™‚é–“ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
 
-	//// ƒXƒvƒ‰ƒCƒ“‹Èü
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·š
 	////posints = { start, start, p2, p3, end, end }
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
@@ -285,16 +285,16 @@ void GamePlayScene::Initialize()
 	//points.emplace_back(XMVectorSet(0, 70, 100, 0));
 	//points.emplace_back(XMVectorSet(0, 30, 50, 0));//e
 	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//e
-	////p1‚©‚çƒXƒ^[ƒg
+	////p1ã‹ã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆ
 	//splineStartIndex = 1;
 
 	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
 
-	//ŠÔƒŠƒZƒbƒgBƒ^ƒCƒgƒ‹‚É–ß‚é“xB
+	//æ™‚é–“ãƒªã‚»ãƒƒãƒˆã€‚ã‚¿ã‚¤ãƒˆãƒ«ã«æˆ»ã‚‹åº¦ã€‚
 	Timer* timer = Timer::GetInstance();
 	timer->TimerPlay(false);
 
-	//¡‚ ‚éƒp[ƒeƒBƒNƒ‹‚ğíœ‚·‚é
+	//ä»Šã‚ã‚‹ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚’å‰Šé™¤ã™ã‚‹
 	ParticleManager::GetInstance()->DeleteParticles();
 
 }
@@ -304,17 +304,17 @@ void GamePlayScene::Finalize()
 	//safe_delete(fbxObject_1);
 	//safe_delete(fbxModel_1);
 
-	//©ƒLƒƒƒ‰‰ğ•ú
+	//è‡ªã‚­ãƒ£ãƒ©è§£æ”¾
 	//delete player_;
 	//delete smallEnemy_;
 }
 
 void GamePlayScene::SmallEnemyAppear()
 {
-	//ƒL[“ü—Íg‚¤
+	//ã‚­ãƒ¼å…¥åŠ›ä½¿ã†
 	//Input* input = Input::GetInstance();
 
-	//G‹›“G¶¬
+	//é›‘é­šæ•µç”Ÿæˆ
 	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
 
 	madeSmallEnemy->Initialize();
@@ -324,20 +324,20 @@ void GamePlayScene::SmallEnemyAppear()
 	{
 		se->SetSEBulModel(mod_enemybullet.get());
 	}
-	//G‹›“G“o˜^
+	//é›‘é­šæ•µç™»éŒ²
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 
 void GamePlayScene::DoorOpen()
 {
 
-	int LDoorPosXRim = -2200;//¶‚Ì•ÇŠJ‚¯I‚í‚éêŠ
-	int DoorMoveSp = 6;//ƒhƒA‚ªŠJ‚­‘¬“x
+	int LDoorPosXRim = -2200;//å·¦ã®å£é–‹ã‘çµ‚ã‚ã‚‹å ´æ‰€
+	int DoorMoveSp = 6;//ãƒ‰ã‚¢ãŒé–‹ãé€Ÿåº¦
 
 	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
 	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
 
-	//¶‚Ì•Ç‚ªˆê’ès‚Á‚½‚çI‚í‚è
+	//å·¦ã®å£ãŒä¸€å®šè¡Œã£ãŸã‚‰çµ‚ã‚ã‚Š
 	if (!(LDoorPos.x < LDoorPosXRim)) {
 		LDoorPos.x -= 6;
 		RDoorPos.x += 6;
@@ -352,7 +352,7 @@ void GamePlayScene::DoorOpen()
 void GamePlayScene::BeforeBossAppear()
 {
 
-	//‰‰o’†‚Ì‚İtrue
+	//æ¼”å‡ºä¸­æ™‚ã®ã¿true
 	BeforeBossAppearNow = true;
 
 	const int BBPaternCountNum = 4;
@@ -377,7 +377,7 @@ void GamePlayScene::BeforeBossAppear()
 		if (SP_BossWarning.w > 1.0) {
 			beforeBossPattern_ = BeforeBossPattern::dec;
 			AlertSoundFlag = true;
-			BBPaternCount++;//ŒJ‚è•Ô‚·‰ñ”
+			BBPaternCount++;//ç¹°ã‚Šè¿”ã™å›æ•°
 		}
 		break;
 
@@ -393,7 +393,7 @@ void GamePlayScene::BeforeBossAppear()
 		break;
 	}
 
-	//--ŒJ‚è•Ô‚·‰ñ”0~------Á‚¦‚Ä‚©‚çƒ{ƒXí‚Ö
+	//--ç¹°ã‚Šè¿”ã™å›æ•°0~------æ¶ˆãˆã¦ã‹ã‚‰ãƒœã‚¹æˆ¦ã¸
 	if (BBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
 
@@ -420,9 +420,9 @@ void GamePlayScene::BossDeathEfect()
 
 	sp_blackwindow->Update();
 
-	//ƒ{ƒXŒ‚”j‚ÅƒNƒŠƒA@Update“à‚¾‚Æˆêu‰æ–ÊŒ©‚¦‚¿‚á‚¤‚©‚ç‚±‚±‚É
+	//ãƒœã‚¹æ’ƒç ´ã§ã‚¯ãƒªã‚¢ã€€Updateå†…ã ã¨ä¸€ç¬ç”»é¢è¦‹ãˆã¡ã‚ƒã†ã‹ã‚‰ã“ã“ã«
 	if (!boss_.front()->GetAlive()) {
-		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGM‚â‚ß
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMã‚„ã‚
 		BaseScene* scene = new ClearScene();
 		sceneManager_->SetNextScene(scene);
 	}
@@ -430,33 +430,32 @@ void GamePlayScene::BossDeathEfect()
 
 void GamePlayScene::PlayerMove()
 {
-	//Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	//----------«ˆÚ“®§ŒÀ
+	//----------â†“ç§»å‹•åˆ¶é™
 	const float PlayerMoveLimX = 400;
 
-	const float PlayerMaxMoveLimY = 0;//‰º‚És‚¯‚é”ÍˆÍ
-	const float PlayerMinMoveLimY = 300;//ã‚És‚¯‚é”ÍˆÍ
+	const float PlayerMaxMoveLimY = 0;//ä¸‹ã«è¡Œã‘ã‚‹ç¯„å›²
+	const float PlayerMinMoveLimY = 300;//ä¸Šã«è¡Œã‘ã‚‹ç¯„å›²
 
-	//const float PlayerMaxMoveLimZ = 290;//Œã‚ë
+	//const float PlayerMaxMoveLimZ = 290;//å¾Œã‚
 	//const float PlayerMinMoveLimZ = 200;
 
 	XMFLOAT3 PlayerPos = player_->GetPosition();
 	XMFLOAT3 rotation = player_->GetRotation();
 	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
 	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
-	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//‰º‚És‚¯‚é”ÍˆÍ
-	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//ã‚És‚¯‚é”ÍˆÍ
+	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//ä¸‹ã«è¡Œã‘ã‚‹ç¯„å›²
+	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//ä¸Šã«è¡Œã‘ã‚‹ç¯„å›²
 	//PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
 	//PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
 	player_->SetPosition(PlayerPos);
-	//----------ªˆÚ“®§ŒÀ
+	//----------â†‘ç§»å‹•åˆ¶é™
 
-	//------------------«ƒvƒŒƒCƒ„[ˆÚ“®•p¨
+	//------------------â†“ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•ï¼†å§¿å‹¢
 	if (cInput->LeftMove() || cInput->RightMove() || cInput->UpMove() || cInput->DownMove())// inputQ || inputZ ||
 	{
-		//------ƒvƒŒƒCƒ„[‚à“¯‚¶ˆÚ“®------//
+		//------ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚‚åŒã˜ç§»å‹•------//
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 3.f;
 
@@ -475,7 +474,7 @@ void GamePlayScene::PlayerMove()
 			if (rotation.z <= 10) {
 				rotation.z += 1.f;
 			}
-			isLMove = true;//¶ˆÚ“®’†
+			isLMove = true;//å·¦ç§»å‹•ä¸­
 		}
 
 		if (cInput->RightMove()) {
@@ -485,7 +484,7 @@ void GamePlayScene::PlayerMove()
 			if (rotation.z >= -10) {
 				rotation.z -= 1.f;
 			}
-			isRMove = true;//‰EˆÚ“®’†
+			isRMove = true;//å³ç§»å‹•ä¸­
 		}
 	}
 	else
@@ -494,7 +493,7 @@ void GamePlayScene::PlayerMove()
 		isRMove = false;
 	}
 
-	//“ü—Í‚È‚¢‚Æ‚«–ß‚·
+	//å…¥åŠ›ãªã„ã¨ãæˆ»ã™
 	if (rotation.z > 0 && isLMove == false) {
 		rotation.z -= 1.f;
 	}
@@ -504,6 +503,57 @@ void GamePlayScene::PlayerMove()
 
 	player_->SetPosition(PlayerPos);
 	player_->SetRotation(rotation);
+}
+
+void GamePlayScene::PlayerDash()
+{
+	//shiftã‚­ãƒ¼ã€å³ã‚¯ãƒªãƒƒã‚¯ã§ãƒ€ãƒƒã‚·ãƒ¥
+	//åŠ æ¸›é€Ÿè¨ˆç®—ã§å¸¸ã«è¶³ã™å€¤å‡ºã™â‡¨å®Ÿéš›ã«è¶³ã™
+	//ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
+	ComplexInput* cInput = ComplexInput::GetInstance();
+
+	//ã‚­ãƒ¼æŠ¼ã•ã‚ŒãŸã‚‰
+	if (cInput->PlayerDash()&& DashFlag==false) {
+		//ç§»å‹•ä¸­ãªã‚‰
+		if (cInput->DownMove() || cInput->UpMove() || cInput->RightMove() || cInput->LeftMove()) {
+			DashFlag = true;
+		}
+	}
+	//ãƒ€ãƒƒã‚·ãƒ¥ã‚¹ã‚¿ãƒ¼ãƒˆ
+	if (DashFlag == true) {
+		XMFLOAT3 pPos = player_->GetPosition();
+
+		DashCount--;
+
+		if (cInput->DownMove()) {
+			DashVel.y = -5;
+			DashAlreadyDecided = true;
+		}
+		if (cInput->UpMove()) {
+			DashVel.y = 5;
+			DashAlreadyDecided = true;
+		}
+		if (cInput->RightMove()) {
+			DashVel.x = 5;
+			DashAlreadyDecided = true;
+		}
+		if (cInput->LeftMove()) {
+			DashVel.x = -5;
+			DashAlreadyDecided = true;
+		}
+
+		pPos.x += DashVel.x;
+		pPos.y += DashVel.y;
+		//pPos.z += DashVel.z;
+
+		player_->SetPosition(pPos);
+
+		if (DashCount == 0) {
+			DashVel = { 0,0,0 };
+			DashCount = DashCountDef;
+			DashFlag = false;
+		}
+	}
 
 }
 
@@ -511,18 +561,18 @@ void GamePlayScene::pHeadingToTheNextPlace()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	//UŒ‚‚Å‚«‚È‚¢‚æ‚¤‚É
+	//æ”»æ’ƒã§ããªã„ã‚ˆã†ã«
 	charParams->pAtkPossibleFlag = false;
 
 	XMFLOAT3 pPos = player_->GetPosition();
 
-	bool StopFlag = false;//’â~‚µ‚Ä‚Ë
+	bool StopFlag = false;//åœæ­¢ã—ã¦ã­
 
 	if (pNextPlaceGoSp < pNextPlaceGoSpMax) {
 		pNextPlaceGoSp += AccelVal;
 	}
-	if (pPos.z > charParams->StopPos) {//w’è‚µ‚½êŠ’´‚¦‚½‚ç
-		StopFlag = true;//~‚Ü‚ê
+	if (pPos.z > charParams->StopPos) {//æŒ‡å®šã—ãŸå ´æ‰€è¶…ãˆãŸã‚‰
+		StopFlag = true;//æ­¢ã¾ã‚Œ
 	}
 
 	if (StopFlag == true) {
@@ -531,7 +581,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
 
-			//‚à‚¤UŒ‚‚µ‚Ä‚¢‚¢‚æ
+			//ã‚‚ã†æ”»æ’ƒã—ã¦ã„ã„ã‚ˆ
 			charParams->pAtkPossibleFlag = true;
 		}
 	}
@@ -545,24 +595,24 @@ void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
 	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
-	//‚­[[[[‚é‚½‚¢‚Ş‰¼@¡‚Í•¶š‚¾‚¯
+	//ããƒ¼ãƒ¼ãƒ¼ãƒ¼ã‚‹ãŸã„ã‚€ä»®ã€€ä»Šã¯æ–‡å­—ã ã‘
 	if (pDamFlag == true) {
 
 		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
-		//‰æ‘œ”–‚­‚µ‚Ä‚­
+		//ç”»åƒè–„ãã—ã¦ã
 		pDamCol.w -= 0.03;
-		//0‚æ‚è‘å‚«‚¢ŠÔ‚©‚Â‚Ü‚¾ˆê‰ñ‚à‚â‚Á‚Ä‚È‚¢‚Æ‚«
+		//0ã‚ˆã‚Šå¤§ãã„é–“ã‹ã¤ã¾ã ä¸€å›ã‚‚ã‚„ã£ã¦ãªã„ã¨ã
 		if (pDamCol.w > 0 && DamEfRedFlag == false) {
 			sp_dame_ef->Update();
 		}
 		else {
-			//ŒJ‚è•Ô‚³‚È‚¢‚æ‚¤‚É
+			//ç¹°ã‚Šè¿”ã•ãªã„ã‚ˆã†ã«
 			DamEfRedFlag = true;
 		}
 	}
 	else {
-		//ƒ_ƒ[ƒWI‚í‚Á‚½‚çÔ‚Ìƒ_ƒ[ƒW‰æ‘œF–ß‚·
+		//ãƒ€ãƒ¡ãƒ¼ã‚¸çµ‚ã‚ã£ãŸã‚‰èµ¤ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ç”»åƒè‰²æˆ»ã™
 		DamEfRedFlag = false;
 		pDamCol.w = 1;
 	}
@@ -580,7 +630,7 @@ void GamePlayScene::UpdateMouse()
 	constexpr XMFLOAT2 centerPos = XMFLOAT2((float)WinApp::window_width / 2.f,
 		(float)WinApp::window_height / 2.f);
 
-	// ’†S‚©‚ç‚Ì‹—
+	// ä¸­å¿ƒã‹ã‚‰ã®è·
 	cameraMoveVel.x = float(input->GetMousePos().x) - centerPos.x;
 	cameraMoveVel.y = float(input->GetMousePos().y) - centerPos.y;
 
@@ -589,22 +639,22 @@ void GamePlayScene::UpdateMouse()
 
 void GamePlayScene::UpdateCamera()
 {
-	// ƒJƒƒ‰‚Ì‹——£
+	// ã‚«ãƒ¡ãƒ©ã®è·é›¢
 	//constexpr float camLen = 64.f;
-	// ƒJƒƒ‰‚Ì‚‚³
+	// ã‚«ãƒ¡ãƒ©ã®é«˜ã•
 	//constexpr float camHeight = camLen * 10.5f;
 
-	// ©‹@‚©‚çƒJƒƒ‰’‹“_‚Ü‚Å‚Ì‹——£
+	// è‡ªæ©Ÿã‹ã‚‰ã‚«ãƒ¡ãƒ©æ³¨è¦–ç‚¹ã¾ã§ã®è·é›¢
 	//constexpr float player2targetLen = camLen * 2.f;
 
-	// ©‹@‚Ì‹üƒxƒNƒgƒ‹
+	// è‡ªæ©Ÿã®è¦–ç·šãƒ™ã‚¯ãƒˆãƒ«
 	{
-		//Š´“x
+		//æ„Ÿåº¦
 		const float camMoveVel = 0.05f;
 
 		XMFLOAT3 rota = player_->GetRotation();
 
-		//ƒJƒƒ‰ã‰ºˆÚ“®§ŒÀ
+		//ã‚«ãƒ¡ãƒ©ä¸Šä¸‹ç§»å‹•åˆ¶é™
 		const float rotXrim = 60.f;
 		const float rotYrim = 90.f;
 		if (rota.x > rotXrim) {
@@ -613,16 +663,16 @@ void GamePlayScene::UpdateCamera()
 		if (rota.x < -rotXrim) {
 			rota.x = -rotXrim;
 		}
-		//ƒJƒƒ‰¶‰EˆÚ“®§ŒÀ
+		//ã‚«ãƒ¡ãƒ©å·¦å³ç§»å‹•åˆ¶é™
 		if (rota.y > rotYrim) {
 			rota.y = rotYrim;
 		}
 		if (rota.y < -rotYrim) {
 			rota.y = -rotYrim;
 		}
-		// ƒ}ƒEƒX‚Ì‰¡•ûŒü(X)‚ÌˆÚ“®‚ªƒJƒƒ‰‚Ìc•ûŒü(Y)‚Ì‰ñ“]‚É‚È‚é
+		// ãƒã‚¦ã‚¹ã®æ¨ªæ–¹å‘(X)ã®ç§»å‹•ãŒã‚«ãƒ¡ãƒ©ã®ç¸¦æ–¹å‘(Y)ã®å›è»¢ã«ãªã‚‹
 		rota.x += cameraMoveVel.y * camMoveVel;
-		// ƒ}ƒEƒX‚Ìc•ûŒü(Y)‚ÌˆÚ“®‚ªƒJƒƒ‰‚Ì‰¡•ûŒü(X)‚Ì‰ñ“]‚É‚È‚é
+		// ãƒã‚¦ã‚¹ã®ç¸¦æ–¹å‘(Y)ã®ç§»å‹•ãŒã‚«ãƒ¡ãƒ©ã®æ¨ªæ–¹å‘(X)ã®å›è»¢ã«ãªã‚‹
 		rota.y += cameraMoveVel.x * camMoveVel;
 
 		player_->SetRotation(rota);
@@ -631,10 +681,10 @@ void GamePlayScene::UpdateCamera()
 
 void GamePlayScene::PadStickCamera()
 {
-	//ƒpƒbƒh‰EƒXƒeƒBƒbƒN‚ÅƒJƒƒ‰‹“_
+	//ãƒ‘ãƒƒãƒ‰å³ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã§ã‚«ãƒ¡ãƒ©è¦–ç‚¹
 	Input* input = Input::GetInstance();
 
-	//Š´“x
+	//æ„Ÿåº¦
 	const float PadCamMoveAmount = 0.5f;
 
 	if (input->PushRightStickUp()) {
@@ -663,24 +713,24 @@ void GamePlayScene::CollisionAll()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	float NowBoHp = charParams->GetNowBoHp();//Œ»İ‚Ì‚Ú‚·HPæ“¾
-	float BossDefense = charParams->GetBossDefense();//ƒ{ƒX–hŒä—Íæ“¾ æ“ª—v‘f
-	float NowpHp = charParams->GetNowpHp();//©‹@‘Ì—Íæ“¾
-	float pBulPow = player_->GetpBulPow();//©‹@’eˆĞ—Í
+	float NowBoHp = charParams->GetNowBoHp();//ç¾åœ¨ã®ã¼ã™HPå–å¾—
+	float BossDefense = charParams->GetBossDefense();//ãƒœã‚¹é˜²å¾¡åŠ›å–å¾— å…ˆé ­è¦ç´ 
+	float NowpHp = charParams->GetNowpHp();//è‡ªæ©Ÿä½“åŠ›å–å¾—
+	float pBulPow = player_->GetpBulPow();//è‡ªæ©Ÿå¼¾å¨åŠ›
 
-	//------------------------------«“–‚½‚è”»’èZONE«-----------------------------//
-	//[©‹@‚Ì’e]‚Æ[ƒ{ƒX]‚Ì“–‚½‚è”»’è                  ˆÚ“®I‚í‚Á‚½‚ç					©‹@‚Ì‘Ì—Í‚ ‚é‚Æ‚«
+	//------------------------------â†“å½“ãŸã‚Šåˆ¤å®šZONEâ†“-----------------------------//
+	//[è‡ªæ©Ÿã®å¼¾]ã¨[ãƒœã‚¹]ã®å½“ãŸã‚Šåˆ¤å®š                  ç§»å‹•çµ‚ã‚ã£ãŸã‚‰					è‡ªæ©Ÿã®ä½“åŠ›ã‚ã‚‹ã¨ã
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
 		{
 
-			Sphere pBulForm;//‹…
+			Sphere pBulForm;//çƒ
 
 			for (auto& pb : player_->GetBullets()) {
-				if (!pb->GetAlive())continue;//€‚ñ‚Å‚½‚çƒXƒLƒbƒv
+				if (!pb->GetAlive())continue;//æ­»ã‚“ã§ãŸã‚‰ã‚¹ã‚­ãƒƒãƒ—
 				pBulForm.center = XMLoadFloat3(&pb->GetPosition());
 				pBulForm.radius = pb->GetScale().x;
 
-				// Õ“Ë”»’è‚ğ‚·‚é
+				// è¡çªåˆ¤å®šã‚’ã™ã‚‹
 				for (auto& bo : boss_) {
 					if (!bo->GetAlive())continue;
 					Sphere enemyForm;
@@ -689,29 +739,29 @@ void GamePlayScene::CollisionAll()
 
 					if (bo->GetisDeath())continue;
 
-					// “–‚½‚Á‚½‚çÁ‚¦‚é
+					// å½“ãŸã£ãŸã‚‰æ¶ˆãˆã‚‹
 					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
 						XMFLOAT3 boPos = bo->GetPosition();
 
 						pb->SetAlive(false);
 
 						//bo->SetColor({ 1,0,0,1 });
-						//‹ò‚ç‚Á‚Ä‚Ü‚¾¶‚«‚Ä‚½‚ç
+						//å–°ã‚‰ã£ã¦ã¾ã ç”Ÿãã¦ãŸã‚‰
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 						}
 						Damage = pBulPow - BossDefense;
 						NowBoHp -= Damage;
-						charParams->SetNowBoHp(NowBoHp);//ƒ{ƒXHPƒZƒbƒg
+						charParams->SetNowBoHp(NowBoHp);//ãƒœã‚¹HPã‚»ãƒƒãƒˆ
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 
 						if (NowBoHp <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
 							bo->SetisDeath(true);
-							//c‚Á‚Ä‚¢‚éG‹›“G‚Í‚à‚¤‚¢‚ç‚È‚¢
-							for (auto& bob : bo->GetBullets()) {//‚¢‚éG‹›“G‚Ì•ª‚¾‚¯
-								bob->SetAlive(false);//Á‚·
+							//æ®‹ã£ã¦ã„ã‚‹é›‘é­šæ•µã¯ã‚‚ã†ã„ã‚‰ãªã„
+							for (auto& bob : bo->GetBullets()) {//ã„ã‚‹é›‘é­šæ•µã®åˆ†ã ã‘
+								bob->SetAlive(false);//æ¶ˆã™
 							}
 
 						}
@@ -720,7 +770,7 @@ void GamePlayScene::CollisionAll()
 					}
 				}
 			}
-			////ƒ{ƒX‚¢‚ê‚ÎTRUE@Á‚¦‚½‚çFALSE@‚¢‚È‚¢‚ÆENPTY
+			////ãƒœã‚¹ã„ã‚Œã°TRUEã€€æ¶ˆãˆãŸã‚‰FALSEã€€ã„ãªã„ã¨ENPTY
 			//if (!boss_.empty())
 			//{
 			//	if (boss_.front()->GetAlive()) {
@@ -733,13 +783,13 @@ void GamePlayScene::CollisionAll()
 			//else {
 			//	DebugText::GetInstance()->Print("empty", 200, 190, 2);
 			//}
-			// ƒ{ƒX‚ğÁ‚·
+			// ãƒœã‚¹ã‚’æ¶ˆã™
 			boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
 				[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
 		}
 	}
 
-	//[©‹@‚Ì’e]‚Æ[G‹›“G]“–‚½‚è”»’è
+	//[è‡ªæ©Ÿã®å¼¾]ã¨[é›‘é­šæ•µ]å½“ãŸã‚Šåˆ¤å®š
 	{
 
 		Sphere pBulForm;
@@ -749,18 +799,18 @@ void GamePlayScene::CollisionAll()
 			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
 			pBulForm.radius = pb->GetScale().x;
 
-			// Õ“Ë”»’è‚ğ‚·‚é
+			// è¡çªåˆ¤å®šã‚’ã™ã‚‹
 			for (auto& se : smallEnemys_) {
 				if (!se->GetAlive())continue;
 				Sphere smallenemyForm;
 				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x + 20;//—]—T‚ğ‚½‚¹‚é•ª{
+				smallenemyForm.radius = se->GetScale().x + 20;//ä½™è£•ã‚’æŒãŸã›ã‚‹åˆ†ï¼‹
 
-				// “–‚½‚Á‚½‚çÁ‚¦‚é
+				// å½“ãŸã£ãŸã‚‰æ¶ˆãˆã‚‹
 				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
 					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
-					sEnemyMurdersNum++;//Œ‚”j”
-					// ƒp[ƒeƒBƒNƒ‹‚Ì”­¶
+					sEnemyMurdersNum++;//æ’ƒç ´æ•°
+					// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ç™ºç”Ÿ
 					XMFLOAT3 sePos = se->GetPosition();
 					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 80, 5);
 					se->SetAlive(false);
@@ -771,18 +821,18 @@ void GamePlayScene::CollisionAll()
 		}
 	}
 
-	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚ÌG‹›“G‚Í€‚µ‚Ä”q‚¹‚æ
+	//æ¶ˆæ»…ãƒ•ãƒ©ã‚°ç«‹ã£ãŸã‚‰ãã®é›‘é­šæ•µã¯æ­»ã—ã¦æ‹ã›ã‚ˆ
 	/*smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
 		return !smallEnemy->GetAlive();
 		});*/
 
-		//[©‹@]‚Æ[ƒ{ƒX’e]‚Ì“–‚½‚è”»’è
+		//[è‡ªæ©Ÿ]ã¨[ãƒœã‚¹å¼¾]ã®å½“ãŸã‚Šåˆ¤å®š
 	{
 
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
-		//ƒ{ƒXHP‚ª‚ ‚é‚Æ‚«
+		//ãƒœã‚¹HPãŒã‚ã‚‹ã¨ã
 		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
@@ -794,9 +844,9 @@ void GamePlayScene::CollisionAll()
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 
 						pDamFlag = true;
-						NowpHp -= bo->GetBulPow();//©‹@ƒ_ƒ[ƒW
+						NowpHp -= bo->GetBulPow();//è‡ªæ©Ÿãƒ€ãƒ¡ãƒ¼ã‚¸
 						charParams->SetispDam(true);
-						charParams->SetNowpHp(NowpHp);//ƒvƒŒƒCƒ„[HPƒZƒbƒg
+						charParams->SetNowpHp(NowpHp);//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼HPã‚»ãƒƒãƒˆ
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						bob->SetAlive(false);
@@ -807,13 +857,13 @@ void GamePlayScene::CollisionAll()
 			}
 		}
 	}
-	//[©‹@]‚Æ[ƒ{ƒX‘_‚¢’e]‚Ì“–‚½‚è”»’è
+	//[è‡ªæ©Ÿ]ã¨[ãƒœã‚¹ç‹™ã„å¼¾]ã®å½“ãŸã‚Šåˆ¤å®š
 	{
 
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
-		//ƒ{ƒX‚ÌHP‚ ‚é‚Æ‚«
+		//ãƒœã‚¹ã®HPã‚ã‚‹ã¨ã
 		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
@@ -825,9 +875,9 @@ void GamePlayScene::CollisionAll()
 					if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
 
 						pDamFlag = true;
-						NowpHp -= bo->GetAimBulPow();//©‹@ƒ_ƒ[ƒW
+						NowpHp -= bo->GetAimBulPow();//è‡ªæ©Ÿãƒ€ãƒ¡ãƒ¼ã‚¸
 						charParams->SetispDam(true);
-						charParams->SetNowpHp(NowpHp);//ƒvƒŒƒCƒ„[HPƒZƒbƒg
+						charParams->SetNowpHp(NowpHp);//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼HPã‚»ãƒƒãƒˆ
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						boaimbul->SetAlive(false);
@@ -840,7 +890,7 @@ void GamePlayScene::CollisionAll()
 
 	}
 
-	//[G‹›“G’e]‚Æ[©‹@]‚Ì“–‚½‚è”»’è
+	//[é›‘é­šæ•µå¼¾]ã¨[è‡ªæ©Ÿ]ã®å½“ãŸã‚Šåˆ¤å®š
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
@@ -849,17 +899,17 @@ void GamePlayScene::CollisionAll()
 		if (player_->GetAlive()) {
 			for (auto& se : smallEnemys_) {
 				if (!se->GetAlive())continue;
-				for (auto& seb : se->GetBullets()) {//seb G‹›“G’e
+				for (auto& seb : se->GetBullets()) {//seb é›‘é­šæ•µå¼¾
 					Sphere seBulForm;
 					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
-					seBulForm.radius = seb->GetScale().z + 1;//—]—T
+					seBulForm.radius = seb->GetScale().z + 1;//ä½™è£•
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
-						float seBulPow = se->GetBulPow();//G‹›“G’Êí’eˆĞ—Í
+						float seBulPow = se->GetBulPow();//é›‘é­šæ•µé€šå¸¸å¼¾å¨åŠ›
 						pDamFlag = true;
-						NowpHp -= seBulPow;//©‹@ƒ_ƒ[ƒW
-						charParams->SetispDam(true);//©‹@‚­‚ç‚¢
-						charParams->SetNowpHp(NowpHp);//ƒ{ƒXHPƒZƒbƒg
+						NowpHp -= seBulPow;//è‡ªæ©Ÿãƒ€ãƒ¡ãƒ¼ã‚¸
+						charParams->SetispDam(true);//è‡ªæ©Ÿãã‚‰ã„
+						charParams->SetNowpHp(NowpHp);//ãƒœã‚¹HPã‚»ãƒƒãƒˆ
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 						seb->SetAlive(false);
@@ -871,14 +921,14 @@ void GamePlayScene::CollisionAll()
 		}
 	}
 
-	//[ƒ{ƒX]‚Æ[©‹@]‚Ì“–‚½‚è”»’è
+	//[ãƒœã‚¹]ã¨[è‡ªæ©Ÿ]ã®å½“ãŸã‚Šåˆ¤å®š
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
 
 		if (player_->GetAlive()) {
-			// Õ“Ë”»’è‚ğ‚·‚é
+			// è¡çªåˆ¤å®šã‚’ã™ã‚‹
 			for (auto& bo : boss_) {
 				if (!bo->GetAlive())continue;
 				Sphere bossForm;
@@ -887,17 +937,17 @@ void GamePlayScene::CollisionAll()
 
 				if (bo->GetisDeath())continue;
 
-				//’èŠú“I‚Éƒ_ƒ[ƒW
+				//å®šæœŸçš„ã«ãƒ€ãƒ¡ãƒ¼ã‚¸
 				if (BodyDamFlag == false) {
 					if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
 						pDamFlag = true;
-						float bodyPow = bo->GetBodyPow();//ƒ{ƒX‘ÌˆĞ—Í
-						NowpHp -= bodyPow;//©‹@‚Éƒ_ƒ[ƒW
-						charParams->SetispDam(true);//©‹@‚­‚ç‚¢
+						float bodyPow = bo->GetBodyPow();//ãƒœã‚¹ä½“å¨åŠ›
+						NowpHp -= bodyPow;//è‡ªæ©Ÿã«ãƒ€ãƒ¡ãƒ¼ã‚¸
+						charParams->SetispDam(true);//è‡ªæ©Ÿãã‚‰ã„
 						charParams->SetNowpHp(NowpHp);
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						BodyDamFlag = true;//ƒN[ƒ‹‚½‚¢‚Ş
+						BodyDamFlag = true;//ã‚¯ãƒ¼ãƒ«ãŸã„ã‚€
 						break;
 					}
 				}
@@ -906,7 +956,7 @@ void GamePlayScene::CollisionAll()
 	}
 }
 
-//------------------------------ª“–‚½‚è”»’èZONEª-----------------------------//
+//------------------------------â†‘å½“ãŸã‚Šåˆ¤å®šZONEâ†‘-----------------------------//
 
 bool GamePlayScene::GameReady()
 {
@@ -914,7 +964,7 @@ bool GamePlayScene::GameReady()
 	XMFLOAT4 GOCol = sp_ready_go->GetColor();
 	XMFLOAT2 GOSize = sp_ready_go->GetSize();
 	XMFLOAT3 GOPos = sp_ready_go->GetPosition();
-	//ƒvƒŒƒCƒ„[‘¤‚ÅƒŒƒfƒB[’†‚ÍAttack‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ã§ãƒ¬ãƒ‡ã‚£ãƒ¼ä¸­ã¯Attackã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 	bool pReadyFlag = player_->GetReadyNow();
 
 	if (ReadyCol.w > 0.0)
@@ -939,7 +989,7 @@ bool GamePlayScene::GameReady()
 	}
 
 	if (GOCol.w < 0.0) {
-		//ƒAƒ^ƒbƒNŠJn‚µ‚Ä‚æ‚«
+		//ã‚¢ã‚¿ãƒƒã‚¯é–‹å§‹ã—ã¦ã‚ˆã
 		pReadyFlag = false;
 		player_->SetReadyNow(pReadyFlag);
 
@@ -955,7 +1005,7 @@ void GamePlayScene::BodyDamCoolTime()
 		BodyDamCount--;
 		if (BodyDamCount == 0) {
 			BodyDamCount = BodyDamCountDef;
-			BodyDamFlag = false;//‚à‚¤ˆê“x‹ò‚ç‚¤
+			BodyDamFlag = false;//ã‚‚ã†ä¸€åº¦å–°ã‚‰ã†
 		}
 	}
 }
@@ -969,13 +1019,13 @@ void GamePlayScene::Update()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 	const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
-	//ƒpƒbƒhƒgƒŠƒK[
+	//ãƒ‘ãƒƒãƒ‰ãƒˆãƒªã‚¬ãƒ¼
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->WaitKey0 < 10 && pause->GetPauseFlag() == false) {
-		pause->WaitKey0++;//ƒ|[ƒY‚©‚ç“ü—Í‘Ò‚ÂB1ƒtƒŒ‚ÅŠJ‚¢‚Ä•Â‚¶‚¿‚á‚¤‚©‚ç2‰ñ‰Ÿ‚µ‚½“I‚ÈŠ´‚¶‚É‚È‚Á‚¿‚á‚¤
+		pause->WaitKey0++;//ãƒãƒ¼ã‚ºã‹ã‚‰å…¥åŠ›å¾…ã¤ã€‚1ãƒ•ãƒ¬ã§é–‹ã„ã¦é–‰ã˜ã¡ã‚ƒã†ã‹ã‚‰2å›æŠ¼ã—ãŸçš„ãªæ„Ÿã˜ã«ãªã£ã¡ã‚ƒã†
 	}
 	if (pause->WaitKey0 >= 2) {
 		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {
@@ -989,27 +1039,27 @@ void GamePlayScene::Update()
 	if (pause->GetPauseFlag() == true) {
 
 		pause->PauseNow();
-		UpdateMouse();//ƒ|[ƒY‚µ‚Ä‚é‚Æ‚«‚àƒ}ƒEƒXXV@Œ³‚ÍPauseŠÖ”“à
+		UpdateMouse();//ãƒãƒ¼ã‚ºã—ã¦ã‚‹ã¨ãã‚‚ãƒã‚¦ã‚¹æ›´æ–°ã€€å…ƒã¯Pauseé–¢æ•°å†…
 
 		if (pause->GetSceneChangeTitleFlag() == true) {
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			input->PadVibration();//U“®
-			// ‰¹º’â~
+			input->PadVibration();//æŒ¯å‹•
+			// éŸ³å£°åœæ­¢
 			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
-			//ƒV[ƒ“Ø‚è‘Ö‚¦
+			//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 			BaseScene* scene = new TitleScene();
 			sceneManager_->SetNextScene(scene);
 		}
 
 	}
 
-	//—^‚¦‚éƒ_ƒ[ƒW‚ª0ˆÈ‰º‚¾‚Á‚½‚ç1‚É‚·‚é
+	//ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒ0ä»¥ä¸‹ã ã£ãŸã‚‰1ã«ã™ã‚‹
 	if (Damage <= 0) {
 		Damage = 1;
 	}
 
-	//ƒ|[ƒY‚Å‚È‚¢‚Æ‚«`
-	//‚±‚ÌŠO‚Íƒ|[ƒY’†‚àÀs
+	//ãƒãƒ¼ã‚ºã§ãªã„ã¨ãï½
+	//--------------ã“ã®å¤–ã«å‡ºã™ã¨ãƒãƒ¼ã‚ºä¸­ã‚‚å®Ÿè¡Œ
 	if (pause->GetPauseFlag() == false)
 	{
 
@@ -1017,11 +1067,11 @@ void GamePlayScene::Update()
 		DxBase* dxBase = DxBase::GetInstance();
 
 		CharParameters* charParameters = CharParameters::GetInstance();
-		float NowBoHp = charParameters->GetNowBoHp();//Œ»İ‚Ì‚Ú‚·HPæ“¾
-		float BossDefense = charParameters->GetBossDefense();//ƒ{ƒX–hŒä—Íæ“¾
-		float NowpHp = charParameters->GetNowpHp();//©‹@‘Ì—Íæ“¾
+		float NowBoHp = charParameters->GetNowBoHp();//ç¾åœ¨ã®ã¼ã™HPå–å¾—
+		float BossDefense = charParameters->GetBossDefense();//ãƒœã‚¹é˜²å¾¡åŠ›å–å¾—
+		float NowpHp = charParameters->GetNowpHp();//è‡ªæ©Ÿä½“åŠ›å–å¾—
 
-		//ƒL[‘€ì‰Ÿ‚µ‚Ä‚¢‚éŠÔ
+		//ã‚­ãƒ¼æ“ä½œæŠ¼ã—ã¦ã„ã‚‹é–“
 
 		const bool inputT = input->PushKey(DIK_T);
 		const bool inputE = input->PushKey(DIK_E);
@@ -1032,7 +1082,7 @@ void GamePlayScene::Update()
 		const bool inputL = input->PushKey(DIK_L);
 
 		const bool input3 = input->PushKey(DIK_3);
-		//‰Ÿ‚µ‚½uŠÔ
+		//æŠ¼ã—ãŸç¬é–“
 		const bool TriggerM = input->TriggerKey(DIK_M);
 		const bool TriggerE = input->TriggerKey(DIK_E);
 		const bool TriggerR = input->TriggerKey(DIK_R);
@@ -1041,36 +1091,37 @@ void GamePlayScene::Update()
 		float pMaxHp = charParameters->GetpMaxHp();
 		float boMaxHp = charParameters->GetboMaxHp();
 
-		//©‹@‚ÌHPƒo[
+		//è‡ªæ©Ÿã®HPãƒãƒ¼
 		charParameters->pHpSizeChange();
 
 		charParameters->BarGetDislodged();
 
 		const float RotVul = 0.3f;
 		{
-			//“V‹…‰ñ“]
+			//å¤©çƒå›è»¢
 			XMFLOAT3 rotation = obj_worlddome->GetRotation();
 			rotation.y += RotVul;
 			obj_worlddome->SetRotation({ rotation });
 		}
 
-		if (player_->GetPHpLessThan0() == false)
+		if (player_->GetPHpLessThan0() == false|| DashFlag==false)
 		{
-			//ƒvƒŒƒCƒ„[ˆÚ“®-ã‚É‘‚­‚ÆˆÚ“®‚©‚­‚Â‚©‚È‚¢
+			//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç§»å‹•-ä¸Šã«æ›¸ãã¨ç§»å‹•ã‹ãã¤ã‹ãªã„
 			PlayerMove();
 		}
+		PlayerDash();
 
 		DrawUI();
-		//ƒpƒbƒh‰EƒXƒeƒBƒbƒNƒJƒƒ‰‹“_
+		//ãƒ‘ãƒƒãƒ‰å³ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚«ãƒ¡ãƒ©è¦–ç‚¹
 		PadStickCamera();
 
-		// ƒ}ƒEƒXî•ñ‚ÌXV
+		// ãƒã‚¦ã‚¹æƒ…å ±ã®æ›´æ–°
 		UpdateMouse();
-		// ƒJƒƒ‰‚ÌXV
+		// ã‚«ãƒ¡ãƒ©ã®æ›´æ–°
 		camera->Update();
 		UpdateCamera();
 
-		if (pRotDef == false) { //ˆê“x‚¾‚¯
+		if (pRotDef == false) { //ä¸€åº¦ã ã‘
 			input->PadVibrationDef();
 			player_->SetRotation({});
 			pRotDef = true;
@@ -1083,7 +1134,7 @@ void GamePlayScene::Update()
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 
-		//ƒXƒvƒ‰ƒCƒgXV
+		//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæ›´æ–°
 		sprite_back->Update();
 		//sp_sight->Update();
 		//sp_guide->Update();
@@ -1097,7 +1148,7 @@ void GamePlayScene::Update()
 		{
 			PlayTimer();
 
-			//if (TriggerR) {//ƒfƒoƒbƒN—p@“K“–‚É@‚¢‚Â‚©‚ÍÁ‚·
+			//if (TriggerR) {//ãƒ‡ãƒãƒƒã‚¯ç”¨ã€€é©å½“ã«ã€€ã„ã¤ã‹ã¯æ¶ˆã™
 			//	camera->SetTarget({  });
 			//	camera->SetEye({  });
 			//	player_->SetAlive(true);
@@ -1107,11 +1158,11 @@ void GamePlayScene::Update()
 			//	sEnemyMurdersNum = 0;
 			//	BossEnemyAdvent = false;
 
-			//	// ƒJƒƒ‰reƒZƒbƒg
+			//	// ã‚«ãƒ¡ãƒ©reã‚»ãƒƒãƒˆ
 			//	//Object3d::SetCamera(camera.get());
 			//}
 
-			//“G‚ÌHPƒo[
+			//æ•µã®HPãƒãƒ¼
 			if (BossEnemyAdvent == true)
 			{
 				charParameters->boHpSizeChange();
@@ -1119,65 +1170,65 @@ void GamePlayScene::Update()
 
 			if (BossEnemyAdvent == false)
 			{
-				//‚ª–‚¿‚½‚ç
+				//æ™‚ãŒæº€ã¡ãŸã‚‰
 				if (SEneAppCount == 0) {
-					//G‹›“G—ˆ‚é
-					//csv‚ÌÅŒã‚Ü‚Ås‚Á‚½ê‡Å‰‚É–ß‚·
+					//é›‘é­šæ•µæ¥ã‚‹
+					//csvã®æœ€å¾Œã¾ã§è¡Œã£ãŸå ´åˆæœ€åˆã«æˆ»ã™
 					if (++seIndex >= csvData.size()) {
 						seIndex = 0;
 					}
 					SmallEnemyAppear();
-					float posx = std::stof(csvData[seIndex][0]);//G‹›“GXÀ•W‚Ícsv‚Ì0”Ô–Ú
+					float posx = std::stof(csvData[seIndex][0]);//é›‘é­šæ•µXåº§æ¨™ã¯csvã®0ç•ªç›®
 					float posy = std::stof(csvData[seIndex][1]);
 					float posz = std::stof(csvData[seIndex][2]);
-					//G‹›“G‚ğcsv’Ê‚è‚ÌêŠ‚Éo‚·
+					//é›‘é­šæ•µã‚’csvé€šã‚Šã®å ´æ‰€ã«å‡ºã™
 					smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
 
-					//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+					//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 					SEneAppCount = SEneAppInterval;
 				}
 			}
-			//G‹›“GƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+			//é›‘é­šæ•µã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 			SEneAppCount--;
 
-			//------‘_‚¢’e«
-			//G‹›“G‚ÌŒ‚‚Â’e‚ªƒvƒŒƒCƒ„[‚Ì‚¢‚½êŠ‚É”ò‚ñ‚Å‚¢‚­
+			//------ç‹™ã„å¼¾â†“
+			//é›‘é­šæ•µã®æ’ƒã¤å¼¾ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã„ãŸå ´æ‰€ã«é£›ã‚“ã§ã„ã
 			for (auto& se : smallEnemys_) {
-				//ƒ^[ƒQƒbƒg
+				//ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 				se->SetShotTag(player_.get());
 			}
 			for (auto& bo : boss_) {
 				bo->SetShotTag(player_.get());
 			}
-			//------‘_‚¢’eª
+			//------ç‹™ã„å¼¾â†‘
 
-			//©‹@‘¤‚Å€–SŠm”F‚µ‚½‚çÁ‚·
+			//è‡ªæ©Ÿå´ã§æ­»äº¡ç¢ºèªã—ãŸã‚‰æ¶ˆã™
 			if (player_->GetpDeath() == true) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
 				player_->SetAlive(false);
 			}
-			//----------------«ƒV[ƒ“Ø‚è‘Ö‚¦ŠÖ˜A«----------------//
-			//©‹@HP0‚ÅƒQ[ƒ€ƒI[ƒo[
+			//----------------â†“ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆé–¢é€£â†“----------------//
+			//è‡ªæ©ŸHP0ã§ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
 			if (!player_->GetAlive()) {
-				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGM‚â‚ß
+				GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMã‚„ã‚
 				BaseScene* scene = new GameOver();
 				sceneManager_->SetNextScene(scene);
 			}
-			//----------------ªƒV[ƒ“Ø‚è‘Ö‚¦ŠÖ˜Aª---------------//
+			//----------------â†‘ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆé–¢é€£â†‘---------------//
 
-			//‚­‚ç‚Á‚½‚çƒN[ƒ‹ƒ^ƒCƒ€
+			//ãã‚‰ã£ãŸã‚‰ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
 			CoolTime();
-			BodyDamCoolTime();//‘ÌŒp‘±ƒ_ƒ[ƒW
+			BodyDamCoolTime();//ä½“ç¶™ç¶šãƒ€ãƒ¡ãƒ¼ã‚¸
 
 			if (player_->GetPHpLessThan0() == false)
 			{
 				CollisionAll();
 			}
 
-			// ƒp[ƒeƒBƒNƒ‹XV
+			// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æ›´æ–°
 			ParticleManager::GetInstance()->Update();
 
-			//// ƒXƒvƒ‰ƒCƒ“‹Èü‚ÅˆÚ“®
+			//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã§ç§»å‹•
 			//{
 			//	frame++;
 			//	float timeRate = (float)frame / 120.f;
@@ -1195,14 +1246,14 @@ void GamePlayScene::Update()
 			//		}
 			//	}
 
-			//	// ƒxƒNƒ^[‚ğƒtƒ[ƒg‚É•ÏŠ·
+			//	// ãƒ™ã‚¯ã‚¿ãƒ¼ã‚’ãƒ•ãƒ­ãƒ¼ãƒˆã«å¤‰æ›
 			//	XMFLOAT3 splineFloat;
 			//	XMStoreFloat3(&splineFloat, SplinePosition(points, splineStartIndex, timeRate));
 
 			//	player_->SetPosition(splineFloat);
 			//}
 
-			//G‹›“GXV
+			//é›‘é­šæ•µæ›´æ–°
 			if (BossEnemyAdvent == false)
 			{
 				for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
@@ -1210,33 +1261,33 @@ void GamePlayScene::Update()
 				}
 			}
 
-			//Œ‚”j”’B¬‚Åƒ{ƒXí
+			//æ’ƒç ´æ•°é”æˆã§ãƒœã‚¹æˆ¦
 			if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 
-				//c‚Á‚Ä‚¢‚éG‹›“G‚Í‚à‚¤‚¢‚ç‚È‚¢
-				for (auto& se : smallEnemys_) {//‚¢‚éG‹›“G‚Ì•ª‚¾‚¯
-					se->SetAlive(false);//Á‚·
+				//æ®‹ã£ã¦ã„ã‚‹é›‘é­šæ•µã¯ã‚‚ã†ã„ã‚‰ãªã„
+				for (auto& se : smallEnemys_) {//ã„ã‚‹é›‘é­šæ•µã®åˆ†ã ã‘
+					se->SetAlive(false);//æ¶ˆã™
 				}
 
-				//ƒ{ƒXí‘O‚Ì‰‰o
+				//ãƒœã‚¹æˆ¦å‰ã®æ¼”å‡º
 				if (BeforeBossAppearFlag == true)
-				{//‰‰oI‚í‚Á‚½‚ç
-					//ƒ{ƒXí“Ë“ü‚Ì‚¨’m‚ç‚¹‚Å‚·
+				{//æ¼”å‡ºçµ‚ã‚ã£ãŸã‚‰
+					//ãƒœã‚¹æˆ¦çªå…¥ã®ãŠçŸ¥ã‚‰ã›ã§ã™
 					BossEnemyAdvent = true;
 				}
 				else {
 					BeforeBossAppear();
 				}
-				//ğŒ’B¬‚Åƒ{ƒX“oê‰‰o
+				//æ¡ä»¶é”æˆã§ãƒœã‚¹ç™»å ´æ¼”å‡º
 				for (std::unique_ptr<Boss>& boss : boss_) {
-					boss->Update();//“GXV
+					boss->Update();//æ•µæ›´æ–°
 
 					if (boss->GetisDeath() == true)
 					{
 						BossDeathEfect();
 					}
 				}
-				//”à‚ğŠJ‚¯‚é
+				//æ‰‰ã‚’é–‹ã‘ã‚‹
 				if (DoorOpenFlag == false) { DoorOpen(); }
 
 				if (charParams->pNextPlaceGoFlag == true) {
@@ -1248,7 +1299,7 @@ void GamePlayScene::Update()
 			//fbxObject_1->Update();
 
 			sp_beforeboss->Update();
-			//“G‚ÌHPƒo[
+			//æ•µã®HPãƒãƒ¼
 			if (BossEnemyAdvent == true && NowBoHp > 0)
 			{
 				charParameters->boHpUpdate();
@@ -1256,9 +1307,9 @@ void GamePlayScene::Update()
 
 		}
 
-	}//‚±‚±‚Ü‚Åƒ|[ƒY‚µ‚Ä‚È‚¢‚Æ‚«
+	}//ã“ã“ã¾ã§ãƒãƒ¼ã‚ºã—ã¦ãªã„ã¨ã
 
-	//-------í‚ÉƒfƒoƒeƒL«
+	//-------å¸¸ã«ãƒ‡ãƒãƒ†ã‚­â†“
 	// 
 	//Pause* pause = Pause::GetInstance();
 	//if (pause->GetPauseFlag() == false) {
@@ -1276,33 +1327,33 @@ void GamePlayScene::Draw()
 {
 	Pause* pause = Pause::GetInstance();
 
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
 
 	CharParameters* charParameters = CharParameters::GetInstance();
-	//// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒRƒ}ƒ“ƒh
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šã‚³ãƒãƒ³ãƒ‰
 	SpriteBase::GetInstance()->PreDraw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// ƒXƒvƒ‰ƒCƒg•`‰æ
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	sprite_back->Draw();
 
 
-	//3dƒIƒuƒWƒF•`‰æ‘Oˆ—
+	//3dã‚ªãƒ–ã‚¸ã‚§æç”»å‰å‡¦ç†
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
-	//G‹›“G
+	//é›‘é­šæ•µ
 	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 		smallEnemy->Draw();
 	}
 
-	//“G•`‰æ
+	//æ•µæç”»
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
 	}
 
-	//3dƒIƒuƒWƒF•`‰æ
+	//3dã‚ªãƒ–ã‚¸ã‚§æç”»
 	object3d_1->Draw();
 	//obj_worlddome->Draw();
 	//obj_sword->Draw();
@@ -1311,24 +1362,24 @@ void GamePlayScene::Draw()
 	obj_tunnel->Draw();
 	obj_backwall->Draw();
 
-	//©ƒLƒƒƒ‰•`‰æ
+	//è‡ªã‚­ãƒ£ãƒ©æç”»
 	player_->Draw();
 
 	//smallEnemy_->Draw();
 
-	// FBX3dƒIƒuƒWƒFƒNƒg•`‰æ
+	// FBX3dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 	//fbxObject_1->Draw(cmdList);
 
-	// ƒp[ƒeƒBƒNƒ‹•`‰æ
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”»
 	DxBase* dxBase = DxBase::GetInstance();
 	ParticleManager::GetInstance()->Draw(dxBase->GetCmdList());
 
-	float NowBoHp = charParameters->GetNowBoHp();//Œ»İ‚Ì‚Ú‚·HPæ“¾
+	float NowBoHp = charParameters->GetNowBoHp();//ç¾åœ¨ã®ã¼ã™HPå–å¾—
 
-	//3dƒIƒuƒWƒF•`‰æŒãˆ—
+	//3dã‚ªãƒ–ã‚¸ã‚§æç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 
-	// ‚SD•`‰æƒRƒ}ƒ“ƒh‚±‚±‚©‚ç
+	// ï¼”ï¼æç”»ã‚³ãƒãƒ³ãƒ‰ã“ã“ã‹ã‚‰
 
 	//for (int i = 0; i < _countof(object3ds); i++)
 	//{
@@ -1337,10 +1388,10 @@ void GamePlayScene::Draw()
 	//        indices, _countof(indices));
 	//}
 
-	//// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒRƒ}ƒ“ƒh
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šã‚³ãƒãƒ³ãƒ‰
 	SpriteBase::GetInstance()->PreDraw();
 
-	//---------------‚¨è‘OƒXƒvƒ‰ƒCƒg•`‰æ
+	//---------------ãŠæ‰‹å‰ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	if (pause->GetPauseFlag() == false)
 	{
 		//sp_guide->Draw();
@@ -1354,17 +1405,17 @@ void GamePlayScene::Draw()
 	}
 	else if (BossEnemyAdvent == true && NowBoHp > 0) {
 		charParameters->boHpDraw();
-	}//ƒ{ƒXí‚Ì‚İ•\¦
+	}//ãƒœã‚¹æˆ¦æ™‚ã®ã¿è¡¨ç¤º
 
 	if (pause->GetOpWindOpenFlag() == true) { pause->SpOperWindDraw(); }
 
-	//ƒ{ƒXí‘O ƒ|[ƒY’†‚ÍŒ©‚¹‚È‚¢
+	//ãƒœã‚¹æˆ¦å‰ ãƒãƒ¼ã‚ºä¸­ã¯è¦‹ã›ãªã„
 	if (BeforeBossAppearNow == true && pause->GetPauseFlag() == false)
 	{
 		sp_beforeboss->Draw();
 	}
 
-	//ŠJn‘O’†‚Ì‚İ
+	//é–‹å§‹å‰ä¸­ã®ã¿
 	if (GameReady() == true)
 	{
 		sp_ready->Draw();
@@ -1380,13 +1431,13 @@ void GamePlayScene::Draw()
 	if (pDamFlag == true) {
 		sp_dame_ef->Draw();
 	}
-	//Œü‚±‚¤‚Åƒ_ƒ[ƒW‚­‚ç‚¢ó‘Ô‰ğœ‚µ‚½‚ç‚±‚Á‚¿‚Å‚à“¯—l
+	//å‘ã“ã†ã§ãƒ€ãƒ¡ãƒ¼ã‚¸ãã‚‰ã„çŠ¶æ…‹è§£é™¤ã—ãŸã‚‰ã“ã£ã¡ã§ã‚‚åŒæ§˜
 	if (charParameters->GetispDam() == false) {
 		pDamFlag = false;
 	}
 
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// ƒXƒvƒ‰ƒCƒg•`‰æ
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
    // sprite->Draw();
 
 }
@@ -1404,7 +1455,7 @@ void GamePlayScene::Draw()
 //	XMVECTOR p2 = posints[startIndex + 1];
 //	XMVECTOR p3 = posints[startIndex + 2];
 //
-//	//mt3ƒXƒvƒ‰ƒCƒ“‹Èü‚Ìl‚¦•û
+//	//mt3ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³æ›²ç·šã®è€ƒãˆæ–¹
 //	XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
 //		(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
 //		(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
@@ -1415,7 +1466,7 @@ void GamePlayScene::Draw()
 void GamePlayScene::DrawUI()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
-	//ğŒ‚È‚µí‚É•\¦
+	//æ¡ä»¶ãªã—å¸¸ã«è¡¨ç¤º
 	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
 	//DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
 	//DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
@@ -1423,7 +1474,7 @@ void GamePlayScene::DrawUI()
 	//DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
 	//DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
 	//{
-	////©‹@À•W
+	////è‡ªæ©Ÿåº§æ¨™
 	//	char tmp[32]{};
 	//	sprintf_s(tmp, 32, "%2.f,%2.f,%2.f", player_->GetPosition().x, player_->GetPosition().y, player_->GetPosition().z);
 	//	DebugText::GetInstance()->Print(tmp, 430, 220, 3);
@@ -1436,12 +1487,12 @@ void GamePlayScene::DrawUI()
 	//}
 	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
 
-	//if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ƒ{ƒXí‚Ì‚İ
+	//if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ãƒœã‚¹æˆ¦æ™‚ã®ã¿
 	//	DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
 	//	//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
 	//}
-	//else {//ƒ{ƒXí‚¶‚á‚È‚¢‚Æ‚«‚Ì‚İ•\¦
-	//	//G‹›“GŒ‚”j”ŠÖ˜A
+	//else {//ãƒœã‚¹æˆ¦ã˜ã‚ƒãªã„ã¨ãã®ã¿è¡¨ç¤º
+	//	//é›‘é­šæ•µæ’ƒç ´æ•°é–¢é€£
 	//	{
 	//		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
 
@@ -1458,7 +1509,7 @@ void GamePlayScene::DrawUI()
 	//	}
 	//}
 
-	//{//U“®ŠÔ
+	//{//æŒ¯å‹•æ™‚é–“
 	//	char tmp[32]{};
 	//	sprintf_s(tmp, 32, "%d", pShakeTimer_);
 	//	DebugText::GetInstance()->Print(tmp, 430, 430, 3);
@@ -1470,7 +1521,7 @@ void GamePlayScene::DrawUI()
 void GamePlayScene::PlayTimer()
 {
 	//Pause* pause = Pause::GetInstance();
-	////ŠÔŒv‘ª
+	////æ™‚é–“è¨ˆæ¸¬
 	//{
 	//	Timer* timer = Timer::GetInstance();
 	//	if (pause->GetPauseFlag() == false)
