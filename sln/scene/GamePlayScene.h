@@ -29,6 +29,14 @@ class GamePlayScene :public BaseScene,public BaseObject
 		dec,
 	};
 
+	enum class PlayerDashDirection {
+		def,
+		right,
+		left,
+		up,
+		down,
+	};
+
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -104,6 +112,9 @@ public:
 	size_t splineStartIndex;
 
 	BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
+
+	//ダッシュする方向
+	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
 
 private:
 	//sprite
@@ -210,10 +221,12 @@ private:
 	//ダッシュ時間
 	const int DashCountDef = 30;
 	int DashCount = DashCountDef;
+	//ダッシュクールインターバル
+	const int DashIntervalDef = 60;
+	int DashInterval = DashIntervalDef;
+	bool DashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
 	XMFLOAT3 DashVel={0,0,0};
-	//ダッシュ方向決定したからもう受付しないからね false:まだ
-	bool DashAlreadyDecided = false;
 	
 	//----自機ダッシュ 
 };

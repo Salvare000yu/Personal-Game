@@ -513,35 +513,56 @@ void GamePlayScene::PlayerDash()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//キー押されたら
-	if (cInput->PlayerDash()&& DashFlag==false) {
+	if (cInput->PlayerDash()&& DashFlag==false&& DashIntervalFlag==false) {
 		//移動中なら
 		if (cInput->DownMove() || cInput->UpMove() || cInput->RightMove() || cInput->LeftMove()) {
 			DashFlag = true;
+			DashIntervalFlag = true;
 		}
 	}
 	//ダッシュスタート
 	if (DashFlag == true) {
 		XMFLOAT3 pPos = player_->GetPosition();
 
+		//ダッシュする時間
 		DashCount--;
 
-		if (cInput->DownMove()) {
-			DashVel.y = -5;
-			DashAlreadyDecided = true;
-		}
-		if (cInput->UpMove()) {
-			DashVel.y = 5;
-			DashAlreadyDecided = true;
-		}
-		if (cInput->RightMove()) {
-			DashVel.x = 5;
-			DashAlreadyDecided = true;
-		}
-		if (cInput->LeftMove()) {
-			DashVel.x = -5;
-			DashAlreadyDecided = true;
+		//まだ方向決める前なら
+		//ダッシュ中に反対方向押してもそっち方向にダッシュできないようにする目的で一回決めた方向にしかダッシュできないように
+		if (playerDashDirection_ == PlayerDashDirection::def) {
+			if (cInput->DownMove()) {
+				//下に加速に決めた！
+				playerDashDirection_ = PlayerDashDirection::down;
+			}
+			if (cInput->UpMove()) {
+				//上に加速に決めた！
+				playerDashDirection_ = PlayerDashDirection::up;
+			}
+			if (cInput->RightMove()) {
+				//右に加速に決めた！
+				playerDashDirection_ = PlayerDashDirection::right;
+			}
+			if (cInput->LeftMove()) {
+				//左に加速に決めた！
+				playerDashDirection_ = PlayerDashDirection::left;
+			}
 		}
 
+		//------決めた方向にダッシュ
+		if (playerDashDirection_ == PlayerDashDirection::down) {
+			DashVel.y = -5;
+		}
+		if (playerDashDirection_ == PlayerDashDirection::up) {
+			DashVel.y = 5;
+		}
+		if (playerDashDirection_ == PlayerDashDirection::right) {
+			DashVel.x = 5;
+		}
+		if (playerDashDirection_ == PlayerDashDirection::left) {
+			DashVel.x = -5;
+		}
+
+		//移動
 		pPos.x += DashVel.x;
 		pPos.y += DashVel.y;
 		//pPos.z += DashVel.z;
@@ -549,9 +570,20 @@ void GamePlayScene::PlayerDash()
 		player_->SetPosition(pPos);
 
 		if (DashCount == 0) {
+			playerDashDirection_ = PlayerDashDirection::def;
 			DashVel = { 0,0,0 };
 			DashCount = DashCountDef;
 			DashFlag = false;
+		}
+	}
+
+	//インターバル計測なう
+	if (DashIntervalFlag == true) {
+		DashInterval--;
+		if (DashInterval == 0) {
+			//ダッシュしてよし
+			DashInterval = DashIntervalDef;
+			DashIntervalFlag = false;
 		}
 	}
 
