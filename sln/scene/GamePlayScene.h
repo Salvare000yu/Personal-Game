@@ -221,12 +221,20 @@ private:
 	//ダッシュ時間
 	const int DashCountDef = 30;
 	int DashCount = DashCountDef;
+	//ダッシュカウントがこの分引いた値になったら減衰
+	const int DashAttenuation = 10;
+	bool DashAttenuationFlag = false;//減衰開始 fasle:まだしてない
+	//減衰数値
+	float Attenuation=-0.2;
 	//ダッシュクールインターバル
-	const int DashIntervalDef = 60;
+	const int DashIntervalDef = 40;
 	int DashInterval = DashIntervalDef;
 	bool DashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
 	XMFLOAT3 DashVel={0,0,0};
+	//実際に増やす値
+	const float DashVelIncDef = 6;
+	float DashVelInc = DashVelIncDef;
 	
 	//----自機ダッシュ 
 };

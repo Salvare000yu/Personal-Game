@@ -433,10 +433,10 @@ void GamePlayScene::PlayerMove()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//----------↓移動制限
-	const float PlayerMoveLimX = 400;
+	const float PlayerMoveLimX = 600;
 
 	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
-	const float PlayerMinMoveLimY = 300;//上に行ける範囲
+	const float PlayerMinMoveLimY = 400;//上に行ける範囲
 
 	//const float PlayerMaxMoveLimZ = 290;//後ろ
 	//const float PlayerMinMoveLimZ = 200;
@@ -550,16 +550,20 @@ void GamePlayScene::PlayerDash()
 
 		//------決めた方向にダッシュ
 		if (playerDashDirection_ == PlayerDashDirection::down) {
-			DashVel.y = -5;
+			DashVel.y = -DashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::up) {
-			DashVel.y = 5;
+			DashVel.y = DashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::right) {
-			DashVel.x = 5;
+			DashVel.x = DashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::left) {
-			DashVel.x = -5;
+			DashVel.x = -DashVelInc;
+		}
+		//現ダッシュ時間が減衰開始時間になったら
+		if (DashCount== (DashCountDef - DashAttenuation)) {
+			DashAttenuationFlag = true;//減衰開始
 		}
 
 		//移動
@@ -570,9 +574,11 @@ void GamePlayScene::PlayerDash()
 		player_->SetPosition(pPos);
 
 		if (DashCount == 0) {
-			playerDashDirection_ = PlayerDashDirection::def;
+			playerDashDirection_ = PlayerDashDirection::def;//決定する前に戻す
+			DashVelInc = DashVelIncDef;
 			DashVel = { 0,0,0 };
 			DashCount = DashCountDef;
+			DashAttenuationFlag = false;
 			DashFlag = false;
 		}
 	}
@@ -585,6 +591,10 @@ void GamePlayScene::PlayerDash()
 			DashInterval = DashIntervalDef;
 			DashIntervalFlag = false;
 		}
+	}
+
+	if (DashAttenuationFlag == true) {
+		DashVelInc += Attenuation;
 	}
 
 }
