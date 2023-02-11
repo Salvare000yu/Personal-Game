@@ -316,6 +316,7 @@ void Boss::PlungeInto()
 		position.z += ReverseVel;
 		if (position.z >= WasPosMem.z) {//突っ込み前の場所超えたら
 			PlungeCount = PlungeCountDef;
+			plungeIntoPattern_ = PlungeIntoPattern::Leave;
 			actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
 		}
 		break;
@@ -332,6 +333,7 @@ void Boss::PlungeInto()
 			}
 			else {//突っ込み後
 				PlungeCompletFlag = false;//リセット
+				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
 			}
 		}
@@ -555,7 +557,7 @@ void Boss::Initialize()
 	//大きさ
 	obj->SetScale({ 50.0f, 50.0f, 50.0f });
 	//場所
-	obj->SetPosition({ 0,-70,3300 });
+	obj->SetPosition({ 0,50,3300 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");

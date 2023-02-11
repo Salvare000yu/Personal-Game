@@ -300,7 +300,7 @@ void Player::Initialize()
 	//‘å‚«‚³
 	obj->SetScale({ 5.0f, 5.0f, 5.0f });
 	//êŠ
-	obj->SetPosition({ 0,40,-170 });
+	obj->SetPosition({ 0,70,-250 });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("shot.wav");

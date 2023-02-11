@@ -1146,13 +1146,13 @@ void GamePlayScene::Update()
 			obj_worlddome->SetRotation({ rotation });
 		}
 
-		if (player_->GetPHpLessThan0() == false|| DashFlag==false)
+		if (player_->GetPHpLessThan0() == false)
 		{
 			//プレイヤー移動-上に書くと移動かくつかない
 			PlayerMove();
 		}
-		PlayerDash();
 
+		PlayerDash();
 		DrawUI();
 		//パッド右スティックカメラ視点
 		PadStickCamera();
