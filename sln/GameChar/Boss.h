@@ -143,7 +143,7 @@ private:
 	const float AimBulPow = 150;
 
 	//ボス本体の威力
-	const int BodyPow = 50;
+	const int BodyPow = 100;
 
 	//false：まだ死んでない
 	bool isDeath = false;

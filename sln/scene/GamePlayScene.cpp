@@ -196,6 +196,7 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("bossdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdeath.wav");
 	GameSound::GetInstance()->LoadWave("playerdam.wav");
+	GameSound::GetInstance()->LoadWave("dash.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_bosswarning.wav");
 	// 音声再生 鳴らしたいとき
@@ -516,12 +517,15 @@ void GamePlayScene::PlayerDash()
 	if (cInput->PlayerDash()&& DashFlag==false&& DashIntervalFlag==false) {
 		//移動中なら
 		if (cInput->DownMove() || cInput->UpMove() || cInput->RightMove() || cInput->LeftMove()) {
+			//ダッシュをするとき風切り音
+			GameSound::GetInstance()->PlayWave("dash.wav", 0.7f, 0);
 			DashFlag = true;
 			DashIntervalFlag = true;
 		}
 	}
 	//ダッシュスタート
 	if (DashFlag == true) {
+
 		XMFLOAT3 pPos = player_->GetPosition();
 
 		//ダッシュする時間
