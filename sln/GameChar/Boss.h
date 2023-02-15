@@ -41,6 +41,9 @@ public:
 	//描画
 	void Draw()override;
 
+	//シェイク
+	void Shake();
+
 	//攻撃
 	void Attack();
 
@@ -218,5 +221,15 @@ private:
 	bool PlungeCompletFlag = false;
 	//
 	//-------PlungeInto
+
+	//---シェイク
+	int randShakeDef = 0;
+	int randShakeNow = randShakeDef;
+	//いた場所保存 false:保存前
+	bool ShakePosMemFlag = false;
+	//揺らし終えたか false:まだ
+	bool isShakeFinished = false;
+	//いた場所
+	XMFLOAT3 posMem={};
 
 };

@@ -15,9 +15,9 @@ void Boss::BossAppear()
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	XMFLOAT3 pos=obj->GetPosition();
+	XMFLOAT3 pos = obj->GetPosition();
 	pos.z--;
-	
+
 	//移動完了確認しだい
 	if (charParams->pNextPlaceGoFlag == false) {
 		ActionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
@@ -59,7 +59,7 @@ void Boss::Approach()
 
 	//近づく制限は自機の場所に自機と離したい距離分間を開ける
 	const int SpaceDistance = 200;
-	ApproachLim = shotTag->GetPosition().z+ SpaceDistance;
+	ApproachLim = shotTag->GetPosition().z + SpaceDistance;
 
 	//ある程度近づいたら離れる
 	if (position.z < ApproachLim) {
@@ -82,7 +82,7 @@ void Boss::Leave()
 			{
 				DiffusionAttack();
 			}
-			else {DiffusionAttackEavenNumber();}
+			else { DiffusionAttackEavenNumber(); }
 		}
 		//再びカウントできるように初期化
 		DiffusionAtkCount = DiffusionAtkInterval;
@@ -99,7 +99,7 @@ void Boss::Leave()
 	LeaveLim = shotTag->GetPosition().z + SpaceDistance;
 
 	//ある程度離れたら近づいてくる
-	if (positionBack.z > ActionStartPos.z&& positionBack.y< ActionStartPos.y) {
+	if (positionBack.z > ActionStartPos.z && positionBack.y < ActionStartPos.y) {
 		if (even_odd_NumFlag == true) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
 		actionPattern_ = ActionPattern::Approach;
@@ -125,10 +125,10 @@ void Boss::HpHalfPatStart()
 		GetPosFlag = false;
 
 		//指定座標どこか
-		TargetHpHalfPos = { 0,0,pPos.z+ SpaceDistance };
+		TargetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
 		//防御力上がる
-		float Defence=charParams->GetBossDefense();
+		float Defence = charParams->GetBossDefense();
 		Defence += 20;
 		charParams->SetBossDefense(Defence);
 	}
@@ -184,7 +184,7 @@ void Boss::CircularMotionMove()
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
 	//弧度法
-	HpHalf_rad = HpHalf_Angle *3.1415926535f/180.0f;
+	HpHalf_rad = HpHalf_Angle * 3.1415926535f / 180.0f;
 
 	//円の位置を三角関数でだす
 	addX = cos(HpHalf_rad) * HpHalf_Length;
@@ -192,8 +192,8 @@ void Boss::CircularMotionMove()
 
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//中心座標に移動量を足した値を座標に
-	position.x = pPos.x+addX;
-	position.y =40+addY;
+	position.x = pPos.x + addX;
+	position.y = 40 + addY;
 	position.z -= 0.15f;//地味に迫ってくる
 
 	obj->SetPosition(position);
@@ -222,13 +222,13 @@ void Boss::CircularMotionMove()
 		if (alive) { Attack(); }//追尾弾
 
 		//だんだん弾の発射間隔速く
-		Circular_AtkInterval-=2;
+		Circular_AtkInterval -= 2;
 
 		//再びカウントできるように初期化
 		Circular_AtkCount = Circular_AtkInterval;
 	}
 }
-void Boss::LeaveFirstPos() 
+void Boss::LeaveFirstPos()
 {
 
 	Nowframe++;
@@ -294,7 +294,7 @@ void Boss::PlungeInto()
 
 	switch (plungeIntoPattern_)
 	{
-	
+
 	case PlungeIntoPattern::Leave://一度離れて
 		position.z += LeaveVel;
 
@@ -305,7 +305,7 @@ void Boss::PlungeInto()
 
 	case PlungeIntoPattern::PlungeInto://突っ込んでくる
 		position.z -= PlungeVel;
-		if (position.z < charParameters->StopPos+750) {//突撃終わったら
+		if (position.z < charParameters->StopPos + 750) {//突撃終わったら
 			//もう突っ込んだ
 			PlungeCompletFlag = true;
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
@@ -341,6 +341,26 @@ void Boss::PlungeInto()
 	}
 
 	obj->SetPosition(position);
+}
+
+void Boss::Shake() {
+
+	CharParameters* charParameters = CharParameters::GetInstance();
+	//pos揺らす
+	XMFLOAT3 pos = obj->GetPosition();
+
+	randShakeNow = 7 + 1;//a~b
+
+	if(ShakePosMemFlag==false) {
+		posMem = pos;
+		ShakePosMemFlag = true;
+	}
+	if(ShakePosMemFlag==true) {
+		pos.x = posMem.x + rand() % randShakeNow - 4.f;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+		pos.y = posMem.y + rand() % randShakeNow - 4.f;
+	}
+	obj->SetPosition(pos);
+
 }
 
 //-------攻撃系
@@ -515,7 +535,7 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if(GetPosDeathFlag==true)
+	if (GetPosDeathFlag == true)
 	{
 		//最初の位置
 		boPosDeath = obj->GetPosition();
@@ -627,6 +647,10 @@ void Boss::Update()
 		if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
 			actionPattern_ = ActionPattern::HpHalfPatStart;
 		}
+	}
+
+	if (plungeIntoPattern_ == PlungeIntoPattern::Wait) {
+		Shake();
 	}
 
 	//メンバ関数ポインタ呼び出し
