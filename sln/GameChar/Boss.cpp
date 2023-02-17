@@ -387,6 +387,7 @@ void Boss::PlungeInto()
 				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
 			}
 			else {//突っ込み後
+				obj->SetPosition(PlungeNowPos);//その時の位置
 				PlungeCompletFlag = false;//リセット
 				PlungerFame = 0;//経過時間リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
