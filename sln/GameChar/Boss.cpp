@@ -332,17 +332,6 @@ void Boss::PlungeInto()
 
 		obj->SetPosition(PlungeNowPos);//その時の位置
 
-		{
-			char tmp[32]{};
-			sprintf_s(tmp, 32, "%2.f", PlungeNowPos.z);
-			DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-		}
-		{
-			char tmp[32]{};
-			sprintf_s(tmp, 32, "%2.f", PlungeNowPos.x);
-			DebugText::GetInstance()->Print(tmp, 300, 430, 3);
-		}
-
 		if (position.z < charParameters->StopPos + 750) {//突撃終わったら
 
 			boPosFlag = false;//一度きり読み込みリセ
@@ -368,6 +357,11 @@ void Boss::PlungeInto()
 		//待機時間デクリメント
 		PlungeIntoWaitCount--;
 
+		//突撃後なら突っ込んだ場所でまつ
+		if (PlungeCompletFlag == true) {
+			obj->SetPosition(pPosMom);
+		}
+
 		if (PlungeIntoWaitCount == 0) {
 			if (PlungeCompletFlag == false) {//突っ込み完了前なら
 				//その時のターゲット座標
@@ -387,7 +381,6 @@ void Boss::PlungeInto()
 				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
 			}
 			else {//突っ込み後
-				obj->SetPosition(PlungeNowPos);//その時の位置
 				PlungeCompletFlag = false;//リセット
 				PlungerFame = 0;//経過時間リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
