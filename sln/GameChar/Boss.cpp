@@ -301,11 +301,52 @@ void Boss::PlungeInto()
 		if (position.z >= LeavePos) {
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;
 		}
+
+		obj->SetPosition(position);
+
 		break;
 
 	case PlungeIntoPattern::PlungeInto://突っ込んでくる
-		position.z -= PlungeVel;
+		//position.z -= PlungeVel;void Boss::PAimBul()
+
+		PlungerFame++;
+
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		PlungeSp.x = (pPosMom.x - boPosMom.x);
+		PlungeSp.y = (pPosMom.y - boPosMom.y);
+		PlungeSp.z = (pPosMom.z - boPosMom.z);
+
+		//XMVECTORに変換してxmvecMoveSpにいれる
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&PlungeSp);
+		//normalize
+		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
+		// 大きさを任意値に(速度)
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 30.f);
+		// FLOAT3に変換
+		XMStoreFloat3(&PlungeSp, xmvecMoveSp);
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		PlungeNowPos.x = boPosMom.x + PlungeSp.x * PlungerFame;
+		PlungeNowPos.y = boPosMom.y + PlungeSp.y * PlungerFame;
+		PlungeNowPos.z = boPosMom.z + PlungeSp.z * PlungerFame;
+
+		obj->SetPosition(PlungeNowPos);//その時の位置
+
+		{
+			char tmp[32]{};
+			sprintf_s(tmp, 32, "%2.f", PlungeNowPos.z);
+			DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+		}
+		{
+			char tmp[32]{};
+			sprintf_s(tmp, 32, "%2.f", PlungeNowPos.x);
+			DebugText::GetInstance()->Print(tmp, 300, 430, 3);
+		}
+
 		if (position.z < charParameters->StopPos + 750) {//突撃終わったら
+
+			boPosFlag = false;//一度きり読み込みリセ
+			pMomFlag = false;//一度きりセット
 			//もう突っ込んだ
 			PlungeCompletFlag = true;
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
@@ -319,6 +360,7 @@ void Boss::PlungeInto()
 			plungeIntoPattern_ = PlungeIntoPattern::Leave;
 			actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
 		}
+		obj->SetPosition(position);
 		break;
 
 	case PlungeIntoPattern::Wait://待機してから行動
@@ -328,19 +370,33 @@ void Boss::PlungeInto()
 
 		if (PlungeIntoWaitCount == 0) {
 			if (PlungeCompletFlag == false) {//突っ込み完了前なら
+				//その時のターゲット座標
+				//一度きり　突っ込みに使う座標
+				if (pMomFlag == false) {
+					pPosMom = shotTag->GetPosition();
+					pMomFlag = true;
+				}
+
+				if (boPosFlag == false)
+				{
+					//最初の位置
+					boPosMom = obj->GetPosition();
+					boPosFlag = true;
+				}
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
 			}
 			else {//突っ込み後
 				PlungeCompletFlag = false;//リセット
+				PlungerFame = 0;//経過時間リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+				ShakePosMemFlag = false;//シェイク終わり
 				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
 			}
 		}
 		break;
 	}
 
-	obj->SetPosition(position);
 }
 
 void Boss::Shake() {
@@ -351,11 +407,11 @@ void Boss::Shake() {
 
 	randShakeNow = 7 + 1;//a~b
 
-	if(ShakePosMemFlag==false) {
+	if (ShakePosMemFlag == false) {
 		posMem = pos;
 		ShakePosMemFlag = true;
 	}
-	if(ShakePosMemFlag==true) {
+	if (ShakePosMemFlag == true) {
 		pos.x = posMem.x + rand() % randShakeNow - 4.f;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
 		pos.y = posMem.y + rand() % randShakeNow - 4.f;
 	}

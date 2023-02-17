@@ -1154,9 +1154,10 @@ void GamePlayScene::Update()
 		{
 			//プレイヤー移動-上に書くと移動かくつかない
 			PlayerMove();
+
+			PlayerDash();
 		}
 
-		PlayerDash();
 		DrawUI();
 		//パッド右スティックカメラ視点
 		PadStickCamera();

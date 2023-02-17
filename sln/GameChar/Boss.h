@@ -217,9 +217,22 @@ private:
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 	//突撃速度
 	const int PlungeVel = 50;
+	//自機いた場所取得フラグ false:未取得
+	bool pMomFlag=false;
+	//自機いた場所
+	XMFLOAT3 pPosMom{};
 	//突っ込み終わったか  false:まだ突っ込んでない
 	bool PlungeCompletFlag = false;
-	//
+	//突っ込み
+	float PlungerFame = 0;
+	//ボス最初の場所
+	bool boPosFlag = false;
+	//ボスいた場所
+	XMFLOAT3 boPosMom{};
+	//突っ込み速度
+	XMFLOAT3 PlungeSp{};
+	//その時のボスの位置
+	XMFLOAT3 PlungeNowPos;
 	//-------PlungeInto
 
 	//---シェイク
