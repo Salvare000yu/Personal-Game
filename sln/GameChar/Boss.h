@@ -33,6 +33,7 @@ class Boss:public BaseObject
 
 	enum class AfterPlungePattern {
 		Wait,//時間空けてから行動
+		Attack,//攻撃
 	};
 
 public:
@@ -226,7 +227,7 @@ private:
 	//戻る前座標入れる
 	XMFLOAT3 BeforeReversePosMem;
 	//今の場所
-	XMFLOAT3 ReverseNpwPos;
+	XMFLOAT3 ReverseNowPos;
 	//どこに戻るかの場所
 	XMFLOAT3 ReversePos;
 	//突っ込み待ち待機時間 でふぉ180
@@ -234,10 +235,13 @@ private:
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 	//突撃速度
 	const int PlungeVel = 50;
+
+	//----plungeとafter両立しないのでafterでも使う
 	//自機いた場所取得フラグ false:未取得
-	bool pMomFlag=false;
-	//自機いた場所
-	XMFLOAT3 pPosMom{};
+	bool pMemFlag=false;
+	//自機いた場所 
+	XMFLOAT3 pPosMem{};
+
 	//突っ込み終わったか  false:まだ突っ込んでない
 	bool PlungeCompletFlag = false;
 	//突っ込み
@@ -251,6 +255,25 @@ private:
 	//その時のボスの位置
 	XMFLOAT3 PlungeNowPos;
 	//-------PlungeInto
+
+	//-------AfterPlungeInto
+	//
+	//待ち時間
+	const int WaitTimeDef = 100;
+	int WaitTime = WaitTimeDef;
+	//攻撃するための自機いた場所取得フラグ false:取得前
+	bool pPosMemFlag = false;
+	//攻撃時に自機のいた場所へ（XY）移動する速度
+	XMFLOAT3 AtkMoveSp;
+	//ボスいた場所
+	XMFLOAT3 boPosMem;
+	//ボスの現在地
+	XMFLOAT3 boNowPos;
+	//攻撃に移動にかかる絶対時間
+	const int NecesAtkMoveTime = 180;
+	
+	// 
+	//-------AfterPlungeInto
 
 	//---シェイク
 	int randShakeDef = 0;

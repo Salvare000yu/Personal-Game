@@ -312,9 +312,9 @@ void Boss::PlungeInto()
 		Nowframe++;
 
 		//移動速度＝（指定座標-最初位置）/かかる時間
-		PlungeSp.x = (pPosMom.x - boPosMom.x);
-		PlungeSp.y = (pPosMom.y - boPosMom.y);
-		PlungeSp.z = (pPosMom.z - boPosMom.z);
+		PlungeSp.x = (pPosMem.x - boPosMom.x);
+		PlungeSp.y = (pPosMem.y - boPosMom.y);
+		PlungeSp.z = (pPosMem.z - boPosMom.z);
 
 		//XMVECTORに変換してxmvecMoveSpにいれる
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&PlungeSp);
@@ -335,7 +335,7 @@ void Boss::PlungeInto()
 		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
 
 			boPosFlag = false;//一度きり読み込みリセ
-			pMomFlag = false;//一度きりセット
+			pMemFlag = false;//一度きりセット
 
 			Nowframe = 0;
 			//もう突っ込んだ
@@ -346,7 +346,7 @@ void Boss::PlungeInto()
 
 	case PlungeIntoPattern::Reverse://突っ込み終わったから戻れ
 
-		ReversePos = { 0,100,shotTag->GetPosition().z + 800 };
+		ReversePos = { 0,100,shotTag->GetPosition().z + 1000 };
 
 		Nowframe++;
 
@@ -370,11 +370,11 @@ void Boss::PlungeInto()
 		XMStoreFloat3(&ReverseSp, xmvecRevMoveSp);
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
-		ReverseNpwPos.x = BeforeReversePosMem.x + ReverseSp.x * Nowframe;
-		ReverseNpwPos.y = BeforeReversePosMem.y + ReverseSp.y * Nowframe;
-		ReverseNpwPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
+		ReverseNowPos.x = BeforeReversePosMem.x + ReverseSp.x * Nowframe;
+		ReverseNowPos.y = BeforeReversePosMem.y + ReverseSp.y * Nowframe;
+		ReverseNowPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
 
-		obj->SetPosition(ReverseNpwPos);//その時の位置
+		obj->SetPosition(ReverseNowPos);//その時の位置
 
 		//z座標が指定座標になったら
 		if (position.z >= ReversePos.z) {
@@ -393,16 +393,16 @@ void Boss::PlungeInto()
 
 		//突撃後なら突っ込んだ場所でまつ
 		if (PlungeCompletFlag == true) {
-			obj->SetPosition(pPosMom);
+			obj->SetPosition(pPosMem);
 		}
 
 		if (PlungeIntoWaitCount == 0) {
 			if (PlungeCompletFlag == false) {//突っ込み完了前なら
 				//その時のターゲット座標
 				//一度きり　突っ込みに使う座標
-				if (pMomFlag == false) {
-					pPosMom = shotTag->GetPosition();
-					pMomFlag = true;
+				if (pMemFlag == false) {
+					pPosMem = shotTag->GetPosition();
+					pMemFlag = true;
 				}
 
 				if (boPosFlag == false)
@@ -418,6 +418,7 @@ void Boss::PlungeInto()
 				PlungeCompletFlag = false;//リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				ShakePosMemFlag = false;//シェイク終わり
+				Nowframe = 0;
 				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
 			}
 		}
@@ -432,10 +433,45 @@ void Boss::AfterPlungeInto()
 	{
 	case AfterPlungePattern::Wait://待機してから行動
 
+		WaitTime--;//待ち時間
+		if (WaitTime == 0) {//指定時間待ったら
+			WaitTime == WaitTimeDef;
+			afterPlungePattern_ = AfterPlungePattern::Attack;//攻撃へ
+		}
+
+		break;
+
+	case AfterPlungePattern::Attack:
+
+		Nowframe++;
+
+		if (pPosMemFlag == false) {
+			pPosMem = shotTag->GetPosition();//自機いた場所
+			boPosMem = obj->GetPosition();//ボスいた場所
+			pPosMemFlag = true;
+		}
+
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		AtkMoveSp.x = (pPosMem.x - boPosMem.x)/ NecesAtkMoveTime;
+		AtkMoveSp.y = (pPosMem.y - boPosMem.y)/ NecesAtkMoveTime;
+		AtkMoveSp.z = (pPosMem.z+500 - boPosMem.z)/ NecesAtkMoveTime;
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		boNowPos.x = boPosMem.x + AtkMoveSp.x * Nowframe;
+		boNowPos.y = boPosMem.y + AtkMoveSp.y * Nowframe;
+		boNowPos.z = boPosMem.z + AtkMoveSp.z * Nowframe;
+
+		obj->SetPosition(boNowPos);//その時の位置
+
+		if (Nowframe==NecesAtkMoveTime) {
+			Nowframe = 0;
+			pPosMemFlag = false;
+			afterPlungePattern_ = AfterPlungePattern::Wait;//攻撃へ
+		}
+
 		break;
 	}
 }
-
 
 void Boss::Shake() {
 
