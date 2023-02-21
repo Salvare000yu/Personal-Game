@@ -20,6 +20,7 @@ class Boss:public BaseObject
 		CircularMotionMove,//ぐるぐる
 		LeaveFirstPos,//元の場所へ一旦引く
 		PlungeInto,//突っ込む
+		AfterPlungeInto,//突っ込み後
 		Death,//死亡
 	};
 
@@ -27,6 +28,10 @@ class Boss:public BaseObject
 		Leave,//前準備で離れる
 		PlungeInto,//突っ込む
 		Reverse,//戻ってくる
+		Wait,//時間空けてから行動
+	};
+
+	enum class AfterPlungePattern {
 		Wait,//時間空けてから行動
 	};
 
@@ -55,6 +60,7 @@ public:
 	void CircularMotionMove();
 	void LeaveFirstPos();
 	void PlungeInto();
+	void AfterPlungeInto();
 	//拡散攻撃
 	void DiffusionAttack();
 	//拡散偶数弾
@@ -95,6 +101,9 @@ public:
 
 	//一度離れてから突っ込む行動パターン　最初離れる
 	PlungeIntoPattern plungeIntoPattern_ = PlungeIntoPattern::Leave;
+
+	//突っ込み後の行動パターン 最初待ち
+	AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得

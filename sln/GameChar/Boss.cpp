@@ -337,7 +337,7 @@ void Boss::PlungeInto()
 			boPosFlag = false;//一度きり読み込みリセ
 			pMomFlag = false;//一度きりセット
 
-			Nowframe=0;
+			Nowframe = 0;
 			//もう突っ込んだ
 			PlungeCompletFlag = true;
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
@@ -346,16 +346,15 @@ void Boss::PlungeInto()
 
 	case PlungeIntoPattern::Reverse://突っ込み終わったから戻れ
 
-		ReversePos = { 0,0,shotTag->GetPosition().z+800 };
+		ReversePos = { 0,100,shotTag->GetPosition().z + 800 };
 
 		Nowframe++;
 
 		if (BeforeReversePosMemFlag == false) {
-			BeforeReversePosMem = obj->GetPosition();
+			BeforeReversePosMem = position;
 			BeforeReversePosMemFlag = true;
 		}
 
-		if (BeforeReversePosMemFlag == true) {
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		ReverseSp.x = (ReversePos.x - BeforeReversePosMem.x);
 		ReverseSp.y = (ReversePos.y - BeforeReversePosMem.y);
@@ -366,7 +365,7 @@ void Boss::PlungeInto()
 		//normalize
 		xmvecRevMoveSp = XMVector3Normalize(xmvecRevMoveSp);
 		// 大きさを任意値に(速度)
-		xmvecRevMoveSp = XMVectorScale(xmvecRevMoveSp, 2.f);
+		xmvecRevMoveSp = XMVectorScale(xmvecRevMoveSp, 10.f);
 		// FLOAT3に変換
 		XMStoreFloat3(&ReverseSp, xmvecRevMoveSp);
 
@@ -376,25 +375,15 @@ void Boss::PlungeInto()
 		ReverseNpwPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
 
 		obj->SetPosition(ReverseNpwPos);//その時の位置
+
+		//z座標が指定座標になったら
+		if (position.z >= ReversePos.z) {
+			PlungeCount = PlungeCountDef;
+			BeforeReversePosMemFlag = false;
+			plungeIntoPattern_ = PlungeIntoPattern::Leave;
+			actionPattern_ = ActionPattern::AfterPlungeInto;//突っ込み一連終わった後の行動へ
 		}
 
-
-
-		//中央後ろらへん移動して波状繰り返す
-
-
-
-
-
-
-		//position.z += ReverseVel;
-		//if (position.z >= WasPosMem.z) {//突っ込み前の場所超えたら
-		//	PlungeCount = PlungeCountDef;
-		//	BeforeReversePosMemFlag = false;
-		//	plungeIntoPattern_ = PlungeIntoPattern::Leave;
-		//	actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
-		//}
-		//obj->SetPosition(position);
 		break;
 
 	case PlungeIntoPattern::Wait://待機してから行動
@@ -436,6 +425,17 @@ void Boss::PlungeInto()
 	}
 
 }
+
+void Boss::AfterPlungeInto()
+{
+	switch (afterPlungePattern_)
+	{
+	case AfterPlungePattern::Wait://待機してから行動
+
+		break;
+	}
+}
+
 
 void Boss::Shake() {
 
@@ -729,6 +729,7 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }
 	if (actionPattern_ == ActionPattern::LeaveFirstPos) { pFunc = &Boss::LeaveFirstPos; }
 	if (actionPattern_ == ActionPattern::PlungeInto) { pFunc = &Boss::PlungeInto; }
+	if (actionPattern_ == ActionPattern::AfterPlungeInto) { pFunc = &Boss::AfterPlungeInto; }
 
 	if (isDeath == true) {
 		actionPattern_ = ActionPattern::Death;
