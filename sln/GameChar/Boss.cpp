@@ -309,7 +309,7 @@ void Boss::PlungeInto()
 	case PlungeIntoPattern::PlungeInto://突っ込んでくる
 		//position.z -= PlungeVel;void Boss::PAimBul()
 
-		PlungerFame++;
+		Nowframe++;
 
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		PlungeSp.x = (pPosMom.x - boPosMom.x);
@@ -321,21 +321,23 @@ void Boss::PlungeInto()
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
 		// 大きさを任意値に(速度)
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 30.f);
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 50.f);
 		// FLOAT3に変換
 		XMStoreFloat3(&PlungeSp, xmvecMoveSp);
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
-		PlungeNowPos.x = boPosMom.x + PlungeSp.x * PlungerFame;
-		PlungeNowPos.y = boPosMom.y + PlungeSp.y * PlungerFame;
-		PlungeNowPos.z = boPosMom.z + PlungeSp.z * PlungerFame;
+		PlungeNowPos.x = boPosMom.x + PlungeSp.x * Nowframe;
+		PlungeNowPos.y = boPosMom.y + PlungeSp.y * Nowframe;
+		PlungeNowPos.z = boPosMom.z + PlungeSp.z * Nowframe;
 
 		obj->SetPosition(PlungeNowPos);//その時の位置
 
-		if (position.z < charParameters->StopPos + 750) {//突撃終わったら
+		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
 
 			boPosFlag = false;//一度きり読み込みリセ
 			pMomFlag = false;//一度きりセット
+
+			Nowframe=0;
 			//もう突っ込んだ
 			PlungeCompletFlag = true;
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
@@ -343,13 +345,56 @@ void Boss::PlungeInto()
 		break;
 
 	case PlungeIntoPattern::Reverse://突っ込み終わったから戻れ
-		position.z += ReverseVel;
-		if (position.z >= WasPosMem.z) {//突っ込み前の場所超えたら
-			PlungeCount = PlungeCountDef;
-			plungeIntoPattern_ = PlungeIntoPattern::Leave;
-			actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
+
+		ReversePos = { 0,0,shotTag->GetPosition().z+800 };
+
+		Nowframe++;
+
+		if (BeforeReversePosMemFlag == false) {
+			BeforeReversePosMem = obj->GetPosition();
+			BeforeReversePosMemFlag = true;
 		}
-		obj->SetPosition(position);
+
+		if (BeforeReversePosMemFlag == true) {
+		//移動速度＝（指定座標-最初位置）/かかる時間
+		ReverseSp.x = (ReversePos.x - BeforeReversePosMem.x);
+		ReverseSp.y = (ReversePos.y - BeforeReversePosMem.y);
+		ReverseSp.z = (ReversePos.z - BeforeReversePosMem.z);
+
+		//XMVECTORに変換してxmvecMoveSpにいれる
+		XMVECTOR xmvecRevMoveSp = XMLoadFloat3(&ReverseSp);
+		//normalize
+		xmvecRevMoveSp = XMVector3Normalize(xmvecRevMoveSp);
+		// 大きさを任意値に(速度)
+		xmvecRevMoveSp = XMVectorScale(xmvecRevMoveSp, 2.f);
+		// FLOAT3に変換
+		XMStoreFloat3(&ReverseSp, xmvecRevMoveSp);
+
+		//その時の位置＝最初位置＋移動速度＊経過時間
+		ReverseNpwPos.x = BeforeReversePosMem.x + ReverseSp.x * Nowframe;
+		ReverseNpwPos.y = BeforeReversePosMem.y + ReverseSp.y * Nowframe;
+		ReverseNpwPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
+
+		obj->SetPosition(ReverseNpwPos);//その時の位置
+		}
+
+
+
+		//中央後ろらへん移動して波状繰り返す
+
+
+
+
+
+
+		//position.z += ReverseVel;
+		//if (position.z >= WasPosMem.z) {//突っ込み前の場所超えたら
+		//	PlungeCount = PlungeCountDef;
+		//	BeforeReversePosMemFlag = false;
+		//	plungeIntoPattern_ = PlungeIntoPattern::Leave;
+		//	actionPattern_ = ActionPattern::CircularMotionMove;//行動パターン戻す
+		//}
+		//obj->SetPosition(position);
 		break;
 
 	case PlungeIntoPattern::Wait://待機してから行動
@@ -382,7 +427,6 @@ void Boss::PlungeInto()
 			}
 			else {//突っ込み後
 				PlungeCompletFlag = false;//リセット
-				PlungerFame = 0;//経過時間リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				ShakePosMemFlag = false;//シェイク終わり
 				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
@@ -719,11 +763,24 @@ void Boss::Update()
 
 	obj->Update();
 
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "BDeathFrame : %2.f", Nowframe);
-	//	DebugText::GetInstance()->Print(tmp, 150, 290, 3);
-	//}
+	{
+		XMFLOAT3 position = obj->GetPosition();
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "BossPosX : %2.f", position.x);
+		DebugText::GetInstance()->Print(tmp, 50, 100, 1);
+	}
+	{
+		XMFLOAT3 position = obj->GetPosition();
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "BossPosY : %2.f", position.y);
+		DebugText::GetInstance()->Print(tmp, 50, 120, 1);
+	}
+	{
+		XMFLOAT3 position = obj->GetPosition();
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "BossPosZ : %2.f", position.z);
+		DebugText::GetInstance()->Print(tmp, 50, 140, 1);
+	}
 }
 
 void Boss::Draw()

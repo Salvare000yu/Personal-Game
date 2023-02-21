@@ -211,7 +211,15 @@ private:
 	//Leaveの時どの程度下がるか
 	const int LeavePos = 5000;
 	//戻る速度
-	const int ReverseVel = 3;
+	XMFLOAT3 ReverseSp;
+	//戻る前の座標取得フラグ　false:してない
+	bool BeforeReversePosMemFlag = false;
+	//戻る前座標入れる
+	XMFLOAT3 BeforeReversePosMem;
+	//今の場所
+	XMFLOAT3 ReverseNpwPos;
+	//どこに戻るかの場所
+	XMFLOAT3 ReversePos;
 	//突っ込み待ち待機時間 でふぉ180
 	const int PlungeIntoWaitCountDef = 180;
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
@@ -224,7 +232,7 @@ private:
 	//突っ込み終わったか  false:まだ突っ込んでない
 	bool PlungeCompletFlag = false;
 	//突っ込み
-	float PlungerFame = 0;
+	//float PlungerFame = 0;
 	//ボス最初の場所
 	bool boPosFlag = false;
 	//ボスいた場所
