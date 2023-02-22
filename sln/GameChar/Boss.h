@@ -66,6 +66,8 @@ public:
 	void DiffusionAttack();
 	//ŠgU‹ô”’e
 	void DiffusionAttackEavenNumber();
+	//’¼üUŒ‚
+	void StraightAttack();
 
 	void Death();
 
@@ -113,6 +115,7 @@ public:
 
 	inline void SetBulModel(Model* model) { BulModel = model; }
 	inline void SetAimBulModel(Model* model) { AimBulModel = model; }
+	inline void SetStraightBulModel(Model* model) { StraightBulModel = model; }
 
 	//’Êí’eˆĞ—Í
 	const float& GetBulPow() { return BulPow; }
@@ -150,6 +153,7 @@ private:
 
 	Model* BulModel = nullptr;
 	Model* AimBulModel = nullptr;
+	Model* StraightBulModel = nullptr;
 
 	//“G’Êí’eˆĞ—Í
 	const float BulPow = 200;

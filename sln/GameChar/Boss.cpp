@@ -435,7 +435,7 @@ void Boss::AfterPlungeInto()
 
 		WaitTime--;//‘Ò‚¿ŠÔ
 		if (WaitTime == 0) {//w’èŠÔ‘Ò‚Á‚½‚ç
-			WaitTime == WaitTimeDef;
+			WaitTime = WaitTimeDef;
 			afterPlungePattern_ = AfterPlungePattern::Attack;//UŒ‚‚Ö
 		}
 
@@ -462,6 +462,15 @@ void Boss::AfterPlungeInto()
 		boNowPos.z = boPosMem.z + AtkMoveSp.z * Nowframe;
 
 		obj->SetPosition(boNowPos);//‚»‚Ì‚ÌˆÊ’u
+
+		AtkCount--;
+		//‚ª–‚¿‚½‚ç
+		if (AtkCount == 0) {
+			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+			if (alive) { StraightAttack(); }
+			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			AtkCount = AtkInterval;
+		}
 
 		if (Nowframe==NecesAtkMoveTime) {
 			Nowframe = 0;
@@ -657,6 +666,24 @@ void Boss::DiffusionAttackEavenNumber()
 	bullets_.push_back(std::move(madeBullet_L2));
 	bullets_.push_back(std::move(madeBullet_R1));
 	bullets_.push_back(std::move(madeBullet_R2));
+}
+void Boss::StraightAttack()
+{
+	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
+
+	//’e”­Ë
+	XMFLOAT3 position = obj->GetPosition();
+	//’e¶¬
+	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+	madeBullet->Initialize();
+	madeBullet->SetModel(StraightBulModel);
+	madeBullet->SetPosition(position);
+	madeBullet->SetScale({ 15.f, 15.f, 15.f });
+
+	//’e“o˜^
+	bullets_.push_back(std::move(madeBullet));
 }
 //------UŒ‚Œnª
 void Boss::Death() {

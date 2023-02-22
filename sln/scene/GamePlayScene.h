@@ -136,6 +136,7 @@ private:
 	std::unique_ptr < Model> mod_playerbullet = nullptr;//é©ã@íe
 	std::unique_ptr < Model> mod_enemybullet = nullptr;//ìGíe
 	std::unique_ptr < Model> mod_bossaimbullet = nullptr;//ìGë_Ç¢íe
+	std::unique_ptr < Model> mod_straightbul = nullptr;//íºê¸íe
 	std::unique_ptr < Model> mod_player = nullptr;// é©ã@
 	std::unique_ptr < Model> mod_enemy = nullptr;
 	std::unique_ptr < Model> mod_firingline = nullptr;

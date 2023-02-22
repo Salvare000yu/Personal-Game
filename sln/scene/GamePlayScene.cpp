@@ -105,6 +105,7 @@ void GamePlayScene::Initialize()
 	mod_playerbullet.reset(Model::LoadFromOBJ("bullet"));
 	mod_enemybullet.reset(Model::LoadFromOBJ("enemyBul"));
 	mod_bossaimbullet.reset(Model::LoadFromOBJ("BossAimBul"));
+	mod_straightbul.reset(Model::LoadFromOBJ("StraightBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
@@ -172,6 +173,7 @@ void GamePlayScene::Initialize()
 		boss->SetModel(mod_enemy.get());
 		boss->SetBulModel(mod_enemybullet.get());
 		boss->SetAimBulModel(mod_bossaimbullet.get());//狙い弾
+		boss->SetStraightBulModel(mod_straightbul.get());//直線弾
 	}
 
 	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
