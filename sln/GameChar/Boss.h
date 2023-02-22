@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "BossBullet.h"
 #include "BossAimBul.h"
+#include "BossStraightBul.h"
 #include "BaseObject.h"
 
 #include <memory>
@@ -96,6 +97,7 @@ public:
 
 	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
 	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
+	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
 
 	//フレームごとに発射
 	static const int AtkInterval = 10;
@@ -112,6 +114,7 @@ public:
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
 	const std::list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
+	const std::list<std::unique_ptr<BossStraightBul>>& GetStraightBullets() { return straightBullets_; }
 
 	inline void SetBulModel(Model* model) { BulModel = model; }
 	inline void SetAimBulModel(Model* model) { AimBulModel = model; }

@@ -675,7 +675,7 @@ void Boss::StraightAttack()
 	//íeî≠éÀ
 	XMFLOAT3 position = obj->GetPosition();
 	//íeê∂ê¨
-	std::unique_ptr<BossBullet> madeBullet = std::make_unique<BossBullet>();
+	std::unique_ptr<BossStraightBul> madeBullet = std::make_unique<BossStraightBul>();
 	//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
 	madeBullet->Initialize();
 	madeBullet->SetModel(StraightBulModel);
@@ -683,7 +683,7 @@ void Boss::StraightAttack()
 	madeBullet->SetScale({ 15.f, 15.f, 15.f });
 
 	//íeìoò^
-	bullets_.push_back(std::move(madeBullet));
+	straightBullets_.push_back(std::move(madeBullet));
 }
 //------çUåÇånÅ™
 void Boss::Death() {
@@ -766,6 +766,9 @@ void Boss::Update()
 	aimBullets_.remove_if([](std::unique_ptr<BossAimBul>& aimBullet) {
 		return !aimBullet->GetAlive();
 		});
+	straightBullets_.remove_if([](std::unique_ptr<BossStraightBul>& straightBullet) {
+		return !straightBullet->GetAlive();
+		});
 
 	//â©ã‡ÇÃâÒì]
 	for (int i = 0; i < 1; i++)
@@ -821,6 +824,9 @@ void Boss::Update()
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//ë_Ç¢íe
 		aimBullet->Update();
 	}
+	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//ë_Ç¢íe
+		straightBullet->Update();
+	}
 
 	//ë_Ç¢íe
 	PAimBul();
@@ -855,6 +861,9 @@ void Boss::Draw()
 	}
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//ë_Ç¢íe
 		aimBullet->Draw();
+	}
+	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//íºê¸íe
+		straightBullet->Draw();
 	}
 
 	if (alive) {

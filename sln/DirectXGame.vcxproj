@@ -156,6 +156,7 @@
     <ClCompile Include="camera\CameraTracking.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="GameChar\BossStraightBul.cpp" />
     <ClCompile Include="input\ComplexInput.cpp" />
     <ClCompile Include="GameChar\PlayerFireLine.cpp" />
     <ClCompile Include="CharParameters\CharParameters.cpp" />
@@ -299,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\BaseObject.h" />
+    <ClInclude Include="GameChar\BossStraightBul.h" />
     <ClInclude Include="GameChar\BossAimBul.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="camera\CameraTracking.h" />
