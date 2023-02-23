@@ -69,6 +69,7 @@ public:
 	void DiffusionAttackEavenNumber();
 	//’¼üUŒ‚
 	void StraightAttack();
+	void StraightBul();
 
 	void Death();
 
@@ -277,7 +278,7 @@ private:
 	//ƒ{ƒX‚ÌŒ»İ’n
 	XMFLOAT3 boNowPos;
 	//UŒ‚‚ÉˆÚ“®‚É‚©‚©‚éâ‘ÎŠÔ
-	const int NecesAtkMoveTime = 180;
+	const int NecesAtkMoveTime = 160;
 	
 	// 
 	//-------AfterPlungeInto

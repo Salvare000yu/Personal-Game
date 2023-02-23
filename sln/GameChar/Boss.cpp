@@ -454,7 +454,7 @@ void Boss::AfterPlungeInto()
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		AtkMoveSp.x = (pPosMem.x - boPosMem.x)/ NecesAtkMoveTime;
 		AtkMoveSp.y = (pPosMem.y - boPosMem.y)/ NecesAtkMoveTime;
-		AtkMoveSp.z = (pPosMem.z+500 - boPosMem.z)/ NecesAtkMoveTime;
+		AtkMoveSp.z = (pPosMem.z+800 - boPosMem.z)/ NecesAtkMoveTime;
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
 		boNowPos.x = boPosMem.x + AtkMoveSp.x * Nowframe;
@@ -685,6 +685,19 @@ void Boss::StraightAttack()
 	//弾登録
 	straightBullets_.push_back(std::move(madeBullet));
 }
+void Boss::StraightBul() {
+
+	//弾一つずつ
+	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {
+
+		straightBullet->StraightBulTime++;
+
+		XMFLOAT3 pos=straightBullet->GetPosition();
+		pos.z -= straightBullet->StraightBulSp;
+		straightBullet->SetPosition(pos);
+	}
+
+}
 //------攻撃系↑
 void Boss::Death() {
 
@@ -830,6 +843,7 @@ void Boss::Update()
 
 	//狙い弾
 	PAimBul();
+	StraightBul();
 
 	obj->Update();
 

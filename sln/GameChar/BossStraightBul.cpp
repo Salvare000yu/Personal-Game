@@ -42,6 +42,8 @@ void BossStraightBul::Update()
 	//	obj_playerbullet->SetPosition({ 0,40,-170 });
 	//}
 
+	StraightBulSp += StraightBulAccel;
+
 	//éûä‘åoâﬂè¡ñ≈
 	if (--vanishTimer_ <= 0) { alive = false; }
 

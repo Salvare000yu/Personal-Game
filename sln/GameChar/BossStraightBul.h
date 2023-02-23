@@ -47,7 +47,7 @@ public:
 	float time;
 
 	//消えるまで
-	static const int32_t BulVanishTime = 60 * 5;//寿命
+	static const int32_t BulVanishTime = 60 * 6;//寿命
 
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
@@ -55,5 +55,12 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
+
+	//直線弾スピード
+	float StraightBulSp = 0.1;
+	//直線弾加速
+	float StraightBulAccel = 1.05;
+	//経過時間
+	float StraightBulTime = 0;
 
 };
