@@ -307,7 +307,6 @@ void Boss::PlungeInto()
 		break;
 
 	case PlungeIntoPattern::PlungeInto://“Ë‚Á‚ñ‚Å‚­‚é
-		//position.z -= PlungeVel;void Boss::PAimBul()
 
 		Nowframe++;
 
@@ -439,6 +438,15 @@ void Boss::AfterPlungeInto()
 			afterPlungePattern_ = AfterPlungePattern::Attack;//UŒ‚‚Ö
 		}
 
+		AtkCount--;
+		//‚ª–‚¿‚½‚ç
+		if (AtkCount == 0) {
+			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+			if (alive) { StraightAttack(); }
+			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			AtkCount = AtkInterval;
+		}
+
 		break;
 
 	case AfterPlungePattern::Attack:
@@ -463,13 +471,13 @@ void Boss::AfterPlungeInto()
 
 		obj->SetPosition(boNowPos);//‚»‚Ì‚ÌˆÊ’u
 
-		AtkCount--;
+		AfterPlungePatAtkCount--;
 		//‚ª–‚¿‚½‚ç
-		if (AtkCount == 0) {
+		if (AfterPlungePatAtkCount == 0) {
 			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
-			if (alive) { StraightAttack(); }
+			if (alive) { Attack(); }
 			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
-			AtkCount = AtkInterval;
+			AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
 		}
 
 		if (Nowframe==NecesAtkMoveTime) {
@@ -685,19 +693,7 @@ void Boss::StraightAttack()
 	//’e“o˜^
 	straightBullets_.push_back(std::move(madeBullet));
 }
-void Boss::StraightBul() {
 
-	//’eˆê‚Â‚¸‚Â
-	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {
-
-		straightBullet->StraightBulTime++;
-
-		XMFLOAT3 pos=straightBullet->GetPosition();
-		pos.z -= straightBullet->StraightBulSp;
-		straightBullet->SetPosition(pos);
-	}
-
-}
 //------UŒ‚Œnª
 void Boss::Death() {
 
@@ -843,7 +839,6 @@ void Boss::Update()
 
 	//‘_‚¢’e
 	PAimBul();
-	StraightBul();
 
 	obj->Update();
 

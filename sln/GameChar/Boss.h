@@ -69,7 +69,6 @@ public:
 	void DiffusionAttackEavenNumber();
 	//直線攻撃
 	void StraightAttack();
-	void StraightBul();
 
 	void Death();
 
@@ -152,6 +151,7 @@ private:
 	float AtkCount = 0;
 	float DiffusionAtkCount = 0;
 	float Circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
+	float AfterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -201,6 +201,9 @@ private:
 
 	static const int Circular_AtkIntervalDef = 45;
 	int Circular_AtkInterval = Circular_AtkIntervalDef;
+
+	//突っ込み後行動のAimBulインターバル
+	static const int AfterPlungePatAtkInterval = 15;
 
 	//-------↓HPHALF↓------//
 	bool isHpHalfPattern = false;//hp半分以下行動してない

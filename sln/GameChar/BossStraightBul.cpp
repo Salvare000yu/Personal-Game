@@ -38,11 +38,10 @@ void BossStraightBul::Update()
 	position.z -= velocity.z;
 	obj->SetPosition(position);
 
-	//if (TriggerR) {//リセット
-	//	obj_playerbullet->SetPosition({ 0,40,-170 });
-	//}
-
-	StraightBulSp += StraightBulAccel;
+	if (StraightBulSp < StraightBulSpLim) {//速度制限内なら加速
+		StraightBulSp += StraightBulSp * StraightBulAccel;
+	}
+	velocity.z = StraightBulSp;
 
 	//時間経過消滅
 	if (--vanishTimer_ <= 0) { alive = false; }
