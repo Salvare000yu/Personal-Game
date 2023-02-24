@@ -63,7 +63,7 @@ void Boss::Approach()
 	ApproachCount--;
 
 	//ある程度近づいたら離れる
-	if (ApproachCount==0) {
+	if (ApproachCount == 0) {
 		ApproachCount = ApproachCountDef;
 		actionPattern_ = ActionPattern::Leave;
 	}
@@ -171,7 +171,7 @@ void Boss::HpHalfPatStart()
 	}
 
 	if (Nowframe == NecesHpHalfFrame) {
-		Nowframe = 0;
+		Nowframe = NowframeDef;
 		GetPosFlag = true;
 		HpHalfMomentPos = {};
 		MoveSp = {};
@@ -183,6 +183,9 @@ void Boss::HpHalfPatStart()
 }
 void Boss::CircularMotionMove()
 {
+	const float ApproachZ = 0.15f;//近づく値
+	const float CircularY = 40;//どの高さで回るか
+
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
 	//弧度法
@@ -202,8 +205,8 @@ void Boss::CircularMotionMove()
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//中心座標に移動量を足した値を座標に
 	position.x = CirclePosMem.x + addX;
-	position.y = 40 + addY;
-	position.z -= 0.15f;//地味に迫ってくる
+	position.y = CircularY + addY;
+	position.z -= ApproachZ;//地味に迫ってくる
 
 	obj->SetPosition(position);
 
@@ -275,7 +278,7 @@ void Boss::LeaveFirstPos()
 	}
 
 	if (Nowframe == NecesLeaveFirstFrame) {
-		Nowframe = 0;
+		Nowframe = NowframeDef;
 		GetPosFlag = true;
 		HpHalfMomentPos = {};
 		MoveSp = {};
@@ -345,7 +348,7 @@ void Boss::PlungeInto()
 			boPosFlag = false;//一度きり読み込みリセ
 			pMemFlag = false;//一度きりセット
 
-			Nowframe = 0;
+			Nowframe = NowframeDef;
 			//もう突っ込んだ
 			PlungeCompletFlag = true;
 			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
@@ -426,7 +429,7 @@ void Boss::PlungeInto()
 				PlungeCompletFlag = false;//リセット
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				ShakePosMemFlag = false;//シェイク終わり
-				Nowframe = 0;
+				Nowframe = NowframeDef;//戻さないと次の行動にカクツキが出る
 				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
 			}
 		}
@@ -446,6 +449,7 @@ void Boss::AfterPlungeInto()
 
 			LoopCount++;//何回やったか数えるんだよ
 			WaitTime = WaitTimeDef;
+			Nowframe = NowframeDef;
 			afterPlungePattern_ = AfterPlungePattern::Attack;//攻撃へ
 		}
 
@@ -469,11 +473,10 @@ void Boss::AfterPlungeInto()
 			boPosMem = obj->GetPosition();//ボスいた場所
 			pPosMemFlag = true;
 		}
-
 		//移動速度＝（指定座標-最初位置）/かかる時間
-		AtkMoveSp.x = (pPosMem.x - boPosMem.x)/ NecesAtkMoveTime;
-		AtkMoveSp.y = (pPosMem.y - boPosMem.y)/ NecesAtkMoveTime;
-		AtkMoveSp.z = (pPosMem.z+800 - boPosMem.z)/ NecesAtkMoveTime;
+		AtkMoveSp.x = (pPosMem.x - boPosMem.x) / NecesAtkMoveTime;
+		AtkMoveSp.y = (pPosMem.y - boPosMem.y) / NecesAtkMoveTime;
+		AtkMoveSp.z = (pPosMem.z + 800 - boPosMem.z) / NecesAtkMoveTime;
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
 		boNowPos.x = boPosMem.x + AtkMoveSp.x * Nowframe;
@@ -491,8 +494,8 @@ void Boss::AfterPlungeInto()
 			AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
 		}
 
-		if (Nowframe==NecesAtkMoveTime) {
-			Nowframe = 0;
+		if (Nowframe == NecesAtkMoveTime) {
+			Nowframe = NowframeDef;
 			pPosMemFlag = false;
 			afterPlungePattern_ = AfterPlungePattern::Wait;
 		}
@@ -500,10 +503,11 @@ void Boss::AfterPlungeInto()
 		break;
 	}
 
+	//↑行動を一定数繰り返したら行動変える
 	if (LoopCount == LoopCountMax) {
 		LoopCount = LoopCountDef;
-		afterPlungePattern_ = AfterPlungePattern::Wait;
-		actionPattern_ = ActionPattern::CircularMotionMove;
+		afterPlungePattern_ = AfterPlungePattern::Wait;//ここの行動戻す
+		actionPattern_ = ActionPattern::CircularMotionMove;//次の行動
 	}
 }
 
@@ -778,12 +782,7 @@ void Boss::Update()
 	const bool input3 = input->PushKey(DIK_3);
 
 	time = frame / 60.f;
-
-	//if (input3) {
-	//	XMFLOAT3 position = obj->GetPosition();
-	//	position.z += 5;
-	//	obj->SetPosition(position);
-	//}
+	frame += 1.f;
 
 		//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
@@ -795,22 +794,6 @@ void Boss::Update()
 	straightBullets_.remove_if([](std::unique_ptr<BossStraightBul>& straightBullet) {
 		return !straightBullet->GetAlive();
 		});
-
-	//黄金の回転
-	for (int i = 0; i < 1; i++)
-	{
-		frame += 1.f;
-
-		//XMFLOAT3 rotation = obj->GetRotation();
-		//rotation.y += 0.7f;
-		//rotation.x += 0.4f;
-		//obj->SetRotation({ rotation });
-
-		//XMFLOAT3 position = obj->GetPosition();
-		//position.x += 5.f * sin(time * 3.14159265358f);
-		//obj->SetPosition(position);
-
-	}
 
 	//メンバ関数ポインタ対応したボスの動きをする
 	if (actionPattern_ == ActionPattern::BossAppear) { pFunc = &Boss::BossAppear; }
@@ -826,7 +809,7 @@ void Boss::Update()
 	if (isDeath == true) {
 		actionPattern_ = ActionPattern::Death;
 		if (IsFirst_Death == false) {
-			Nowframe = 0;
+			Nowframe = NowframeDef;
 			IsFirst_Death = true;
 		}
 	}

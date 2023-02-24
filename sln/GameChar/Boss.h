@@ -147,6 +147,11 @@ private:
 
 	//フレーム
 	float frame = 0;
+
+	//フレーム計測
+	const int NowframeDef = 0;
+	int Nowframe = NowframeDef;
+
 	//攻撃用カウント
 	float AtkCount = 0;
 	float DiffusionAtkCount = 0;
@@ -176,7 +181,6 @@ private:
 	bool GetPosFlag = true;//一度きりの座標読み込み
 	bool GetPosDeathFlag = true;//一度きりの座標読み込み
 	const float NecesFrame = 190.0f;//かかる時間
-	float Nowframe = 0;//現在フレ
 	XMFLOAT3 MoveSp = {};//移動速度
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
 	XMFLOAT3 NowPos = {};//その時の位置
@@ -276,7 +280,7 @@ private:
 	//-------AfterPlungeInto
 	//
 	//待ち時間
-	const int WaitTimeDef = 100;
+	const int WaitTimeDef = 60;
 	int WaitTime = WaitTimeDef;
 	//攻撃するための自機いた場所取得フラグ false:取得前
 	bool pPosMemFlag = false;
@@ -287,12 +291,12 @@ private:
 	//ボスの現在地
 	XMFLOAT3 boNowPos;
 	//攻撃に移動にかかる絶対時間
-	const int NecesAtkMoveTime = 160;
+	const int NecesAtkMoveTime = 60;
 	//WaitとAttack繰り返した回数
 	const int LoopCountDef = 0;
 	int LoopCount = LoopCountDef;
 	//この回数でつぎへ
-	const int LoopCountMax = 5;
+	const int LoopCountMax = 7;
 	
 	// 
 	//-------AfterPlungeInto
