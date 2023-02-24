@@ -80,13 +80,13 @@ public:
 	float time;
 
 	//近づく速さ
-	const float ApproachSpZ = 1.f;
+	const float ApproachSpZ = 3.f;
 	const float ApproachSpY = 2.f;
 	//離れる速さ
-	const float LeaveSpZ = 1.f;
+	const float LeaveSpZ = 3.f;
 	const float LeaveSpY = 2.f;
-	//近づける距離
-	float ApproachLim;
+	////近づける距離
+	//float ApproachLim;
 	//離れられる距離
 	float LeaveLim = 90;
 
@@ -184,6 +184,10 @@ private:
 	float PartTimeInterval;
 	float ParticleFrame = 39;//パーティクル出すフレ
 
+	//この時間だけこの行動をする
+	const int ApproachCountDef = 150;
+	int ApproachCount = ApproachCountDef;
+
 	//------HP半分以下円運動↓
 	const float HpHalf_AngleDef = 20;
 	float HpHalf_Angle = HpHalf_AngleDef;
@@ -192,6 +196,8 @@ private:
 
 	const float HpHalf_LengthDef = 10;//円運動の半径の長さ
 	float HpHalf_Length = HpHalf_LengthDef;
+
+	XMFLOAT3 CirclePosMem;//その時の座標取得
 	//移動値
 	const float addXDef=0;
 	float addX= addXDef;
@@ -282,6 +288,11 @@ private:
 	XMFLOAT3 boNowPos;
 	//攻撃に移動にかかる絶対時間
 	const int NecesAtkMoveTime = 160;
+	//WaitとAttack繰り返した回数
+	const int LoopCountDef = 0;
+	int LoopCount = LoopCountDef;
+	//この回数でつぎへ
+	const int LoopCountMax = 5;
 	
 	// 
 	//-------AfterPlungeInto

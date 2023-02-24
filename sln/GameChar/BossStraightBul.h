@@ -47,7 +47,7 @@ public:
 	float time;
 
 	//Á‚¦‚é‚Ü‚Å
-	static const int32_t BulVanishTime = 60 * 6;//õ–½
+	static const int32_t BulVanishTime = 60 * 10;//õ–½
 
 	//Á–Å‚Ìé
 	int32_t vanishTimer_ = BulVanishTime;

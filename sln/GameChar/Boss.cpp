@@ -16,7 +16,6 @@ void Boss::BossAppear()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	XMFLOAT3 pos = obj->GetPosition();
-	pos.z--;
 
 	//移動完了確認しだい
 	if (charParams->pNextPlaceGoFlag == false) {
@@ -57,12 +56,15 @@ void Boss::Approach()
 	position.x += 7.f * sinf(time * 3.14159265358f);
 	obj->SetPosition(position);
 
-	//近づく制限は自機の場所に自機と離したい距離分間を開ける
-	const int SpaceDistance = 200;
-	ApproachLim = shotTag->GetPosition().z + SpaceDistance;
+	////近づく制限は自機の場所に自機と離したい距離分間を開ける
+	//const int SpaceDistance = 200;
+	//ApproachLim = shotTag->GetPosition().z + SpaceDistance;
+
+	ApproachCount--;
 
 	//ある程度近づいたら離れる
-	if (position.z < ApproachLim) {
+	if (ApproachCount==0) {
+		ApproachCount = ApproachCountDef;
 		actionPattern_ = ActionPattern::Leave;
 	}
 
@@ -116,7 +118,7 @@ void Boss::HpHalfPatStart()
 	//自機の場所
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//指定座標で自機のZからどれくらい間をあけるか
-	const int SpaceDistance = 250;
+	const int SpaceDistance = 500;
 
 	if (GetPosFlag == true)
 	{
@@ -190,9 +192,16 @@ void Boss::CircularMotionMove()
 	addX = cos(HpHalf_rad) * HpHalf_Length;
 	addY = sin(HpHalf_rad) * HpHalf_Length;
 
+	if (GetPosFlag == true)
+	{
+		//最初の位置
+		CirclePosMem = obj->GetPosition();
+		GetPosFlag = false;
+	}
+
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//中心座標に移動量を足した値を座標に
-	position.x = pPos.x + addX;
+	position.x = CirclePosMem.x + addX;
 	position.y = 40 + addY;
 	position.z -= 0.15f;//地味に迫ってくる
 
@@ -209,7 +218,7 @@ void Boss::CircularMotionMove()
 		HpHalf_Length = HpHalf_LengthDef;
 		addX = addXDef;
 		addY = addYDef;
-
+		GetPosFlag = true;
 		actionPattern_ = ActionPattern::LeaveFirstPos;
 
 	}
@@ -434,6 +443,8 @@ void Boss::AfterPlungeInto()
 
 		WaitTime--;//待ち時間
 		if (WaitTime == 0) {//指定時間待ったら
+
+			LoopCount++;//何回やったか数えるんだよ
 			WaitTime = WaitTimeDef;
 			afterPlungePattern_ = AfterPlungePattern::Attack;//攻撃へ
 		}
@@ -483,10 +494,16 @@ void Boss::AfterPlungeInto()
 		if (Nowframe==NecesAtkMoveTime) {
 			Nowframe = 0;
 			pPosMemFlag = false;
-			afterPlungePattern_ = AfterPlungePattern::Wait;//攻撃へ
+			afterPlungePattern_ = AfterPlungePattern::Wait;
 		}
 
 		break;
+	}
+
+	if (LoopCount == LoopCountMax) {
+		LoopCount = LoopCountDef;
+		afterPlungePattern_ = AfterPlungePattern::Wait;
+		actionPattern_ = ActionPattern::CircularMotionMove;
 	}
 }
 
@@ -603,9 +620,9 @@ void Boss::DiffusionAttack()
 	madeBullet_R->SetPosition(position);
 
 	// velocityを算出
-	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1.2, 0);
-	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-2, 0, 1, 0);
-	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(2, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1.7, 0);
+	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-2, 0, 1.7, 0);
+	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(2, 0, 1.7, 0);
 	XMFLOAT3 xmfloat3velocity_center;
 	XMFLOAT3 xmfloat3velocity_L;
 	XMFLOAT3 xmfloat3velocity_R;
@@ -651,10 +668,10 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R2->SetPosition(position);
 
 	// velocityを算出
-	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-3, 0, 1, 0);
-	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-0.5, 0, 1, 0);
-	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(0.5, 0, 1, 0);
-	DirectX::XMVECTOR vecvelocity_R2 = DirectX::XMVectorSet(3, 0, 1, 0);
+	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-3, 0, 1.7, 0);
+	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-0.5, 0, 1.7, 0);
+	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(0.5, 0, 1.7, 0);
+	DirectX::XMVECTOR vecvelocity_R2 = DirectX::XMVectorSet(3, 0, 1.7, 0);
 	XMFLOAT3 xmfloat3velocity_L1;
 	XMFLOAT3 xmfloat3velocity_L2;
 	XMFLOAT3 xmfloat3velocity_R1;
@@ -741,9 +758,9 @@ void Boss::Initialize()
 	obj.reset(Object3d::Create());
 	//-----↓任意↓-----//
 	//大きさ
-	obj->SetScale({ 50.0f, 50.0f, 50.0f });
+	obj->SetScale({ 60.0f, 60.0f, 60.0f });
 	//場所
-	obj->SetPosition({ 0,50,3300 });
+	obj->SetPosition({ 0,0,3300 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
