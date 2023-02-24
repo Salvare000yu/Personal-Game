@@ -127,9 +127,7 @@ private:
 	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
 	std::unique_ptr < Sprite> sp_dame_ef = nullptr;
 
-	std::unique_ptr < Model> mod_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Model> model_1 = nullptr;//地面
-	std::unique_ptr < Model> mod_worlddome = nullptr;//天球
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
 	std::unique_ptr < Model> mod_smallenemy = nullptr;//雑魚敵
@@ -143,9 +141,7 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
-	std::unique_ptr < Object3d> obj_sword = nullptr;//デバック用キャラ
 	std::unique_ptr < Object3d> object3d_1 = nullptr;
-	std::unique_ptr < Object3d> obj_worlddome = nullptr;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
@@ -168,7 +164,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 10
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 10;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

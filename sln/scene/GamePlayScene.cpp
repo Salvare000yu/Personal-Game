@@ -97,8 +97,6 @@ void GamePlayScene::Initialize()
 
 	//------objからモデルデータ読み込み---
 	model_1.reset(Model::LoadFromOBJ("ground"));
-	mod_worlddome.reset(Model::LoadFromOBJ("skydome"));
-	mod_sword.reset(Model::LoadFromOBJ("chr_sword"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
@@ -111,12 +109,9 @@ void GamePlayScene::Initialize()
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
-	//Model* model_3 = Model::LoadFromOBJ("chr_sword");
 
 	//------3dオブジェクト生成------//
 	object3d_1.reset(Object3d::Create());
-	obj_worlddome.reset(Object3d::Create());
-	obj_sword.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
@@ -124,23 +119,17 @@ void GamePlayScene::Initialize()
 
 	//------3dオブジェクトに3dモデルを紐づける------//
 	object3d_1->SetModel(model_1.get());
-	obj_worlddome->SetModel(mod_worlddome.get());
-	obj_sword->SetModel(mod_sword.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
 	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
-	obj_worlddome->SetScale({ 50.0f, 50.0f, 50.0f });
-	obj_sword->SetScale({ 7.0f, 7.0f, 7.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
 	object3d_1->SetPosition({ 0,-150,0 });
-	obj_worlddome->SetPosition({ 0,200,150 });
-	obj_sword->SetPosition({ 0,50,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,2000 });
@@ -230,12 +219,8 @@ void GamePlayScene::Initialize()
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_dame_ef.reset(Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	//sp_.reset(Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
-	//sp_guide->TransferVertexBuffer();
-
-	//sprite_back.push_back(sprite_back);
 
 	charParameters->Initialize();
 
@@ -258,27 +243,11 @@ void GamePlayScene::Initialize()
 	// パーティクル初期化
 	ParticleManager::GetInstance()->SetCamera(camera.get());
 
-	//for (int i = 0; i < 1; i++)
-	//{
-	//    int texNumber = 1;
-	//    Sprite* sprite = Sprite::Create(spriteBase, texNumber, { 0,0 }, false, false);
-
-	//    // スプライトの座標変更
-	//    sprite->SetPosition({ (float)(80),(float)(20),0 });
-	//    //sprite->SetRotation((float)(rand() % 360));
-	//    sprite->SetSize({ (float)(200), (float)(200) });
-
-	//    sprite->TransferVertexBuffer();
-
-	//    sprites.push_back(sprite);
-	//}
-
 	//fbx モデル名指定してファイル読み込み
 	//FbxLoader::GetInstance()->LoadModelFromFile(
 	//	"cube"
 	//);
 
-	//int counter = 0; // アニメーションの経過時間カウンター
 
 	//// スプライン曲線
 	////posints = { start, start, p2, p3, end, end }
@@ -314,8 +283,6 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::SmallEnemyAppear()
 {
-	//キー入力使う
-	//Input* input = Input::GetInstance();
 
 	//雑魚敵生成
 	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
@@ -406,9 +373,6 @@ void GamePlayScene::BeforeBossAppear()
 
 	sp_beforeboss->SetColor(SP_BossWarning);
 
-	//char tmp[32]{};
-	//sprintf_s(tmp, 32, "%2.f", SP_BossWarning.w);
-	//DebugText::GetInstance()->Print(tmp, 430, 490, 3);
 }
 void GamePlayScene::BossDeathEfect()
 {
@@ -646,8 +610,6 @@ void GamePlayScene::CoolTime()
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 
-		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
-
 		//画像薄くしてく
 		pDamCol.w -= 0.03;
 		//0より大きい間かつまだ一回もやってないとき
@@ -665,9 +627,6 @@ void GamePlayScene::CoolTime()
 		pDamCol.w = 1;
 	}
 	sp_dame_ef->SetColor(pDamCol);
-
-	//if (pDamFlag == false) { DebugText::GetInstance()->Print("pdamflag=false", 100, 310, 2); }
-	//if (pDamFlag == true) { DebugText::GetInstance()->Print("pdamflag=true", 100, 310, 2); }
 
 }
 
@@ -1030,6 +989,10 @@ void GamePlayScene::CollisionAll()
 			}
 		}
 	}
+	//与えるダメージが0以下だったら1にする
+	if (Damage <= 0) {
+		Damage = 1;
+	}
 }
 
 //------------------------------↑当たり判定ZONE↑-----------------------------//
@@ -1043,18 +1006,22 @@ bool GamePlayScene::GameReady()
 	//プレイヤー側でレディー中はAttackしないようにする
 	bool pReadyFlag = player_->GetReadyNow();
 
+	const float ReadyColWDecVal = 0.005;//Readyを透明にしていく
+	const float GoColWDecVal = 0.01;//GOを透明にしていく
+	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
+
 	if (ReadyCol.w > 0.0)
 	{
-		ReadyCol.w -= 0.005;
+		ReadyCol.w -= ReadyColWDecVal;
 		sp_ready->SetColor({ ReadyCol });
 		sp_ready->Update();
 	}
 
 	if (ReadyCol.w < 0.0) {
 		ready_GOFlag = true;
-		GOCol.w -= 0.01;
-		GOSize.x += 7;
-		GOSize.y += 7;
+		GOCol.w -= GoColWDecVal;
+		GOSize.x += GoSizeIncVal;
+		GOSize.y += GoSizeIncVal;
 		GOPos.x -= 3.2;
 		GOPos.y -= 3.2;
 		sp_ready_go->SetSize({ GOSize });
@@ -1064,7 +1031,7 @@ bool GamePlayScene::GameReady()
 		sp_ready_go->Update();
 	}
 
-	if (GOCol.w < 0.0) {
+	if (GOCol.w < 0.0) {//透明になったら
 		//アタック開始してよき
 		pReadyFlag = false;
 		player_->SetReadyNow(pReadyFlag);
@@ -1120,18 +1087,12 @@ void GamePlayScene::Update()
 		if (pause->GetSceneChangeTitleFlag() == true) {
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();//振動
-			// 音声停止
-			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");
+			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");// 音声停止
 			//シーン切り替え
 			BaseScene* scene = new TitleScene();
 			sceneManager_->SetNextScene(scene);
 		}
 
-	}
-
-	//与えるダメージが0以下だったら1にする
-	if (Damage <= 0) {
-		Damage = 1;
 	}
 
 	//ポーズでないとき～
@@ -1172,14 +1133,6 @@ void GamePlayScene::Update()
 
 		charParameters->BarGetDislodged();
 
-		const float RotVul = 0.3f;
-		{
-			//天球回転
-			XMFLOAT3 rotation = obj_worlddome->GetRotation();
-			rotation.y += RotVul;
-			obj_worlddome->SetRotation({ rotation });
-		}
-
 		if (player_->GetPHpLessThan0() == false)
 		{
 			//プレイヤー移動-上に書くと移動かくつかない
@@ -1206,8 +1159,6 @@ void GamePlayScene::Update()
 
 		//3dobjUPDATE
 		object3d_1->Update();
-		//obj_worlddome->Update();
-		//obj_sword->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 
@@ -1224,20 +1175,6 @@ void GamePlayScene::Update()
 		if (GameReady() == false)
 		{
 			PlayTimer();
-
-			//if (TriggerR) {//デバック用　適当に　いつかは消す
-			//	camera->SetTarget({  });
-			//	camera->SetEye({  });
-			//	player_->SetAlive(true);
-			//	NowpHp = pMaxHp;
-			//	boss_.front()->SetAlive(true);
-			//	NowBoHp = boMaxHp;
-			//	sEnemyMurdersNum = 0;
-			//	BossEnemyAdvent = false;
-
-			//	// カメラreセット
-			//	//Object3d::SetCamera(camera.get());
-			//}
 
 			//敵のHPバー
 			if (BossEnemyAdvent == true)
@@ -1387,14 +1324,7 @@ void GamePlayScene::Update()
 	}//ここまでポーズしてないとき
 
 	//-------常にデバテキ↓
-	// 
-	//Pause* pause = Pause::GetInstance();
-	//if (pause->GetPauseFlag() == false) {
-	//	DebugText::GetInstance()->Print("pause:false", 100, 440, 2);
-	//}
-	//else {
-	//	DebugText::GetInstance()->Print("pause:true", 100, 440, 2);
-	//}
+	//-------常にデバテキ↑
 
 	obj_tunnel->Update();
 	obj_backwall->Update();
@@ -1432,8 +1362,6 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画
 	object3d_1->Draw();
-	//obj_worlddome->Draw();
-	//obj_sword->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
@@ -1441,8 +1369,6 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
-
-	//smallEnemy_->Draw();
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);
@@ -1455,15 +1381,6 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
-
-	// ４．描画コマンドここから
-
-	//for (int i = 0; i < _countof(object3ds); i++)
-	//{
-	//    DrawObject3d(&object3ds[i], dxBase->GetCmdList(), basicDescHeap.Get(), vbView, ibView,
-	//        CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeap->GetGPUDescriptorHandleForHeapStart(), constantBufferNum, dxBase->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)),
-	//        indices, _countof(indices));
-	//}
 
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();

@@ -131,7 +131,7 @@ void Boss::HpHalfPatStart()
 
 		//–hŒä—Íã‚ª‚é
 		float Defence = charParams->GetBossDefense();
-		Defence += 20;
+		Defence += 30;
 		charParams->SetBossDefense(Defence);
 	}
 
@@ -841,25 +841,6 @@ void Boss::Update()
 	PAimBul();
 
 	obj->Update();
-
-	{
-		XMFLOAT3 position = obj->GetPosition();
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "BossPosX : %2.f", position.x);
-		DebugText::GetInstance()->Print(tmp, 50, 100, 1);
-	}
-	{
-		XMFLOAT3 position = obj->GetPosition();
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "BossPosY : %2.f", position.y);
-		DebugText::GetInstance()->Print(tmp, 50, 120, 1);
-	}
-	{
-		XMFLOAT3 position = obj->GetPosition();
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "BossPosZ : %2.f", position.z);
-		DebugText::GetInstance()->Print(tmp, 50, 140, 1);
-	}
 }
 
 void Boss::Draw()
