@@ -907,7 +907,6 @@ void GamePlayScene::CollisionAll()
 	}
 	//[自機]と[ボス狙い弾]の当たり判定
 	{
-
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
@@ -931,11 +930,40 @@ void GamePlayScene::CollisionAll()
 						boaimbul->SetAlive(false);
 						break;
 					}
+				}
+			}
+		}
+	}
+
+	//[自機]と[ボス直線弾]の当たり判定
+	{
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z + 2;
+		//ボスのHPあるとき
+		if (player_->GetAlive() && (NowBoHp > 0)) {
+			for (auto& bo : boss_) {
+				if (!bo->GetAlive())continue;
+				for (auto& boStraightBul : bo->GetStraightBullets()) {
+					Sphere straightBulForm;
+					straightBulForm.center = XMLoadFloat3(&boStraightBul->GetPosition());
+					straightBulForm.radius = boStraightBul->GetScale().z + 2.f;
+
+					if (Collision::CheckSphere2Sphere(playerForm, straightBulForm)) {
+
+						pDamFlag = true;
+						NowpHp -= bo->GetStraightBulPow();//自機ダメージ
+						charParams->SetispDam(true);
+						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+
+						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						boStraightBul->SetAlive(false);
+						break;
+					}
 
 				}
 			}
 		}
-
 	}
 
 	//[雑魚敵弾]と[自機]の当たり判定

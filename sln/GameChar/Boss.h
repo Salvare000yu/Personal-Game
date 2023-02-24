@@ -124,6 +124,8 @@ public:
 	const float& GetBulPow() { return BulPow; }
 	//狙い弾威力
 	const float& GetAimBulPow() { return AimBulPow; }
+	//直線威力
+	const float& GetStraightBulPow() { return StraightBulPow; }
 	//ボス本体にぶつかった時の威力
 	const float& GetBodyPow() { return BodyPow; }
 
@@ -164,12 +166,13 @@ private:
 	Model* AimBulModel = nullptr;
 	Model* StraightBulModel = nullptr;
 
-	//敵通常弾威力
+	//弾威力
 	const float BulPow = 200;
 	const float AimBulPow = 150;
+	const float StraightBulPow = 170;
 
 	//ボス本体の威力
-	const int BodyPow = 100;
+	const int BodyPow = 250;
 
 	//false：まだ死んでない
 	bool isDeath = false;
