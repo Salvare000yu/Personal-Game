@@ -127,7 +127,7 @@ public:
 	//直線威力
 	const float& GetStraightBulPow() { return StraightBulPow; }
 	//ボス本体にぶつかった時の威力
-	const float& GetBodyPow() { return BodyPow; }
+	const int& GetBodyPow() { return BodyPow; }
 
 	//ボス生死
 	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
@@ -155,10 +155,10 @@ private:
 	int Nowframe = NowframeDef;
 
 	//攻撃用カウント
-	float AtkCount = 0;
-	float DiffusionAtkCount = 0;
-	float Circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
-	float AfterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
+	int AtkCount = 0;
+	int DiffusionAtkCount = 0;
+	int Circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
+	int AfterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -196,19 +196,19 @@ private:
 	int ApproachCount = ApproachCountDef;
 
 	//------HP半分以下円運動↓
-	const float HpHalf_AngleDef = 20;
+	const float HpHalf_AngleDef = 20.f;
 	float HpHalf_Angle = HpHalf_AngleDef;
-	const float HpHalf_radDef = 100;
+	const float HpHalf_radDef = 100.f;
 	float HpHalf_rad = HpHalf_radDef;
 
-	const float HpHalf_LengthDef = 10;//円運動の半径の長さ
+	const float HpHalf_LengthDef = 10.f;//円運動の半径の長さ
 	float HpHalf_Length = HpHalf_LengthDef;
 
 	XMFLOAT3 CirclePosMem;//その時の座標取得
 	//移動値
-	const float addXDef=0;
+	const float addXDef=0.f;
 	float addX= addXDef;
-	const float addYDef = 0;
+	const float addYDef = 0.f;
 	float addY = addYDef;
 	//------HP半分以下円運動↑
 

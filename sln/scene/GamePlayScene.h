@@ -164,7 +164,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 10
-	float BossTermsEMurdersNum = 10;
+	float BossTermsEMurdersNum = 0;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ
@@ -188,7 +188,7 @@ private:
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
 	//黒画像を強くする値
-	const float colordec = 0.006;
+	const float colordec = 0.006f;
 
 	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;
@@ -202,8 +202,8 @@ private:
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 10.f;
 	float pNextPlaceGoSp = 2.f;
-	float AccelVal = 0.03;//加速値
-	float DecelVal = 0.1;//減速値
+	float AccelVal = 0.03f;//加速値
+	float DecelVal = 0.1f;//減速値
 
 	//与える威力
 	int Damage;
@@ -222,7 +222,7 @@ private:
 	const int DashAttenuation = 10;
 	bool DashAttenuationFlag = false;//減衰開始 fasle:まだしてない
 	//減衰数値
-	float Attenuation=-0.2;
+	float Attenuation=-0.2f;
 	//ダッシュクールインターバル
 	const int DashIntervalDef = 40;
 	int DashInterval = DashIntervalDef;

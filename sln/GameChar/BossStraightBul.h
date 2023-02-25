@@ -57,9 +57,9 @@ public:
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
 	//直線弾スピード
-	float StraightBulSp = 0.07;
+	float StraightBulSp = 0.07f;
 	//直線弾加速
-	float StraightBulAccel = 0.1;
+	float StraightBulAccel = 0.1f;
 	//速度制限
 	const int StraightBulSpLim = 30;
 

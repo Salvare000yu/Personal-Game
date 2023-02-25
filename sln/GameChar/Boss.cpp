@@ -192,8 +192,8 @@ void Boss::CircularMotionMove()
 	HpHalf_rad = HpHalf_Angle * 3.1415926535f / 180.0f;
 
 	//â~ÇÃà íuÇéOäpä÷êîÇ≈ÇæÇ∑
-	addX = cos(HpHalf_rad) * HpHalf_Length;
-	addY = sin(HpHalf_rad) * HpHalf_Length;
+	addX = cosf(HpHalf_rad) * HpHalf_Length;
+	addY = sinf(HpHalf_rad) * HpHalf_Length;
 
 	if (GetPosFlag == true)
 	{
@@ -624,9 +624,11 @@ void Boss::DiffusionAttack()
 	madeBullet_R->SetPosition(position);
 
 	// velocityÇéZèo
-	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, 1.7, 0);
-	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-2, 0, 1.7, 0);
-	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(2, 0, 1.7, 0);
+	const float MoveZ = 1.7f;//à⁄ìÆó 
+	const float MoveX = 2.f;
+	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, MoveZ, 0);
+	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
+	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(MoveX, 0, MoveZ, 0);
 	XMFLOAT3 xmfloat3velocity_center;
 	XMFLOAT3 xmfloat3velocity_L;
 	XMFLOAT3 xmfloat3velocity_R;
@@ -672,10 +674,13 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R2->SetPosition(position);
 
 	// velocityÇéZèo
-	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-3, 0, 1.7, 0);
-	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-0.5, 0, 1.7, 0);
-	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(0.5, 0, 1.7, 0);
-	DirectX::XMVECTOR vecvelocity_R2 = DirectX::XMVectorSet(3, 0, 1.7, 0);
+	const float MoveZ = 1.7f;//à⁄ìÆó 
+	const float MoveEdgeX = 3.f;//í[íeà⁄ìÆó 
+	const float MoveX = 0.5f;//à⁄ìÆó 
+	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-MoveEdgeX, 0, MoveZ, 0);
+	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
+	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(MoveX, 0, MoveZ, 0);
+	DirectX::XMVECTOR vecvelocity_R2 = DirectX::XMVectorSet(MoveEdgeX, 0, MoveZ, 0);
 	XMFLOAT3 xmfloat3velocity_L1;
 	XMFLOAT3 xmfloat3velocity_L2;
 	XMFLOAT3 xmfloat3velocity_R1;
