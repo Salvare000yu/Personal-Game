@@ -17,6 +17,7 @@ class Boss:public BaseObject
 		BossAppear,
 		Approach,//‹ß‚Ã‚¢‚Ä‚­‚é
 		Leave,//—£‚ê‚é
+		Vertical,//cUŒ‚
 		HpHalfPatStart,//Hp”¼•ªˆÈ‰º‚É‚È‚Á‚½‚çƒ^ƒQ‚Ü‚ÅˆÚ“®
 		CircularMotionMove,//‚®‚é‚®‚é
 		LeaveFirstPos,//Œ³‚ÌêŠ‚Öˆê’Uˆø‚­
@@ -58,6 +59,7 @@ public:
 	void BossAppear();
 	void Approach();
 	void Leave();
+	void Vertical();
 	void HpHalfPatStart();
 	void CircularMotionMove();
 	void LeaveFirstPos();
@@ -194,6 +196,12 @@ private:
 	//‚±‚ÌŠÔ‚¾‚¯‚±‚Ìs“®‚ğ‚·‚é
 	const int ApproachCountDef = 150;
 	int ApproachCount = ApproachCountDef;
+
+	//------c‚É—h‚ê‚éUŒ‚
+	const int ChangeVerticalCountDef = 0;
+	int ChangeVerticalCount = ChangeVerticalCountDef;
+	const int ChangeVerticalNeces = 2;//cUŒ‚‚ÉˆÚ‚éˆ×‚É•K—vƒJƒEƒ“ƒg
+	//------
 
 	//------HP”¼•ªˆÈ‰º‰~‰^“®«
 	const float HpHalf_AngleDef = 20.f;

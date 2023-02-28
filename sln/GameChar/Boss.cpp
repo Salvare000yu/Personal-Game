@@ -65,6 +65,7 @@ void Boss::Approach()
 	//‚ ‚é’ö“x‹ß‚Ã‚¢‚½‚ç—£‚ê‚é
 	if (ApproachCount == 0) {
 		ApproachCount = ApproachCountDef;
+		ChangeVerticalCount++;//cUŒ‚‚·‚é‚½‚ß‚ÌƒJƒEƒ“ƒgi‚ß‚é
 		actionPattern_ = ActionPattern::Leave;
 	}
 
@@ -104,7 +105,21 @@ void Boss::Leave()
 	if (positionBack.z > ActionStartPos.z && positionBack.y < ActionStartPos.y) {
 		if (even_odd_NumFlag == true) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
-		actionPattern_ = ActionPattern::Approach;
+
+		if (ChangeVerticalCount == ChangeVerticalNeces) {//cUŒ‚ƒJƒEƒ“ƒg‚ªˆê’è‚É’B‚µ‚½‚ç
+			actionPattern_ = ActionPattern::Vertical;//cUŒ‚
+		}
+		else {
+			actionPattern_ = ActionPattern::Approach;
+		}
+
+	}
+}
+void Boss::Vertical(){
+
+	if (Nowframe==3498349348989) {
+		ChangeVerticalCount = ChangeVerticalCountDef;//cUŒ‚‚·‚é‚½‚ß‚É•K—v‚ÈƒJƒEƒ“ƒg‚ðƒfƒtƒH‚É–ß‚·
+		actionPattern_ = ActionPattern::Leave;
 	}
 }
 
@@ -405,6 +420,11 @@ void Boss::PlungeInto()
 		//“ËŒ‚Œã‚È‚ç“Ë‚Áž‚ñ‚¾êŠ‚Å‚Ü‚Â
 		if (PlungeCompletFlag == true) {
 			obj->SetPosition(pPosMem);
+		}
+		else {
+			XMFLOAT3 rot=obj->GetRotation();
+			rot.z++;
+			obj->SetRotation(rot);
 		}
 
 		if (PlungeIntoWaitCount == 0) {
@@ -804,6 +824,7 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::BossAppear) { pFunc = &Boss::BossAppear; }
 	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
 	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
+	if (actionPattern_ == ActionPattern::Vertical) { pFunc = &Boss::Vertical; }
 	if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }
 	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
 	if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }

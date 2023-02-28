@@ -12,7 +12,6 @@
 #include "Boss.h"
 #include "Player.h"
 #include "SmallEnemy.h"
-#include "PlayerFireLine.h"
 
 #include <memory>
 

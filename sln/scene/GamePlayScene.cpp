@@ -1344,7 +1344,6 @@ void GamePlayScene::Draw()
 	//// スプライト描画
 	sprite_back->Draw();
 
-
 	//3dオブジェ描画前処理
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
@@ -1395,7 +1394,6 @@ void GamePlayScene::Draw()
 	}
 	if (pause->GetPauseFlag() == true) {
 		pause->SpFlagTrueNowDraw();
-
 	}
 	else if (BossEnemyAdvent == true && NowBoHp > 0) {
 		charParameters->boHpDraw();
