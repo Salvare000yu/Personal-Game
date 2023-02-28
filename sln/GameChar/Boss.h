@@ -26,6 +26,12 @@ class Boss:public BaseObject
 		Death,//死亡
 	};
 
+	enum class VerticalPattern {
+		def,//デフォルトから始まる
+		Wait,//待ち
+		StartVertical,//最初に上へ
+	};
+
 	enum class PlungeIntoPattern {
 		Leave,//前準備で離れる
 		PlungeInto,//突っ込む
@@ -106,9 +112,10 @@ public:
 	static const int AtkInterval_LeaveFirst = 20;
 	static const int DiffusionAtkInterval =20;
 
+	//縦攻撃
+	VerticalPattern verticalPattern_ = VerticalPattern::def;
 	//一度離れてから突っ込む行動パターン　最初離れる
 	PlungeIntoPattern plungeIntoPattern_ = PlungeIntoPattern::Leave;
-
 	//突っ込み後の行動パターン 最初待ち
 	AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
 
@@ -135,6 +142,10 @@ public:
 	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
 	const float& GetisDeath() { return isDeath; }
 
+	//ボス当たり判定するか
+	void SetDoCollision(bool doCollision) { this->doCollision = doCollision; }
+	const float& GetDoCollision() { return doCollision; }
+
 	//狙い弾　打つ相手
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 	//-----------------↑げったーせったー↑------------------//
@@ -155,6 +166,9 @@ private:
 	//フレーム計測
 	const int NowframeDef = 0;
 	int Nowframe = NowframeDef;
+
+	//当たり判定取るか true:取る
+	bool doCollision = true;
 
 	//攻撃用カウント
 	int AtkCount = 0;
@@ -198,9 +212,11 @@ private:
 	int ApproachCount = ApproachCountDef;
 
 	//------縦に揺れる攻撃
-	const int ChangeVerticalCountDef = 0;
+	const int ChangeVerticalCountDef = 1;//デフォ0　終わったら消してん
 	int ChangeVerticalCount = ChangeVerticalCountDef;
 	const int ChangeVerticalNeces = 2;//縦攻撃に移る為に必要カウント
+	//最初の上昇値
+	int StartVerticalVal = -5;
 	//------
 
 	//------HP半分以下円運動↓
