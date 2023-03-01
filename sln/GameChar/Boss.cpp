@@ -120,15 +120,16 @@ void Boss::Vertical()
 	XMFLOAT3 position = obj->GetPosition();
 
 	switch (verticalPattern_) {
+
 	case VerticalPattern::def://デフォルト
 		verticalPattern_ = VerticalPattern::StartVertical;//上昇開始
 		DebugText::GetInstance()->Print("Vertical:Def", 200, 190, 2);
 		break;
 
 	case VerticalPattern::StartVertical://まずは上昇
-		position.y+= StartVerticalVal;
+		position.y += StartVerticalVal;
 		StartVerticalVal++;
-		
+
 		if (position.y > 900) {//一定超えたら判定切ってから待ち
 			doCollision = false;//当たり判定取らない
 			verticalPattern_ = VerticalPattern::Wait;//上昇開始
@@ -139,46 +140,56 @@ void Boss::Vertical()
 	case VerticalPattern::Wait:
 		VerticalWaitCount--;//待ちカウント減らす
 
-		if (VerticalWaitCount==0) {
+		if (VerticalWaitCount == 0) {
 			VerticalWaitCount = VerticalWaitCountDef;//カウント戻す
 			doCollision = true;//当たり判定オンにしてから次行動
-			verticalPattern_ = VerticalPattern::Down;//下移動
+
+			if (NextDown == true) {//次下降なら
+				NextDown = false;//戻してから
+				verticalPattern_ = VerticalPattern::Down;//下移動
+			}
+			if (NextUp == true) {//次上昇なら
+				NextUp = false;//戻してから
+				verticalPattern_ = VerticalPattern::Up;//上移動
+			}
 		}
 		DebugText::GetInstance()->Print("Vertical:Wait", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Down:
-		if (VerticalStartPosFlag==false) {//最初に開始位置決める
-			DownPos = { DownPos.x, DownPos.y,position.z };//Zは元いた位置
-			position = DownPos;//今の位置を下に下がる開始位置にする
-			VerticalStartPosFlag = true;
+		if (VerticalStartPosFlag == false) {//最初に開始位置決める
+			UpDownPos = { UpDownPos.x, DownStartPosY,position.z };//Yは開始位置　Zは元いた位置
+			position = UpDownPos;//今の位置を下に下がる開始位置にする
+			VerticalStartPosFlag = true;//最初の開始位置を決め終わった
 		}
-		if (VerticalStartPosFlag == true) {//あとで消してみて
-			position.y -= 10;
-			if (position.y <= UpPos.y) {//上昇開始位置のYまできたら
-				DownPos.x += NextMoveX;//次の移動時のためにX足しとく
-				//↓待ち時間挟んでね　Wait時は判定切る
-				VerticalStartPosFlag = true;//開始位置決定フラグ戻す
-				verticalPattern_ = VerticalPattern::Up;//上移動
-			}
+		position.y -= VerticalSp;//移動
+		if (position.y <= UpStartPosY) {//上昇開始位置のYまできたら
+			UpDownPos.x += NextMoveX;//次の移動時のためにX足しとく
+			//↓待ち時間挟んでね　Wait時は判定切る
+			VerticalStartPosFlag = false;//開始位置決定フラグ戻す
+			NextUp = true;//次上昇
+			verticalPattern_ = VerticalPattern::Wait;//まってから
 		}
+
 		DebugText::GetInstance()->Print("Vertical:Down", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Up:
-		//if (一度きり) {
-		//	position = UpPos;//今の位置を上に上がる開始位置にする
-		//}
-		//上にあげていく
-		//if (一定まで上がったら（StartVerticalで使う変数と同じ数値）) {
-		//	次にUpするとき用に位置足してから、待ち時間経由して、（Wait時は判定切る
-		//		if (UpDown繰り返し一定したら指定座標に戻り元の行動へ) {
-		//			verticalPattern_ = VerticalPattern::Reverse;//戻る
-		//		}
-		//		else {
-		//			verticalPattern_ = VerticalPattern::Down;//下移動
-		//		}
-		//}
+		if (VerticalStartPosFlag == false) {//最初に開始位置決める
+			UpDownPos = { UpDownPos.x, UpStartPosY,position.z };//Yは開始位置　Zは元いた位置
+			position = UpDownPos;//今の位置を下に下がる開始位置にする
+			VerticalStartPosFlag = true;//最初の開始位置を決め終わった
+		}
+		position.y += VerticalSp;//移動
+		if (position.y >= DownStartPosY) {//上昇開始位置のYまできたら
+			UpDownPos.x += NextMoveX;//次の移動時のためにX足しとく
+			//↓待ち時間挟んでね　Wait時は判定切る
+			VerticalStartPosFlag = false;//開始位置決定フラグ戻す
+			NextDown = true;//次上昇
+			verticalPattern_ = VerticalPattern::Wait;//まってから
+		}
+
+		DebugText::GetInstance()->Print("Vertical:Up", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Reverse:
@@ -187,11 +198,12 @@ void Boss::Vertical()
 		//	ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
 		//verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
 		break;
+
 	}
 
 	obj->SetPosition(position);
 
-	if (Nowframe==3498349348989) {
+	if (Nowframe == 3498349348989) {
 		actionPattern_ = ActionPattern::Leave;
 	}
 }
@@ -495,7 +507,7 @@ void Boss::PlungeInto()
 			obj->SetPosition(pPosMem);
 		}
 		else {
-			XMFLOAT3 rot=obj->GetRotation();
+			XMFLOAT3 rot = obj->GetRotation();
 			rot.z++;
 			obj->SetRotation(rot);
 		}
@@ -882,7 +894,7 @@ void Boss::Update()
 	time = frame / 60.f;
 	frame += 1.f;
 
-		//消滅フラグ立ったらその弾は死して拝せよ
+	//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
