@@ -122,16 +122,18 @@ void Boss::Vertical()
 	switch (verticalPattern_) {
 	case VerticalPattern::def://デフォルト
 		verticalPattern_ = VerticalPattern::StartVertical;//上昇開始
+		DebugText::GetInstance()->Print("Vertical:Def", 200, 190, 2);
 		break;
 
 	case VerticalPattern::StartVertical://まずは上昇
 		position.y+= StartVerticalVal;
 		StartVerticalVal++;
 		
-		if (position.y > 800) {//一定超えたら判定切ってから待ち
+		if (position.y > 900) {//一定超えたら判定切ってから待ち
 			doCollision = false;//当たり判定取らない
 			verticalPattern_ = VerticalPattern::Wait;//上昇開始
 		}
+		DebugText::GetInstance()->Print("Vertical:Start", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Wait:
@@ -142,41 +144,48 @@ void Boss::Vertical()
 			doCollision = true;//当たり判定オンにしてから次行動
 			verticalPattern_ = VerticalPattern::Down;//下移動
 		}
+		DebugText::GetInstance()->Print("Vertical:Wait", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Down:
-		if (一度きり) {
+		if (VerticalStartPosFlag==false) {//最初に開始位置決める
+			DownPos = { DownPos.x, DownPos.y,position.z };//Zは元いた位置
 			position = DownPos;//今の位置を下に下がる開始位置にする
+			VerticalStartPosFlag = true;
 		}
-		座標を下げていく
-		if (座標が地面より下がったら) {
-			下に下がる位置を次にDownやるとき用に足してから
-				↓待ち時間挟んでね　Wait時は判定切る
-			verticalPattern_ = VerticalPattern::Up;//上移動
+		if (VerticalStartPosFlag == true) {//あとで消してみて
+			position.y -= 10;
+			if (position.y <= UpPos.y) {//上昇開始位置のYまできたら
+				DownPos.x += NextMoveX;//次の移動時のためにX足しとく
+				//↓待ち時間挟んでね　Wait時は判定切る
+				VerticalStartPosFlag = true;//開始位置決定フラグ戻す
+				verticalPattern_ = VerticalPattern::Up;//上移動
+			}
 		}
+		DebugText::GetInstance()->Print("Vertical:Down", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Up:
-		if (一度きり) {
-			position = UpPos;//今の位置を上に上がる開始位置にする
-		}
-		上にあげていく
-		if (一定まで上がったら（StartVerticalで使う変数と同じ数値）) {
-			次にUpするとき用に位置足してから、待ち時間経由して、（Wait時は判定切る
-				if (UpDown繰り返し一定したら指定座標に戻り元の行動へ) {
-					verticalPattern_ = VerticalPattern::Reverse;//戻る
-				}
-				else {
-					verticalPattern_ = VerticalPattern::Down;//下移動
-				}
-		}
+		//if (一度きり) {
+		//	position = UpPos;//今の位置を上に上がる開始位置にする
+		//}
+		//上にあげていく
+		//if (一定まで上がったら（StartVerticalで使う変数と同じ数値）) {
+		//	次にUpするとき用に位置足してから、待ち時間経由して、（Wait時は判定切る
+		//		if (UpDown繰り返し一定したら指定座標に戻り元の行動へ) {
+		//			verticalPattern_ = VerticalPattern::Reverse;//戻る
+		//		}
+		//		else {
+		//			verticalPattern_ = VerticalPattern::Down;//下移動
+		//		}
+		//}
 		break;
 
 	case VerticalPattern::Reverse:
-		上と下用の座標も元に戻す
-		アクションパターンに戻す
-			ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
-		verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
+		//上と下用の座標も元に戻す
+		//アクションパターンに戻す
+		//	ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
+		//verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
 		break;
 	}
 

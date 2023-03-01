@@ -26,20 +26,23 @@ class Boss:public BaseObject
 		Death,//死亡
 	};
 
-	enum class VerticalPattern {
+	enum class VerticalPattern {//縦の攻撃パターン
 		def,//デフォルトから始まる
 		Wait,//待ち
 		StartVertical,//最初に上へ
+		Down,//下移動
+		Up,//上移動
+		Reverse,//戻る
 	};
 
-	enum class PlungeIntoPattern {
+	enum class PlungeIntoPattern {//突っ込み
 		Leave,//前準備で離れる
 		PlungeInto,//突っ込む
 		Reverse,//戻ってくる
 		Wait,//時間空けてから行動
 	};
 
-	enum class AfterPlungePattern {
+	enum class AfterPlungePattern {//突っ込み後行動
 		Wait,//時間空けてから行動
 		Attack,//攻撃
 	};
@@ -217,6 +220,15 @@ private:
 	const int ChangeVerticalNeces = 2;//縦攻撃に移る為に必要カウント
 	//最初の上昇値
 	int StartVerticalVal = -5;
+	//待ち時間
+	const int VerticalWaitCountDef = 60;
+	int VerticalWaitCount = VerticalWaitCountDef;
+	XMFLOAT3 DownPos={-600,900,0};	//下に下がる開始座標
+	XMFLOAT3 UpPos={0,-250,0};	//上に上がる開始座標
+	const float NextMoveX = 200;//UpDownの最後にXをずらす値
+	//UpDown時の最初に開始位置決めるフラグ false:決める前
+	bool VerticalStartPosFlag = false;
+
 	//------
 
 	//------HP半分以下円運動↓
