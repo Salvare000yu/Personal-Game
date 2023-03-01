@@ -326,6 +326,7 @@ void GamePlayScene::BeforeBossAppear()
 	BeforeBossAppearNow = true;
 
 	const int BBPaternCountNum = 4;
+	const float WarningW = 0.03f;//透明度変化値
 
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 	//SP_BossWarning.w -= 0.01;
@@ -337,14 +338,14 @@ void GamePlayScene::BeforeBossAppear()
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.2f, 0);
 			AlertSoundFlag = false;
 		}
-		SP_BossWarning.w -= 0.03;
-		if (SP_BossWarning.w < 0.0) {
+		SP_BossWarning.w -= WarningW;
+		if (SP_BossWarning.w < 0.0f) {
 			beforeBossPattern_ = BeforeBossPattern::inc;
 		}
 		break;
 	case BeforeBossPattern::inc:
-		SP_BossWarning.w += 0.03;
-		if (SP_BossWarning.w > 1.0) {
+		SP_BossWarning.w += WarningW;
+		if (SP_BossWarning.w > 1.0f) {
 			beforeBossPattern_ = BeforeBossPattern::dec;
 			AlertSoundFlag = true;
 			BBPaternCount++;//繰り返す回数
@@ -356,7 +357,7 @@ void GamePlayScene::BeforeBossAppear()
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
 			AlertSoundFlag = false;
 		}
-		SP_BossWarning.w -= 0.03;
+		SP_BossWarning.w -= WarningW;
 		if (SP_BossWarning.w < 0.0) {
 			beforeBossPattern_ = BeforeBossPattern::inc;
 		}
@@ -607,13 +608,15 @@ void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
 	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
+	const float DamEffectW = 0.03f;
+
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 
 		//画像薄くしてく
-		pDamCol.w -= 0.03;
+		pDamCol.w -= DamEffectW;
 		//0より大きい間かつまだ一回もやってないとき
-		if (pDamCol.w > 0 && DamEfRedFlag == false) {
+		if (pDamCol.w > 0.f && DamEfRedFlag == false) {
 			sp_dame_ef->Update();
 		}
 		else {
@@ -624,7 +627,7 @@ void GamePlayScene::CoolTime()
 	else {
 		//ダメージ終わったら赤のダメージ画像色戻す
 		DamEfRedFlag = false;
-		pDamCol.w = 1;
+		pDamCol.w = 1.f;
 	}
 	sp_dame_ef->SetColor(pDamCol);
 

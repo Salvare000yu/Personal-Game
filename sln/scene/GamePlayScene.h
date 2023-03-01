@@ -205,7 +205,7 @@ private:
 	float DecelVal = 0.1f;//Œ¸‘¬’l
 
 	//—^‚¦‚éˆĞ—Í
-	int Damage;
+	float Damage;
 
 	std::vector<std::vector<std::string>> csvData;
 	//‰½s–Ú‚Ü‚Åo‚µ‚½‚©

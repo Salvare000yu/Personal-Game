@@ -22,7 +22,7 @@ void BossStraightBul::Initialize()
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
-	obj->SetScale({ 10.0f, 10.0f, 10.0f });
+	//obj->SetScale({ 70.0f, 70.0f, 70.0f });
 	//êŠ
 	//obj->SetPosition({ position });
 

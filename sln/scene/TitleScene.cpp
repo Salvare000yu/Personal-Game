@@ -105,6 +105,8 @@ void TitleScene::BeforeUpdate()
 	//windowc‰¡Žæ“¾‚µ‚½‚¢‚Æ‚«Žg‚¤
 	WinApp* winApp = WinApp::GetInstance();
 
+	const float spAccel = 1.05f;//‰Á‘¬
+
 	//’†S‚ðŽæ‚é
 	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
 	XMFLOAT2 NameTexSize = sp_gametitlename->GetTexSize();
@@ -115,7 +117,7 @@ void TitleScene::BeforeUpdate()
 	if (NamePos.x > NamePosXCenter)
 	{
 		NamePos.x -= sp;
-		sp *= 1.05;
+		sp *= spAccel;
 	}
 	else { 
 		MoveStartFlag = false; 
@@ -135,8 +137,10 @@ void TitleScene::BeforeUpdate()
 void TitleScene::SceneChange()
 {
 	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	const float StartSpAccel = 1.05f;
+
 	NamePos.x -= StartSp;
-	StartSp *= 1.05;
+	StartSp *= StartSpAccel;
 	sp_gametitlename->SetPosition({ NamePos });
 
 	Input* input = Input::GetInstance();

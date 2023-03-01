@@ -123,18 +123,16 @@ void Boss::Vertical()
 
 	case VerticalPattern::def://デフォルト
 		verticalPattern_ = VerticalPattern::StartVertical;//上昇開始
-		DebugText::GetInstance()->Print("Vertical:Def", 200, 190, 2);
 		break;
 
 	case VerticalPattern::StartVertical://まずは上昇
 		position.y += StartVerticalVal;
 		StartVerticalVal++;
 
-		if (position.y > 900) {//一定超えたら判定切ってから待ち
+		if (position.y > DownStartPosY) {//一定超えたら判定切ってから待ち
 			doCollision = false;//当たり判定取らない
 			verticalPattern_ = VerticalPattern::Wait;//上昇開始
 		}
-		DebugText::GetInstance()->Print("Vertical:Start", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Wait:
@@ -153,7 +151,6 @@ void Boss::Vertical()
 				verticalPattern_ = VerticalPattern::Up;//上移動
 			}
 		}
-		DebugText::GetInstance()->Print("Vertical:Wait", 200, 190, 2);
 		break;
 
 	case VerticalPattern::Down:
@@ -171,7 +168,15 @@ void Boss::Vertical()
 			verticalPattern_ = VerticalPattern::Wait;//まってから
 		}
 
-		DebugText::GetInstance()->Print("Vertical:Down", 200, 190, 2);
+		//発射カウントをデクリメント
+		AtkCount--;
+		//時が満ちたら
+		if (AtkCount == 0) {
+			//突撃時、生存時のみ発射
+			if (alive) { Attack(); }//追尾弾
+			//再びカウントできるように初期化
+			AtkCount = AtkInterval;
+		}
 		break;
 
 	case VerticalPattern::Up:
@@ -189,7 +194,14 @@ void Boss::Vertical()
 			verticalPattern_ = VerticalPattern::Wait;//まってから
 		}
 
-		DebugText::GetInstance()->Print("Vertical:Up", 200, 190, 2);
+		AtkCount--;
+		//時が満ちたら
+		if (AtkCount == 0) {
+			//突撃時、生存時のみ発射
+			if (alive) { StraightAttack(); }
+			//再びカウントできるように初期化
+			AtkCount = AtkInterval;
+		}
 		break;
 
 	case VerticalPattern::Reverse:
@@ -819,7 +831,7 @@ void Boss::StraightAttack()
 	madeBullet->Initialize();
 	madeBullet->SetModel(StraightBulModel);
 	madeBullet->SetPosition(position);
-	madeBullet->SetScale({ 15.f, 15.f, 15.f });
+	madeBullet->SetScale({ 30.f, 30.f, 30.f });
 
 	//弾登録
 	straightBullets_.push_back(std::move(madeBullet));

@@ -227,7 +227,7 @@ private:
 	int VerticalWaitCount = VerticalWaitCountDef;
 	XMFLOAT3 UpDownPos={-600,900,0};	//上昇下降開始座標
 	float UpStartPosY = -250;//上昇開始Y座標
-	float DownStartPosY = 900;//下降開始Y座標
+	float DownStartPosY = 950;//下降開始Y座標
 	const float NextMoveX = 200;//UpDownの最後にXをずらす値
 	//UpDown時の最初に開始位置決めるフラグ false:決める前
 	bool VerticalStartPosFlag = false;

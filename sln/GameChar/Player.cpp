@@ -35,7 +35,7 @@ void Player::Attack()
 	const bool InputMouseLEFT = input->PushMouse(0);
 
 	//’e‘¬
-	const int pBulVel = 40;
+	const int pBulVel = 60;
 
 	//’·‰Ÿ‚µ”­ŽË
 	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
