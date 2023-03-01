@@ -54,12 +54,13 @@ private:
 	std::unique_ptr < Sprite> sp_gametitlename = nullptr;
 	std::unique_ptr < Sprite> sp_titleoper = nullptr;
 
-	//Model* model_1 = nullptr;
-	//Model* model_2 = nullptr;
+	//----------3dobj
+	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
+	std::unique_ptr < Model> mod_ground = nullptr;//地面
 
-	//Object3d* object3d_1 = nullptr;
-	//Object3d* object3d_2 = nullptr;
-	//Object3d* object3d_3 = nullptr;
+	std::unique_ptr < Object3d> obj_tunnel = nullptr;
+	std::unique_ptr < Object3d> obj_ground = nullptr;
+
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
 

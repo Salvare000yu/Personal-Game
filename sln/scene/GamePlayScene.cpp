@@ -96,7 +96,7 @@ void GamePlayScene::Initialize()
 	time = frame / 60.f;	// 60fps想定
 
 	//------objからモデルデータ読み込み---
-	model_1.reset(Model::LoadFromOBJ("ground"));
+	mod_ground.reset(Model::LoadFromOBJ("ground"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
@@ -111,25 +111,25 @@ void GamePlayScene::Initialize()
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 
 	//------3dオブジェクト生成------//
-	object3d_1.reset(Object3d::Create());
+	obj_ground.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
 
 	//------3dオブジェクトに3dモデルを紐づける------//
-	object3d_1->SetModel(model_1.get());
+	obj_ground->SetModel(mod_ground.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
-	object3d_1->SetScale({ 80.0f, 20.0f, 500.0f });
+	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
-	object3d_1->SetPosition({ 0,-150,0 });
+	obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,2000 });
@@ -381,7 +381,7 @@ void GamePlayScene::BossDeathEfect()
 	color.w += colordec;
 	sp_blackwindow->SetColor(color);
 
-	if (boss_.front()->GetPosition().y < object3d_1->GetPosition().y)
+	if (boss_.front()->GetPosition().y < obj_ground->GetPosition().y)
 	{
 		boss_.front()->SetAlive(false);
 	}
@@ -1162,7 +1162,7 @@ void GamePlayScene::Update()
 		}
 
 		//3dobjUPDATE
-		object3d_1->Update();
+		obj_ground->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 
@@ -1364,7 +1364,7 @@ void GamePlayScene::Draw()
 	}
 
 	//3dオブジェ描画
-	object3d_1->Draw();
+	obj_ground->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();

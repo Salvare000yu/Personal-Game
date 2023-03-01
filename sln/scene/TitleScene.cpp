@@ -26,23 +26,22 @@ void TitleScene::Initialize()
 	input->MouseCursorHiddenFlag(false);
 
 	////---objからモデルデータ読み込み---
-	//model_1 = Model::LoadFromOBJ("ground");
-	//model_2 = Model::LoadFromOBJ("triangle_mat");
-	////Model* model_3 = Model::LoadFromOBJ("chr_sword");
+	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
+	mod_ground.reset(Model::LoadFromOBJ("ground"));
 	////---3dオブジェクト生成---
-	//object3d_1 = Object3d::Create();
-	//object3d_2 = Object3d::Create();
-	//object3d_3 = Object3d::Create();
+	obj_tunnel.reset(Object3d::Create());
+	obj_ground.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
-	//object3d_1->SetModel(model_1);
-	//object3d_2->SetModel(model_2);
-	//object3d_3->SetModel(model_2);
-
-	//object3d_2->SetScale({ 20.0f, 20.0f, 20.0f });
-	//object3d_3->SetScale({ 30.0f, 30.0f, 30.0f });
-
-	//object3d_2->SetPosition({ 5,-1,5 });
-	//object3d_3->SetPosition({ -5,-1,5 });
+	obj_tunnel->SetModel(mod_tunnel.get());
+	obj_ground->SetModel(mod_ground.get());
+	//------object3dスケール------//
+	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
+	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
+	//------object3d位置------//
+	obj_tunnel->SetPosition({ 0,40,2000 });
+	obj_ground->SetPosition({ 0,-150,0 });
+	//------object回転------//
+	obj_tunnel->SetRotation({ 0,-90,0 });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
@@ -242,15 +241,31 @@ void TitleScene::Update()
 	if (SceneChangeFlag == true) {
 		SceneChange();//チェンジ移動開始
 	}
+
+	obj_tunnel->Update();
+	obj_ground->Update();
+
 	DrawUI();
 }
 
 void TitleScene::Draw()
 {
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
+	//3dオブジェ描画前処理
+	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
+
+	//３DオブジェクトDraw
+	obj_tunnel->Draw();
+	obj_ground->Draw();
+
+	//3dオブジェ描画後処理
+	Object3d::PostDraw();
+
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
-	sprite1->Draw();
+	//sprite1->Draw();
 
 	sp_gametitlename->Draw();
 
