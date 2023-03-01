@@ -131,6 +131,7 @@ void Boss::Vertical()
 
 		if (position.y > DownStartPosY) {//一定超えたら判定切ってから待ち
 			doCollision = false;//当たり判定取らない
+			StartVerticalVal = StartVerticalValDef;//最初の上昇値戻す
 			verticalPattern_ = VerticalPattern::Wait;//上昇開始
 		}
 		break;
@@ -139,16 +140,25 @@ void Boss::Vertical()
 		VerticalWaitCount--;//待ちカウント減らす
 
 		if (VerticalWaitCount == 0) {
-			VerticalWaitCount = VerticalWaitCountDef;//カウント戻す
+			VerticalWaitCount = VerticalWaitCountDef/2;//初回以降はデフォ/2にカウント戻す
 			doCollision = true;//当たり判定オンにしてから次行動
 
-			if (NextDown == true) {//次下降なら
-				NextDown = false;//戻してから
-				verticalPattern_ = VerticalPattern::Down;//下移動
+			if (VerticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
+				if (NextDown == true) {//次下降なら
+					NextDown = false;//戻してから
+					verticalPattern_ = VerticalPattern::Down;//下移動
+				}
+				if (NextUp == true) {//次上昇なら
+					NextUp = false;//戻してから
+					verticalPattern_ = VerticalPattern::Up;//上移動
+				}
 			}
-			if (NextUp == true) {//次上昇なら
-				NextUp = false;//戻してから
-				verticalPattern_ = VerticalPattern::Up;//上移動
+			else {//るーぷが指定数おわったら（カウント0で）
+				//次の動き戻す
+				NextUp = false;
+				NextDown = true;//最初は下降
+				VerticalLoopCount = VerticalLoopCountDef;
+				verticalPattern_ = VerticalPattern::Reverse;//戻るパターンへ
 			}
 		}
 		break;
@@ -165,7 +175,8 @@ void Boss::Vertical()
 			//↓待ち時間挟んでね　Wait時は判定切る
 			VerticalStartPosFlag = false;//開始位置決定フラグ戻す
 			NextUp = true;//次上昇
-			verticalPattern_ = VerticalPattern::Wait;//まってから
+			VerticalLoopCount--;//Down抜けるときにデクリメント
+			verticalPattern_ = VerticalPattern::Wait;//まってか
 		}
 
 		//発射カウントをデクリメント
@@ -175,7 +186,7 @@ void Boss::Vertical()
 			//突撃時、生存時のみ発射
 			if (alive) { Attack(); }//追尾弾
 			//再びカウントできるように初期化
-			AtkCount = AtkInterval;
+			AtkCount = Vertical_AtkInterval;
 		}
 		break;
 
@@ -200,24 +211,34 @@ void Boss::Vertical()
 			//突撃時、生存時のみ発射
 			if (alive) { StraightAttack(); }
 			//再びカウントできるように初期化
-			AtkCount = AtkInterval;
+			AtkCount = Vertical_AtkInterval;
 		}
 		break;
 
 	case VerticalPattern::Reverse:
-		//上と下用の座標も元に戻す
-		//アクションパターンに戻す
-		//	ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
-		//verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
+		if (ReverseStartPosFlag == false) {//ここから戻り始める
+			position = { ReverseStartPos.x,position.y,position.z };//X、Yは最後の高さのまま、Z
+			ReverseStartPosFlag = true;
+		}
+		position.y += VerticalSp;
+
+		if (position.y>= ReverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
+			ReverseStartPosFlag = false;
+			verticalPattern_ = VerticalPattern::EndVertical;//縦パターンの行動終了する前にやること
+		}
+		break;
+
+	case VerticalPattern::EndVertical:
+		UpDownPos = UpDownPosDef;//上と下用の座標も元に戻す
+		VerticalWaitCount = VerticalWaitCountDef;//待ちカウントデフォルトに戻す
+		ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
+		verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
+		actionPattern_ = ActionPattern::Approach;//大本の行動パターンをApproachに戻す
 		break;
 
 	}
 
 	obj->SetPosition(position);
-
-	if (Nowframe == 3498349348989) {
-		actionPattern_ = ActionPattern::Leave;
-	}
 }
 
 void Boss::HpHalfPatStart()

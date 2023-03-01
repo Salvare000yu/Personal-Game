@@ -33,6 +33,7 @@ class Boss:public BaseObject
 		Down,//下移動
 		Up,//上移動
 		Reverse,//戻る
+		EndVertical,//縦行動終わり
 	};
 
 	enum class PlungeIntoPattern {//突っ込み
@@ -215,17 +216,19 @@ private:
 	int ApproachCount = ApproachCountDef;
 
 	//------縦に揺れる攻撃
-	const int ChangeVerticalCountDef = 1;//デフォ0　終わったら消してん
+	const int ChangeVerticalCountDef = 0;//デフォ0　終わったら消してん
 	int ChangeVerticalCount = ChangeVerticalCountDef;
-	const int ChangeVerticalNeces = 2;//縦攻撃に移る為に必要カウント
+	const int ChangeVerticalNeces = 3;//縦攻撃に移る為に必要カウント
 	//最初の上昇値
-	int StartVerticalVal = -5;
+	const int StartVerticalValDef = -5;
+	int StartVerticalVal = StartVerticalValDef;
 	//上昇下降速度
-	float VerticalSp = 10;
+	float VerticalSp = 15;
 	//待ち時間
-	const int VerticalWaitCountDef = 60;
+	const int VerticalWaitCountDef = 50;
 	int VerticalWaitCount = VerticalWaitCountDef;
-	XMFLOAT3 UpDownPos={-600,900,0};	//上昇下降開始座標
+	const XMFLOAT3 UpDownPosDef={-600,900,0};	//上昇下降開始座標
+	XMFLOAT3 UpDownPos= UpDownPosDef;
 	float UpStartPosY = -250;//上昇開始Y座標
 	float DownStartPosY = 950;//下降開始Y座標
 	const float NextMoveX = 200;//UpDownの最後にXをずらす値
@@ -234,6 +237,15 @@ private:
 	//次の動き false:これじゃない
 	bool NextUp = false;
 	bool NextDown = true;//最初は下降
+	//UpDown何回ループさせるか
+	const int VerticalLoopCountDef = 4;
+	int VerticalLoopCount = VerticalLoopCountDef;
+	//戻る行動開始座標に移動
+	XMFLOAT3 ReverseStartPos;
+	//戻る行動開始座標を最初に一回やる　false:まだ
+	bool ReverseStartPosFlag = false;
+	//縦攻撃用インターバル
+	static const int Vertical_AtkInterval = 7;
 
 	//------
 
