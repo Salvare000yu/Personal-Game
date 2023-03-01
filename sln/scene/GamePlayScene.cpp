@@ -743,6 +743,7 @@ void GamePlayScene::CollisionAll()
 				// 衝突判定をする
 				for (auto& bo : boss_) {
 					if (!bo->GetAlive())continue;
+					if (!bo->GetDoCollision())continue;//ボス側で判定取らないでって言われてたらスキップ
 					Sphere enemyForm;
 					enemyForm.center = XMLoadFloat3(&bo->GetPosition());
 					enemyForm.radius = bo->GetScale().x;

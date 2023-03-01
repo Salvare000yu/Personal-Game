@@ -130,13 +130,13 @@ void Boss::Vertical()
 		StartVerticalVal++;
 
 		if (position.y > DownStartPosY) {//一定超えたら判定切ってから待ち
-			doCollision = false;//当たり判定取らない
 			StartVerticalVal = StartVerticalValDef;//最初の上昇値戻す
 			verticalPattern_ = VerticalPattern::Wait;//上昇開始
 		}
 		break;
 
 	case VerticalPattern::Wait:
+		doCollision = false;//Wait時は画面外なので当たり判定取らない
 		VerticalWaitCount--;//待ちカウント減らす
 
 		if (VerticalWaitCount == 0) {

@@ -148,7 +148,7 @@ public:
 
 	//ƒ{ƒX“–‚½‚è”»’è‚·‚é‚©
 	void SetDoCollision(bool doCollision) { this->doCollision = doCollision; }
-	const float& GetDoCollision() { return doCollision; }
+	const bool& GetDoCollision() { return doCollision; }
 
 	//‘_‚¢’e@‘Å‚Â‘ŠŽè
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
