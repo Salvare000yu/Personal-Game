@@ -165,6 +165,8 @@ void PostEffect::TransfarConstBuffer()
 	ConstBufferData* constMap = nullptr;
 	HRESULT result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	constMap->time = frame / 60.f;	// 60fps‘z’è
+	constMap->windowSize = XMFLOAT2(WinApp::window_width,WinApp::window_height);
+	constMap->vignettePow = vignettePow;
 	constBuff_->Unmap(0, nullptr);
 }
 

@@ -1,6 +1,8 @@
 cbuffer cbuff0 : register(b0)
 {
     float time;
+    float2 windowSize;
+    float vignettePow;
 };
 
 // 頂点シェーダーからピクセルシェーダーへのやり取りに使用する構造体

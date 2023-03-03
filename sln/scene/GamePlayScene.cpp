@@ -204,7 +204,6 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
 	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/BlackWindow.png");
-	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/dame_ef.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -214,7 +213,6 @@ void GamePlayScene::Initialize()
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_dame_ef.reset(Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sprite_back->TransferVertexBuffer();
 
@@ -608,30 +606,25 @@ void GamePlayScene::pHeadingToTheNextPlace()
 void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
-	XMFLOAT4 pDamCol = sp_dame_ef->GetColor();
-	const float DamEffectW = 0.03f;
+	const float DamEffectW = 0.3f;
 
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
 
 		//画像薄くしてく
-		pDamCol.w -= DamEffectW;
-		//0より大きい間かつまだ一回もやってないとき
-		if (pDamCol.w > 0.f && DamEfRedFlag == false) {
-			sp_dame_ef->Update();
-		}
-		else {
+		vignettePow -= DamEffectW;
+		if(vignettePow<0.f) {
 			//繰り返さないように
 			DamEfRedFlag = true;
+			vignettePow = 0.f;
 		}
+		PostEffect::GetInstance()->SetVignettePow(vignettePow);
 	}
 	else {
 		//ダメージ終わったら赤のダメージ画像色戻す
 		DamEfRedFlag = false;
-		pDamCol.w = 1.f;
+		vignettePow = 1.f;
 	}
-	sp_dame_ef->SetColor(pDamCol);
-
 }
 
 void GamePlayScene::UpdateMouse()
@@ -1027,7 +1020,7 @@ bool GamePlayScene::GameReady()
 		sp_ready->SetColor({ ReadyCol });
 		sp_ready->Update();
 
-		XMFLOAT3 pos;
+		XMFLOAT3 pos{};
 		pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
 		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
 		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
@@ -1439,9 +1432,6 @@ void GamePlayScene::Draw()
 		}
 	}
 
-	if (pDamFlag == true) {
-		sp_dame_ef->Draw();
-	}
 	//向こうでダメージくらい状態解除したらこっちでも同様
 	if (charParameters->GetispDam() == false) {
 		pDamFlag = false;

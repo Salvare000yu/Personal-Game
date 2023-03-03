@@ -38,6 +38,8 @@ public:
 	// 定数バッファ用データ構造体
 	struct ConstBufferData {
 		float time;
+		DirectX::XMFLOAT2 windowSize;  // 画面サイズ
+		float vignettePow;
 	};
 
 	void CreateGraphicsPipelineState();
@@ -68,6 +70,9 @@ public:
 	static const float clearColor[4];
 
 	static const UINT texBuffNum = 2;
+
+	// ヴィネットの強さ
+	inline void SetVignettePow(float vignettePow) { this->vignettePow = vignettePow; }
 
 private:
 
@@ -116,4 +121,5 @@ private:
 	//PipelineSet pipelineSet;
 
 	float frame = 0;
+	float vignettePow = 0.f;
 };

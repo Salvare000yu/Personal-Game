@@ -121,7 +121,6 @@ private:
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
-	std::unique_ptr < Sprite> sp_dame_ef = nullptr;
 
 	std::unique_ptr < Model> mod_ground = nullptr;//地面
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
@@ -148,6 +147,10 @@ private:
 
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
+
+	//----ポストエフェクト関連
+	//ヴィネット強さ
+	float vignettePow=0;
 
 	//-----開始時演出
 	//ゲーム開始時フレーム
