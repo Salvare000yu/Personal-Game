@@ -39,17 +39,14 @@ class GamePlayScene :public BaseScene,public BaseObject
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	//// DirectX::を省略
-	//using XMFLOAT2 = DirectX::XMFLOAT2;
-	//using XMFLOAT3 = DirectX::XMFLOAT3;
-	//using XMFLOAT4 = DirectX::XMFLOAT4;
-	//using XMMATRIX = DirectX::XMMATRIX;
 
 public:
 
 	void Initialize() override;
 
 	void Finalize() override;
+
+	void Appearance();
 
 	void UpdateMouse();
 	void UpdateCamera();
@@ -152,8 +149,17 @@ private:
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
 
+	//-----開始時演出
+	//ゲーム開始時フレーム
+	int GameReadyFrame = 0;
+	//開始時自機座標
+	XMFLOAT3 ApStartPPos;
+	//終了
+	XMFLOAT3 ApEndPPos;
+
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
+	//-----開始時演出
 
 	float frame = 0;
 
@@ -163,7 +169,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 10
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 1;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

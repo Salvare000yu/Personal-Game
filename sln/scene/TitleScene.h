@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "Object3d.h"
 #include "SpriteBase.h"
+#include "Player.h"
 #include <memory>
 #include "DxBase.h"
 
@@ -23,6 +24,8 @@ public:
 	void SceneChange();
 
 	void UpDown();
+
+	void DoorOpen();//扉が開く
 
 	void Update() override;
 
@@ -48,6 +51,8 @@ public:
 	float time;
 	float frame = 0;
 
+	std::unique_ptr < Player> player_ = nullptr;
+
 private:
 
 	std::unique_ptr < Sprite> sprite1 = nullptr;
@@ -57,15 +62,22 @@ private:
 	//----------3dobj
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_ground = nullptr;//地面
+	std::unique_ptr < Model> mod_player = nullptr;// 自機
+	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
+	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
 
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 	std::unique_ptr < Object3d> obj_ground = nullptr;
+	std::unique_ptr < Object3d> obj_kaberight = nullptr;
+	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
 
 	float NamePosXCenter = 0;
 	float NamePosYCenter = 0;
+
+	bool DoorOpenFlag = false;//扉開けてない
 
 	////これ超えたらパターン変える　最大最小
 	//const float NamePosMoveMax = 7;

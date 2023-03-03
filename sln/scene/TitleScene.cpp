@@ -28,20 +28,40 @@ void TitleScene::Initialize()
 	////---objからモデルデータ読み込み---
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_ground.reset(Model::LoadFromOBJ("ground"));
+	mod_player.reset(Model::LoadFromOBJ("player"));
+	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
+	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	////---3dオブジェクト生成---
 	obj_tunnel.reset(Object3d::Create());
 	obj_ground.reset(Object3d::Create());
+	obj_kaberight.reset(Object3d::Create());
+	obj_kabeleft.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_ground->SetModel(mod_ground.get());
+	obj_kaberight->SetModel(mod_kaberight.get());
+	obj_kabeleft->SetModel(mod_kabeleft.get());
 	//------object3dスケール------//
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
+	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
+	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	//------object3d位置------//
 	obj_tunnel->SetPosition({ 0,40,2000 });
 	obj_ground->SetPosition({ 0,-150,0 });
+	obj_kaberight->SetPosition({ 490,340,2000 });
+	obj_kabeleft->SetPosition({ -490,340,2000 });
 	//------object回転------//
 	obj_tunnel->SetRotation({ 0,-90,0 });
+	obj_kaberight->SetRotation({ 0,0,0 });
+	obj_kabeleft->SetRotation({ 0,180,0 });
+
+	//いろいろ生成
+	player_.reset(new Player());
+	//いろいろキャラ初期化
+	player_->Initialize();
+	player_->SetPosition({ 0,0,100 });
+	player_->SetModel(mod_player.get());
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
@@ -244,6 +264,9 @@ void TitleScene::Update()
 
 	obj_tunnel->Update();
 	obj_ground->Update();
+	player_->Update();
+	obj_kaberight->Update();
+	obj_kabeleft->Update();
 
 	DrawUI();
 }
@@ -258,6 +281,9 @@ void TitleScene::Draw()
 	//３DオブジェクトDraw
 	obj_tunnel->Draw();
 	obj_ground->Draw();
+	player_->Draw();
+	obj_kaberight->Draw();
+	obj_kabeleft->Draw();
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();

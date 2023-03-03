@@ -28,9 +28,6 @@
 
 #include <DirectXMath.h>
 
-//using namespace DirectX;
-
-
 std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	bool commentFlag,
 	char divChar,
@@ -147,12 +144,11 @@ void GamePlayScene::Initialize()
 	player_->SetPBulModel(mod_playerbullet.get());
 	player_->SetPFiringLine(mod_firingline.get());
 
-	camera->SetTrackingTarget(player_.get());
 	camera->SetTarget(player_->GetPosition());
-	//XMFLOAT3 eye = player_->GetPosition();
-	//eye.z -= 50;
-	//eye.y += 10;
-	//camera->SetEye(eye);
+	
+	ApEndPPos = player_->GetPosition();
+	ApStartPPos = ApEndPPos;
+	ApStartPPos.z -= 1000;
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)//ボス
@@ -279,6 +275,11 @@ void GamePlayScene::Finalize()
 	//自キャラ解放
 	//delete player_;
 	//delete smallEnemy_;
+}
+
+void GamePlayScene::Appearance()
+{
+
 }
 
 void GamePlayScene::SmallEnemyAppear()
@@ -481,7 +482,7 @@ void GamePlayScene::PlayerDash()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//キー押されたら
-	if (cInput->PlayerDash()&& DashFlag==false&& DashIntervalFlag==false) {
+	if (cInput->PlayerDash() && DashFlag == false && DashIntervalFlag == false) {
 		//移動中なら
 		if (cInput->DownMove() || cInput->UpMove() || cInput->RightMove() || cInput->LeftMove()) {
 			//ダッシュをするとき風切り音
@@ -533,7 +534,7 @@ void GamePlayScene::PlayerDash()
 			DashVel.x = -DashVelInc;
 		}
 		//現ダッシュ時間が減衰開始時間になったら
-		if (DashCount== (DashCountDef - DashAttenuation)) {
+		if (DashCount == (DashCountDef - DashAttenuation)) {
 			DashAttenuationFlag = true;//減衰開始
 		}
 
@@ -1014,14 +1015,27 @@ bool GamePlayScene::GameReady()
 	const float GoColWDecVal = 0.01;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
-	if (ReadyCol.w > 0.0)
+	constexpr int frameMax = 120;
+
+
+
+	if (GameReadyFrame < frameMax)
 	{
-		ReadyCol.w -= ReadyColWDecVal;
+		float raito = (float)GameReadyFrame / frameMax;
+		GameReadyFrame++;
+		ReadyCol.w = 1.f - raito;
 		sp_ready->SetColor({ ReadyCol });
 		sp_ready->Update();
-	}
 
-	if (ReadyCol.w < 0.0) {
+		XMFLOAT3 pos;
+		pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
+		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
+		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
+		player_->SetPosition(pos);
+
+		camera->SetTarget(pos);
+	}
+	else {
 		ready_GOFlag = true;
 		GOCol.w -= GoColWDecVal;
 		GOSize.x += GoSizeIncVal;
@@ -1033,6 +1047,7 @@ bool GamePlayScene::GameReady()
 		sp_ready_go->SetColor({ GOCol });
 		sp_ready_go->SetPosition({ GOPos });
 		sp_ready_go->Update();
+		camera->SetTrackingTarget(player_.get());
 	}
 
 	if (GOCol.w < 0.0) {//透明になったら
@@ -1083,12 +1098,12 @@ void GamePlayScene::Update()
 			}
 		}
 	}
-	if (pause->GetPauseFlag() == true) {
+	if (pause->GetPauseFlag()) {
 
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
-		if (pause->GetSceneChangeTitleFlag() == true) {
+		if (pause->GetSceneChangeTitleFlag()) {
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			input->PadVibration();//振動
 			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");// 音声停止

@@ -215,7 +215,7 @@ private:
 	const int ApproachCountDef = 150;
 	int ApproachCount = ApproachCountDef;
 
-	//------縦に揺れる攻撃
+	//------縦に揺れる攻撃F
 	const int ChangeVerticalCountDef = 0;//デフォ0　終わったら消してん
 	int ChangeVerticalCount = ChangeVerticalCountDef;
 	const int ChangeVerticalNeces = 3;//縦攻撃に移る為に必要カウント

@@ -122,6 +122,7 @@
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,6 +141,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
