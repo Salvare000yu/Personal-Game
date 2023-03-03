@@ -143,7 +143,6 @@ void GamePlayScene::Initialize()
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
 	player_->SetPFiringLine(mod_firingline.get());
-
 	camera->SetTarget(player_->GetPosition());
 	
 	ApEndPPos = player_->GetPosition();
@@ -606,7 +605,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
-	const float DamEffectW = 0.3f;
+	const float DamEffectW = 0.03f;
 
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag == true) {
@@ -1168,6 +1167,10 @@ void GamePlayScene::Update()
 			player_->SetRotation({});
 			pRotDef = true;
 		}
+
+		//auto rot =obj_tunnel->GetRotation();
+		//rot.x -= 1.f;
+		//obj_tunnel->SetRotation(rot);
 
 		//3dobjUPDATE
 		obj_ground->Update();
