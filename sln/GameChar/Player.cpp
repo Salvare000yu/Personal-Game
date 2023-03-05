@@ -41,7 +41,7 @@ void Player::Attack()
 	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
 	{
 		//çUåÇÇµÇƒÇÊÇ¢èÛãµÇ»ÇÁ
-		if (charParameters->pAtkPossibleFlag == true) {
+		if (charParameters->pAtkPossibleFlag) {
 			if (ReadyNowFlag == false) {
 				XMFLOAT3 PlayerPos = obj->GetPosition();
 				//íeê∂ê¨
@@ -330,9 +330,11 @@ void Player::Update()
 
 	//ê∂Ç´ÇƒÇƒHpÇOÇ¢Ç∂ÇÂÇ§Ç»ÇÁ
 	if (alive && isPHpLessThan0 == false) {
-		FiringLine();
-		firingline_->Update();
-		Move();
+		if (charParameters->pAtkPossibleFlag) {//çUåÇÇµÇƒÇ¢Ç¢Ç∆Ç´Ç»ÇÁ
+			FiringLine();
+			firingline_->Update();
+			Move();
+		}
 	}
 	else {
 		//0à»â∫Ç»Ç¡ÇΩÇÁ
@@ -360,6 +362,8 @@ void Player::Update()
 
 void Player::Draw()
 {
+	CharParameters* charParameters = CharParameters::GetInstance();
+
 	//íeçXêV
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw();
@@ -371,6 +375,8 @@ void Player::Draw()
 	}
 
 	if (alive && isPHpLessThan0 == false) {
-		firingline_->Draw();
+		if (charParameters->pAtkPossibleFlag) {//çUåÇÇµÇƒÇ¢Ç¢Ç∆Ç´Ç»ÇÁ
+			firingline_->Draw();
+		}
 	}
 }

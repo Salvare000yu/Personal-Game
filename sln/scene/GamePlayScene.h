@@ -46,8 +46,6 @@ public:
 
 	void Finalize() override;
 
-	void Appearance();
-
 	void UpdateMouse();
 	void UpdateCamera();
 

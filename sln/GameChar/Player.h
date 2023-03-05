@@ -93,9 +93,6 @@ public:
 	//’eˆÐ—Í
 	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
 	const float& GetpBulPow() { return pBulPower; }
-	//ƒvƒŒƒC’†‚©‚Ç‚¤‚©
-	void SetReadyNow(bool ReadyNowFlag) { this->ReadyNowFlag = ReadyNowFlag; }
-	const bool& GetReadyNow() { return ReadyNowFlag; }
 	//Ž©‹@‘Ì—Í‚ª0‚æ‚è­‚È‚¢‚©‘½‚¢‚©
 	void SetPHpLessThan0(bool isPHpLessThan0) { this->isPHpLessThan0 = isPHpLessThan0; }
 	const bool& GetPHpLessThan0() { return isPHpLessThan0; }

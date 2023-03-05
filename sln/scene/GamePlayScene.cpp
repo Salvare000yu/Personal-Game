@@ -144,7 +144,8 @@ void GamePlayScene::Initialize()
 	player_->SetPBulModel(mod_playerbullet.get());
 	player_->SetPFiringLine(mod_firingline.get());
 	camera->SetTarget(player_->GetPosition());
-	
+	camera->SetEye({0,100,-100});//ここにカメラをおいて、最初の演出で自機を追いかける
+	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
 	ApStartPPos.z -= 1000;
@@ -272,11 +273,6 @@ void GamePlayScene::Finalize()
 	//自キャラ解放
 	//delete player_;
 	//delete smallEnemy_;
-}
-
-void GamePlayScene::Appearance()
-{
-
 }
 
 void GamePlayScene::SmallEnemyAppear()
@@ -996,20 +992,19 @@ void GamePlayScene::CollisionAll()
 
 bool GamePlayScene::GameReady()
 {
+
+	CharParameters* charParameters = CharParameters::GetInstance();
+
 	XMFLOAT4 ReadyCol = sp_ready->GetColor();
 	XMFLOAT4 GOCol = sp_ready_go->GetColor();
 	XMFLOAT2 GOSize = sp_ready_go->GetSize();
 	XMFLOAT3 GOPos = sp_ready_go->GetPosition();
-	//プレイヤー側でレディー中はAttackしないようにする
-	bool pReadyFlag = player_->GetReadyNow();
 
 	const float ReadyColWDecVal = 0.005;//Readyを透明にしていく
 	const float GoColWDecVal = 0.01;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
-	constexpr int frameMax = 120;
-
-
+	constexpr int frameMax = 240;
 
 	if (GameReadyFrame < frameMax)
 	{
@@ -1026,6 +1021,8 @@ bool GamePlayScene::GameReady()
 		player_->SetPosition(pos);
 
 		camera->SetTarget(pos);
+
+		charParameters->pAtkPossibleFlag = false;//登場中攻撃しない
 	}
 	else {
 		ready_GOFlag = true;
@@ -1044,8 +1041,7 @@ bool GamePlayScene::GameReady()
 
 	if (GOCol.w < 0.0) {//透明になったら
 		//アタック開始してよき
-		pReadyFlag = false;
-		player_->SetReadyNow(pReadyFlag);
+		charParameters->pAtkPossibleFlag = true;
 
 		return false;
 	}
