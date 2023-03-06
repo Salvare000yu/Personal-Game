@@ -199,6 +199,8 @@ private:
 	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;
 
+	//自機動くなフラグ true:動 く な　false:動いてよい
+	bool PDontMoveFlag = true;
 	//自機移動中かどうか false:してない
 	bool isLMove = false;
 	bool isRMove = false;

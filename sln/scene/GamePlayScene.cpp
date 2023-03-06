@@ -1009,6 +1009,9 @@ bool GamePlayScene::GameReady()
 
 	if (GameReadyFrame < frameMax)
 	{
+		//最初演出中は動くな
+		PDontMoveFlag = true;
+
 		float raito = (float)GameReadyFrame / frameMax;
 		GameReadyFrame++;
 		ReadyCol.w = 1.f - raito;
@@ -1042,6 +1045,8 @@ bool GamePlayScene::GameReady()
 	if (GOCol.w < 0.0) {//透明になったら
 		//アタック開始してよき
 		charParameters->pAtkPossibleFlag = true;
+		//動いていいよ
+		PDontMoveFlag = false;
 
 		return false;
 	}
@@ -1072,13 +1077,30 @@ void GamePlayScene::Update()
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
 
+	//キー操作押している間
+	const bool inputT = input->PushKey(DIK_T);
+	const bool inputE = input->PushKey(DIK_E);
+
+	const bool inputI = input->PushKey(DIK_I);
+	const bool inputK = input->PushKey(DIK_K);
+	const bool inputJ = input->PushKey(DIK_J);
+	const bool inputL = input->PushKey(DIK_L);
+
+	const bool input3 = input->PushKey(DIK_3);
+	//押した瞬間
+	const bool TriggerM = input->TriggerKey(DIK_M);
+	const bool TriggerE = input->TriggerKey(DIK_E);
+	const bool TriggerR = input->TriggerKey(DIK_R);
+	const bool Trigger2 = input->TriggerKey(DIK_2);
+
+
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->WaitKey0 < 10 && pause->GetPauseFlag() == false) {
 		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 	}
-	if (pause->WaitKey0 >= 2) {
-		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {
+	if (pause->WaitKey0 >= 2) {//ある程度経ったら受付
+		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
 			if (cInput->PauseOpenClose() && (GameReady() == false) && pause->GetPauseFlag() == false) {
 				pause->EveryInit();
 				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -1115,23 +1137,6 @@ void GamePlayScene::Update()
 		float BossDefense = charParameters->GetBossDefense();//ボス防御力取得
 		float NowpHp = charParameters->GetNowpHp();//自機体力取得
 
-		//キー操作押している間
-
-		const bool inputT = input->PushKey(DIK_T);
-		const bool inputE = input->PushKey(DIK_E);
-
-		const bool inputI = input->PushKey(DIK_I);
-		const bool inputK = input->PushKey(DIK_K);
-		const bool inputJ = input->PushKey(DIK_J);
-		const bool inputL = input->PushKey(DIK_L);
-
-		const bool input3 = input->PushKey(DIK_3);
-		//押した瞬間
-		const bool TriggerM = input->TriggerKey(DIK_M);
-		const bool TriggerE = input->TriggerKey(DIK_E);
-		const bool TriggerR = input->TriggerKey(DIK_R);
-		const bool Trigger2 = input->TriggerKey(DIK_2);
-
 		float pMaxHp = charParameters->GetpMaxHp();
 		float boMaxHp = charParameters->GetboMaxHp();
 
@@ -1142,10 +1147,11 @@ void GamePlayScene::Update()
 
 		if (player_->GetPHpLessThan0() == false)
 		{
-			//プレイヤー移動-上に書くと移動かくつかない
-			PlayerMove();
-
-			PlayerDash();
+			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
+				//プレイヤー移動-上に書くと移動かくつかない
+				PlayerMove();
+				PlayerDash();
+			}
 		}
 
 		DrawUI();
@@ -1156,7 +1162,9 @@ void GamePlayScene::Update()
 		UpdateMouse();
 		// カメラの更新
 		camera->Update();
-		UpdateCamera();
+		if (GameReady() == false) {
+			UpdateCamera();
+		}
 
 		if (pRotDef == false) { //一度だけ
 			input->PadVibrationDef();

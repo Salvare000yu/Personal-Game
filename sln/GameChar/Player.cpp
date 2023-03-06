@@ -129,32 +129,6 @@ void Player::Move()
 	const bool TriggerR = input->TriggerKey(DIK_R);
 
 	XMFLOAT3 rotation = obj->GetRotation();
-	//XMFLOAT3 position = obj->GetPosition();
-
-	//if (TriggerR) {//リセット
-	//	obj->SetPosition({ 0,40,-170 });
-	//	obj->SetRotation({ 0,0,0 });
-	//}
-
-	//if (inputUp || inputDown || inputRight || inputLeft)
-	//{
-	//	XMFLOAT3 Rot = obj->GetRotation();
-	//	if (inputUp) {
-	//		Rot.x -= 1;
-	//	}
-	//	if (inputDown) {
-	//		Rot.x += 1;
-	//	}
-	//	if (inputRight) {
-	//		Rot.y += 1;
-	//	}
-	//	if (inputLeft) {
-	//		Rot.y -= 1;
-	//	}
-	//	obj->SetRotation(Rot);
-	//}
-
-	//------------------↑プレイヤー移動＆姿勢
 
 	//自分回転
 	if (inputL)
