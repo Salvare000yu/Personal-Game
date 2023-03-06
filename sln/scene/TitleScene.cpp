@@ -6,6 +6,7 @@
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "SelectScene.h"
+#include "CharParameters.h"
 
 #include "Timer.h"
 
@@ -20,6 +21,8 @@ void TitleScene::Initialize()
 #pragma region 描画初期化処理
 
 	WinApp* winApp = WinApp::GetInstance();
+
+	CharParameters* charParameters = CharParameters::GetInstance();
 
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
@@ -63,17 +66,14 @@ void TitleScene::Initialize()
 	player_->SetPosition({ 0,0,100 });
 	player_->SetModel(mod_player.get());
 
+	charParameters->pAtkPossibleFlag = false;//タイトルでは弾を打たない
+
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
 	// 音声再生
 	GameSound::GetInstance()->PlayWave("A_rhythmaze_125.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
-
-	// 3Dオブジェクトの数
-	//const int OBJECT_NUM = 2;
-
-	//Object3d object3ds[OBJECT_NUM];
 
 	// スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/title_prac.png");
@@ -87,21 +87,6 @@ void TitleScene::Initialize()
 
 	//スプライトポジション
 	sp_gametitlename->SetPosition({ winApp->window_width,NamePosYCenter,0 });
-
-	//for (int i = 0; i < 1; i++)
-	//{
-	//    int texNumber = 1;
-	//    Sprite* sprite = Sprite::Create(spriteBase, texNumber, { 0,0 }, false, false);
-
-	//    // スプライトの座標変更
-	//    sprite->SetPosition({ (float)(80),(float)(20),0 });
-	//    //sprite->SetRotation((float)(rand() % 360));
-	//    sprite->SetSize({ (float)(200), (float)(200) });
-
-	//    sprite->TransferVertexBuffer();
-
-	//    sprites.push_back(sprite);
-	//}
 
 	//ポストエフェクト用テクスチャ読み込み
 	//SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
@@ -269,6 +254,7 @@ void TitleScene::Update()
 	obj_kabeleft->Update();
 
 	DrawUI();
+
 }
 
 void TitleScene::Draw()

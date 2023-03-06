@@ -40,35 +40,30 @@ void Player::Attack()
 	//í∑âüÇµî≠éÀ
 	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
 	{
-		//çUåÇÇµÇƒÇÊÇ¢èÛãµÇ»ÇÁ
-		if (charParameters->pAtkPossibleFlag) {
-			if (ReadyNowFlag == false) {
-				XMFLOAT3 PlayerPos = obj->GetPosition();
-				//íeê∂ê¨
-				std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
-				//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
-				madeBullet->Initialize();
-				madeBullet->SetModel(pBulModel);
-				madeBullet->SetPosition(PlayerPos);
+		XMFLOAT3 PlayerPos = obj->GetPosition();
+		//íeê∂ê¨
+		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+		//bulletÇÃinitializeÇ…posì¸ÇÍÇƒÇªÇÃéûÇÃÉvÉåÉCÉÑÅ[posÇ…ï\é¶Ç∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
+		madeBullet->Initialize();
+		madeBullet->SetModel(pBulModel);
+		madeBullet->SetPosition(PlayerPos);
 
-				// velocityÇéZèo íeî≠éÀë¨ìxz
-				DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, pBulVel, 0);
-				XMFLOAT3 xmfloat3velocity;
-				XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
+		// velocityÇéZèo íeî≠éÀë¨ìxz
+		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, pBulVel, 0);
+		XMFLOAT3 xmfloat3velocity;
+		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
-				madeBullet->SetVelocity(xmfloat3velocity);
+		madeBullet->SetVelocity(xmfloat3velocity);
 
-				// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
-				GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
+		// âπê∫çƒê∂ ñ¬ÇÁÇµÇΩÇ¢Ç∆Ç´
+		GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
 
-				//íeìoò^
-				bullets_.push_back(std::move(madeBullet));
+		//íeìoò^
+		bullets_.push_back(std::move(madeBullet));
 
-				//input->PadVibrationDef();
+		//input->PadVibrationDef();
 
-				AttackIntervalFlag = true;
-			}
-		}
+		AttackIntervalFlag = true;
 	}
 	if (AttackIntervalFlag == true)
 	{
@@ -310,10 +305,10 @@ void Player::Initialize()
 void Player::Update()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
-	//é©ã@ëÃóÕÇ™0Çâ∫âÒÇ¡ÇΩÇÁ
+
 	float pHp = charParameters->GetNowpHp();
 	if (pHp <= 0) {
-		isPHpLessThan0 = true;
+		isPHpLessThan0 = true;//é©ã@ëÃóÕÇ™0Çâ∫âÒÇ¡ÇƒÇ¢ÇÈ
 	}
 
 	//è¡ñ≈ÉtÉâÉOóßÇ¡ÇΩÇÁÇªÇÃíeÇÕéÄÇµÇƒîqÇπÇÊ
@@ -322,7 +317,13 @@ void Player::Update()
 		});
 
 	//î≠éÀèàóù ê∂Ç´ÇƒÇƒHp0à»è„Ç»ÇÁ
-	if (alive && isPHpLessThan0 == false) { Attack(); }
+	if (alive && isPHpLessThan0 == false) {
+		//çUåÇÇµÇƒÇÊÇ¢èÛãµÇ»ÇÁ
+		if (charParameters->pAtkPossibleFlag) {
+			Attack();
+		}
+	}
+
 	//íeçXêV
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
@@ -330,8 +331,8 @@ void Player::Update()
 
 	//ê∂Ç´ÇƒÇƒHpÇOÇ¢Ç∂ÇÂÇ§Ç»ÇÁ
 	if (alive && isPHpLessThan0 == false) {
+		FiringLine();
 		if (charParameters->pAtkPossibleFlag) {//çUåÇÇµÇƒÇ¢Ç¢Ç∆Ç´Ç»ÇÁ
-			FiringLine();
 			firingline_->Update();
 			Move();
 		}

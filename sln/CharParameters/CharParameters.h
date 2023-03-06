@@ -44,7 +44,7 @@ public:
 	bool pNextPlaceGoFlag = true;
 
 	//©‹@‚ªUŒ‚‚Å‚«‚é‚æ‚¤‚É‚·‚é‚© true:UŒ‚‚Å‚«‚é
-	bool pAtkPossibleFlag = true;
+	bool pAtkPossibleFlag = false;
 
 private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;

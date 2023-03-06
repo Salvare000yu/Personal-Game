@@ -89,7 +89,9 @@ void GamePlayScene::Initialize()
 	//FbxObject3d::CreateGraphicsPipeline();
 	//FbxObject3d::SetCamera(camera.get());
 
-	//使う定義とか　仮おいとくね
+	CharParameters* charParameters = CharParameters::GetInstance();
+
+	//時間
 	time = frame / 60.f;	// 60fps想定
 
 	//------objからモデルデータ読み込み---
@@ -192,7 +194,6 @@ void GamePlayScene::Initialize()
 	//const int OBJECT_NUM = 2;
 
 	//Object3d object3ds[OBJECT_NUM];
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	Pause* pause = Pause::GetInstance();
 	pause->Initialize();
@@ -1022,7 +1023,6 @@ bool GamePlayScene::GameReady()
 
 		camera->SetTarget(pos);
 
-		charParameters->pAtkPossibleFlag = false;//登場中攻撃しない
 	}
 	else {
 		ready_GOFlag = true;
@@ -1335,6 +1335,7 @@ void GamePlayScene::Update()
 	}//ここまでポーズしてないとき
 
 	//-------常にデバテキ↓
+//		DebugText::GetInstance()->Print("true", 100, 70, 2);
 	//-------常にデバテキ↑
 
 	obj_tunnel->Update();

@@ -107,8 +107,6 @@ private:
 	const float pBulPowerMax = 100;
 	float pBulPower = pBulPowerMax;
 
-	//play‚ÌReady’†‚©‚Ç‚¤‚©
-	bool ReadyNowFlag = true;//trueF‚â‚Á‚Ä‚é
 	//©‹@‘Ì—Í‚ª0‚æ‚è­‚È‚¢‚Æ‚« false:@‚O‚æ‚è‘½‚¢
 	bool isPHpLessThan0 = false;
 
