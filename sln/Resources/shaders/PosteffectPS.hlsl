@@ -11,7 +11,7 @@ float Gaussian(float2 drawUV, float2 pickUV, float sigma)
 }
 
 // 高光度部分を抽出したものをぼかす
-float4 GaussianBlurHighLumi(Texture2D<float4> tex, float2 uv, float sigma = 0.005f, float stepWidth = 0.002f, float threthreshold = 0.8f)
+float4 GaussianBlurHighLumi(Texture2D<float4> tex, float2 uv, float sigma = 0.005f, float stepWidth = 0.002f, float threthreshold = 0.9f)
 {
     // 合計でどのくらい混ぜたかを記録する変数
     float totalWeight = 0;

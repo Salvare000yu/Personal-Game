@@ -150,7 +150,7 @@ void GamePlayScene::Initialize()
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 800;
+	ApStartPPos.z -= 1000;
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)//ボス

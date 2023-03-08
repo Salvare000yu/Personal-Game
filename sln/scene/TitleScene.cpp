@@ -54,7 +54,7 @@ void TitleScene::Initialize()
 	obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
-	//------object‰ñ“]------//
+	//------object‰ñ“]
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
