@@ -55,10 +55,10 @@ public:
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
-	bool ShotTagMomFlag = true;//一度きりのターゲット座標読み込み
+	bool ShotTagMomOnlyFlag = true;//一度きりのターゲット座標読み込み
 	XMFLOAT3 ShotTagMoment{};
 	float Nowframe = 0;//現在フレ
-	bool GetPosFlag = true;//一度きりの座標読み込み
+	bool GetPosOnlyFlag = true;//一度きりの座標読み込み
 	XMFLOAT3 boPosMoment;//発射時の雑魚敵位置
 	XMFLOAT3 MoveSp;//弾移動速度
 	XMFLOAT3 NowPos;//その時の弾位置

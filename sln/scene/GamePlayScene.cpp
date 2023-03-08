@@ -150,7 +150,7 @@ void GamePlayScene::Initialize()
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 1000;
+	ApStartPPos.z -= 800;
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_)//ボス
@@ -784,9 +784,9 @@ void GamePlayScene::CollisionAll()
 			//else {
 			//	DebugText::GetInstance()->Print("empty", 200, 190, 2);
 			//}
-			// ボスを消す
-			boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
-				[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
+			//// ボスを消す
+			//boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
+			//	[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
 		}
 	}
 
@@ -1317,11 +1317,10 @@ void GamePlayScene::Update()
 				}
 				//条件達成でボス登場演出
 				for (std::unique_ptr<Boss>& boss : boss_) {
-					boss->Update();//敵更新
+					boss->Update();//ボス更新
 
-					if (boss->GetisDeath() == true)
-					{
-						BossDeathEfect();
+					if (boss->GetisDeath() == true){
+						BossDeathEfect();//死亡条件達成で死亡時えふぇくと
 					}
 				}
 				//扉を開ける

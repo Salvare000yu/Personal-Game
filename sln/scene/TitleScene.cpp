@@ -68,6 +68,8 @@ void TitleScene::Initialize()
 
 	player_->pAtkPossibleFlag = false;//ƒ^ƒCƒgƒ‹‚Å‚Í’e‚ð‘Å‚½‚È‚¢
 
+	charParameters->Initialize();
+
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");

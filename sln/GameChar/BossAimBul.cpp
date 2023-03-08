@@ -28,12 +28,12 @@ void BossAimBul::Initialize()
 
 	//-------↓狙い弾↓-------//
 	Nowframe = 0;//現在フレ
-	GetPosFlag = true;//一度きり座標読み取りフラグ
+	GetPosOnlyFlag = true;//一度きり座標読み取りフラグ
 	NowPos = {};//その時の弾位置
 	boPosMoment = {};//発射時の雑魚敵位置
 	MoveSp = {};//弾移動速度
 
-	ShotTagMomFlag = true;
+	ShotTagMomOnlyFlag = true;
 	ShotTagMoment = {};
 
 	//-------↑狙い弾↑-------//

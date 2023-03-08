@@ -144,19 +144,19 @@ void SmallEnemy::Update()
 
 		//その時のターゲット座標
 		//一度きり
-		if (bullet->ShotTagMomFlag == true) {
+		if (bullet->ShotTagMomOnlyFlag == true) {
 			bullet->ShotTagMoment = shotTag->GetPosition();
-			bullet->ShotTagMomFlag = false;
+			bullet->ShotTagMomOnlyFlag = false;
 		}
 
 		bullet->Update();
 
 		bullet->Nowframe++;
-		if (bullet->GetPosFlag == true)
+		if (bullet->GetPosOnlyFlag == true)
 		{
 			//最初の位置
 			bullet->sePosMoment = obj->GetPosition();
-			bullet->GetPosFlag = false;
+			bullet->GetPosOnlyFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		// //絶対当たる

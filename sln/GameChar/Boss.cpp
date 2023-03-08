@@ -253,11 +253,11 @@ void Boss::HpHalfPatStart()
 	//指定座標で自機のZからどれくらい間をあけるか
 	const int SpaceDistance = 500;
 
-	if (GetPosFlag == true)
+	if (GetPosOnlyFlag == true)
 	{
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
-		GetPosFlag = false;
+		GetPosOnlyFlag = false;
 
 		//指定座標どこか
 		TargetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
@@ -305,7 +305,7 @@ void Boss::HpHalfPatStart()
 
 	if (Nowframe == NecesHpHalfFrame) {
 		Nowframe = NowframeDef;
-		GetPosFlag = true;
+		GetPosOnlyFlag = true;
 		HpHalfMomentPos = {};
 		MoveSp = {};
 		NowPos = {};
@@ -328,11 +328,11 @@ void Boss::CircularMotionMove()
 	addX = cosf(HpHalf_rad) * HpHalf_Length;
 	addY = sinf(HpHalf_rad) * HpHalf_Length;
 
-	if (GetPosFlag == true)
+	if (GetPosOnlyFlag == true)
 	{
 		//最初の位置
 		CirclePosMem = obj->GetPosition();
-		GetPosFlag = false;
+		GetPosOnlyFlag = false;
 	}
 
 	XMFLOAT3 pPos = shotTag->GetPosition();
@@ -354,7 +354,7 @@ void Boss::CircularMotionMove()
 		HpHalf_Length = HpHalf_LengthDef;
 		addX = addXDef;
 		addY = addYDef;
-		GetPosFlag = true;
+		GetPosOnlyFlag = true;
 		actionPattern_ = ActionPattern::LeaveFirstPos;
 
 	}
@@ -378,11 +378,11 @@ void Boss::LeaveFirstPos()
 
 	Nowframe++;
 
-	if (GetPosFlag == true)
+	if (GetPosOnlyFlag == true)
 	{
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
-		GetPosFlag = false;
+		GetPosOnlyFlag = false;
 
 		//LeaveFirstPos2回で突っ込む
 		PlungeCount--;
@@ -412,7 +412,7 @@ void Boss::LeaveFirstPos()
 
 	if (Nowframe == NecesLeaveFirstFrame) {
 		Nowframe = NowframeDef;
-		GetPosFlag = true;
+		GetPosOnlyFlag = true;
 		HpHalfMomentPos = {};
 		MoveSp = {};
 		NowPos = {};
@@ -699,17 +699,17 @@ void Boss::PAimBul()
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
 		//その時のターゲット座標
 	//一度きり
-		if (aimBullet->ShotTagMomFlag == true) {
+		if (aimBullet->ShotTagMomOnlyFlag == true) {
 			aimBullet->ShotTagMoment = shotTag->GetPosition();
-			aimBullet->ShotTagMomFlag = false;
+			aimBullet->ShotTagMomOnlyFlag = false;
 		}
 
 		aimBullet->Nowframe++;
-		if (aimBullet->GetPosFlag == true)
+		if (aimBullet->GetPosOnlyFlag == true)
 		{
 			//最初の位置
 			aimBullet->boPosMoment = obj->GetPosition();
-			aimBullet->GetPosFlag = false;
+			aimBullet->GetPosOnlyFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
 		// //絶対当たる
@@ -865,11 +865,11 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if (GetPosDeathFlag == true)
+	if (GetPosDeathOnlyFlag == true)
 	{
 		//最初の位置
 		boPosDeath = obj->GetPosition();
-		GetPosDeathFlag = false;
+		GetPosDeathOnlyFlag = false;
 	}
 
 	//XMFLOAT3 boRot = obj->GetRotation();

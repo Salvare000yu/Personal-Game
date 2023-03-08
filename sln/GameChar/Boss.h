@@ -201,8 +201,8 @@ private:
 	bool IsFirst_Death = false;
 
 	XMFLOAT3 boPosDeath = {};
-	bool GetPosFlag = true;//一度きりの座標読み込み
-	bool GetPosDeathFlag = true;//一度きりの座標読み込み
+	bool GetPosOnlyFlag = true;//一度きりの座標読み込み
+	bool GetPosDeathOnlyFlag = true;//一度きりの座標読み込み
 	const float NecesFrame = 190.0f;//かかる時間
 	XMFLOAT3 MoveSp = {};//移動速度
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
