@@ -100,6 +100,9 @@ public:
 	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
 	const bool& GetpDeath() { return PlayerDeathFlag; }
 	//-------------------↑げったーせったー↑-------------------//
+	
+	//自機が攻撃できるようにするか true:攻撃できる
+	bool pAtkPossibleFlag = false;
 
 private:
 	//自機通常弾威力
@@ -133,5 +136,6 @@ private:
 
 	//自機死亡演出時　false:爆発してない
 	bool ExplosionFlag = false;
+
 };
 

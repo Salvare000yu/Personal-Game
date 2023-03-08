@@ -66,7 +66,7 @@ void TitleScene::Initialize()
 	player_->SetPosition({ 0,0,100 });
 	player_->SetModel(mod_player.get());
 
-	charParameters->pAtkPossibleFlag = false;//タイトルでは弾を打たない
+	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");

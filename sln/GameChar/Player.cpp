@@ -290,10 +290,10 @@ void Player::Update()
 		return !bullet->GetAlive();
 		});
 
-	//”­ŽËˆ— ¶‚«‚Ä‚ÄHp0ˆÈã‚È‚ç
-	if (alive && isPHpLessThan0 == false) {
-		//UŒ‚‚µ‚Ä‚æ‚¢ó‹µ‚È‚ç
-		if (charParameters->pAtkPossibleFlag) {
+	//UŒ‚‚µ‚Ä‚æ‚¢ó‹µ‚È‚ç
+	if (pAtkPossibleFlag) {
+		//”­ŽËˆ— ¶‚«‚Ä‚ÄHp0ˆÈã‚È‚ç
+		if (alive && isPHpLessThan0 == false) {
 			Attack();
 		}
 	}
@@ -306,7 +306,7 @@ void Player::Update()
 	//¶‚«‚Ä‚ÄHp‚O‚¢‚¶‚å‚¤‚È‚ç
 	if (alive && isPHpLessThan0 == false) {
 		FiringLine();
-		if (charParameters->pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
+		if (pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
 			firingline_->Update();
 			Move();
 		}
@@ -350,7 +350,7 @@ void Player::Draw()
 	}
 
 	if (alive && isPHpLessThan0 == false) {
-		if (charParameters->pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
+		if (pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
 			firingline_->Draw();
 		}
 	}

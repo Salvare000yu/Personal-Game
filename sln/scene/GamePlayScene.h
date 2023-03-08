@@ -160,6 +160,9 @@ private:
 
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
+	//一度きり攻撃許可出す false:まだだしてない
+	bool MayDoPAtk_OnceFlag = false;
+
 	//-----開始時演出
 
 	float frame = 0;

@@ -146,7 +146,7 @@ void GamePlayScene::Initialize()
 	player_->SetPBulModel(mod_playerbullet.get());
 	player_->SetPFiringLine(mod_firingline.get());
 	camera->SetTarget(player_->GetPosition());
-	camera->SetEye({0,100,-100});//ここにカメラをおいて、最初の演出で自機を追いかける
+	camera->SetEye({0,100,-1000});//ここにカメラをおいて、最初の演出で自機を追いかける
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
@@ -570,7 +570,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//攻撃できないように
-	charParams->pAtkPossibleFlag = false;
+	player_->pAtkPossibleFlag=false;
 
 	XMFLOAT3 pPos = player_->GetPosition();
 
@@ -588,9 +588,9 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
+			//攻撃可能
+			player_->pAtkPossibleFlag=true;
 
-			//もう攻撃していいよ
-			charParams->pAtkPossibleFlag = true;
 		}
 	}
 
@@ -1005,7 +1005,7 @@ bool GamePlayScene::GameReady()
 	const float GoColWDecVal = 0.01;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
-	constexpr int frameMax = 240;
+	constexpr int frameMax = 420;
 
 	if (GameReadyFrame < frameMax)
 	{
@@ -1043,10 +1043,14 @@ bool GamePlayScene::GameReady()
 	}
 
 	if (GOCol.w < 0.0) {//透明になったら
-		//アタック開始してよき
-		charParameters->pAtkPossibleFlag = true;
-		//動いていいよ
-		PDontMoveFlag = false;
+		if (MayDoPAtk_OnceFlag == false) {
+			//アタック開始してよき
+			player_->pAtkPossibleFlag = true;
+			//動いていいよ
+			PDontMoveFlag = false;
+
+			MayDoPAtk_OnceFlag = true;
+		}
 
 		return false;
 	}
@@ -1162,7 +1166,7 @@ void GamePlayScene::Update()
 		UpdateMouse();
 		// カメラの更新
 		camera->Update();
-		if (GameReady() == false) {
+		if (GameReady() == false) {//ゲーム開始前演出終了後に自機の回転＝カメラ回転できるようになる
 			UpdateCamera();
 		}
 
@@ -1343,7 +1347,12 @@ void GamePlayScene::Update()
 	}//ここまでポーズしてないとき
 
 	//-------常にデバテキ↓
-//		DebugText::GetInstance()->Print("true", 100, 70, 2);
+	//if (player_->pAtkPossibleFlag) {
+	//	DebugText::GetInstance()->Print("true", 100, 70, 2);
+	//}
+	//else {
+	//	DebugText::GetInstance()->Print("false", 100, 90, 2);
+	//}
 	//-------常にデバテキ↑
 
 	obj_tunnel->Update();
