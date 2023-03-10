@@ -240,25 +240,6 @@ void Player::PlayerDeath()
 	}
 }
 
-void Player::FiringLine()
-{
-
-	//‚¢‚ë‚¢‚ë¶¬
-	firingline_.reset(new PlayerFireLine());
-	//‚¢‚ë‚¢‚ëƒLƒƒƒ‰‰Šú‰»
-	firingline_ = std::make_unique<PlayerFireLine>();
-	firingline_->Initialize();
-	firingline_->SetModel(pFiringLine);
-
-	XMFLOAT3 PlayerPos = obj->GetPosition();
-	firingline_->SetPosition({ PlayerPos.x,PlayerPos.y,PlayerPos.z });
-
-	XMFLOAT3 PlayerRot = obj->GetRotation();
-	firingline_->SetRotation(PlayerRot);
-
-	//firingline_->SetScale({ 0.5f,0.5f,10.f });
-}
-
 void Player::Initialize()
 {
 	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
@@ -305,14 +286,14 @@ void Player::Update()
 
 	//¶‚«‚Ä‚ÄHp‚O‚¢‚¶‚å‚¤‚È‚ç
 	if (alive && isPHpLessThan0 == false) {
-		FiringLine();
+
 		if (pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
-			firingline_->Update();
 			Move();
 		}
 	}
 	else {
-		//0ˆÈ‰º‚È‚Á‚½‚ç
+		//0ˆÈ‰º‚È‚Á‚½‚çUŒ‚•s‰Âƒtƒ‰ƒO‚½‚Ä‚Ä€–S‰‰o
+		pAtkPossibleFlag = false;
 		PlayerDeath();
 	}
 
@@ -349,9 +330,4 @@ void Player::Draw()
 		obj->Draw();
 	}
 
-	if (alive && isPHpLessThan0 == false) {
-		if (pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
-			firingline_->Draw();
-		}
-	}
 }

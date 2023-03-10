@@ -32,7 +32,6 @@ private:
 
 	Model* pBulModel = nullptr;
 	Model* pFiringLine = nullptr;
-	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
 	//攻撃のインターバルのためのフラグ 発射前
 	bool AttackIntervalFlag = false;
@@ -60,8 +59,6 @@ public:
 	void Shake();
 
 	void PlayerDeath();
-
-	void FiringLine();
 
 	std::unique_ptr<Camera> camera; //カメラ
 

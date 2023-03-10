@@ -90,6 +90,7 @@ public:
 	//Enemy* enemy_ = nullptr;
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
+	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
 	//雑魚敵リストを取得
 	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
@@ -209,6 +210,9 @@ private:
 	bool isRMove = false;
 
 	bool DoorOpenFlag = false;//扉開けてない
+
+	//自機死亡演出中初回自機座標取得　false:やっていない
+	bool PDeathDirection_PosMemOnlyFlag = false;
 
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 10.f;

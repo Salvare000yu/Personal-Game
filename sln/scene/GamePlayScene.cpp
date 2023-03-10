@@ -147,6 +147,14 @@ void GamePlayScene::Initialize()
 	player_->SetPFiringLine(mod_firingline.get());
 	camera->SetTarget(player_->GetPosition());
 	camera->SetEye({0,100,-1000});//ここにカメラをおいて、最初の演出で自機を追いかける
+
+	//いろいろ生成
+	firingline_.reset(new PlayerFireLine());
+	//いろいろキャラ初期化
+	firingline_ = std::make_unique<PlayerFireLine>();
+	firingline_->Initialize();
+	firingline_->SetModel(mod_firingline.get());
+
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
@@ -677,6 +685,16 @@ void GamePlayScene::UpdateCamera()
 
 		player_->SetRotation(rota);
 	}
+
+	{//自機射線
+		XMFLOAT3 PlayerPos = player_->GetPosition();
+		firingline_->SetPosition({ PlayerPos.x,PlayerPos.y,PlayerPos.z });
+
+		XMFLOAT3 PlayerRot = player_->GetRotation();
+		firingline_->SetRotation(PlayerRot);
+
+		//firingline_->SetScale({ 0.5f,0.5f,10.f });
+	}
 }
 
 void GamePlayScene::PadStickCamera()
@@ -1194,6 +1212,9 @@ void GamePlayScene::Update()
 		pause->SpUpdate();
 
 		player_->Update();
+		if (player_->pAtkPossibleFlag == true) {//攻撃可能時のみ
+			firingline_->Update();
+		}
 
 		if (GameReady() == false)
 		{
@@ -1396,6 +1417,9 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
+	if (player_->pAtkPossibleFlag == true) {//攻撃可能時のみ
+		firingline_->Draw();
+	}
 
 	// FBX3dオブジェクト描画
 	//fbxObject_1->Draw(cmdList);

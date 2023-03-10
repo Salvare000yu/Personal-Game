@@ -9,6 +9,8 @@
 #include "Player.h"
 #include <memory>
 #include "DxBase.h"
+#include "CameraTracking.h"
+#include "Camera.h"
 
 class TitleScene :public BaseScene
 {
@@ -20,6 +22,8 @@ public:
 	void Finalize() override;
 
 	void BeforeUpdate();
+
+	void PlayerAppear();//自機の登場
 
 	void SceneChange();
 
@@ -78,6 +82,9 @@ private:
 	float NamePosYCenter = 0;
 
 	bool DoorOpenFlag = false;//扉開けてない
+
+	// カメラ
+	std::unique_ptr<CameraTracking> camera;
 
 	////これ超えたらパターン変える　最大最小
 	//const float NamePosMoveMax = 7;

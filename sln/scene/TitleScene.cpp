@@ -16,6 +16,10 @@
 
 using namespace DirectX;
 
+/// <summary>
+/// TITlEを３Dにする途中　中途半端だからコメントアウトして一旦２Dに戻してる
+/// </summary>
+
 void TitleScene::Initialize()
 {
 #pragma region 描画初期化処理
@@ -28,45 +32,51 @@ void TitleScene::Initialize()
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
 
-	////---objからモデルデータ読み込み---
-	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
-	mod_ground.reset(Model::LoadFromOBJ("ground"));
-	mod_player.reset(Model::LoadFromOBJ("player"));
-	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
-	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
-	////---3dオブジェクト生成---
-	obj_tunnel.reset(Object3d::Create());
-	obj_ground.reset(Object3d::Create());
-	obj_kaberight.reset(Object3d::Create());
-	obj_kabeleft.reset(Object3d::Create());
-	////---3dオブジェクトに3dモデルを紐づける---
-	obj_tunnel->SetModel(mod_tunnel.get());
-	obj_ground->SetModel(mod_ground.get());
-	obj_kaberight->SetModel(mod_kaberight.get());
-	obj_kabeleft->SetModel(mod_kabeleft.get());
-	//------object3dスケール------//
-	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
-	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
-	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	//------object3d位置------//
-	obj_tunnel->SetPosition({ 0,40,2000 });
-	obj_ground->SetPosition({ 0,-150,0 });
-	obj_kaberight->SetPosition({ 490,340,2000 });
-	obj_kabeleft->SetPosition({ -490,340,2000 });
-	//------object回転
-	obj_tunnel->SetRotation({ 0,-90,0 });
-	obj_kaberight->SetRotation({ 0,0,0 });
-	obj_kabeleft->SetRotation({ 0,180,0 });
+	//camera.reset(new CameraTracking());
+	//Object3d::SetCamera(camera.get());
 
-	//いろいろ生成
-	player_.reset(new Player());
-	//いろいろキャラ初期化
-	player_->Initialize();
-	player_->SetPosition({ 0,0,100 });
-	player_->SetModel(mod_player.get());
+	//////---objからモデルデータ読み込み---
+	//mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
+	//mod_ground.reset(Model::LoadFromOBJ("ground"));
+	//mod_player.reset(Model::LoadFromOBJ("player"));
+	//mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
+	//mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
+	//////---3dオブジェクト生成---
+	//obj_tunnel.reset(Object3d::Create());
+	//obj_ground.reset(Object3d::Create());
+	//obj_kaberight.reset(Object3d::Create());
+	//obj_kabeleft.reset(Object3d::Create());
+	//////---3dオブジェクトに3dモデルを紐づける---
+	//obj_tunnel->SetModel(mod_tunnel.get());
+	//obj_ground->SetModel(mod_ground.get());
+	//obj_kaberight->SetModel(mod_kaberight.get());
+	//obj_kabeleft->SetModel(mod_kabeleft.get());
+	////------object3dスケール------//
+	//obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
+	//obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
+	//obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
+	//obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
+	////------object3d位置------//
+	//obj_tunnel->SetPosition({ 0,40,2000 });
+	//obj_ground->SetPosition({ 0,-150,0 });
+	//obj_kaberight->SetPosition({ 490,340,2000 });
+	//obj_kabeleft->SetPosition({ -490,340,2000 });
+	////------object回転
+	//obj_tunnel->SetRotation({ 0,-90,0 });
+	//obj_kaberight->SetRotation({ 0,0,0 });
+	//obj_kabeleft->SetRotation({ 0,180,0 });
 
-	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
+	////いろいろ生成
+	//player_.reset(new Player());
+	////いろいろキャラ初期化
+	//player_->Initialize();
+	//player_->SetPosition({ 0,0,-5000 });
+	//player_->SetModel(mod_player.get());
+
+	//player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
+
+	//camera->SetTarget(player_->GetPosition());
+	//camera->SetEye({ 70,30,-4500 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
 
@@ -103,7 +113,7 @@ void TitleScene::Initialize()
 
 void TitleScene::Finalize()
 {
-//	delete postEffect;
+	//	delete postEffect;
 }
 
 void TitleScene::BeforeUpdate()
@@ -125,8 +135,8 @@ void TitleScene::BeforeUpdate()
 		NamePos.x -= sp;
 		sp *= spAccel;
 	}
-	else { 
-		MoveStartFlag = false; 
+	else {
+		MoveStartFlag = false;
 	}
 
 	sp_gametitlename->SetPosition({ NamePos });
@@ -138,6 +148,14 @@ void TitleScene::BeforeUpdate()
 
 	//sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
 	sp_gametitlename->Update();
+}
+
+void TitleScene::PlayerAppear()
+{
+	//camera->SetTarget(player_->GetPosition());
+	//XMFLOAT3 pos = player_->GetPosition();
+	//pos.z++;
+	//player_->SetPosition(pos);
 }
 
 void TitleScene::SceneChange()
@@ -192,8 +210,8 @@ void TitleScene::UpDown()
 	//		upDownPattern_ = UpDownPattern::Up; 
 	//	}
 	//	break;
-	time=frame / 60;
-	NamePos.y += sinf(time*6.f);
+	time = frame / 60;
+	NamePos.y += sinf(time * 6.f);
 	frame++;
 	sp_gametitlename->SetPosition({ NamePos });
 	sp_gametitlename->Update();
@@ -226,7 +244,7 @@ void TitleScene::Update()
 
 	if (MoveStartFlag == false && SceneChangeFlag == false)
 	{
-		
+
 		//押した瞬間のみ
 		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 		//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
@@ -249,12 +267,22 @@ void TitleScene::Update()
 		SceneChange();//チェンジ移動開始
 	}
 
-	obj_tunnel->Update();
-	obj_ground->Update();
-	player_->Update();
-	obj_kaberight->Update();
-	obj_kabeleft->Update();
+	//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
+	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+	//}
 
+	PlayerAppear();//自機登場
+
+	//obj_tunnel->Update();
+	//obj_ground->Update();
+	//player_->Update();
+	//obj_kaberight->Update();
+	//obj_kabeleft->Update();
+
+	// カメラの更新
+	//camera->Update();
 	DrawUI();
 
 }
@@ -267,11 +295,11 @@ void TitleScene::Draw()
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
 	//３DオブジェクトDraw
-	obj_tunnel->Draw();
-	obj_ground->Draw();
-	player_->Draw();
-	obj_kaberight->Draw();
-	obj_kabeleft->Draw();
+	//obj_tunnel->Draw();
+	//obj_ground->Draw();
+	//player_->Draw();
+	//obj_kaberight->Draw();
+	//obj_kabeleft->Draw();
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
@@ -279,7 +307,7 @@ void TitleScene::Draw()
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
-	//sprite1->Draw();
+	sprite1->Draw();
 
 	sp_gametitlename->Draw();
 
