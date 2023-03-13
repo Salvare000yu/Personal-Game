@@ -4,6 +4,7 @@
 /// </summary>
 #include "BaseScene.h"
 #include "Sprite.h"
+#include "BaseObject.h"
 #include "Object3d.h"
 #include "SpriteBase.h"
 #include "Player.h"
@@ -12,7 +13,9 @@
 #include "CameraTracking.h"
 #include "Camera.h"
 
-class TitleScene :public BaseScene
+using namespace DirectX;
+
+class TitleScene :public BaseScene, public BaseObject
 {
 
 public:
@@ -52,10 +55,10 @@ public:
 	//};
 	//UpDownPattern upDownPattern_ = UpDownPattern::def;
 
+	std::unique_ptr < Player> player_ = nullptr;
+
 	float time;
 	float frame = 0;
-
-	std::unique_ptr < Player> player_ = nullptr;
 
 private:
 
@@ -74,6 +77,14 @@ private:
 	std::unique_ptr < Object3d> obj_ground = nullptr;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
+
+	//-----自機登場
+	int PAppearFrame = 0;
+	//開始時自機座標
+	XMFLOAT3 ApStartPPos;
+	//終了
+	XMFLOAT3 ApEndPPos;
+	//------
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか

@@ -133,7 +133,7 @@ void GameOver::Retry()
 
 	{//ˆÚ“®ˆ—
 		//0‚©‚ç1‚ÖˆÚ“®
-		if (SSOp0_1Flag == true)
+		if (SSOp0_1Flag)
 		{
 			SSOp0_1pos.x += EaseVal;
 			EaseVal -= DecEaseVal;
@@ -192,7 +192,7 @@ void GameOver::GoTitle()
 
 	{//ˆÚ“®ˆ—
 		//0‚©‚ç1‚ÖˆÚ“®
-		if (SSOp0_1Flag == true)
+		if (SSOp0_1Flag)
 		{
 			SSOp1_0pos.x -= EaseVal;
 			EaseVal -= DecEaseVal;

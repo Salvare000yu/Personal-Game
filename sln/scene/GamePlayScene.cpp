@@ -337,7 +337,7 @@ void GamePlayScene::BeforeBossAppear()
 	switch (beforeBossPattern_)
 	{
 	case BeforeBossPattern::def:
-		if (AlertSoundFlag == true) {
+		if (AlertSoundFlag) {
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.2f, 0);
 			AlertSoundFlag = false;
 		}
@@ -356,7 +356,7 @@ void GamePlayScene::BeforeBossAppear()
 		break;
 
 	case BeforeBossPattern::dec:
-		if (AlertSoundFlag == true) {
+		if (AlertSoundFlag) {
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
 			AlertSoundFlag = false;
 		}
@@ -494,7 +494,7 @@ void GamePlayScene::PlayerDash()
 		}
 	}
 	//ダッシュスタート
-	if (DashFlag == true) {
+	if (DashFlag) {
 
 		XMFLOAT3 pPos = player_->GetPosition();
 
@@ -558,7 +558,7 @@ void GamePlayScene::PlayerDash()
 	}
 
 	//インターバル計測なう
-	if (DashIntervalFlag == true) {
+	if (DashIntervalFlag) {
 		DashInterval--;
 		if (DashInterval == 0) {
 			//ダッシュしてよし
@@ -567,7 +567,7 @@ void GamePlayScene::PlayerDash()
 		}
 	}
 
-	if (DashAttenuationFlag == true) {
+	if (DashAttenuationFlag) {
 		DashVelInc += Attenuation;
 	}
 
@@ -591,12 +591,12 @@ void GamePlayScene::pHeadingToTheNextPlace()
 		StopFlag = true;//止まれ
 	}
 
-	if (StopFlag == true) {
+	if (StopFlag) {
 		pNextPlaceGoSp -= DecelVal;
 
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
-			//攻撃可能
+			//攻撃可能にしてから終わる
 			player_->pAtkPossibleFlag=true;
 
 		}
@@ -613,7 +613,7 @@ void GamePlayScene::CoolTime()
 	const float DamEffectW = 0.03f;
 
 	//くーーーーるたいむ仮　今は文字だけ
-	if (pDamFlag == true) {
+	if (pDamFlag) {
 
 		//画像薄くしてく
 		vignettePow -= DamEffectW;
@@ -1078,7 +1078,7 @@ bool GamePlayScene::GameReady()
 
 void GamePlayScene::BodyDamCoolTime()
 {
-	if (BodyDamFlag == true) {
+	if (BodyDamFlag) {
 		BodyDamCount--;
 		if (BodyDamCount == 0) {
 			BodyDamCount = BodyDamCountDef;
@@ -1212,7 +1212,7 @@ void GamePlayScene::Update()
 		pause->SpUpdate();
 
 		player_->Update();
-		if (player_->pAtkPossibleFlag == true) {//攻撃可能時のみ
+		if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
 			firingline_->Update();
 		}
 
@@ -1221,7 +1221,7 @@ void GamePlayScene::Update()
 			PlayTimer();
 
 			//敵のHPバー
-			if (BossEnemyAdvent == true)
+			if (BossEnemyAdvent)
 			{
 				charParameters->boHpSizeChange();
 			}
@@ -1261,7 +1261,7 @@ void GamePlayScene::Update()
 			//------狙い弾↑
 
 			//自機側で死亡確認したら消す
-			if (player_->GetpDeath() == true) {
+			if (player_->GetpDeath()) {
 				GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
 				player_->SetAlive(false);
 			}
@@ -1328,7 +1328,7 @@ void GamePlayScene::Update()
 				}
 
 				//ボス戦前の演出
-				if (BeforeBossAppearFlag == true)
+				if (BeforeBossAppearFlag)
 				{//演出終わったら
 					//ボス戦突入のお知らせです
 					BossEnemyAdvent = true;
@@ -1340,14 +1340,14 @@ void GamePlayScene::Update()
 				for (std::unique_ptr<Boss>& boss : boss_) {
 					boss->Update();//ボス更新
 
-					if (boss->GetisDeath() == true){
+					if (boss->GetisDeath()){
 						BossDeathEfect();//死亡条件達成で死亡時えふぇくと
 					}
 				}
 				//扉を開ける
 				if (DoorOpenFlag == false) { DoorOpen(); }
 
-				if (charParams->pNextPlaceGoFlag == true) {
+				if (charParams->pNextPlaceGoFlag) {
 					pHeadingToTheNextPlace();
 				}
 			}
@@ -1357,7 +1357,7 @@ void GamePlayScene::Update()
 
 			sp_beforeboss->Update();
 			//敵のHPバー
-			if (BossEnemyAdvent == true && NowBoHp > 0)
+			if (BossEnemyAdvent && NowBoHp > 0)
 			{
 				charParameters->boHpUpdate();
 			}
@@ -1417,7 +1417,7 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
-	if (player_->pAtkPossibleFlag == true) {//攻撃可能時のみ
+	if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
 		firingline_->Draw();
 	}
 
@@ -1444,30 +1444,30 @@ void GamePlayScene::Draw()
 		pause->SpOpenPauseDraw();
 		//sp_sight->Draw();
 	}
-	if (pause->GetPauseFlag() == true) {
+	if (pause->GetPauseFlag()) {
 		pause->SpFlagTrueNowDraw();
 	}
-	else if (BossEnemyAdvent == true && NowBoHp > 0) {
+	else if (BossEnemyAdvent && NowBoHp > 0) {
 		charParameters->boHpDraw();
 	}//ボス戦時のみ表示
 
-	if (pause->GetOpWindOpenFlag() == true) { pause->SpOperWindDraw(); }
+	if (pause->GetOpWindOpenFlag()) { pause->SpOperWindDraw(); }
 
 	//ボス戦前 ポーズ中は見せない
-	if (BeforeBossAppearNow == true && pause->GetPauseFlag() == false)
+	if (BeforeBossAppearNow && pause->GetPauseFlag() == false)
 	{
 		sp_beforeboss->Draw();
 	}
 
 	//開始前中のみ
-	if (GameReady() == true)
+	if (GameReady())
 	{
 		sp_ready->Draw();
-		if (ready_GOFlag == true) { sp_ready_go->Draw(); };
+		if (ready_GOFlag) { sp_ready_go->Draw(); };
 	}
 
 	for (auto& bo : boss_) {
-		if (bo->GetisDeath() == true) {
+		if (bo->GetisDeath()) {
 			sp_blackwindow->Draw();
 		}
 	}

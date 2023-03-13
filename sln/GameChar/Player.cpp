@@ -65,7 +65,7 @@ void Player::Attack()
 
 		AttackIntervalFlag = true;
 	}
-	if (AttackIntervalFlag == true)
+	if (AttackIntervalFlag)
 	{
 
 		if (--AtkInterval_ >= 0) {//クールタイム 0まで減らす	
@@ -193,7 +193,7 @@ void Player::PlayerDeath()
 
 	XMFLOAT3 position = obj->GetPosition();
 
-	if (GetPosFlag == true)
+	if (GetPosFlag)
 	{
 		//最初の位置
 		pPosDeath = obj->GetPosition();
@@ -221,7 +221,7 @@ void Player::PlayerDeath()
 		ParticleFrame = 0;
 	}
 
-	if (ExplosionFlag == true) {
+	if (ExplosionFlag) {
 		Shake();
 		if (pShakeTimer_ <= 0) {
 			ExplosionFlag = false;
@@ -298,7 +298,7 @@ void Player::Update()
 	}
 
 	//自機が喰らってる状態になったら
-	if (charParameters->GetispDam() == true) {
+	if (charParameters->GetispDam()) {
 		//HP0以下ならやらないように　死亡演出やってるもんね
 		if (charParameters->GetNowpHp() > 0)
 		{

@@ -81,7 +81,7 @@ void Boss::Leave()
 	if (DiffusionAtkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
-			if (even_odd_NumFlag == true)//奇数弾
+			if (even_odd_NumFlag)//奇数弾
 			{
 				DiffusionAttack();
 			}
@@ -103,7 +103,7 @@ void Boss::Leave()
 
 	//ある程度離れたら近づいてくる
 	if (positionBack.z > ActionStartPos.z && positionBack.y < ActionStartPos.y) {
-		if (even_odd_NumFlag == true) { even_odd_NumFlag = false; }
+		if (even_odd_NumFlag) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
 
 		if (ChangeVerticalCount == ChangeVerticalNeces) {//縦攻撃カウントが一定に達したら
@@ -144,11 +144,11 @@ void Boss::Vertical()
 			doCollision = true;//当たり判定オンにしてから次行動
 
 			if (VerticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
-				if (NextDown == true) {//次下降なら
+				if (NextDown) {//次下降なら
 					NextDown = false;//戻してから
 					verticalPattern_ = VerticalPattern::Down;//下移動
 				}
-				if (NextUp == true) {//次上昇なら
+				if (NextUp) {//次上昇なら
 					NextUp = false;//戻してから
 					verticalPattern_ = VerticalPattern::Up;//上移動
 				}
@@ -253,7 +253,7 @@ void Boss::HpHalfPatStart()
 	//指定座標で自機のZからどれくらい間をあけるか
 	const int SpaceDistance = 500;
 
-	if (GetPosOnlyFlag == true)
+	if (GetPosOnlyFlag)
 	{
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
@@ -284,7 +284,7 @@ void Boss::HpHalfPatStart()
 	if (DiffusionAtkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
-			if (even_odd_NumFlag == true)//奇数弾
+			if (even_odd_NumFlag)//奇数弾
 			{
 				DiffusionAttack();
 			}
@@ -328,7 +328,7 @@ void Boss::CircularMotionMove()
 	addX = cosf(HpHalf_rad) * HpHalf_Length;
 	addY = sinf(HpHalf_rad) * HpHalf_Length;
 
-	if (GetPosOnlyFlag == true)
+	if (GetPosOnlyFlag)
 	{
 		//最初の位置
 		CirclePosMem = obj->GetPosition();
@@ -378,7 +378,7 @@ void Boss::LeaveFirstPos()
 
 	Nowframe++;
 
-	if (GetPosOnlyFlag == true)
+	if (GetPosOnlyFlag)
 	{
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
@@ -536,7 +536,7 @@ void Boss::PlungeInto()
 		PlungeIntoWaitCount--;
 
 		//突撃後なら突っ込んだ場所でまつ
-		if (PlungeCompletFlag == true) {
+		if (PlungeCompletFlag) {
 			obj->SetPosition(pPosMem);
 		}
 		else {
@@ -661,7 +661,7 @@ void Boss::Shake() {
 		posMem = pos;
 		ShakePosMemFlag = true;
 	}
-	if (ShakePosMemFlag == true) {
+	if (ShakePosMemFlag) {
 		pos.x = posMem.x + rand() % randShakeNow - 4.f;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
 		pos.y = posMem.y + rand() % randShakeNow - 4.f;
 	}
@@ -699,13 +699,13 @@ void Boss::PAimBul()
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
 		//その時のターゲット座標
 	//一度きり
-		if (aimBullet->ShotTagMomOnlyFlag == true) {
+		if (aimBullet->ShotTagMomOnlyFlag) {
 			aimBullet->ShotTagMoment = shotTag->GetPosition();
 			aimBullet->ShotTagMomOnlyFlag = false;
 		}
 
 		aimBullet->Nowframe++;
-		if (aimBullet->GetPosOnlyFlag == true)
+		if (aimBullet->GetPosOnlyFlag)
 		{
 			//最初の位置
 			aimBullet->boPosMoment = obj->GetPosition();
@@ -865,7 +865,7 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if (GetPosDeathOnlyFlag == true)
+	if (GetPosDeathOnlyFlag)
 	{
 		//最初の位置
 		boPosDeath = obj->GetPosition();
@@ -950,7 +950,7 @@ void Boss::Update()
 	if (actionPattern_ == ActionPattern::PlungeInto) { pFunc = &Boss::PlungeInto; }
 	if (actionPattern_ == ActionPattern::AfterPlungeInto) { pFunc = &Boss::AfterPlungeInto; }
 
-	if (isDeath == true) {
+	if (isDeath) {
 		actionPattern_ = ActionPattern::Death;
 		if (IsFirst_Death == false) {
 			Nowframe = NowframeDef;

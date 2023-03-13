@@ -87,7 +87,7 @@ void SmallEnemy::Update()
 
 	XMFLOAT3 sePos = obj->GetPosition();
 	//登場は奥から向かってくる
-	if (isSeApproach == true) {
+	if (isSeApproach) {
 		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
 			sePos.z -= 6;
 		}
@@ -101,7 +101,7 @@ void SmallEnemy::Update()
 		}
 	}
 	
-	if (isRetire == true) {
+	if (isRetire) {
 		//自機より右にいるか左にいるかでどちらに捌けるか変わる
 		if (obj->GetPosition().x < shotTag->GetPosition().x) {
 			retirePat_=RetirePat::Left;
@@ -144,7 +144,7 @@ void SmallEnemy::Update()
 
 		//その時のターゲット座標
 		//一度きり
-		if (bullet->ShotTagMomOnlyFlag == true) {
+		if (bullet->ShotTagMomOnlyFlag) {
 			bullet->ShotTagMoment = shotTag->GetPosition();
 			bullet->ShotTagMomOnlyFlag = false;
 		}
@@ -152,7 +152,7 @@ void SmallEnemy::Update()
 		bullet->Update();
 
 		bullet->Nowframe++;
-		if (bullet->GetPosOnlyFlag == true)
+		if (bullet->GetPosOnlyFlag)
 		{
 			//最初の位置
 			bullet->sePosMoment = obj->GetPosition();
