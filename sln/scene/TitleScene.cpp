@@ -74,10 +74,12 @@ void TitleScene::Initialize()
 	//自機登場演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 700;//ここから自機の初期位置まで指定フレーム掛けて動く
+	ApStartPPos.z -= 500;//ここから自機の初期位置まで指定フレーム掛けて動く
 
 	camera->SetTarget(player_->GetPosition());
-	camera->SetEye({ 10,10,-3000 });//ここにカメラをおいて、最初の演出で自機を追いかける
+	const float EyeXDef = 10;//最終位置
+	const float EyeX = EyeXDef - (CamEyeMoveSpX * PAppearFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
+	camera->SetEye({ EyeX,10,-3000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
 
@@ -119,44 +121,41 @@ void TitleScene::Finalize()
 
 void TitleScene::BeforeUpdate()
 {
-	//window縦横取得したいとき使う
-	WinApp* winApp = WinApp::GetInstance();
+	////window縦横取得したいとき使う
+	//WinApp* winApp = WinApp::GetInstance();
 
-	const float spAccel = 1.05f;//加速
+	//const float spAccel = 1.05f;//加速
 
-	//中心を取る
-	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	XMFLOAT2 NameTexSize = sp_gametitlename->GetTexSize();
+	////中心を取る
+	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	//XMFLOAT2 NameTexSize = sp_gametitlename->GetTexSize();
 
-	NamePosXCenter = (winApp->window_width / 2) - (NameTexSize.x / 2);//画像左上にセットされるから中央を取る
-	NamePosYCenter = (winApp->window_height / 2) - (NameTexSize.y / 2);//〃;
+	//NamePosXCenter = (winApp->window_width / 2) - (NameTexSize.x / 2);//画像左上にセットされるから中央を取る
+	//NamePosYCenter = (winApp->window_height / 2) - (NameTexSize.y / 2);//〃;
 
-	if (NamePos.x > NamePosXCenter)
-	{
-		NamePos.x -= sp;
-		sp *= spAccel;
-	}
-	else {
-		MoveStartFlag = false;
-	}
+	//if (NamePos.x > NamePosXCenter)
+	//{
+	//	NamePos.x -= sp;
+	//	sp *= spAccel;
+	//}
+	//else {
+	//	MoveStartFlag = false;
+	//}
 
-	sp_gametitlename->SetPosition({ NamePos });
-	//XMFLOAT2 NameSize = sp_gametitlename->GetSize();
-	//NameSize.x--;
-	//NameSize.y--;
-	//sp_gametitlename->SetSize({NameSize});
-	//sp_gametitlename->TransferVertexBuffer();
+	//sp_gametitlename->SetPosition({ NamePos });
+	////XMFLOAT2 NameSize = sp_gametitlename->GetSize();
+	////NameSize.x--;
+	////NameSize.y--;
+	////sp_gametitlename->SetSize({NameSize});
+	////sp_gametitlename->TransferVertexBuffer();
 
-	//sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
-	sp_gametitlename->Update();
+	////sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
+	//sp_gametitlename->Update();
 }
 
 void TitleScene::PlayerAppear()
 {
 	camera->SetTarget(player_->GetPosition());
-	//XMFLOAT3 pos = player_->GetPosition();
-
-	constexpr int PAppearFrameMax = 100;//最大フレーム
 
 	if (PAppearFrame < PAppearFrameMax) {//最大フレーム到達までやる
 		
@@ -168,22 +167,17 @@ void TitleScene::PlayerAppear()
 		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
 		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
 		player_->SetPosition(pos);
-
+		
+		XMFLOAT3 eyePos=camera->GetEye();
+		eyePos.x += CamEyeMoveSpX;
+		camera->SetEye(eyePos);
+		
 		camera->SetTarget(pos);
 	}
 	else {//最大フレーム後
-
+		PAppearFlag = false;//登場完了
 	}
-
-
-
-	//2950まで自機が動く]
 	
-
-
-	//camera->SetEye({ 10,10,-3000 })に最終的になる
-
-	//player_->SetPosition(pos);
 }
 
 void TitleScene::SceneChange()
@@ -272,16 +266,13 @@ void TitleScene::Update()
 	}
 
 	//sprite1->Update();
-	if (MoveStartFlag) { BeforeUpdate(); }
+	if (PAppearFlag) {
+		//BeforeUpdate(); 
+		PlayerAppear();//自機登場
+	}
 
-	if (MoveStartFlag == false && SceneChangeFlag == false)
+	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
-
-		//押した瞬間のみ
-		//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-		//const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
-		//パッド押した瞬間
-		//const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
 
 		if ((cInput->DecisionByEnter()))     // スペースキーが押されていたら
 		{
@@ -304,8 +295,6 @@ void TitleScene::Update()
 	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
 	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
 	//}
-
-	PlayerAppear();//自機登場
 
 	obj_tunnel->Update();
 	obj_ground->Update();
@@ -343,9 +332,9 @@ void TitleScene::Draw()
 
 	//sp_gametitlename->Draw();
 
-	if (MoveStartFlag == false && SceneChangeFlag == false)
+	if (PAppearFlag == false && SceneChangeFlag == false)//自機登場終わってるかつENTER押される前なら
 	{
-		sp_titleoper->Draw();
+		sp_titleoper->Draw();//ENTERで開始するよ！画像
 	}
 
 }

@@ -41,7 +41,7 @@ public:
 
 	DxBase* dxBase = nullptr;
 
-	bool MoveStartFlag = true;
+	bool PAppearFlag = true;//自機登場フラグ　true：登場中
 	float sp = 1.5;
 	float StartSp=1.5;
 
@@ -84,6 +84,9 @@ private:
 	XMFLOAT3 ApStartPPos;
 	//終了
 	XMFLOAT3 ApEndPPos;
+
+	const float PAppearFrameMax = 60.f;//最大フレーム
+	const float CamEyeMoveSpX = 0.7f;//横ずらす値
 	//------
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか

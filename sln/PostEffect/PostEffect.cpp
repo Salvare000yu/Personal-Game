@@ -14,7 +14,7 @@ using namespace DirectX;
 ID3D12Device* PostEffect::device_ = nullptr;
 
 //静的メンバ変数
-const float PostEffect::clearColor[4] = { 0.25f,0.5f,0.1f,0.0f };//緑っぽい色
+const float PostEffect::clearColor[4] = { 0.f,0.f,0.f,0.f };//背景の色
 
 PostEffect* PostEffect::GetInstance()
 {

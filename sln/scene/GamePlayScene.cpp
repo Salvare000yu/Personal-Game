@@ -131,7 +131,7 @@ void GamePlayScene::Initialize()
 	obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
-	obj_tunnel->SetPosition({ 0,40,2000 });
+	obj_tunnel->SetPosition({ 0,40,1000 });
 	obj_backwall->SetPosition({ 0,40,7000 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });

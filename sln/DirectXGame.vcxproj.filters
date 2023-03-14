@@ -253,7 +253,7 @@
     <ClInclude Include="2d\SpriteBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="3d\WinApp.h">
+    <ClInclude Include="base\WinApp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="base\MyDirectXGame.h">

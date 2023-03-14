@@ -337,7 +337,7 @@
     <ClInclude Include="2d\SpriteBase.h" />
     <ClInclude Include="scene\SelectScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="3d\WinApp.h" />
+    <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Timer\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
