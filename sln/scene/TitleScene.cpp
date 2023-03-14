@@ -53,10 +53,10 @@ void TitleScene::Initialize()
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	//------object3d位置------//
-	obj_tunnel->SetPosition({ 0,40,2000 });
+	obj_tunnel->SetPosition({ 0,40,-500 });
 	obj_ground->SetPosition({ 0,-150,0 });
-	obj_kaberight->SetPosition({ 490,340,2000 });
-	obj_kabeleft->SetPosition({ -490,340,2000 });
+	obj_kaberight->SetPosition({ 490,340,-500 });
+	obj_kabeleft->SetPosition({ -490,340,-500 });
 	//------object回転
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
@@ -66,7 +66,7 @@ void TitleScene::Initialize()
 	player_.reset(new Player());
 	//いろいろキャラ初期化
 	player_->Initialize();
-	player_->SetPosition({ 0,0,-2950 });
+	player_->SetPosition({ 0,150,-1950 });
 	player_->SetModel(mod_player.get());
 
 	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
@@ -78,8 +78,8 @@ void TitleScene::Initialize()
 
 	camera->SetTarget(player_->GetPosition());
 	const float EyeXDef = 10;//最終位置
-	const float EyeX = EyeXDef - (CamEyeMoveSpX * PAppearFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
-	camera->SetEye({ EyeX,10,-3000 });//ここにカメラをおいて、最初の演出で自機を追いかける
+	const float EyeX = EyeXDef - (CamEyeMoveSpX * PApMoveFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
+	camera->SetEye({ EyeX,160,-2000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
 
@@ -155,50 +155,81 @@ void TitleScene::BeforeUpdate()
 
 void TitleScene::PlayerAppear()
 {
-	camera->SetTarget(player_->GetPosition());
 
-	if (PAppearFrame < PAppearFrameMax) {//最大フレーム到達までやる
-		
-		float raito = (float)PAppearFrame / PAppearFrameMax;
-		PAppearFrame++;
+	XMFLOAT3 pos = player_->GetPosition();
+
+	if (PMoveFrame < PApMoveFrameMax) {//最大フレーム到達までやる
+
+		float raito = (float)PMoveFrame / PApMoveFrameMax;
+		PMoveFrame++;
 
 		XMFLOAT3 pos{};
 		pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
 		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
 		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
 		player_->SetPosition(pos);
-		
-		XMFLOAT3 eyePos=camera->GetEye();
+
+		XMFLOAT3 eyePos = camera->GetEye();
 		eyePos.x += CamEyeMoveSpX;
 		camera->SetEye(eyePos);
-		
+
 		camera->SetTarget(pos);
 	}
 	else {//最大フレーム後
+		PMoveFrame = PMoveFrameDef;//シーン切り替えないでも使うのでデフォルトに戻す
+		ExitEndPPos = { pos.x,pos.y,ExitPosZ };//退場は指定Zまで行っておわる
+		ExitStartPPos = pos;//現在自機座標から退場始める
 		PAppearFlag = false;//登場完了
 	}
-	
-}
 
+}
+void TitleScene::DoorOpen()
+{
+
+	const int LDoorPosXRim = -2200;//左の壁開け終わる場所
+	const float DoorMoveSp = 7.f;//ドアが開く速度
+
+	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
+	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
+
+	//左の壁が一定行ったら終わり
+	if (!(LDoorPos.x < LDoorPosXRim)) {
+		LDoorPos.x -= DoorMoveSp;
+		RDoorPos.x += DoorMoveSp;
+	}
+	else {
+		DoorOpenFlag = true;
+	}
+	obj_kabeleft->SetPosition(LDoorPos);
+	obj_kaberight->SetPosition(RDoorPos);
+}
 void TitleScene::SceneChange()
 {
-	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	const float StartSpAccel = 1.05f;
+	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	//const float StartSpAccel = 1.05f;
 
-	NamePos.x -= StartSp;
-	StartSp *= StartSpAccel;
-	sp_gametitlename->SetPosition({ NamePos });
+	//NamePos.x -= StartSp;
+	//StartSp *= StartSpAccel;
+	//sp_gametitlename->SetPosition({ NamePos });
 
 	Input* input = Input::GetInstance();
 
-	XMFLOAT3 pos = player_->GetPosition();
-	pos.z++;
-	player_->SetPosition(pos);
+	if (PMoveFrame < PExitMoveFrameMax) {//退場用時間かけて退場する
 
-	if (--SceneChangeVibCount == 0) {
-		input->PadVibrationDef();
+		DoorOpen();//扉を開ける
+
+		float raito = (float)PMoveFrame / PExitMoveFrameMax;
+		PMoveFrame++;
+
+		XMFLOAT3 pos{};
+		pos.x = std::lerp(ExitStartPPos.x, ExitEndPPos.x, raito);
+		pos.y = std::lerp(ExitStartPPos.y, ExitEndPPos.y, raito);
+		pos.z = std::lerp(ExitStartPPos.z, ExitEndPPos.z, raito);
+		player_->SetPosition(pos);
+
+		camera->SetTarget(pos);
 	}
-	if (NamePos.x < -1280) {
+	else {//最大フレーム後
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//シーン切り替え
@@ -206,7 +237,19 @@ void TitleScene::SceneChange()
 		sceneManager_->SetNextScene(scene);
 	}
 
-	sp_gametitlename->Update();
+	//指定時間だけ振動するようにしよう　上のelseの中に入れて演出後チェンジに
+	//	if (--SceneChangeVibCount == 0) {
+	//		input->PadVibrationDef();
+	//	}
+	//if (最大フレーム到達でシーン切り替え系処理) {
+	//	// 音声停止
+	//	GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
+	//	//シーン切り替え
+	//	BaseScene* scene = new SelectScene();
+	//	sceneManager_->SetNextScene(scene);
+	//}
+
+	//sp_gametitlename->Update();
 }
 
 void TitleScene::UpDown()
@@ -295,6 +338,8 @@ void TitleScene::Update()
 	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
 	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
 	//}
+
+	camera->SetTarget(player_->GetPosition());//カメラは自機を追う
 
 	obj_tunnel->Update();
 	obj_ground->Update();

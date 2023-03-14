@@ -312,8 +312,8 @@ void GamePlayScene::DoorOpen()
 
 	//左の壁が一定行ったら終わり
 	if (!(LDoorPos.x < LDoorPosXRim)) {
-		LDoorPos.x -= 6;
-		RDoorPos.x += 6;
+		LDoorPos.x -= DoorMoveSp;
+		RDoorPos.x += DoorMoveSp;
 	}
 	else {
 		DoorOpenFlag = true;

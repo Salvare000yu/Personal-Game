@@ -78,16 +78,21 @@ private:
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
+	//----------登場退場共通----------//
+	const float PApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)
+	const float PExitMoveFrameMax = 120.f;//経過時間最大フレーム(退場)
+	const int PMoveFrameDef = 0;//経過時間でふぉ
+	int PMoveFrame = PMoveFrameDef;//経過時間
 	//-----自機登場
-	int PAppearFrame = 0;
-	//開始時自機座標
-	XMFLOAT3 ApStartPPos;
-	//終了
-	XMFLOAT3 ApEndPPos;
-
-	const float PAppearFrameMax = 60.f;//最大フレーム
-	const float CamEyeMoveSpX = 0.7f;//横ずらす値
-	//------
+	XMFLOAT3 ApStartPPos;//開始時自機座標
+	XMFLOAT3 ApEndPPos;//終了
+	const float CamEyeMoveSpX = 0.7f;//カメラ横ずらす値
+	//------自機登場
+	//------自機退場(シーンチェンジ)
+	XMFLOAT3 ExitStartPPos;//開始時自機座標
+	XMFLOAT3 ExitEndPPos;//終了
+	const float ExitPosZ = -500;//ここでおわる
+	//------自機退場(シーンチェンジ)
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
