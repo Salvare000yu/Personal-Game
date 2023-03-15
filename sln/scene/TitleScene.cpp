@@ -37,30 +37,36 @@ void TitleScene::Initialize()
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
+	mod_logo.reset(Model::LoadFromOBJ("STRIKER_Logo"));
 	////---3dオブジェクト生成---
 	obj_tunnel.reset(Object3d::Create());
 	obj_ground.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
+	obj_logo.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_ground->SetModel(mod_ground.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
+	obj_logo->SetModel(mod_logo.get());
 	//------object3dスケール------//
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
+	obj_logo->SetScale({ 40.f,40.f,40.f });
 	//------object3d位置------//
 	obj_tunnel->SetPosition({ 0,40,-500 });
 	obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
+	obj_logo->SetPosition({ 0,100,-1000 });
 	//------object回転
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
+	obj_logo->SetRotation({ 0,0,0 });
 
 	//いろいろ生成
 	player_.reset(new Player());
@@ -92,16 +98,14 @@ void TitleScene::Initialize()
 
 	// スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/title_prac.png");
-	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/GameTitleName.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/Title_oper.png");
 
 	// スプライトの生成
 	sprite1.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_gametitlename.reset(Sprite::Create(2, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	//スプライトポジション
-	sp_gametitlename->SetPosition({ winApp->window_width,NamePosYCenter,0 });
+	
 
 	//ポストエフェクト用テクスチャ読み込み
 	//SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
@@ -151,6 +155,7 @@ void TitleScene::BeforeUpdate()
 
 	////sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
 	//sp_gametitlename->Update();
+
 }
 
 void TitleScene::PlayerAppear()
@@ -187,7 +192,7 @@ void TitleScene::DoorOpen()
 {
 
 	const int LDoorPosXRim = -2200;//左の壁開け終わる場所
-	const float DoorMoveSp = 7.f;//ドアが開く速度
+	const float DoorMoveSp = 7.2f;//ドアが開く速度
 
 	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
 	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
@@ -218,6 +223,11 @@ void TitleScene::SceneChange()
 
 		DoorOpen();//扉を開ける
 
+		//指定時間だけ振動する
+		if (--SceneChangeVibCount == 0) {
+			input->PadVibrationDef();
+		}
+
 		float raito = (float)PMoveFrame / PExitMoveFrameMax;
 		PMoveFrame++;
 
@@ -237,24 +247,12 @@ void TitleScene::SceneChange()
 		sceneManager_->SetNextScene(scene);
 	}
 
-	//指定時間だけ振動するようにしよう　上のelseの中に入れて演出後チェンジに
-	//	if (--SceneChangeVibCount == 0) {
-	//		input->PadVibrationDef();
-	//	}
-	//if (最大フレーム到達でシーン切り替え系処理) {
-	//	// 音声停止
-	//	GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
-	//	//シーン切り替え
-	//	BaseScene* scene = new SelectScene();
-	//	sceneManager_->SetNextScene(scene);
-	//}
-
 	//sp_gametitlename->Update();
 }
 
 void TitleScene::UpDown()
 {
-	XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
+	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
 	//NamePosYUpDown*=0.99;
 	//switch (upDownPattern_)
 	//{
@@ -280,10 +278,10 @@ void TitleScene::UpDown()
 	//	}
 	//	break;
 	time = frame / 60;
-	NamePos.y += sinf(time * 6.f);
+	//NamePos.y += sinf(time * 6.f);
 	frame++;
-	sp_gametitlename->SetPosition({ NamePos });
-	sp_gametitlename->Update();
+	//sp_gametitlename->SetPosition({ NamePos });
+	//sp_gametitlename->Update();
 }
 
 void TitleScene::Update()
@@ -346,6 +344,7 @@ void TitleScene::Update()
 	player_->Update();
 	obj_kaberight->Update();
 	obj_kabeleft->Update();
+	obj_logo->Update();
 
 	// カメラの更新
 	camera->Update();
@@ -366,6 +365,7 @@ void TitleScene::Draw()
 	player_->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
+	obj_logo->Draw();
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();

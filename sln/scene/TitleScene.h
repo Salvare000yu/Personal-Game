@@ -63,7 +63,6 @@ public:
 private:
 
 	std::unique_ptr < Sprite> sprite1 = nullptr;
-	std::unique_ptr < Sprite> sp_gametitlename = nullptr;
 	std::unique_ptr < Sprite> sp_titleoper = nullptr;
 
 	//----------3dobj
@@ -72,15 +71,17 @@ private:
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
+	std::unique_ptr < Model> mod_logo = nullptr;//タイトルロゴ
 
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 	std::unique_ptr < Object3d> obj_ground = nullptr;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
+	std::unique_ptr < Object3d> obj_logo = nullptr;//タイトルロゴ
 
 	//----------登場退場共通----------//
 	const float PApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)
-	const float PExitMoveFrameMax = 120.f;//経過時間最大フレーム(退場)
+	const float PExitMoveFrameMax = 100.f;//経過時間最大フレーム(退場)
 	const int PMoveFrameDef = 0;//経過時間でふぉ
 	int PMoveFrame = PMoveFrameDef;//経過時間
 	//-----自機登場
@@ -91,7 +92,7 @@ private:
 	//------自機退場(シーンチェンジ)
 	XMFLOAT3 ExitStartPPos;//開始時自機座標
 	XMFLOAT3 ExitEndPPos;//終了
-	const float ExitPosZ = -500;//ここでおわる
+	const float ExitPosZ = 0;//ここでおわる
 	//------自機退場(シーンチェンジ)
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
