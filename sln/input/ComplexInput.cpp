@@ -1,3 +1,4 @@
+
 #include "ComplexInput.h"
 
 ComplexInput* ComplexInput::GetInstance()

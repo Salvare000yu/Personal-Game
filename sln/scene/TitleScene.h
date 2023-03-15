@@ -29,7 +29,7 @@ public:
 	void PlayerAppear();//自機の登場
 
 	void SceneChange();
-
+	void ToStartSprite();//エンターを押してね!的なUI表示
 	void UpDown();
 
 	void DoorOpen();//扉が開く
@@ -94,6 +94,10 @@ private:
 	XMFLOAT3 ExitEndPPos;//終了
 	const float ExitPosZ = 0;//ここでおわる
 	//------自機退場(シーンチェンジ)
+
+	//------ENTERスプライト点滅
+	const int ToStartFrameDef = 40;//透明じゃない時間
+	int ToStartFrame = ToStartFrameDef;
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか

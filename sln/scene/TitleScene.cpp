@@ -105,7 +105,7 @@ void TitleScene::Initialize()
 	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	//スプライトポジション
-	
+
 
 	//ポストエフェクト用テクスチャ読み込み
 	//SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
@@ -250,6 +250,33 @@ void TitleScene::SceneChange()
 	//sp_gametitlename->Update();
 }
 
+void TitleScene::ToStartSprite()
+{
+	XMFLOAT4 color = sp_titleoper->GetColor();
+
+	ToStartFrame--;//透明でない時間
+	ToStartFrame = max(ToStartFrame, 0);
+
+	if (ToStartFrame <= 0) {
+		color.w -= 0.012f;
+	}
+
+	if (color.w <= 0.5f) {
+		ToStartFrame = ToStartFrameDef;//またこの時間分まつ
+		color.w = 1.f;
+	}
+
+	sp_titleoper->SetColor(color);
+	sp_titleoper->TransferVertexBuffer();
+	sp_titleoper->Update();
+
+	{
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "%2.f", (float)ToStartFrame);
+		DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+	}
+}
+
 void TitleScene::UpDown()
 {
 	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
@@ -312,9 +339,9 @@ void TitleScene::Update()
 		PlayerAppear();//自機登場
 	}
 
+	//登場完了して退場前
 	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
-
 		if ((cInput->DecisionByEnter()))     // スペースキーが押されていたら
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -322,6 +349,7 @@ void TitleScene::Update()
 			input->PadVibration();
 		}
 
+		ToStartSprite();
 		UpDown();
 
 		//postEffect->Update();
@@ -330,12 +358,6 @@ void TitleScene::Update()
 	if (SceneChangeFlag) {
 		SceneChange();//チェンジ移動開始
 	}
-
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
-	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-	//}
 
 	camera->SetTarget(player_->GetPosition());//カメラは自機を追う
 
@@ -394,4 +416,9 @@ void TitleScene::DrawUI()
 	//}
 	//else { DebugText::GetInstance()->Print("SceneChangeF:false", 300, 200, 3.0f); }
 
+		//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
+	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
+	//}
 }

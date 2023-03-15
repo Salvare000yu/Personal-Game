@@ -1,5 +1,8 @@
 #pragma once
 #include "Input.h"
+/// <summary>
+/// ƒL[‰Ÿ‚³‚ê‚½ˆ—‚ª•¡”‚ ‚Á‚Ä‚à‚í‚©‚è‚â‚·‚­‚·‚é
+/// </summary>
 
 class ComplexInput
 {
