@@ -17,6 +17,12 @@ using namespace DirectX;
 
 class TitleScene :public BaseScene, public BaseObject
 {
+	//ロゴの動き
+	enum class LogoPattern {
+		def,
+		rightRot,
+		leftRot,
+	};
 
 public:
 
@@ -62,7 +68,6 @@ public:
 
 private:
 
-	std::unique_ptr < Sprite> sprite1 = nullptr;
 	std::unique_ptr < Sprite> sp_titleoper = nullptr;
 
 	//----------3dobj
@@ -87,7 +92,7 @@ private:
 	//-----自機登場
 	XMFLOAT3 ApStartPPos;//開始時自機座標
 	XMFLOAT3 ApEndPPos;//終了
-	const float CamEyeMoveSpX = 0.7f;//カメラ横ずらす値
+	const float CamEyeMoveSpX = 1.5f;//カメラ横ずらす値
 	//------自機登場
 	//------自機退場(シーンチェンジ)
 	XMFLOAT3 ExitStartPPos;//開始時自機座標
@@ -98,6 +103,12 @@ private:
 	//------ENTERスプライト点滅
 	const int ToStartFrameDef = 40;//透明じゃない時間
 	int ToStartFrame = ToStartFrameDef;
+	//-------
+
+	//ロゴの動き　デフォルト
+	LogoPattern logoPattern_ = LogoPattern::def;
+
+	float LogoRotVel = 0;//常にロゴのRotに加算される値
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか

@@ -66,7 +66,6 @@ void TitleScene::Initialize()
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
-	obj_logo->SetRotation({ 0,0,0 });
 
 	//いろいろ生成
 	player_.reset(new Player());
@@ -101,7 +100,6 @@ void TitleScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/Title_oper.png");
 
 	// スプライトの生成
-	sprite1.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	//スプライトポジション
@@ -210,12 +208,6 @@ void TitleScene::DoorOpen()
 }
 void TitleScene::SceneChange()
 {
-	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	//const float StartSpAccel = 1.05f;
-
-	//NamePos.x -= StartSp;
-	//StartSp *= StartSpAccel;
-	//sp_gametitlename->SetPosition({ NamePos });
 
 	Input* input = Input::GetInstance();
 
@@ -247,68 +239,65 @@ void TitleScene::SceneChange()
 		sceneManager_->SetNextScene(scene);
 	}
 
-	//sp_gametitlename->Update();
 }
 
 void TitleScene::ToStartSprite()
 {
+	constexpr float ColorWDec = 0.012f;//透明にしていく速度
+	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
 	XMFLOAT4 color = sp_titleoper->GetColor();
 
 	ToStartFrame--;//透明でない時間
-	ToStartFrame = max(ToStartFrame, 0);
+	ToStartFrame = max(ToStartFrame, 0);//ToStartFrameの最小値は0
 
-	if (ToStartFrame <= 0) {
-		color.w -= 0.012f;
+	if (ToStartFrame <= 0) {//指定時間たったら
+		color.w -= ColorWDec;
 	}
 
-	if (color.w <= 0.5f) {
+	if (color.w <= Transparency) {
 		ToStartFrame = ToStartFrameDef;//またこの時間分まつ
-		color.w = 1.f;
+		color.w = 1.f;//一番明るい状態
 	}
 
 	sp_titleoper->SetColor(color);
 	sp_titleoper->TransferVertexBuffer();
 	sp_titleoper->Update();
-
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", (float)ToStartFrame);
-		DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-	}
 }
 
 void TitleScene::UpDown()
 {
-	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	//NamePosYUpDown*=0.99;
-	//switch (upDownPattern_)
-	//{
-	//case UpDownPattern::def:
-	//	NamePos.y += NamePosYUpDown;
-	//	if(NamePos.y>= NamePosMoveMax){ 
-	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-	//		upDownPattern_ = UpDownPattern::Down; 
-	//	}
-	//	break;
-	//case UpDownPattern::Up:
-	//	NamePos.y += NamePosYUpDown;
-	//	if (NamePos.y >= NamePosMoveMax) { 
-	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-	//		upDownPattern_ = UpDownPattern::Down; 
-	//	}
-	//	break;
-	//case UpDownPattern::Down:
-	//	NamePos.y -= NamePosYUpDown;
-	//	if(NamePos.y<=NamePosMoveMin){
-	//		NamePosYUpDown = NamePosYUpDownDef;//デフォルト値に戻す
-	//		upDownPattern_ = UpDownPattern::Up; 
-	//	}
-	//	break;
+	XMFLOAT3 rot = obj_logo->GetRotation();
+
+	constexpr float RotSp = 0.02f;//回転速度
+	constexpr float RotMax= 1.5f;//どこまで回転するか
+
+	switch (logoPattern_) {
+	case LogoPattern::def:
+		if (PAppearFlag == false) {//登場が終わったら
+			logoPattern_ = LogoPattern::rightRot;
+		}
+		break;
+
+	case LogoPattern::rightRot:
+		LogoRotVel = -RotSp;
+		if (rot.y <= -RotMax) {//最大値まで回転したら
+			logoPattern_ = LogoPattern::leftRot;//次左回転
+		}
+		break;
+
+	case LogoPattern::leftRot:
+		LogoRotVel = RotSp;
+		if (rot.y >= RotMax) {//最大値まで回転したら
+			logoPattern_ = LogoPattern::rightRot;//次右回転
+		}
+		break;
+	}
+
+	rot.y += LogoRotVel;
+	obj_logo->SetRotation(rot);
+
 	time = frame / 60;
-	//NamePos.y += sinf(time * 6.f);
 	frame++;
-	//sp_gametitlename->SetPosition({ NamePos });
-	//sp_gametitlename->Update();
 }
 
 void TitleScene::Update()
@@ -333,7 +322,6 @@ void TitleScene::Update()
 		input->PadVibrationDef();
 	}
 
-	//sprite1->Update();
 	if (PAppearFlag) {
 		//BeforeUpdate(); 
 		PlayerAppear();//自機登場
@@ -349,7 +337,7 @@ void TitleScene::Update()
 			input->PadVibration();
 		}
 
-		ToStartSprite();
+		ToStartSprite();//ENTER押してね的な画像関係
 		UpDown();
 
 		//postEffect->Update();
@@ -395,7 +383,6 @@ void TitleScene::Draw()
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
-	//sprite1->Draw();
 
 	//sp_gametitlename->Draw();
 
@@ -416,9 +403,9 @@ void TitleScene::DrawUI()
 	//}
 	//else { DebugText::GetInstance()->Print("SceneChangeF:false", 300, 200, 3.0f); }
 
-		//{
+	//{
 	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f", player_->GetPosition().z);
+	//	sprintf_s(tmp, 32, "%2.f", (float)ToStartFrame);
 	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
 	//}
 }

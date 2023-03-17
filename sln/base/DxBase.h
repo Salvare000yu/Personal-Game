@@ -22,12 +22,6 @@ public://ƒƒ“ƒoŠÖ”
 
 	void Initialize(WinApp* winApp);
 
-	/// <summary>
-	/// imgui‰Šú‰»
-	/// </summary>
-	/// <returns>¬”Û</returns>
-	//bool InitializeImgui();
-
 	//•`‰æ‘O
 	void PreDraw();
 	//•`‰æŒãˆ—
