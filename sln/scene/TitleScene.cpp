@@ -264,12 +264,15 @@ void TitleScene::ToStartSprite()
 	sp_titleoper->Update();
 }
 
-void TitleScene::UpDown()
+void TitleScene::LogoMove()
 {
 	XMFLOAT3 rot = obj_logo->GetRotation();
+	XMFLOAT3 pos = obj_logo->GetPosition();
 
-	constexpr float RotSp = 0.02f;//回転速度
-	constexpr float RotMax= 1.5f;//どこまで回転するか
+	constexpr float RotSp = 0.03f;//回転速度
+	constexpr float RotMax= 1.7f;//どこまで回転するか
+	constexpr int PosYSp= 5;//上にずらす値
+	constexpr int PosYMax = 300;//Y座標の最大値
 
 	switch (logoPattern_) {
 	case LogoPattern::def:
@@ -291,10 +294,25 @@ void TitleScene::UpDown()
 			logoPattern_ = LogoPattern::rightRot;//次右回転
 		}
 		break;
+
+	case LogoPattern::beforeNextScene:
+		pos.y = min(pos.y, PosYMax);//Y座標はPosYMaxまでしかいけないように
+		pos.y += PosYSp;
+		break;
+	}
+
+	//シーンチェンジフラグ経ってなかったら上下移動
+	if (!SceneChangeFlag) {
+		pos.y += 0.2f * sinf(time * 3.14159265358f);
+	}
+	else {
+		//シーンチェンジ開始したら
+		logoPattern_ = LogoPattern::beforeNextScene;
 	}
 
 	rot.y += LogoRotVel;
 	obj_logo->SetRotation(rot);
+	obj_logo->SetPosition(pos);
 
 	time = frame / 60;
 	frame++;
@@ -326,7 +344,7 @@ void TitleScene::Update()
 		//BeforeUpdate(); 
 		PlayerAppear();//自機登場
 	}
-
+	
 	//登場完了して退場前
 	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
@@ -338,8 +356,6 @@ void TitleScene::Update()
 		}
 
 		ToStartSprite();//ENTER押してね的な画像関係
-		UpDown();
-
 		//postEffect->Update();
 	}
 
@@ -348,6 +364,7 @@ void TitleScene::Update()
 	}
 
 	camera->SetTarget(player_->GetPosition());//カメラは自機を追う
+	LogoMove();//ロゴの動き
 
 	obj_tunnel->Update();
 	obj_ground->Update();

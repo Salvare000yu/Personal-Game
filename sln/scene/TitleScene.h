@@ -22,6 +22,7 @@ class TitleScene :public BaseScene, public BaseObject
 		def,
 		rightRot,
 		leftRot,
+		beforeNextScene,//シーン遷移前
 	};
 
 public:
@@ -36,7 +37,7 @@ public:
 
 	void SceneChange();
 	void ToStartSprite();//エンターを押してね!的なUI表示
-	void UpDown();
+	void LogoMove();
 
 	void DoorOpen();//扉が開く
 
@@ -112,9 +113,6 @@ private:
 
 	int VibCount = 15;//タイトルから何フレーム振動させるか
 	int SceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
-
-	float NamePosXCenter = 0;
-	float NamePosYCenter = 0;
 
 	bool DoorOpenFlag = false;//扉開けてない
 
