@@ -190,7 +190,6 @@
     <ClCompile Include="GameChar\SmallEnemyBullet.cpp" />
     <ClCompile Include="2d\Sprite.cpp" />
     <ClCompile Include="2d\SpriteBase.cpp" />
-    <ClCompile Include="scene\SelectScene.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Timer\Timer.cpp" />
@@ -321,7 +320,6 @@
     <ClInclude Include="GameChar\SmallEnemyBullet.h" />
     <ClInclude Include="2d\Sprite.h" />
     <ClInclude Include="2d\SpriteBase.h" />
-    <ClInclude Include="scene\SelectScene.h" />
     <ClInclude Include="scene\TitleScene.h" />
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Timer\Timer.h" />

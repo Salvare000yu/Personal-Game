@@ -5,7 +5,6 @@
 #include "ComplexInput.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
-#include "SelectScene.h"
 #include "CharParameters.h"
 
 #include "Timer.h"
@@ -235,7 +234,7 @@ void TitleScene::SceneChange()
 		// ‰¹º’âŽ~
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//ƒV[ƒ“Ø‚è‘Ö‚¦
-		BaseScene* scene = new SelectScene();
+		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
