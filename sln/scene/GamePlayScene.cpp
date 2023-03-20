@@ -28,8 +28,6 @@
 
 #include <DirectXMath.h>
 
-//New PC 120fps
-
 std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	bool commentFlag,
 	char divChar,

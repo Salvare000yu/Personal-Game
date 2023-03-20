@@ -12,6 +12,7 @@
 #include "DxBase.h"
 #include "CameraTracking.h"
 #include "Camera.h"
+#include "SceneChange.h"
 
 using namespace DirectX;
 
@@ -35,7 +36,7 @@ public:
 
 	void PlayerAppear();//自機の登場
 
-	void SceneChange();
+	void NextScene();
 	void ToStartSprite();//エンターを押してね!的なUI表示
 	void LogoMove();
 

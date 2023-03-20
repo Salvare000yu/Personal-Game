@@ -22,6 +22,7 @@ void TitleScene::Initialize()
 	WinApp* winApp = WinApp::GetInstance();
 
 	CharParameters* charParameters = CharParameters::GetInstance();
+	SceneChange* sceneChange = SceneChange::GetInstance();
 
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
@@ -86,6 +87,8 @@ void TitleScene::Initialize()
 	camera->SetEye({ EyeX,160,-2000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
+	//シーン遷移演出初期化
+	sceneChange->Initialize();
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
@@ -205,10 +208,11 @@ void TitleScene::DoorOpen()
 	obj_kabeleft->SetPosition(LDoorPos);
 	obj_kaberight->SetPosition(RDoorPos);
 }
-void TitleScene::SceneChange()
+void TitleScene::NextScene()
 {
 
 	Input* input = Input::GetInstance();
+	SceneChange* sceneChange = SceneChange::GetInstance();
 
 	if (PMoveFrame < PExitMoveFrameMax) {//退場用時間かけて退場する
 
@@ -237,6 +241,9 @@ void TitleScene::SceneChange()
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
+
+	//シーン遷移演出更新
+	sceneChange->Update();
 
 }
 
@@ -359,7 +366,7 @@ void TitleScene::Update()
 	}
 
 	if (SceneChangeFlag) {
-		SceneChange();//チェンジ移動開始
+		NextScene();//チェンジ移動開始
 	}
 
 	camera->SetTarget(player_->GetPosition());//カメラは自機を追う
@@ -406,6 +413,10 @@ void TitleScene::Draw()
 	{
 		sp_titleoper->Draw();//ENTERで開始するよ！画像
 	}
+
+	SceneChange* sceneChange = SceneChange::GetInstance();
+
+	sceneChange->Draw();//シーン遷移演出描画
 
 }
 
