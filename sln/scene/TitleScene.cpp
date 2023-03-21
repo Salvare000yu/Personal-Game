@@ -22,7 +22,7 @@ void TitleScene::Initialize()
 	WinApp* winApp = WinApp::GetInstance();
 
 	CharParameters* charParameters = CharParameters::GetInstance();
-	SceneChange* sceneChange = SceneChange::GetInstance();
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
@@ -88,7 +88,7 @@ void TitleScene::Initialize()
 
 	charParameters->Initialize();
 	//シーン遷移演出初期化
-	sceneChange->Initialize();
+	sceneChangeDirection->Initialize();
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
@@ -212,17 +212,17 @@ void TitleScene::NextScene()
 {
 
 	Input* input = Input::GetInstance();
-	SceneChange* sceneChange = SceneChange::GetInstance();
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
-	if (PMoveFrame < PExitMoveFrameMax) {//退場用時間かけて退場する
+	//if (PMoveFrame < PExitMoveFrameMax) {//退場用時間かけて退場する
+	DoorOpen();//扉を開ける
 
-		DoorOpen();//扉を開ける
+	//指定時間だけ振動する
+	if (--SceneChangeVibCount == 0) {
+		input->PadVibrationDef();
+	}
 
-		//指定時間だけ振動する
-		if (--SceneChangeVibCount == 0) {
-			input->PadVibrationDef();
-		}
-
+	{
 		float raito = (float)PMoveFrame / PExitMoveFrameMax;
 		PMoveFrame++;
 
@@ -234,16 +234,26 @@ void TitleScene::NextScene()
 
 		camera->SetTarget(pos);
 	}
-	else {//最大フレーム後
+	//自機がシーン遷移演出開始位置に到達したら
+	if (player_->GetPosition().z >= SceneChangeDirecPosZ&& HideTheScreenOnly==false) {
+		sceneChangeDirection->HideTheScreenFlag = true;//画面隠す開始
+		HideTheScreenOnly = true;
+	}
+
+	//}
+	//else {//最大フレーム後
+	if (sceneChangeDirection->SceneChangeCompFlag)//シーン遷移完了したら
+	{
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
 		//シーン切り替え
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
+	//}
 
 	//シーン遷移演出更新
-	sceneChange->Update();
+	sceneChangeDirection->Update();
 
 }
 
@@ -276,8 +286,8 @@ void TitleScene::LogoMove()
 	XMFLOAT3 pos = obj_logo->GetPosition();
 
 	constexpr float RotSp = 0.03f;//回転速度
-	constexpr float RotMax= 1.7f;//どこまで回転するか
-	constexpr int PosYSp= 5;//上にずらす値
+	constexpr float RotMax = 1.7f;//どこまで回転するか
+	constexpr int PosYSp = 5;//上にずらす値
 	constexpr int PosYMax = 300;//Y座標の最大値
 
 	switch (logoPattern_) {
@@ -328,6 +338,7 @@ void TitleScene::Update()
 {
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	////------------------------デバッグ用！！！！！！
 	const bool InputSPACE = input->PushKey(DIK_SPACE);
@@ -350,7 +361,7 @@ void TitleScene::Update()
 		//BeforeUpdate(); 
 		PlayerAppear();//自機登場
 	}
-	
+
 	//登場完了して退場前
 	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
@@ -366,6 +377,7 @@ void TitleScene::Update()
 	}
 
 	if (SceneChangeFlag) {
+		sceneChangeDirection->SceneChangeDirectionFlag = true;
 		NextScene();//チェンジ移動開始
 	}
 
@@ -414,9 +426,11 @@ void TitleScene::Draw()
 		sp_titleoper->Draw();//ENTERで開始するよ！画像
 	}
 
-	SceneChange* sceneChange = SceneChange::GetInstance();
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
+	if (sceneChangeDirection->SceneChangeDirectionFlag) {//シーン遷移演出中なら
+		sceneChangeDirection->Draw();//シーン遷移演出描画
+	}
 
-	sceneChange->Draw();//シーン遷移演出描画
 
 }
 

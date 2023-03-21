@@ -147,7 +147,7 @@
     <ClCompile Include="GameChar\BossStraightBul.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneChange\SceneChange.cpp">
+    <ClCompile Include="SceneChangeDirection\SceneChangeDirection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -331,7 +331,7 @@
     <ClInclude Include="GameChar\BossStraightBul.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SceneChange\SceneChange.h">
+    <ClInclude Include="SceneChangeDirection\SceneChangeDirection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
