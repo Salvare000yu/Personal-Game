@@ -15,6 +15,12 @@ void SceneChangeDirection::Initialize()
 	sp_scenechange.reset(Sprite::Create(18, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sp_scenechange->SetPosition({ 1280,0,0 });
+
+	SceneChangeDirectionFlag = false;
+	SceneChangeCompFlag = false;
+	HideTheScreenFlag = false;
+	GameReadyStartFlag = false;
+
 }
 
 void SceneChangeDirection::HideTheScreen()
