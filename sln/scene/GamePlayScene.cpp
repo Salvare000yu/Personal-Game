@@ -10,6 +10,7 @@
 #include "ParticleManager.h"
 #include "CharParameters.h"
 #include "Pause.h"
+#include "SceneChangeDirection.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -1013,6 +1014,7 @@ bool GamePlayScene::GameReady()
 {
 
 	CharParameters* charParameters = CharParameters::GetInstance();
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	XMFLOAT4 ReadyCol = sp_ready->GetColor();
 	XMFLOAT4 GOCol = sp_ready_go->GetColor();
@@ -1025,6 +1027,12 @@ bool GamePlayScene::GameReady()
 
 	constexpr int frameMax = 420;
 
+	sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった
+
+	//シーン遷移演出更新
+	sceneChangeDirection->Update();
+
+{
 	if (GameReadyFrame < frameMax)
 	{
 		//最初演出中は動くな
@@ -1059,6 +1067,7 @@ bool GamePlayScene::GameReady()
 		sp_ready_go->Update();
 		camera->SetTrackingTarget(player_.get());
 	}
+}
 
 	if (GOCol.w < 0.0) {//透明になったら
 		if (MayDoPAtk_OnceFlag == false) {
@@ -1471,6 +1480,9 @@ void GamePlayScene::Draw()
 			sp_blackwindow->Draw();
 		}
 	}
+
+	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
+	sceneChangeDirection->Draw();//シーン遷移演出描画
 
 	//向こうでダメージくらい状態解除したらこっちでも同様
 	if (charParameters->GetispDam() == false) {

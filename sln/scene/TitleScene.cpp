@@ -214,7 +214,6 @@ void TitleScene::NextScene()
 	Input* input = Input::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
-	//if (PMoveFrame < PExitMoveFrameMax) {//退場用時間かけて退場する
 	DoorOpen();//扉を開ける
 
 	//指定時間だけ振動する
@@ -222,7 +221,7 @@ void TitleScene::NextScene()
 		input->PadVibrationDef();
 	}
 
-	{
+	{//指定時間で移動
 		float raito = (float)PMoveFrame / PExitMoveFrameMax;
 		PMoveFrame++;
 
@@ -240,8 +239,6 @@ void TitleScene::NextScene()
 		HideTheScreenOnly = true;
 	}
 
-	//}
-	//else {//最大フレーム後
 	if (sceneChangeDirection->SceneChangeCompFlag)//シーン遷移完了したら
 	{
 		// 音声停止
@@ -250,7 +247,6 @@ void TitleScene::NextScene()
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
-	//}
 
 	//シーン遷移演出更新
 	sceneChangeDirection->Update();
@@ -419,8 +415,6 @@ void TitleScene::Draw()
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
 
-	//sp_gametitlename->Draw();
-
 	if (PAppearFlag == false && SceneChangeFlag == false)//自機登場終わってるかつENTER押される前なら
 	{
 		sp_titleoper->Draw();//ENTERで開始するよ！画像
@@ -430,7 +424,6 @@ void TitleScene::Draw()
 	if (sceneChangeDirection->SceneChangeDirectionFlag) {//シーン遷移演出中なら
 		sceneChangeDirection->Draw();//シーン遷移演出描画
 	}
-
 
 }
 
