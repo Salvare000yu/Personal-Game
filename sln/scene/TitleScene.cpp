@@ -71,7 +71,7 @@ void TitleScene::Initialize()
 	player_.reset(new Player());
 	//いろいろキャラ初期化
 	player_->Initialize();
-	player_->SetPosition({ 0,150,-1950 });
+	player_->SetPosition({ PlayerInitPos });
 	player_->SetModel(mod_player.get());
 
 	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
@@ -123,38 +123,75 @@ void TitleScene::Finalize()
 	//	delete postEffect;
 }
 
-void TitleScene::BeforeUpdate()
+void TitleScene::PStandbyRot()
 {
-	////window縦横取得したいとき使う
-	//WinApp* winApp = WinApp::GetInstance();
+	XMFLOAT3 rot = player_->GetRotation();
 
-	//const float spAccel = 1.05f;//加速
+	switch (standbyRotPattern_) {
+	case StandbyRotPattern::def:
+		RotSp = RotSpDef;
+		standbyRotPattern_ = StandbyRotPattern::accel;
+		break;
 
-	////中心を取る
-	//XMFLOAT3 NamePos = sp_gametitlename->GetPosition();
-	//XMFLOAT2 NameTexSize = sp_gametitlename->GetTexSize();
+	case StandbyRotPattern::accel:
+		if (rot.z <= 270) {
+			rot.z += RotSp;//ちょっと反対に傾けてから
+			RotSp += RotSpAccel;//加速
+		}
+		else {
+			standbyRotPattern_ = StandbyRotPattern::deceleration;
+		}
 
-	//NamePosXCenter = (winApp->window_width / 2) - (NameTexSize.x / 2);//画像左上にセットされるから中央を取る
-	//NamePosYCenter = (winApp->window_height / 2) - (NameTexSize.y / 2);//〃;
+		//if(rot.z>360){//一回転超えたら
+		//	standbyRotPattern_ = StandbyRotPattern::deceleration;
+		//}
+		break;
 
-	//if (NamePos.x > NamePosXCenter)
-	//{
-	//	NamePos.x -= sp;
-	//	sp *= spAccel;
+	case StandbyRotPattern::deceleration:
+
+		rot.z += RotSp;//ちょっと反対に傾けてから
+		RotSp -= RotSpAccel;//加速
+
+		if (rot.z > 360) {
+			rot.z = 0;
+			StandbyRotIntervalTime = StandbyRotIntervalTimeDef;
+			standbyRotPattern_ = StandbyRotPattern::def;
+		}
+
+		//rot.z -= RotSp;//ちょっと反対に傾けてから
+		//RotSp -= RotSpAccel;//加速
+		//if (rot.z <= 360) {
+		//	standbyRotPattern_ = StandbyRotPattern::debug;
+		//}
+		break;
+
+	case StandbyRotPattern::debug:
+
+		break;
+	}
+
+	player_->SetRotation(rot);
+
+	//if (終わり次第) {
+	//	StandbyRotIntervalTime = StandbyRotIntervalTimeDef;//インターバル戻す
 	//}
-	//else {
-	//	MoveStartFlag = false;
-	//}
 
-	//sp_gametitlename->SetPosition({ NamePos });
-	////XMFLOAT2 NameSize = sp_gametitlename->GetSize();
-	////NameSize.x--;
-	////NameSize.y--;
-	////sp_gametitlename->SetSize({NameSize});
-	////sp_gametitlename->TransferVertexBuffer();
+}
+void TitleScene::PlayerStandby()
+{
+	if (StandbyRotIntervalTime == 0) {
+		PStandbyRot();//回転
+	}
+	else {
+		StandbyRotIntervalTime--;//回転インターバル
+	}
 
-	////sp_gametitlename->SetPosition({ NamePosXCenter,NamePosYCenter,NamePos.z });
-	//sp_gametitlename->Update();
+	XMFLOAT3 pos = player_->GetPosition();
+	//登場後の自機座標(=初期値)にカメラを固定して自機だけ動かす
+	camera->SetTarget(PlayerInitPos);
+	pos.y += 0.005f * sinf(time * 1.5f);//上下
+
+	player_->SetPosition(pos);
 
 }
 
@@ -234,7 +271,7 @@ void TitleScene::NextScene()
 		camera->SetTarget(pos);
 	}
 	//自機がシーン遷移演出開始位置に到達したら
-	if (player_->GetPosition().z >= SceneChangeDirecPosZ&& HideTheScreenOnly==false) {
+	if (player_->GetPosition().z >= SceneChangeDirecPosZ && HideTheScreenOnly == false) {
 		sceneChangeDirection->HideTheScreenFlag = true;//画面隠す開始
 		HideTheScreenOnly = true;
 	}
@@ -354,7 +391,6 @@ void TitleScene::Update()
 	}
 
 	if (PAppearFlag) {
-		//BeforeUpdate(); 
 		PlayerAppear();//自機登場
 	}
 
@@ -368,6 +404,7 @@ void TitleScene::Update()
 			input->PadVibration();
 		}
 
+		PlayerStandby();//たいきもーしょん
 		ToStartSprite();//ENTER押してね的な画像関係
 		//postEffect->Update();
 	}
@@ -377,7 +414,6 @@ void TitleScene::Update()
 		NextScene();//チェンジ移動開始
 	}
 
-	camera->SetTarget(player_->GetPosition());//カメラは自機を追う
 	LogoMove();//ロゴの動き
 
 	obj_tunnel->Update();

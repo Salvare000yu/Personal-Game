@@ -26,13 +26,22 @@ class TitleScene :public BaseScene, public BaseObject
 		beforeNextScene,//シーン遷移前
 	};
 
+	//待機中回転
+	enum class StandbyRotPattern {
+		def,
+		accel,
+		deceleration,
+		debug,
+	};
+
 public:
 
 	void Initialize() override;
 
 	void Finalize() override;
 
-	void BeforeUpdate();
+	void PStandbyRot();//待機中の自機回転
+	void PlayerStandby();//待機中
 
 	void PlayerAppear();//自機の登場
 
@@ -92,6 +101,7 @@ private:
 	const int PMoveFrameDef = 0;//経過時間でふぉ
 	int PMoveFrame = PMoveFrameDef;//経過時間
 	//-----自機登場
+	XMFLOAT3 PlayerInitPos{ 0,150,-1950 };
 	XMFLOAT3 ApStartPPos;//開始時自機座標
 	XMFLOAT3 ApEndPPos;//終了
 	const float CamEyeMoveSpX = 1.5f;//カメラ横ずらす値
@@ -108,6 +118,14 @@ private:
 	const int ToStartFrameDef = 40;//透明じゃない時間
 	int ToStartFrame = ToStartFrameDef;
 	//-------
+	
+	//この秒数待ったら回転
+	const int StandbyRotIntervalTimeDef = 60*5;
+	int StandbyRotIntervalTime = StandbyRotIntervalTimeDef;
+	const float RotSpDef = -4;//回転速度
+	float RotSp = RotSpDef;
+	const float RotSpAccel=0.2;//加速
+	StandbyRotPattern standbyRotPattern_ = StandbyRotPattern::def;//待機中回転パターン
 
 	//ロゴの動き　デフォルト
 	LogoPattern logoPattern_ = LogoPattern::def;

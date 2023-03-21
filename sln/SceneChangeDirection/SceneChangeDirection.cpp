@@ -20,6 +20,7 @@ void SceneChangeDirection::Initialize()
 	SceneChangeCompFlag = false;
 	HideTheScreenFlag = false;
 	GameReadyStartFlag = false;
+	OpenTheScreenFlag = false;
 
 }
 
@@ -48,8 +49,8 @@ void SceneChangeDirection::OpenTheScreen()
 	pos.x += HideVel;
 	sp_scenechange->SetPosition({ pos });
 
-	if (pos.x <= 0) {
-
+	if (pos.x ==1280) {
+		OpenTheScreenFlag = true;//Š®‘S‚ÉŠJ‚«Ø‚Á‚½
 	}
 }
 

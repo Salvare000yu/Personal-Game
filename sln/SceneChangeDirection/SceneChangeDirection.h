@@ -31,7 +31,9 @@ public:
 	//画面隠す　false:隠し始める前
 	bool HideTheScreenFlag;
 	//playsceneが始まり演出始める　false:まだ
-	bool GameReadyStartFlag;
+	bool GameReadyStartFlag;	
+	//開き切った　false:開く前
+	bool OpenTheScreenFlag;
 
 private:
 

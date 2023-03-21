@@ -1027,12 +1027,12 @@ bool GamePlayScene::GameReady()
 
 	constexpr int frameMax = 420;
 
-	sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった
-
-	//シーン遷移演出更新
-	sceneChangeDirection->Update();
-
-{
+	if (sceneChangeDirection->OpenTheScreenFlag == false) {//シーン遷移画像残ってるなら
+		sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった
+		//シーン遷移演出更新
+		sceneChangeDirection->Update();
+	}
+	else{//演出画像開き切ったら
 	if (GameReadyFrame < frameMax)
 	{
 		//最初演出中は動くな
