@@ -62,11 +62,7 @@ void SceneChangeDirection::Update()
 	if (GameReadyStartFlag) {
 		OpenTheScreen();//ƒV[ƒ“‘JˆÚŠ®—¹Œã‰æ–Ê‚ðŠJ‚¯‚é
 	}
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", sp_scenechange->GetPosition().x);
-		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	}
+
 	sp_scenechange->Update();
 }
 

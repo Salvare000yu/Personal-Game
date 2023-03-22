@@ -285,7 +285,7 @@ void GamePlayScene::Finalize()
 	//delete smallEnemy_;
 }
 
-void GamePlayScene::SmallEnemyAppear()
+void GamePlayScene::SmallEnemyCreate()
 {
 
 	//雑魚敵生成
@@ -301,6 +301,69 @@ void GamePlayScene::SmallEnemyAppear()
 	//雑魚敵登録
 	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
+void GamePlayScene::SmallEnemyAppear()
+{
+	if (BossEnemyAdvent == false)
+	{
+		//時が満ちたら
+		if (SEneAppCount == 0) {
+			//雑魚敵来る
+			//csvの最後まで行った場合最初に戻す
+			if (++seIndex >= csvData.size()) {
+				seIndex = 0;
+			}
+			SmallEnemyCreate();
+			float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
+			float posy = std::stof(csvData[seIndex][1]);
+			float posz = std::stof(csvData[seIndex][2]);
+			//雑魚敵をcsv通りの場所に出す
+			smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
+
+			//再びカウントできるように初期化
+			SEneAppCount = SEneAppInterval;
+		}
+	}
+	//雑魚敵カウントをデクリメント
+	SEneAppCount--;
+}
+
+void GamePlayScene::BossConditionComp()
+{
+	//撃破数達成でボス戦
+	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		CharParameters* charParams = CharParameters::GetInstance();
+
+		//残っている雑魚敵はもういらない
+		for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
+			se->SetAlive(false);//消す
+		}
+
+		//ボス戦前の演出
+		if (BeforeBossAppearFlag)
+		{//演出終わったら
+			//ボス戦突入のお知らせです
+			BossEnemyAdvent = true;
+		}
+		else {
+			BeforeBossAppear();
+		}
+		//条件達成でボス登場演出
+		for (std::unique_ptr<Boss>& boss : boss_) {
+			boss->Update();//ボス更新
+
+			if (boss->GetisDeath()) {
+				BossDeathEffect();//死亡条件達成で死亡時えふぇくと
+			}
+		}
+		//扉を開ける
+		if (DoorOpenFlag == false) { DoorOpen(); }
+
+		if (charParams->pNextPlaceGoFlag) {
+			pHeadingToTheNextPlace();
+		}
+	}
+}
+
 
 void GamePlayScene::DoorOpen()
 {
@@ -379,7 +442,7 @@ void GamePlayScene::BeforeBossAppear()
 	sp_beforeboss->SetColor(SP_BossWarning);
 
 }
-void GamePlayScene::BossDeathEfect()
+void GamePlayScene::BossDeathEffect()
 {
 	XMFLOAT4 color = sp_blackwindow->GetColor();
 	color.w += colordec;
@@ -1065,7 +1128,11 @@ bool GamePlayScene::GameReady()
 		sp_ready_go->SetColor({ GOCol });
 		sp_ready_go->SetPosition({ GOPos });
 		sp_ready_go->Update();
-		camera->SetTrackingTarget(player_.get());
+
+		if (SetTagOnceFlag == false) {
+			camera->SetTrackingTarget(player_.get());
+			SetTagOnceFlag = true;
+		}
 	}
 }
 
@@ -1123,7 +1190,6 @@ void GamePlayScene::Update()
 	const bool TriggerE = input->TriggerKey(DIK_E);
 	const bool TriggerR = input->TriggerKey(DIK_R);
 	const bool Trigger2 = input->TriggerKey(DIK_2);
-
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
@@ -1222,7 +1288,7 @@ void GamePlayScene::Update()
 
 		player_->Update();
 		if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
-			firingline_->Update();
+			firingline_->Update();//射線
 		}
 
 		if (GameReady() == false)
@@ -1235,28 +1301,7 @@ void GamePlayScene::Update()
 				charParameters->boHpSizeChange();
 			}
 
-			if (BossEnemyAdvent == false)
-			{
-				//時が満ちたら
-				if (SEneAppCount == 0) {
-					//雑魚敵来る
-					//csvの最後まで行った場合最初に戻す
-					if (++seIndex >= csvData.size()) {
-						seIndex = 0;
-					}
-					SmallEnemyAppear();
-					float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
-					float posy = std::stof(csvData[seIndex][1]);
-					float posz = std::stof(csvData[seIndex][2]);
-					//雑魚敵をcsv通りの場所に出す
-					smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
-
-					//再びカウントできるように初期化
-					SEneAppCount = SEneAppInterval;
-				}
-			}
-			//雑魚敵カウントをデクリメント
-			SEneAppCount--;
+			SmallEnemyAppear();//雑魚的出現関数
 
 			//------狙い弾↓
 			//雑魚敵の撃つ弾がプレイヤーのいた場所に飛んでいく
@@ -1327,39 +1372,8 @@ void GamePlayScene::Update()
 					smallEnemy->Update();
 				}
 			}
-
-			//撃破数達成でボス戦
-			if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-
-				//残っている雑魚敵はもういらない
-				for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
-					se->SetAlive(false);//消す
-				}
-
-				//ボス戦前の演出
-				if (BeforeBossAppearFlag)
-				{//演出終わったら
-					//ボス戦突入のお知らせです
-					BossEnemyAdvent = true;
-				}
-				else {
-					BeforeBossAppear();
-				}
-				//条件達成でボス登場演出
-				for (std::unique_ptr<Boss>& boss : boss_) {
-					boss->Update();//ボス更新
-
-					if (boss->GetisDeath()){
-						BossDeathEfect();//死亡条件達成で死亡時えふぇくと
-					}
-				}
-				//扉を開ける
-				if (DoorOpenFlag == false) { DoorOpen(); }
-
-				if (charParams->pNextPlaceGoFlag) {
-					pHeadingToTheNextPlace();
-				}
-			}
+			//ボス戦条件達成でボス戦行くための準備
+			BossConditionComp();
 
 			// FBX Update
 			//fbxObject_1->Update();

@@ -4,6 +4,7 @@
 #include "GameSound.h"
 #include "CharParameters.h"
 #include "ParticleManager.h"
+#include "DebugText.h"
 
 #include <DirectXMath.h>
 

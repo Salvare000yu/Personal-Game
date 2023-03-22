@@ -40,7 +40,6 @@ public:
 
 	void Finalize() override;
 
-	void PStandbyRot();//待機中の自機回転
 	void PlayerStandby();//待機中
 
 	void PlayerAppear();//自機の登場
@@ -118,14 +117,6 @@ private:
 	const int ToStartFrameDef = 40;//透明じゃない時間
 	int ToStartFrame = ToStartFrameDef;
 	//-------
-	
-	//この秒数待ったら回転
-	const int StandbyRotIntervalTimeDef = 60*5;
-	int StandbyRotIntervalTime = StandbyRotIntervalTimeDef;
-	const float RotSpDef = -4;//回転速度
-	float RotSp = RotSpDef;
-	const float RotSpAccel=0.2;//加速
-	StandbyRotPattern standbyRotPattern_ = StandbyRotPattern::def;//待機中回転パターン
 
 	//ロゴの動き　デフォルト
 	LogoPattern logoPattern_ = LogoPattern::def;

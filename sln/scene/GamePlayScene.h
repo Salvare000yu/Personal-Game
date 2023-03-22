@@ -64,20 +64,23 @@ public:
 
 	void PlayTimer();
 
-	void SmallEnemyAppear();//雑魚敵出現
+	void SmallEnemyCreate();	//雑魚敵生成
+	void SmallEnemyAppear();	//雑魚敵出現
+
+	void BossConditionComp();//ボス戦条件たっせい
 
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
 	void BeforeBossAppear();
 
-	void BossDeathEfect();
+	void BossDeathEffect();
 
 	void PlayerMove();
 	void PlayerDash();//ダッシュ
 
 	void CoolTime();
 
-	XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);
+	//XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);
 
 	float time;
 
@@ -158,6 +161,8 @@ private:
 	XMFLOAT3 ApStartPPos;
 	//終了
 	XMFLOAT3 ApEndPPos;
+	//追従カメラ一回だけセット
+	bool SetTagOnceFlag = false;
 
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
@@ -213,6 +218,9 @@ private:
 
 	//自機死亡演出中初回自機座標取得　false:やっていない
 	bool PDeathDirection_PosMemOnlyFlag = false;
+	
+	//関数始まったときのみ false:まだ
+	bool PDeathEffect_PosMemOnlyFlag = false;
 
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 10.f;

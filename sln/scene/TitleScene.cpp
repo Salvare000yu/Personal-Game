@@ -123,68 +123,8 @@ void TitleScene::Finalize()
 	//	delete postEffect;
 }
 
-void TitleScene::PStandbyRot()
-{
-	XMFLOAT3 rot = player_->GetRotation();
-
-	switch (standbyRotPattern_) {
-	case StandbyRotPattern::def:
-		RotSp = RotSpDef;
-		standbyRotPattern_ = StandbyRotPattern::accel;
-		break;
-
-	case StandbyRotPattern::accel:
-		if (rot.z <= 270) {
-			rot.z += RotSp;//ちょっと反対に傾けてから
-			RotSp += RotSpAccel;//加速
-		}
-		else {
-			standbyRotPattern_ = StandbyRotPattern::deceleration;
-		}
-
-		//if(rot.z>360){//一回転超えたら
-		//	standbyRotPattern_ = StandbyRotPattern::deceleration;
-		//}
-		break;
-
-	case StandbyRotPattern::deceleration:
-
-		rot.z += RotSp;//ちょっと反対に傾けてから
-		RotSp -= RotSpAccel;//加速
-
-		if (rot.z > 360) {
-			rot.z = 0;
-			StandbyRotIntervalTime = StandbyRotIntervalTimeDef;
-			standbyRotPattern_ = StandbyRotPattern::def;
-		}
-
-		//rot.z -= RotSp;//ちょっと反対に傾けてから
-		//RotSp -= RotSpAccel;//加速
-		//if (rot.z <= 360) {
-		//	standbyRotPattern_ = StandbyRotPattern::debug;
-		//}
-		break;
-
-	case StandbyRotPattern::debug:
-
-		break;
-	}
-
-	player_->SetRotation(rot);
-
-	//if (終わり次第) {
-	//	StandbyRotIntervalTime = StandbyRotIntervalTimeDef;//インターバル戻す
-	//}
-
-}
 void TitleScene::PlayerStandby()
 {
-	if (StandbyRotIntervalTime == 0) {
-		PStandbyRot();//回転
-	}
-	else {
-		StandbyRotIntervalTime--;//回転インターバル
-	}
 
 	XMFLOAT3 pos = player_->GetPosition();
 	//登場後の自機座標(=初期値)にカメラを固定して自機だけ動かす
@@ -345,6 +285,7 @@ void TitleScene::LogoMove()
 		break;
 
 	case LogoPattern::beforeNextScene:
+		LogoRotVel = 0;
 		pos.y = min(pos.y, PosYMax);//Y座標はPosYMaxまでしかいけないように
 		pos.y += PosYSp;
 		break;
