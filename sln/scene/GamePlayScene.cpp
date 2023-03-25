@@ -1052,7 +1052,7 @@ void GamePlayScene::CollisionAll()
 				if (BodyDamFlag == false) {
 					if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
 						pDamFlag = true;
-						float bodyPow = bo->GetBodyPow();//ボス体威力
+						int bodyPow = bo->GetBodyPow();//ボス体威力
 						NowpHp -= bodyPow;//自機にダメージ
 						charParams->SetispDam(true);//自機くらい
 						charParams->SetNowpHp(NowpHp);
@@ -1084,8 +1084,8 @@ bool GamePlayScene::GameReady()
 	XMFLOAT2 GOSize = sp_ready_go->GetSize();
 	XMFLOAT3 GOPos = sp_ready_go->GetPosition();
 
-	const float ReadyColWDecVal = 0.005;//Readyを透明にしていく
-	const float GoColWDecVal = 0.01;//GOを透明にしていく
+	const float ReadyColWDecVal = 0.005f;//Readyを透明にしていく
+	const float GoColWDecVal = 0.01f;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
 	constexpr int frameMax = 420;
@@ -1121,8 +1121,8 @@ bool GamePlayScene::GameReady()
 		GOCol.w -= GoColWDecVal;
 		GOSize.x += GoSizeIncVal;
 		GOSize.y += GoSizeIncVal;
-		GOPos.x -= 3.2;
-		GOPos.y -= 3.2;
+		GOPos.x -= 3.2f;
+		GOPos.y -= 3.2f;
 		sp_ready_go->SetSize({ GOSize });
 		sp_ready_go->TransferVertexBuffer();
 		sp_ready_go->SetColor({ GOCol });

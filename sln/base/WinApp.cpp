@@ -1,6 +1,8 @@
 #include "WinApp.h"
 #include <Windows.h>
 
+#pragma comment(lib,"winmm.lib")
+
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     //メッセージで分岐
@@ -53,6 +55,9 @@ void WinApp::Initialize()
 
     // ウィンドウ表示
     ShowWindow(hwnd, SW_SHOW);
+
+    //FPS固定でタイマーの制度（sleep）が低くたくさんスリープして動きがもっさりするので制度UP
+    timeBeginPeriod(1);
 }
 
 void WinApp::Update()

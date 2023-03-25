@@ -5,6 +5,7 @@
 #include <dxgi1_6.h>
 #include <wrl.h>
 #include "WinApp.h"
+#include <chrono>
 
 #include <DirectXMath.h>
 
@@ -56,6 +57,9 @@ private:
 	//------
 	//バックバッファ
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>>backBuffers;
+
+	//FPS固定 時間記録
+	std::chrono::steady_clock::time_point reference_;
 private:
 	bool InitializeCommand();
 
@@ -72,5 +76,9 @@ private:
 	bool DebugLayer();
 
 	bool SetBreakOnSeverity();
+	//----//FPS固定
+	void InitFixFps();//初期化
+	void UpdateFixFps();//更新
+	//-----
 };
 

@@ -73,7 +73,7 @@ public:
 
 	std::unique_ptr < Player> player_ = nullptr;
 
-	float time;
+	float time=0;
 	float frame = 0;
 
 private:
@@ -101,13 +101,13 @@ private:
 	int PMoveFrame = PMoveFrameDef;//経過時間
 	//-----自機登場
 	XMFLOAT3 PlayerInitPos{ 0,150,-1950 };
-	XMFLOAT3 ApStartPPos;//開始時自機座標
-	XMFLOAT3 ApEndPPos;//終了
+	XMFLOAT3 ApStartPPos{};//開始時自機座標
+	XMFLOAT3 ApEndPPos{};//終了
 	const float CamEyeMoveSpX = 1.5f;//カメラ横ずらす値
 	//------自機登場
 	//------自機退場(シーンチェンジ)
-	XMFLOAT3 ExitStartPPos;//開始時自機座標
-	XMFLOAT3 ExitEndPPos;//終了
+	XMFLOAT3 ExitStartPPos{};//開始時自機座標
+	XMFLOAT3 ExitEndPPos{};//終了
 	const float ExitPosZ = 200;//ここでおわる
 	const float SceneChangeDirecPosZ = 0;//シーン遷移演出開始位置
 	bool HideTheScreenOnly = false;//一度きり画面隠しフラグ　false：まだしてない

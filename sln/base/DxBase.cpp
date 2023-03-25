@@ -1,4 +1,4 @@
-//DirectXcommon
+//基盤部分DirectXcommon
 
 #include "DxBase.h"
 
@@ -45,6 +45,9 @@ void DxBase::Initialize(WinApp* winApp)
     InitializeDepthBuffer();
     //フェンス
     InitializeFence();
+
+    //FPS固定
+    InitFixFps();
 
 }
 
@@ -107,10 +110,12 @@ void DxBase::PostDraw()
         CloseHandle(event);
     }
 
+    //FPS固定更新 VSyncを残し追加で待つので実行完了待ち直後に
+    UpdateFixFps();
+
     cmdAllocator->Reset(); // キューをクリア
     cmdList->Reset(cmdAllocator.Get(), nullptr);  // 再びコマンドリストを貯める準備
 #pragma endregion グラフィックスコマンド
-
 
 }
 
@@ -372,4 +377,34 @@ bool DxBase::SetBreakOnSeverity()
 #endif
 
     return true;
+}
+
+void DxBase::InitFixFps()
+{
+    //現在時間記録
+    reference_ = std::chrono::steady_clock::now();
+}
+
+void DxBase::UpdateFixFps()
+{
+    //1/60ジャスト
+    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+    //1/60よりちょっとだけ短い時間
+    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+
+    const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    //前回記録からの経過時間取得
+    std::chrono::microseconds elapsed =
+        std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+    //1/60(よりわずかに短い時間）経過前なら
+    if (elapsed < kMinCheckTime) {
+        //1/60秒経過するまで微小なスリープ繰り返す
+        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+            //1マイクロスリープ
+            std::this_thread::sleep_for(std::chrono::microseconds(1));
+        }
+    }
+    //現在時間記録
+    reference_ = std::chrono::steady_clock::now();
 }

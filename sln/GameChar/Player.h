@@ -120,7 +120,7 @@ private:
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
 	XMFLOAT3 NowPos = {};//その時の位置
 
-	float PartTimeInterval;
+	float PartTimeInterval=0;
 	float ParticleFrame = 39;//パーティクル出すフレ
 
 	bool GetPosFlag = true;//一度きりの座標読み込み

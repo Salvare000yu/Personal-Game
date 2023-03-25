@@ -143,8 +143,8 @@ public:
 	const int& GetBodyPow() { return BodyPow; }
 
 	//ボス生死
-	void SetisDeath(float isDeath) { this->isDeath = isDeath; }
-	const float& GetisDeath() { return isDeath; }
+	void SetisDeath(bool isDeath) { this->isDeath = isDeath; }
+	const bool& GetisDeath() { return isDeath; }
 
 	//ボス当たり判定するか
 	void SetDoCollision(bool doCollision) { this->doCollision = doCollision; }

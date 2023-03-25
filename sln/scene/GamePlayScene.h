@@ -82,7 +82,7 @@ public:
 
 	//XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);
 
-	float time;
+	float time=0;
 
 	//指定フレームごとに雑魚出現
 	static const int SEneAppInterval = 60;
@@ -158,9 +158,9 @@ private:
 	//ゲーム開始時フレーム
 	int GameReadyFrame = 0;
 	//開始時自機座標
-	XMFLOAT3 ApStartPPos;
+	XMFLOAT3 ApStartPPos{};
 	//終了
-	XMFLOAT3 ApEndPPos;
+	XMFLOAT3 ApEndPPos{};
 	//追従カメラ一回だけセット
 	bool SetTagOnceFlag = false;
 
@@ -229,7 +229,7 @@ private:
 	float DecelVal = 0.1f;//減速値
 
 	//与える威力
-	float Damage;
+	float Damage{};
 
 	std::vector<std::vector<std::string>> csvData;
 	//何行目まで出したか
