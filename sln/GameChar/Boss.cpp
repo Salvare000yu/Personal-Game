@@ -725,7 +725,7 @@ void Boss::PAimBul()
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
 		// ‘å‚«‚³‚ð”CˆÓ’l‚É(‘¬“x)
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 7.f);
+		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 9.f);
 		// FLOAT3‚É•ÏŠ·
 		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
 

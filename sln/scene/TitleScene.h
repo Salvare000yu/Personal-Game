@@ -96,7 +96,7 @@ private:
 
 	//----------登場退場共通----------//
 	const float PApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)
-	const float PExitMoveFrameMax = 200.f;//経過時間最大フレーム(退場)
+	const float PExitMoveFrameMax = 100.f;//経過時間最大フレーム(退場)
 	const int PMoveFrameDef = 0;//経過時間でふぉ
 	int PMoveFrame = PMoveFrameDef;//経過時間
 	//-----自機登場
@@ -108,8 +108,8 @@ private:
 	//------自機退場(シーンチェンジ)
 	XMFLOAT3 ExitStartPPos{};//開始時自機座標
 	XMFLOAT3 ExitEndPPos{};//終了
-	const float ExitPosZ = 200;//ここでおわる
-	const float SceneChangeDirecPosZ = 0;//シーン遷移演出開始位置
+	const float ExitPosZ = 1300;//ここでおわる
+	const float SceneChangeDirecPosZ = -100;//シーン遷移演出開始位置
 	bool HideTheScreenOnly = false;//一度きり画面隠しフラグ　false：まだしてない
 	//------自機退場(シーンチェンジ)
 

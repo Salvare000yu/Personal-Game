@@ -492,7 +492,7 @@ void GamePlayScene::PlayerMove()
 	{
 		//------プレイヤーも同じ移動------//
 		//bool OldInputFlag = FALSE;
-		constexpr float moveSpeed = 3.f;
+		constexpr float moveSpeed = 5.f;
 
 		if (cInput->DownMove()) {
 			PlayerPos.y -= moveSpeed;
@@ -648,9 +648,9 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 	bool StopFlag = false;//停止してね
 
-	if (pNextPlaceGoSp < pNextPlaceGoSpMax) {
-		pNextPlaceGoSp += AccelVal;
-	}
+	pNextPlaceGoSp = min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
+	pNextPlaceGoSp += AccelVal;
+
 	if (pPos.z > charParams->StopPos) {//指定した場所超えたら
 		StopFlag = true;//止まれ
 	}
@@ -1088,7 +1088,7 @@ bool GamePlayScene::GameReady()
 	const float GoColWDecVal = 0.01f;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
-	constexpr int frameMax = 420;
+	constexpr int frameMax = 300;
 
 	if (sceneChangeDirection->OpenTheScreenFlag == false) {//シーン遷移画像残ってるなら
 		sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった

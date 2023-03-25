@@ -225,8 +225,8 @@ private:
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 10.f;
 	float pNextPlaceGoSp = 2.f;
-	float AccelVal = 0.03f;//加速値
-	float DecelVal = 0.1f;//減速値
+	float AccelVal = 0.1f;//加速値
+	float DecelVal = 0.2f;//減速値
 
 	//与える威力
 	float Damage{};

@@ -39,7 +39,7 @@ private:
 
 	std::unique_ptr < Sprite> sp_scenechange = nullptr;
 
-	const float HideSp = 40;//画面隠す速度 画像サイズで割れる大きさ
+	const float HideSp = 80;//画面隠す速度 画像サイズで割れる大きさ
 
 	float HideVel = 0;//実際に座標に足す値
 

@@ -79,7 +79,7 @@ void TitleScene::Initialize()
 	//自機登場演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 500;//ここから自機の初期位置まで指定フレーム掛けて動く
+	ApStartPPos.z -= 1200;//ここから自機の初期位置まで指定フレーム掛けて動く
 
 	camera->SetTarget(player_->GetPosition());
 	const float EyeXDef = 10;//最終位置
@@ -129,7 +129,7 @@ void TitleScene::PlayerStandby()
 	XMFLOAT3 pos = player_->GetPosition();
 	//登場後の自機座標(=初期値)にカメラを固定して自機だけ動かす
 	camera->SetTarget(PlayerInitPos);
-	pos.y += 0.005f * sinf(time * 1.5f);//上下
+	pos.y += 0.005f * sinf(time * 5.f);//振れ幅＊sin(時＊揺れ速度
 
 	player_->SetPosition(pos);
 
