@@ -70,12 +70,8 @@ std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 
 void GamePlayScene::Initialize()
 {
-
-	//camera.reset(new Camera(WinApp::window_width, WinApp::window_height));
 	camera.reset(new CameraTracking());
 
-	//camera->SetTarget({ 0,50,-200 });
-	//camera->SetEye({ 0,48,-210 });
 	Object3d::SetCamera(camera.get());
 
 	// マウスカーソル非表示
@@ -84,12 +80,6 @@ void GamePlayScene::Initialize()
 
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
-	// カメラセット
-	//Object3d::SetCamera(camera.get());
-
-	//グラフィックスパイプライン生成
-	//FbxObject3d::CreateGraphicsPipeline();
-	//FbxObject3d::SetCamera(camera.get());
 
 	CharParameters* charParameters = CharParameters::GetInstance();
 
@@ -156,6 +146,7 @@ void GamePlayScene::Initialize()
 	firingline_ = std::make_unique<PlayerFireLine>();
 	firingline_->Initialize();
 	firingline_->SetModel(mod_firingline.get());
+	obj_ground->SetColor({ 1,1,1,1 });
 
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
@@ -173,21 +164,6 @@ void GamePlayScene::Initialize()
 		boss->SetStraightBulModel(mod_straightbul.get());//直線弾
 	}
 
-	//fbxModel_1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-	//----------FBX オブジェクト生成とモデルのセット-----------//
-
-	//fbxObject_1 = new FbxObject3d;
-
-	//fbxObject_1->Initialize();
-
-	//------fbxセット------//
-	//fbxObject_1->SetModel(fbxModel_1);
-	//------fbxスケール------//
-	//fbxObject_1->SetScale({ 10.0f, 10.0f, 10.0f });
-	//------fbx位置------//
-	//fbxObject_1->SetPosition({ 0,24,100 });
-	//fbxObject_1->PlayAnimation();
-
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("E_rhythmaze_128.wav");
 	GameSound::GetInstance()->LoadWave("se_baaan1.wav");
@@ -200,17 +176,11 @@ void GamePlayScene::Initialize()
 	GameSound::GetInstance()->LoadWave("personalgame_bosswarning.wav");
 	// 音声再生 鳴らしたいとき
 	GameSound::GetInstance()->PlayWave("E_rhythmaze_128.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
-	// 3Dオブジェクトの数
-	//const int OBJECT_NUM = 2;
-
-	//Object3d object3ds[OBJECT_NUM];
 
 	Pause* pause = Pause::GetInstance();
 	pause->Initialize();
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
-	//SpriteBase::GetInstance()->LoadTexture(2, L"Resources/target_guide.png");
-	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/sight.png");
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
@@ -218,7 +188,6 @@ void GamePlayScene::Initialize()
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	//sp_guide.reset(Sprite::Create(2, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5, 0.5 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -231,39 +200,12 @@ void GamePlayScene::Initialize()
 
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
-	//sp_guide->SetPosition({ 0,0,0 });
-	//sp_sight->SetPosition({ WinApp::window_width / 2,WinApp::window_height / 2+100,0 });
-	//sp_sight->SetSize({ 50,50 });
-	//sp_sight->TransferVertexBuffer();
 
 	//スプライトカラー
 	sp_blackwindow->SetColor({ 1, 1, 1, 0 });
 
-	//---------スプライトサイズ---------//
-	//XMFLOAT2 size = sp_guide->GetSize();
-	//sp_guide->GetSize();
-	//size.x=90;
-	//sp_guide->SetSize({200,0});
-
 	// パーティクル初期化
 	ParticleManager::GetInstance()->SetCamera(camera.get());
-
-	//fbx モデル名指定してファイル読み込み
-	//FbxLoader::GetInstance()->LoadModelFromFile(
-	//	"cube"
-	//);
-
-
-	//// スプライン曲線
-	////posints = { start, start, p2, p3, end, end }
-	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
-	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//s
-	//points.emplace_back(XMVectorSet(0, 0, 60, 0));
-	//points.emplace_back(XMVectorSet(0, 70, 100, 0));
-	//points.emplace_back(XMVectorSet(0, 30, 50, 0));//e
-	//points.emplace_back(XMVectorSet(0, 0, 0, 0));//e
-	////p1からスタート
-	//splineStartIndex = 1;
 
 	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
 
@@ -273,22 +215,15 @@ void GamePlayScene::Initialize()
 
 	//今あるパーティクルを削除する
 	ParticleManager::GetInstance()->DeleteParticles();
-
 }
 
 void GamePlayScene::Finalize()
 {
-	//safe_delete(fbxObject_1);
-	//safe_delete(fbxModel_1);
-
-	//自キャラ解放
-	//delete player_;
-	//delete smallEnemy_;
+	PostEffect::GetInstance()->SetVignettePow(0.f);
 }
 
 void GamePlayScene::SmallEnemyCreate()
 {
-
 	//雑魚敵生成
 	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
 
@@ -365,10 +300,8 @@ void GamePlayScene::BossConditionComp()
 	}
 }
 
-
 void GamePlayScene::DoorOpen()
 {
-
 	int LDoorPosXRim = -2200;//左の壁開け終わる場所
 	int DoorMoveSp = 6;//ドアが開く速度
 
@@ -389,7 +322,6 @@ void GamePlayScene::DoorOpen()
 
 void GamePlayScene::BeforeBossAppear()
 {
-
 	//演出中時のみtrue
 	BeforeBossAppearNow = true;
 
@@ -435,13 +367,11 @@ void GamePlayScene::BeforeBossAppear()
 	//--繰り返す回数0~------消えてからボス戦へ
 	if (BBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
-
 		BeforeBossAppearFlag = true;
 		BeforeBossAppearNow = true;
 	}
 
 	sp_beforeboss->SetColor(SP_BossWarning);
-
 }
 void GamePlayScene::BossDeathEffect()
 {
@@ -501,7 +431,6 @@ void GamePlayScene::PlayerMove()
 		}
 
 		if (cInput->LeftMove()) {
-
 			PlayerPos.x -= moveSpeed;
 
 			if (rotation.z <= 10) {
@@ -511,7 +440,6 @@ void GamePlayScene::PlayerMove()
 		}
 
 		if (cInput->RightMove()) {
-
 			PlayerPos.x += moveSpeed;
 
 			if (rotation.z >= -10) {
@@ -520,12 +448,6 @@ void GamePlayScene::PlayerMove()
 			isRMove = true;//右移動中
 		}
 		player_->SetPosition(PlayerPos);
-
-		//{
-		//	char tmp[128]{};
-		//	sprintf_s(tmp, 128, "%2.f, %2.f, %2.f", PlayerPos.x, PlayerPos.y, PlayerPos.z);
-		//	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-		//}
 	}
 	else
 	{
@@ -563,7 +485,6 @@ void GamePlayScene::PlayerDash()
 	}
 	//ダッシュスタート
 	if (DashFlag) {
-
 		XMFLOAT3 pPos = player_->GetPosition();
 
 		//ダッシュする時間
@@ -638,7 +559,6 @@ void GamePlayScene::PlayerDash()
 	if (DashAttenuationFlag) {
 		DashVelInc += Attenuation;
 	}
-
 }
 
 void GamePlayScene::pHeadingToTheNextPlace()
@@ -666,7 +586,6 @@ void GamePlayScene::pHeadingToTheNextPlace()
 			charParams->pNextPlaceGoFlag = false;
 			//攻撃可能にしてから終わる
 			player_->pAtkPossibleFlag = true;
-
 		}
 	}
 
@@ -682,7 +601,6 @@ void GamePlayScene::CoolTime()
 
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag) {
-
 		//画像薄くしてく
 		vignettePow -= DamEffectW;
 		if (vignettePow < 0.f) {
@@ -715,14 +633,6 @@ void GamePlayScene::UpdateMouse()
 
 void GamePlayScene::UpdateCamera()
 {
-	// カメラの距離
-	//constexpr float camLen = 64.f;
-	// カメラの高さ
-	//constexpr float camHeight = camLen * 10.5f;
-
-	// 自機からカメラ注視点までの距離
-	//constexpr float player2targetLen = camLen * 2.f;
-
 	// 自機の視線ベクトル
 	{
 		//感度
@@ -760,8 +670,6 @@ void GamePlayScene::UpdateCamera()
 
 		XMFLOAT3 PlayerRot = player_->GetRotation();
 		firingline_->SetRotation(PlayerRot);
-
-		//firingline_->SetScale({ 0.5f,0.5f,10.f });
 	}
 }
 
@@ -808,7 +716,6 @@ void GamePlayScene::CollisionAll()
 	//[自機の弾]と[ボス]の当たり判定                  移動終わったら					自機の体力あるとき
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
 		{
-
 			Sphere pBulForm;//球
 
 			for (auto& pb : player_->GetBullets()) {
@@ -832,7 +739,6 @@ void GamePlayScene::CollisionAll()
 
 						pb->SetAlive(false);
 
-						//bo->SetColor({ 1,0,0,1 });
 						//喰らってまだ生きてたら
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
@@ -850,35 +756,17 @@ void GamePlayScene::CollisionAll()
 							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
 								bob->SetAlive(false);//消す
 							}
-
 						}
 
 						break;
 					}
 				}
 			}
-			////ボスいればTRUE　消えたらFALSE　いないとENPTY
-			//if (!boss_.empty())
-			//{
-			//	if (boss_.front()->GetAlive()) {
-			//		DebugText::GetInstance()->Print("TRUE", 200, 190, 2);
-			//	}
-			//	else {
-			//		DebugText::GetInstance()->Print("FALSE", 200, 190, 2);
-			//	}
-			//}
-			//else {
-			//	DebugText::GetInstance()->Print("empty", 200, 190, 2);
-			//}
-			//// ボスを消す
-			//boss_.erase(std::remove_if(boss_.begin(), boss_.end(),
-			//	[](const std::unique_ptr <Boss>& i) {return !i->GetAlive() && i->GetBullets().empty(); }), boss_.end());
 		}
 	}
 
 	//[自機の弾]と[雑魚敵]当たり判定
 	{
-
 		Sphere pBulForm;
 
 		for (auto& pb : player_->GetBullets()) {
@@ -908,14 +796,8 @@ void GamePlayScene::CollisionAll()
 		}
 	}
 
-	//消滅フラグ立ったらその雑魚敵は死して拝せよ
-	/*smallEnemys_.remove_if([](std::unique_ptr<SmallEnemy>& smallEnemy) {
-		return !smallEnemy->GetAlive();
-		});*/
-
-		//[自機]と[ボス弾]の当たり判定
+	//[自機]と[ボス弾]の当たり判定
 	{
-
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z + 2;
@@ -929,7 +811,6 @@ void GamePlayScene::CollisionAll()
 					eBulForm.radius = bob->GetScale().z + 2.f;
 
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
-
 						pDamFlag = true;
 						NowpHp -= bo->GetBulPow();//自機ダメージ
 						charParams->SetispDam(true);
@@ -939,7 +820,6 @@ void GamePlayScene::CollisionAll()
 						bob->SetAlive(false);
 						break;
 					}
-
 				}
 			}
 		}
@@ -959,7 +839,6 @@ void GamePlayScene::CollisionAll()
 					aimBulForm.radius = boaimbul->GetScale().z + 2.f;
 
 					if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
-
 						pDamFlag = true;
 						NowpHp -= bo->GetAimBulPow();//自機ダメージ
 						charParams->SetispDam(true);
@@ -989,7 +868,6 @@ void GamePlayScene::CollisionAll()
 					straightBulForm.radius = boStraightBul->GetScale().z + 2.f;
 
 					if (Collision::CheckSphere2Sphere(playerForm, straightBulForm)) {
-
 						pDamFlag = true;
 						NowpHp -= bo->GetStraightBulPow();//自機ダメージ
 						charParams->SetispDam(true);
@@ -999,7 +877,6 @@ void GamePlayScene::CollisionAll()
 						boStraightBul->SetAlive(false);
 						break;
 					}
-
 				}
 			}
 		}
@@ -1030,7 +907,6 @@ void GamePlayScene::CollisionAll()
 						seb->SetAlive(false);
 						break;
 					}
-
 				}
 			}
 		}
@@ -1079,7 +955,6 @@ void GamePlayScene::CollisionAll()
 
 bool GamePlayScene::GameReady()
 {
-
 	CharParameters* charParameters = CharParameters::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
@@ -1118,7 +993,6 @@ bool GamePlayScene::GameReady()
 			player_->SetPosition(pos);
 
 			camera->SetTarget(pos);
-
 		}
 		else {
 			ready_GOFlag = true;
@@ -1169,7 +1043,6 @@ void GamePlayScene::BodyDamCoolTime()
 
 void GamePlayScene::Update()
 {
-
 	Pause* pause = Pause::GetInstance();
 
 	Input* input = Input::GetInstance();
@@ -1210,7 +1083,6 @@ void GamePlayScene::Update()
 		}
 	}
 	if (pause->GetPauseFlag()) {
-
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
@@ -1222,14 +1094,12 @@ void GamePlayScene::Update()
 			BaseScene* scene = new TitleScene();
 			sceneManager_->SetNextScene(scene);
 		}
-
 	}
 
 	//ポーズでないとき～
 	//--------------この外に出すとポーズ中も実行
 	if (pause->GetPauseFlag() == false)
 	{
-
 		Input* input = Input::GetInstance();
 		DxBase* dxBase = DxBase::GetInstance();
 
@@ -1273,10 +1143,6 @@ void GamePlayScene::Update()
 			pRotDef = true;
 		}
 
-		//auto rot =obj_tunnel->GetRotation();
-		//rot.x -= 1.f;
-		//obj_tunnel->SetRotation(rot);
-
 		//3dobjUPDATE
 		obj_ground->Update();
 		obj_kaberight->Update();
@@ -1284,8 +1150,6 @@ void GamePlayScene::Update()
 
 		//スプライト更新
 		sprite_back->Update();
-		//sp_sight->Update();
-		//sp_guide->Update();
 		charParameters->pHpUpdate();
 
 		pause->SpUpdate();
@@ -1332,8 +1196,6 @@ void GamePlayScene::Update()
 			}
 			//----------------↑シーン切り替え関連↑---------------//
 
-			//くらったらクールタイム
-			CoolTime();
 			BodyDamCoolTime();//体継続ダメージ
 
 			if (player_->GetPHpLessThan0() == false)
@@ -1343,31 +1205,6 @@ void GamePlayScene::Update()
 
 			// パーティクル更新
 			ParticleManager::GetInstance()->Update();
-
-			//// スプライン曲線で移動
-			//{
-			//	frame++;
-			//	float timeRate = (float)frame / 120.f;
-
-			//	if (timeRate >= 1.0f)
-			//	{
-			//		if (splineStartIndex < points.size() - 3) {
-			//			splineStartIndex++;
-			//			timeRate -= 1.0f;
-			//			frame = 0;
-			//		}
-			//		else
-			//		{
-			//			timeRate = 1.0f;
-			//		}
-			//	}
-
-			//	// ベクターをフロートに変換
-			//	XMFLOAT3 splineFloat;
-			//	XMStoreFloat3(&splineFloat, SplinePosition(points, splineStartIndex, timeRate));
-
-			//	player_->SetPosition(splineFloat);
-			//}
 
 			//雑魚敵更新
 			if (BossEnemyAdvent == false)
@@ -1388,19 +1225,11 @@ void GamePlayScene::Update()
 			{
 				charParameters->boHpUpdate();
 			}
-
 		}
-
 	}//ここまでポーズしてないとき
 
-	//-------常にデバテキ↓
-	//if (player_->pAtkPossibleFlag) {
-	//	DebugText::GetInstance()->Print("true", 100, 70, 2);
-	//}
-	//else {
-	//	DebugText::GetInstance()->Print("false", 100, 90, 2);
-	//}
-	//-------常にデバテキ↑
+	//くらったらクールタイム
+	CoolTime();
 
 	obj_tunnel->Update();
 	obj_backwall->Update();
@@ -1416,7 +1245,6 @@ void GamePlayScene::Draw()
 	CharParameters* charParameters = CharParameters::GetInstance();
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
-	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
 	sprite_back->Draw();
 
@@ -1436,20 +1264,17 @@ void GamePlayScene::Draw()
 	}
 
 	//3dオブジェ描画
-	obj_ground->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
 	obj_backwall->Draw();
+	obj_ground->Draw();
 
 	//自キャラ描画
 	player_->Draw();
 	if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
 		firingline_->Draw();
 	}
-
-	// FBX3dオブジェクト描画
-	//fbxObject_1->Draw(cmdList);
 
 	// パーティクル描画
 	DxBase* dxBase = DxBase::GetInstance();
@@ -1506,101 +1331,15 @@ void GamePlayScene::Draw()
 	if (charParameters->GetispDam() == false) {
 		pDamFlag = false;
 	}
-
-	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// スプライト描画
-   // sprite->Draw();
-
 }
-
-//XMVECTOR GamePlayScene::SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t)
-//{
-//
-//	size_t n = posints.size() - 2;
-//
-//	if (startIndex > n)return posints[n];
-//	if (startIndex < 1)return posints[1];
-//
-//	XMVECTOR p0 = posints[startIndex - 1];
-//	XMVECTOR p1 = posints[startIndex];
-//	XMVECTOR p2 = posints[startIndex + 1];
-//	XMVECTOR p3 = posints[startIndex + 2];
-//
-//	//mt3スプライン曲線の考え方
-//	XMVECTOR position = 0.5 * ((2 * p1 + (-p0 + p2) * t) +
-//		(2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
-//		(-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
-//
-//	return position;
-//}
 
 void GamePlayScene::DrawUI()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
-	//条件なし常に表示
-	//DebugText::GetInstance()->Print("---PLAYSCENE---", 100, 70, 2);
-	//DebugText::GetInstance()->Print("[LEFT CLICKorSPACEorPAD ZR] Firing", 100, 100, 2);
-	//DebugText::GetInstance()->Print("[WASD&QZorGAMEPAD:STICK]PlayerMove", 100, 130, 2);
-	//DebugText::GetInstance()->Print("[ALLOWorMOVE MOUSEorJ,K,L,I] PlayerRot", 100, 160, 2);
-	//DebugText::GetInstance()->Print("[ESC] CLOSE WINDOW", 100, 190, 2);
-	//DebugText::GetInstance()->Print("Player HP", 150, 610, 2);
-	//{
-	////自機座標
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f,%2.f,%2.f", player_->GetPosition().x, player_->GetPosition().y, player_->GetPosition().z);
-	//	DebugText::GetInstance()->Print(tmp, 430, 220, 3);
-	//}
-	//if (NowBossHP == 0) {
-	//	DebugText::GetInstance()->Print("crushing!", 100, 230, 3);
-	//}
-	//if (player_->GetAlive()) {
-	//	DebugText::GetInstance()->Print("Alive", 100, 270, 3);
-	//}
-	//else { DebugText::GetInstance()->Print("GameOver", 100, 270, 3); }
-
-	//if (sEnemyMurdersNum >= BossTermsEMurdersNum) {//ボス戦時のみ
-	//	DebugText::GetInstance()->Print("Boss HP", 500, 10, 2);
-	//	//DebugText::GetInstance()->Print("!!!Boss!!!", 100, 415, 3);
-	//}
-	//else {//ボス戦じゃないときのみ表示
-	//	//雑魚敵撃破数関連
-	//	{
-	//		DebugText::GetInstance()->Print("[BossTerms]", 100, 400, 2);
-
-	//		char tmp[32]{};
-	//		sprintf_s(tmp, 32, "%2.f", BossTermsEMurdersNum);
-	//		DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-	//	}
-	//	{
-	//		DebugText::GetInstance()->Print("[Now DefeatedEnemy]", 100, 440, 2);
-
-	//		char tmp[32]{};
-	//		sprintf_s(tmp, 32, "%2.f", sEnemyMurdersNum);
-	//		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	//	}
-	//}
-
-	//{//振動時間
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%d", pShakeTimer_);
-	//	DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	//}
 
 	charParameters->DrawUI();
 }
 
 void GamePlayScene::PlayTimer()
 {
-	//Pause* pause = Pause::GetInstance();
-	////時間計測
-	//{
-	//	Timer* timer = Timer::GetInstance();
-	//	if (pause->GetPauseFlag() == false)
-	//	{
-	//		timer->TimerPlay();
-	//	}
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "NowTime : %2.f", timer->time);
-	//	DebugText::GetInstance()->Print(tmp, 150, 220, 1);
-	//}
 }

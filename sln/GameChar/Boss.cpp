@@ -905,6 +905,7 @@ void Boss::Initialize()
 	mod_outside.reset(Model::LoadFromOBJ("boss_outside"));
 	mod_SideSquare.reset(Model::LoadFromOBJ("boss_SideSquare"));
 	mod_UpDown.reset(Model::LoadFromOBJ("boss_UpDown"));
+	mod_VerticalCircle.reset(Model::LoadFromOBJ("boss_VerticalCircle"));
 	//ì‚é
 	obj.reset(Object3d::Create());
 	obj_core.reset(Object3d::Create());
@@ -912,28 +913,32 @@ void Boss::Initialize()
 	obj_outside.reset(Object3d::Create());
 	obj_SideSquare.reset(Object3d::Create());
 	obj_UpDown.reset(Object3d::Create());
+	obj_VerticalCircle.reset(Object3d::Create());
 
 	obj_core->SetModel(mod_core.get());
 	obj_AroundCore->SetModel(mod_AroundCore.get());
 	obj_outside->SetModel(mod_outside.get());
 	obj_SideSquare->SetModel(mod_SideSquare.get());
 	obj_UpDown->SetModel(mod_UpDown.get());
+	obj_VerticalCircle->SetModel(mod_VerticalCircle.get());
 
-	//-----«”CˆÓ«-----//
+//-----«”CˆÓ«-----//
 	//‘å‚«‚³
 	obj->SetScale({ 60.0f, 60.0f, 60.0f });
-	obj_core->SetScale({ 60.0f, 60.0f, 60.0f });
-	obj_AroundCore->SetScale({ 60.0f, 60.0f, 60.0f });
-	obj_outside->SetScale({ 60.0f, 60.0f, 60.0f });
-	obj_SideSquare->SetScale({ 60.0f, 60.0f, 60.0f });
-	obj_UpDown->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_core->SetScale({ 40.f, 40.f, 40.f });
+	obj_AroundCore->SetScale({ 40.f, 40.f, 40.f });
+	obj_outside->SetScale({ 40.f, 40.f, 40.f });
+	obj_SideSquare->SetScale({ 40.f, 40.f, 40.f });
+	obj_UpDown->SetScale({ 40.f, 40.f, 40.f });
+	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
 	//êŠ
 	obj->SetPosition({ 0,0,3300 });
-	obj_core->SetPosition({ 0,0,1800 });
-	obj_AroundCore->SetPosition({ 0,0,1800 });
-	obj_outside->SetPosition({ 0,0,1800 });
-	obj_SideSquare->SetPosition({ 0,0,1800 });
-	obj_UpDown->SetPosition({ 0,0,1800 });
+	obj_core->SetPosition({ 0,30,2500});
+	obj_AroundCore->SetPosition({ 0,30,2500});
+	obj_outside->SetPosition({ 0,30,2500});
+	obj_SideSquare->SetPosition({ 0,30,2500});
+	obj_UpDown->SetPosition({ 0,30,2500});
+	obj_VerticalCircle->SetPosition({ 0,30,2500 });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
@@ -1016,6 +1021,7 @@ void Boss::Update()
 	obj_outside->Update();
 	obj_SideSquare->Update();
 	obj_UpDown->Update();
+	obj_VerticalCircle->Update();
 }
 
 void Boss::Draw()
@@ -1038,5 +1044,6 @@ void Boss::Draw()
 		obj_outside->Draw();
 		obj_SideSquare->Draw();
 		obj_UpDown->Draw();
+		obj_VerticalCircle->Draw();
 	}
 }

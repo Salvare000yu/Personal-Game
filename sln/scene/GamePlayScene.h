@@ -14,10 +14,11 @@
 #include "SmallEnemy.h"
 
 #include <memory>
+#include <unordered_map>
 
 using namespace DirectX;
 
-class GamePlayScene :public BaseScene,public BaseObject
+class GamePlayScene :public BaseScene, public BaseObject
 {
 
 	DirectX::XMFLOAT2 cameraMoveVel{};
@@ -80,9 +81,7 @@ public:
 
 	void CoolTime();
 
-	//XMVECTOR SplinePosition(const std::vector<XMVECTOR>& posints, size_t startIndex, float t);
-
-	float time=0;
+	float time = 0;
 
 	//指定フレームごとに雑魚出現
 	static const int SEneAppInterval = 60;
@@ -95,11 +94,8 @@ public:
 	SmallEnemy* sEnemys_ = nullptr;
 	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
-	//雑魚敵リストを取得
-	//const std::list<std::unique_ptr<SmallEnemy>>& GetSmallEnemys() { return smallEnemys_; }
-
 	//揺れる時間
-	static const int32_t pShakeTime = 60/2;
+	static const int32_t pShakeTime = 60 / 2;
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
 
@@ -117,7 +113,6 @@ public:
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
-	//std::unique_ptr < Sprite> sp_guide = nullptr;
 	std::unique_ptr < Sprite> sp_sight = nullptr;
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 	std::unique_ptr < Sprite> sp_ready = nullptr;
@@ -138,6 +133,7 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
+	std::unordered_map<std::string, std::unique_ptr < Object3d>> obj_ground;
 	std::unique_ptr < Object3d> obj_ground = nullptr;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
@@ -152,7 +148,7 @@ private:
 
 	//----ポストエフェクト関連
 	//ヴィネット強さ
-	float vignettePow=0;
+	float vignettePow = 0;
 
 	//-----開始時演出
 	//ゲーム開始時フレーム
@@ -192,9 +188,9 @@ private:
 	//↑のクールタイムカウント
 	const int BodyDamCountDef = 30;
 	int BodyDamCount = BodyDamCountDef;
-	
+
 	int randShakeDef = 0;
-	int randShakeNow=randShakeDef;
+	int randShakeNow = randShakeDef;
 
 	int BBPaternCount = 0;//1→0で++
 
@@ -218,7 +214,7 @@ private:
 
 	//自機死亡演出中初回自機座標取得　false:やっていない
 	bool PDeathDirection_PosMemOnlyFlag = false;
-	
+
 	//関数始まったときのみ false:まだ
 	bool PDeathEffect_PosMemOnlyFlag = false;
 
@@ -233,7 +229,7 @@ private:
 
 	std::vector<std::vector<std::string>> csvData;
 	//何行目まで出したか
-	int seIndex=-1;
+	int seIndex = -1;
 
 	//----自機ダッシュ 
 	//false:してない
@@ -245,17 +241,17 @@ private:
 	const int DashAttenuation = 10;
 	bool DashAttenuationFlag = false;//減衰開始 fasle:まだしてない
 	//減衰数値
-	float Attenuation=-0.2f;
+	float Attenuation = -0.2f;
 	//ダッシュクールインターバル
 	const int DashIntervalDef = 40;
 	int DashInterval = DashIntervalDef;
 	bool DashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
-	XMFLOAT3 DashVel={0,0,0};
+	XMFLOAT3 DashVel = { 0,0,0 };
 	//実際に増やす値
 	const float DashVelIncDef = 6;
 	float DashVelInc = DashVelIncDef;
-	
+
 	//----自機ダッシュ 
 };
 
