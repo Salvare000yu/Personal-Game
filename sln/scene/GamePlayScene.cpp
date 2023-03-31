@@ -28,6 +28,7 @@
 #include <sstream>
 
 #include <DirectXMath.h>
+#include <algorithm>
 
 std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	bool commentFlag,
@@ -147,7 +148,7 @@ void GamePlayScene::Initialize()
 	player_->SetPBulModel(mod_playerbullet.get());
 	player_->SetPFiringLine(mod_firingline.get());
 	camera->SetTarget(player_->GetPosition());
-	camera->SetEye({0,100,-1000});//ここにカメラをおいて、最初の演出で自機を追いかける
+	camera->SetEye({ 0,100,-1000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	//いろいろ生成
 	firingline_.reset(new PlayerFireLine());
@@ -467,29 +468,26 @@ void GamePlayScene::PlayerMove()
 {
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	//----------↓移動制限
-	const float PlayerMoveLimX = 600;
-
-	const float PlayerMaxMoveLimY = 0;//下に行ける範囲
-	const float PlayerMinMoveLimY = 400;//上に行ける範囲
-
-	//const float PlayerMaxMoveLimZ = 290;//後ろ
-	//const float PlayerMinMoveLimZ = 200;
-
-	XMFLOAT3 PlayerPos = player_->GetPosition();
 	XMFLOAT3 rotation = player_->GetRotation();
-	PlayerPos.x = max(PlayerPos.x, -PlayerMoveLimX);
-	PlayerPos.x = min(PlayerPos.x, +PlayerMoveLimX);
-	PlayerPos.y = max(PlayerPos.y, -PlayerMaxMoveLimY);//下に行ける範囲
-	PlayerPos.y = min(PlayerPos.y, +PlayerMinMoveLimY);//上に行ける範囲
-	//PlayerPos.z = max(PlayerPos.z, -PlayerMaxMoveLimZ);
-	//PlayerPos.z = min(PlayerPos.z, +PlayerMinMoveLimZ);
-	player_->SetPosition(PlayerPos);
-	//----------↑移動制限
 
 	//------------------↓プレイヤー移動＆姿勢
 	if (cInput->LeftMove() || cInput->RightMove() || cInput->UpMove() || cInput->DownMove())// inputQ || inputZ ||
 	{
+		//----------↓移動制限
+		const float PlayerMoveLimX = 600;
+
+		const float PlayerMaxMoveLimY = 400;//下に行ける範囲
+		const float PlayerMinMoveLimY = 0;//上に行ける範囲
+
+		//const float PlayerMaxMoveLimZ = 290;//後ろ
+		//const float PlayerMinMoveLimZ = 200;
+
+		XMFLOAT3 PlayerPos = player_->GetPosition();
+		PlayerPos.x = std::clamp(PlayerPos.x, -PlayerMoveLimX, PlayerMoveLimX);
+		PlayerPos.y = std::clamp(PlayerPos.y, PlayerMinMoveLimY, PlayerMaxMoveLimY);
+
+		//----------↑移動制限
+
 		//------プレイヤーも同じ移動------//
 		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 5.f;
@@ -521,6 +519,13 @@ void GamePlayScene::PlayerMove()
 			}
 			isRMove = true;//右移動中
 		}
+		player_->SetPosition(PlayerPos);
+
+		//{
+		//	char tmp[128]{};
+		//	sprintf_s(tmp, 128, "%2.f, %2.f, %2.f", PlayerPos.x, PlayerPos.y, PlayerPos.z);
+		//	//DebugText::GetInstance()->Print(tmp, 430, 430, 3);
+		//}
 	}
 	else
 	{
@@ -536,7 +541,6 @@ void GamePlayScene::PlayerMove()
 		rotation.z += 1.f;
 	}
 
-	player_->SetPosition(PlayerPos);
 	player_->SetRotation(rotation);
 }
 
@@ -642,7 +646,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//攻撃できないように
-	player_->pAtkPossibleFlag=false;
+	player_->pAtkPossibleFlag = false;
 
 	XMFLOAT3 pPos = player_->GetPosition();
 
@@ -661,7 +665,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
 			//攻撃可能にしてから終わる
-			player_->pAtkPossibleFlag=true;
+			player_->pAtkPossibleFlag = true;
 
 		}
 	}
@@ -681,7 +685,7 @@ void GamePlayScene::CoolTime()
 
 		//画像薄くしてく
 		vignettePow -= DamEffectW;
-		if(vignettePow<0.f) {
+		if (vignettePow < 0.f) {
 			//繰り返さないように
 			DamEfRedFlag = true;
 			vignettePow = 0.f;
@@ -1095,46 +1099,46 @@ bool GamePlayScene::GameReady()
 		//シーン遷移演出更新
 		sceneChangeDirection->Update();
 	}
-	else{//演出画像開き切ったら
-	if (GameReadyFrame < frameMax)
-	{
-		//最初演出中は動くな
-		PDontMoveFlag = true;
+	else {//演出画像開き切ったら
+		if (GameReadyFrame < frameMax)
+		{
+			//最初演出中は動くな
+			PDontMoveFlag = true;
 
-		float raito = (float)GameReadyFrame / frameMax;
-		GameReadyFrame++;
-		ReadyCol.w = 1.f - raito;
-		sp_ready->SetColor({ ReadyCol });
-		sp_ready->Update();
+			float raito = (float)GameReadyFrame / frameMax;
+			GameReadyFrame++;
+			ReadyCol.w = 1.f - raito;
+			sp_ready->SetColor({ ReadyCol });
+			sp_ready->Update();
 
-		XMFLOAT3 pos{};
-		pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
-		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
-		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
-		player_->SetPosition(pos);
+			XMFLOAT3 pos{};
+			pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
+			pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
+			pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
+			player_->SetPosition(pos);
 
-		camera->SetTarget(pos);
+			camera->SetTarget(pos);
 
-	}
-	else {
-		ready_GOFlag = true;
-		GOCol.w -= GoColWDecVal;
-		GOSize.x += GoSizeIncVal;
-		GOSize.y += GoSizeIncVal;
-		GOPos.x -= 3.2f;
-		GOPos.y -= 3.2f;
-		sp_ready_go->SetSize({ GOSize });
-		sp_ready_go->TransferVertexBuffer();
-		sp_ready_go->SetColor({ GOCol });
-		sp_ready_go->SetPosition({ GOPos });
-		sp_ready_go->Update();
+		}
+		else {
+			ready_GOFlag = true;
+			GOCol.w -= GoColWDecVal;
+			GOSize.x += GoSizeIncVal;
+			GOSize.y += GoSizeIncVal;
+			GOPos.x -= 3.2f;
+			GOPos.y -= 3.2f;
+			sp_ready_go->SetSize({ GOSize });
+			sp_ready_go->TransferVertexBuffer();
+			sp_ready_go->SetColor({ GOCol });
+			sp_ready_go->SetPosition({ GOPos });
+			sp_ready_go->Update();
 
-		if (SetTagOnceFlag == false) {
-			camera->SetTrackingTarget(player_.get());
-			SetTagOnceFlag = true;
+			if (SetTagOnceFlag == false) {
+				camera->SetTrackingTarget(player_.get());
+				SetTagOnceFlag = true;
+			}
 		}
 	}
-}
 
 	if (GOCol.w < 0.0) {//透明になったら
 		if (MayDoPAtk_OnceFlag == false) {

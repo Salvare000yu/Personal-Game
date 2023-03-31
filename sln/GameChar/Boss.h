@@ -155,6 +155,17 @@ public:
 	//-----------------Å™Ç∞Ç¡ÇΩÅ[ÇπÇ¡ÇΩÅ[Å™------------------//
 
 private:
+	std::unique_ptr < Model> mod_core = nullptr;
+	std::unique_ptr < Model> mod_AroundCore = nullptr;
+	std::unique_ptr < Model> mod_outside = nullptr;
+	std::unique_ptr < Model> mod_SideSquare = nullptr;
+	std::unique_ptr < Model> mod_UpDown = nullptr;
+
+	std::unique_ptr < Object3d> obj_core = nullptr;
+	std::unique_ptr < Object3d> obj_AroundCore = nullptr;
+	std::unique_ptr < Object3d> obj_outside = nullptr;
+	std::unique_ptr < Object3d> obj_SideSquare = nullptr;
+	std::unique_ptr < Object3d> obj_UpDown = nullptr;
 
 	// Microsoft::WRL::Çè»ó™
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;

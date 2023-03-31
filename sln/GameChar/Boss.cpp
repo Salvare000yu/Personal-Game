@@ -900,14 +900,40 @@ void Boss::Death() {
 
 void Boss::Initialize()
 {
-
+	mod_core.reset(Model::LoadFromOBJ("boss_core"));
+	mod_AroundCore.reset(Model::LoadFromOBJ("boss_AroundCore"));
+	mod_outside.reset(Model::LoadFromOBJ("boss_outside"));
+	mod_SideSquare.reset(Model::LoadFromOBJ("boss_SideSquare"));
+	mod_UpDown.reset(Model::LoadFromOBJ("boss_UpDown"));
 	//ì‚é
 	obj.reset(Object3d::Create());
+	obj_core.reset(Object3d::Create());
+	obj_AroundCore.reset(Object3d::Create());
+	obj_outside.reset(Object3d::Create());
+	obj_SideSquare.reset(Object3d::Create());
+	obj_UpDown.reset(Object3d::Create());
+
+	obj_core->SetModel(mod_core.get());
+	obj_AroundCore->SetModel(mod_AroundCore.get());
+	obj_outside->SetModel(mod_outside.get());
+	obj_SideSquare->SetModel(mod_SideSquare.get());
+	obj_UpDown->SetModel(mod_UpDown.get());
+
 	//-----«”CˆÓ«-----//
 	//‘å‚«‚³
 	obj->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_core->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_AroundCore->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_outside->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_SideSquare->SetScale({ 60.0f, 60.0f, 60.0f });
+	obj_UpDown->SetScale({ 60.0f, 60.0f, 60.0f });
 	//êŠ
 	obj->SetPosition({ 0,0,3300 });
+	obj_core->SetPosition({ 0,0,1800 });
+	obj_AroundCore->SetPosition({ 0,0,1800 });
+	obj_outside->SetPosition({ 0,0,1800 });
+	obj_SideSquare->SetPosition({ 0,0,1800 });
+	obj_UpDown->SetPosition({ 0,0,1800 });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
@@ -985,6 +1011,11 @@ void Boss::Update()
 	PAimBul();
 
 	obj->Update();
+	obj_core->Update();
+	obj_AroundCore->Update();
+	obj_outside->Update();
+	obj_SideSquare->Update();
+	obj_UpDown->Update();
 }
 
 void Boss::Draw()
@@ -1002,5 +1033,10 @@ void Boss::Draw()
 
 	if (alive) {
 		obj->Draw();
+		obj_core->Draw();
+		obj_AroundCore->Draw();
+		obj_outside->Draw();
+		obj_SideSquare->Draw();
+		obj_UpDown->Draw();
 	}
 }
