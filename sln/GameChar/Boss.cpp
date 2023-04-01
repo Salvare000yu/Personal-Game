@@ -140,7 +140,7 @@ void Boss::Vertical()
 		VerticalWaitCount--;//待ちカウント減らす
 
 		if (VerticalWaitCount == 0) {
-			VerticalWaitCount = VerticalWaitCountDef/2;//初回以降はデフォ/2にカウント戻す
+			VerticalWaitCount = VerticalWaitCountDef / 2;//初回以降はデフォ/2にカウント戻す
 			doCollision = true;//当たり判定オンにしてから次行動
 
 			if (VerticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
@@ -222,7 +222,7 @@ void Boss::Vertical()
 		}
 		position.y += VerticalSp;
 
-		if (position.y>= ReverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
+		if (position.y >= ReverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
 			ReverseStartPosFlag = false;
 			verticalPattern_ = VerticalPattern::EndVertical;//縦パターンの行動終了する前にやること
 		}
@@ -317,7 +317,6 @@ void Boss::HpHalfPatStart()
 void Boss::CircularMotionMove()
 {
 	const float ApproachZ = 0.15f;//近づく値
-	const float CircularY = 40;//どの高さで回るか
 
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
@@ -600,6 +599,13 @@ void Boss::AfterPlungeInto()
 			AtkCount = AtkInterval;
 		}
 
+		//行動を一定数繰り返したら行動変える
+		if (LoopCount == LoopCountMax) {
+			Nowframe = 0;
+			afterPlungePattern_ = AfterPlungePattern::Fin;//行動戻る前に最後に元の場所へ
+			LoopCount = LoopCountDef;
+		}
+
 		break;
 
 	case AfterPlungePattern::Attack:
@@ -639,13 +645,30 @@ void Boss::AfterPlungeInto()
 		}
 
 		break;
-	}
 
-	//↑行動を一定数繰り返したら行動変える
-	if (LoopCount == LoopCountMax) {
-		LoopCount = LoopCountDef;
-		afterPlungePattern_ = AfterPlungePattern::Wait;//ここの行動戻す
-		actionPattern_ = ActionPattern::CircularMotionMove;//次の行動
+	case AfterPlungePattern::Fin:
+		if (PlungeFinOnlyFlag == false) {//最初の座標
+			boPosMem = obj->GetPosition();
+			PlungeFinOnlyFlag = true;
+		}
+		else {
+			float raito = (float)Nowframe / PlungeFinFrameMax;
+			Nowframe++;
+
+			//円行動に合うようにその場所へ移動
+			XMFLOAT3 pos{};
+			pos.x = std::lerp(boPosMem.x, obj->GetPosition().x, raito);
+			pos.y = std::lerp(boPosMem.y, CircularY, raito);
+			pos.z = std::lerp(boPosMem.z, obj->GetPosition().z, raito);
+			obj->SetPosition(pos);
+			if (Nowframe == PlungeFinFrameMax) {
+				Nowframe = 0;
+				PlungeFinOnlyFlag = false;
+				afterPlungePattern_ = AfterPlungePattern::Wait;//ここの行動戻す
+				actionPattern_ = ActionPattern::CircularMotionMove;//次の行動
+			}
+		}
+		break;
 	}
 }
 
@@ -922,8 +945,8 @@ void Boss::Initialize()
 	obj_UpDown->SetModel(mod_UpDown.get());
 	obj_VerticalCircle->SetModel(mod_VerticalCircle.get());
 
-//-----↓任意↓-----//
-	//大きさ
+	//-----↓任意↓-----//
+		//大きさ
 	obj->SetScale({ 60.0f, 60.0f, 60.0f });
 	obj_core->SetScale({ 40.f, 40.f, 40.f });
 	obj_AroundCore->SetScale({ 40.f, 40.f, 40.f });
@@ -933,11 +956,11 @@ void Boss::Initialize()
 	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
 	//場所
 	obj->SetPosition({ 0,0,3300 });
-	obj_core->SetPosition({ 0,30,2500});
-	obj_AroundCore->SetPosition({ 0,30,2500});
-	obj_outside->SetPosition({ 0,30,2500});
-	obj_SideSquare->SetPosition({ 0,30,2500});
-	obj_UpDown->SetPosition({ 0,30,2500});
+	obj_core->SetPosition({ 0,30,2500 });
+	obj_AroundCore->SetPosition({ 0,30,2500 });
+	obj_outside->SetPosition({ 0,30,2500 });
+	obj_SideSquare->SetPosition({ 0,30,2500 });
+	obj_UpDown->SetPosition({ 0,30,2500 });
 	obj_VerticalCircle->SetPosition({ 0,30,2500 });
 
 	// 音声読み込み
@@ -1044,6 +1067,7 @@ void Boss::Draw()
 		obj_outside->Draw();
 		obj_SideSquare->Draw();
 		obj_UpDown->Draw();
-		obj_VerticalCircle->Draw();
+		// todo これを描画するとエラーになる
+		//obj_VerticalCircle->Draw();
 	}
 }

@@ -102,11 +102,22 @@ void GamePlayScene::Initialize()
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 
 	//------3dオブジェクト生成------//
+	// todo 上に書いたほうが手前にあったら描画されない
 	obj_ground.reset(Object3d::Create());
+	//obj_ground.emplace("ground_gre", Object3d::Create());
+	//obj_ground.emplace("ground_mag", Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
+
+	//for (auto& i : obj_ground) {
+	//	mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first));
+	//	i.second->SetModel(mod_ground.at(i.first).get());
+	//	i.second->SetScale({ 80.0f, 20.0f, 500.0f });
+	//	i.second->SetPosition({ 0,-150,0 });
+	//}
+	//obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
 
 	//------3dオブジェクトに3dモデルを紐づける------//
 	obj_ground->SetModel(mod_ground.get());
@@ -146,7 +157,6 @@ void GamePlayScene::Initialize()
 	firingline_ = std::make_unique<PlayerFireLine>();
 	firingline_->Initialize();
 	firingline_->SetModel(mod_firingline.get());
-	obj_ground->SetColor({ 1,1,1,1 });
 
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
@@ -379,7 +389,8 @@ void GamePlayScene::BossDeathEffect()
 	color.w += colordec;
 	sp_blackwindow->SetColor(color);
 
-	if (boss_.front()->GetPosition().y < obj_ground->GetPosition().y)
+	//todo 決めうちなおす
+	if (boss_.front()->GetPosition().y < -150.f)
 	{
 		boss_.front()->SetAlive(false);
 	}
@@ -1043,6 +1054,9 @@ void GamePlayScene::BodyDamCoolTime()
 
 void GamePlayScene::Update()
 {
+	frame += 1.f;
+	time = frame / 60.f;
+
 	Pause* pause = Pause::GetInstance();
 
 	Input* input = Input::GetInstance();
@@ -1147,6 +1161,12 @@ void GamePlayScene::Update()
 		obj_ground->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
+		//obj_ground.at("ground_gre")->SetPosition({ std::sin(time)*100.f,
+		//	-150 + std::sin(time)*50.f,
+		//	std::cos(time)});
+		//for (auto& i : obj_ground) {
+		//	i.second->Update();
+		//}
 
 		//スプライト更新
 		sprite_back->Update();
@@ -1256,19 +1276,22 @@ void GamePlayScene::Draw()
 		smallEnemy->Draw();
 	}
 
+	//3dオブジェ描画
+	//for (auto& i : obj_ground) {
+	//	i.second->Draw();
+	//}
+	obj_ground->Draw();
+	obj_kaberight->Draw();
+	obj_kabeleft->Draw();
+	obj_tunnel->Draw();
+	obj_backwall->Draw();
+
 	//敵描画
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
 	}
-
-	//3dオブジェ描画
-	obj_kaberight->Draw();
-	obj_kabeleft->Draw();
-	obj_tunnel->Draw();
-	obj_backwall->Draw();
-	obj_ground->Draw();
 
 	//自キャラ描画
 	player_->Draw();

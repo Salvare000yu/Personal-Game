@@ -46,6 +46,7 @@ class Boss:public BaseObject
 	enum class AfterPlungePattern {//突っ込み後行動
 		Wait,//時間空けてから行動
 		Attack,//攻撃
+		Fin,//最後指定の場所へ
 	};
 
 public:
@@ -271,6 +272,8 @@ private:
 	const float HpHalf_LengthDef = 10.f;//円運動の半径の長さ
 	float HpHalf_Length = HpHalf_LengthDef;
 
+	const float CircularY = 40;//どの高さで回るか
+
 	XMFLOAT3 CirclePosMem;//その時の座標取得
 	//移動値
 	const float addXDef=0.f;
@@ -326,6 +329,10 @@ private:
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 	//突撃速度
 	const int PlungeVel = 50;
+	//最後定位置戻るのにかかる時間
+	const int PlungeFinFrameMax = 60;
+	//Finで最初いた一度位置取得 false:まだ
+	bool PlungeFinOnlyFlag = false;
 
 	//----plungeとafter両立しないのでafterでも使う
 	//自機いた場所取得フラグ false:未取得
