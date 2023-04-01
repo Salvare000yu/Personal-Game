@@ -383,6 +383,26 @@ void GamePlayScene::BeforeBossAppear()
 
 	sp_beforeboss->SetColor(SP_BossWarning);
 }
+
+void GamePlayScene::BossBodyRed()
+{
+	BossBodyRedTime--;//この時間赤くする
+
+	for (auto& bo : boss_) {//赤くする
+		XMFLOAT4 col = bo->GetColor();
+
+		col = { 0.5f,0,0,1 };//赤
+
+		if (BossBodyRedTime == 0) {//時間になったら
+			col = { 1,1,1,1 };//本来の色
+			BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
+			BossDamFlag = false;//くらっていない状態に
+		}
+
+		bo->SetColor(col);
+	}
+}
+
 void GamePlayScene::BossDeathEffect()
 {
 	XMFLOAT4 color = sp_blackwindow->GetColor();
@@ -608,12 +628,12 @@ void GamePlayScene::pHeadingToTheNextPlace()
 void GamePlayScene::CoolTime()
 {
 	//Input* input = Input::GetInstance();
-	const float DamEffectW = 0.03f;
+	const float DamEffectPow = 0.03f;
 
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag) {
 		//画像薄くしてく
-		vignettePow -= DamEffectW;
+		vignettePow -= DamEffectPow;
 		if (vignettePow < 0.f) {
 			//繰り返さないように
 			DamEfRedFlag = true;
@@ -753,6 +773,7 @@ void GamePlayScene::CollisionAll()
 						//喰らってまだ生きてたら
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
+							BossDamFlag = true;//赤くする
 						}
 						Damage = pBulPow - BossDefense;
 						NowBoHp -= Damage;
@@ -1217,6 +1238,9 @@ void GamePlayScene::Update()
 			//----------------↑シーン切り替え関連↑---------------//
 
 			BodyDamCoolTime();//体継続ダメージ
+			if (BossDamFlag == true) {
+				BossBodyRed();//ダメージ中赤く
+			}
 
 			if (player_->GetPHpLessThan0() == false)
 			{

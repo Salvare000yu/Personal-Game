@@ -73,7 +73,7 @@ public:
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
 	void BeforeBossAppear();
-
+	void BossBodyRed();//体赤くする
 	void BossDeathEffect();
 
 	void PlayerMove();
@@ -183,6 +183,12 @@ private:
 	bool BeforeBossAppearFlag = false;
 	//true:今やってる
 	bool BeforeBossAppearNow = false;
+
+	//ボスダメージ受けた時体赤くする false:くらってない
+	bool BossDamFlag = false;
+	//赤くする時間
+	const int BossBodyRedTimeDef = 5;
+	int BossBodyRedTime = BossBodyRedTimeDef;
 
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
 	bool BodyDamFlag = false;
