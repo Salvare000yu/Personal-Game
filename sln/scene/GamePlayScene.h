@@ -187,8 +187,11 @@ private:
 	//ボスダメージ受けた時体赤くする false:くらってない
 	bool BossDamFlag = false;
 	//赤くする時間
-	const int BossBodyRedTimeDef = 5;
+	const int BossBodyRedTimeDef = 10;
 	int BossBodyRedTime = BossBodyRedTimeDef;
+	//赤から戻していく色
+	float ReCol = 0.f;//赤状態
+	float ReColVal = 0.05f;//戻す数値
 
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
 	bool BodyDamFlag = false;

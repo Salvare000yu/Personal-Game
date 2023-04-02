@@ -391,9 +391,11 @@ void GamePlayScene::BossBodyRed()
 	for (auto& bo : boss_) {//赤くする
 		XMFLOAT4 col = bo->GetColor();
 
-		col = { 0.5f,0,0,1 };//赤
+		col = { 1,ReCol,ReCol,1 };//赤
+		ReCol += ReColVal;
 
 		if (BossBodyRedTime == 0) {//時間になったら
+			ReCol = 0.f;//戻す
 			col = { 1,1,1,1 };//本来の色
 			BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
 			BossDamFlag = false;//くらっていない状態に

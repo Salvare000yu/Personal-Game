@@ -1039,12 +1039,12 @@ void Boss::Update()
 	PAimBul();
 
 	obj->Update();
-	obj_core->Update();
-	obj_AroundCore->Update();
-	obj_outside->Update();
-	obj_SideSquare->Update();
-	obj_UpDown->Update();
-	obj_VerticalCircle->Update();
+	//obj_core->Update();
+	//obj_AroundCore->Update();
+	//obj_outside->Update();
+	//obj_SideSquare->Update();
+	//obj_UpDown->Update();
+	//obj_VerticalCircle->Update();
 }
 
 void Boss::Draw()
@@ -1062,11 +1062,11 @@ void Boss::Draw()
 
 	if (alive) {
 		obj->Draw();
-		obj_core->Draw();
-		obj_AroundCore->Draw();
-		obj_outside->Draw();
-		obj_SideSquare->Draw();
-		obj_UpDown->Draw();
+		//obj_core->Draw();
+		//obj_AroundCore->Draw();
+		//obj_outside->Draw();
+		//obj_SideSquare->Draw();
+		//obj_UpDown->Draw();
 		// todo ‚±‚ê‚ð•`‰æ‚·‚é‚ÆƒGƒ‰[‚É‚È‚é
 		//obj_VerticalCircle->Draw();
 	}
