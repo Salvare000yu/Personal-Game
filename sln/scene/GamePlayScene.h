@@ -113,7 +113,6 @@ public:
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
-	std::unique_ptr < Sprite> sp_sight = nullptr;
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
@@ -176,7 +175,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 10
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 7;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

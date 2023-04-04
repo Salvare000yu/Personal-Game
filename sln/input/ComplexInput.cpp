@@ -194,15 +194,16 @@ bool ComplexInput::tLeftArrow()
 	return false;
 }
 
-bool ComplexInput::DecisionByEnter()
+bool ComplexInput::Decision()
 {
 	Input* input = Input::GetInstance();
 
 	//キー押している間
 	const bool TriggerEnter = input->TriggerKey(DIK_RETURN);
+	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	//パッド
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	if (TriggerEnter || PadTriggerA) {
+	if (TriggerEnter || PadTriggerA|| TriggerSPACE) {
 		return true;
 	} 
 	
@@ -214,10 +215,10 @@ bool ComplexInput::PauseOpenClose()
 	Input* input = Input::GetInstance();
 
 	//キー押している間
-	const bool Trigger0 = input->TriggerKey(DIK_0);
+	const bool TriggerP = input->TriggerKey(DIK_P);
 	//パッド
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
-	if (Trigger0 || PadTriggerStart) {
+	if (TriggerP || PadTriggerStart) {
 		return true;
 	}
 

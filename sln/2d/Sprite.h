@@ -66,6 +66,8 @@ public:
 	/// À•W‚Ìæ“¾
 	const DirectX::XMFLOAT3& GetPosition() { return position_; }
 
+	const float& GetRotation() { return rotation_; }
+
 	const DirectX::XMFLOAT2& GetSize() { return size_; }
 
 	const DirectX::XMFLOAT2& GetTexSize() { return texSize_; }

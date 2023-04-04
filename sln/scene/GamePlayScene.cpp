@@ -198,7 +198,6 @@ void GamePlayScene::Initialize()
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_sight.reset(Sprite::Create(13, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5, 0.5 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -345,7 +344,7 @@ void GamePlayScene::BeforeBossAppear()
 	{
 	case BeforeBossPattern::def:
 		if (AlertSoundFlag) {
-			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.2f, 0);
+			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
 			AlertSoundFlag = false;
 		}
 		SP_BossWarning.w -= WarningW;
@@ -1084,7 +1083,7 @@ void GamePlayScene::Update()
 
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	const bool Trigger0 = input->TriggerKey(DIK_0);
+	//const bool Trigger0 = input->TriggerKey(DIK_0);
 	const bool Trigger1 = input->TriggerKey(DIK_1);
 	//パッドトリガー
 	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
@@ -1107,10 +1106,10 @@ void GamePlayScene::Update()
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	if (pause->WaitKey0 < 10 && pause->GetPauseFlag() == false) {
-		pause->WaitKey0++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
+	if (pause->WaitKeyP < 10 && pause->GetPauseFlag() == false) {
+		pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 	}
-	if (pause->WaitKey0 >= 2) {//ある程度経ったら受付
+	if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
 		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
 			if (cInput->PauseOpenClose() && (GameReady() == false) && pause->GetPauseFlag() == false) {
 				pause->EveryInit();

@@ -108,7 +108,7 @@ void GameOver::Retry()
 		}
 	}
 
-	if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
+	if ((cInput->Decision()) && CursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
@@ -167,7 +167,7 @@ void GameOver::GoTitle()
 		}
 	}
 
-	if ((cInput->DecisionByEnter()) && CursorMoveNowFlag == false)
+	if ((cInput->Decision()) && CursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();

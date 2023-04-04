@@ -57,7 +57,7 @@ void Pause::Initialize()
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
 	PauseNowSelect = 0;
-	WaitKey0 = 0;
+	WaitKeyP = 0;
 }
 
 void Pause::EveryInit()
@@ -66,7 +66,7 @@ void Pause::EveryInit()
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
 	PauseNowSelect = 0;
-	WaitKey0 = 0;
+	WaitKeyP = 0;
 }
 
 void Pause::PauseNow()
@@ -93,7 +93,7 @@ void Pause::PauseNow()
 	(this->*pFunc)();
 
 	//閉じる
-	WaitKey0++;//同じボタンでとじれるように
+	WaitKeyP++;//同じボタンでとじれるように
 	////操作説明画面見てるときは押しても閉じない
 	//if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
 	//	PauseFlag = false;
@@ -132,7 +132,7 @@ void Pause::PauseConti()
 	}
 
 	//継続
-	if (cInput->DecisionByEnter())
+	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		PauseFlag = false;
@@ -147,7 +147,7 @@ void Pause::PauseOper()
 	sp_operation->TransferVertexBuffer();
 
 	//操作説明開いてないときのみ
-	if (OperWindOpenFlag == false!= cInput->DecisionByEnter())
+	if (OperWindOpenFlag == false!= cInput->Decision())
 	{
 		if (cInput->tDownArrow() || cInput->tDownMove()) {//下で2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
@@ -161,14 +161,14 @@ void Pause::PauseOper()
 		}
 	}
 	//操作説明画面開く
-	if (cInput->DecisionByEnter())
+	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		OperWindOpenFlag = true;
 		OperationWind();
 
 		WaitKeyEnter++;
-		if ((cInput->DecisionByEnter()) && WaitKeyEnter >= 2) {
+		if ((cInput->Decision()) && WaitKeyEnter >= 2) {
 			OperWindOpenFlag = false;
 			WaitKeyEnter = 0;
 		}
@@ -199,7 +199,7 @@ void Pause::PauseGoTitle()
 	}
 
 	//タイトルへ戻る
-	if ((cInput->DecisionByEnter()))
+	if ((cInput->Decision()))
 	{
 		SceneChangeTitleFlag = true;
 	}
@@ -207,6 +207,7 @@ void Pause::PauseGoTitle()
 
 void Pause::SpUpdate()
 {
+
 	sp_openpause->Update();
 	sp_pause->Update();
 	sp_continuation->Update();

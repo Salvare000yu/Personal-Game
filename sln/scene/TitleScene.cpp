@@ -326,7 +326,7 @@ void TitleScene::Update()
 	//登場完了して退場前
 	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
-		if ((cInput->DecisionByEnter()))     // スペースキーが押されていたら
+		if ((cInput->Decision()))     // スペースキーorEnterが押されていたら
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 			SceneChangeFlag = true;//チェンジ移動フラグ立てる

@@ -42,7 +42,7 @@ public:
 	const bool& GetSceneChangeTitleFlag() { return SceneChangeTitleFlag; }
 	//-------------↑げったーせったー↑--------------//
 
-	int WaitKey0 = 0;//０だけでポーズ開閉できるように
+	int WaitKeyP = 0;//０だけでポーズ開閉できるように
 private:
 	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;

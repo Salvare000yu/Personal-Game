@@ -325,7 +325,7 @@ private:
 	//‚Ç‚±‚É–ß‚é‚©‚ÌêŠ
 	XMFLOAT3 ReversePos;
 	//“Ë‚Á‚İ‘Ò‚¿‘Ò‹@ŠÔ ‚Å‚Ó‚§180
-	const int PlungeIntoWaitCountDef = 180;
+	const int PlungeIntoWaitCountDef = 140;
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 	//“ËŒ‚‘¬“x
 	const int PlungeVel = 50;

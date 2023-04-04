@@ -30,7 +30,7 @@ public:
 
 	bool PlayerDash();//自機ダッシュ
 
-	bool DecisionByEnter();//決定
+	bool Decision();//決定
 	bool PauseOpenClose();//ポーズ開閉
 };
 
