@@ -94,8 +94,6 @@ private:
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 	std::unique_ptr < Object3d> obj_logo = nullptr;//タイトルロゴ
 
-	//トンネル回す速度
-	const float TunnelRotSp = 0.02f;
 	//----------登場退場共通----------//
 	const float PApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)
 	const float PExitMoveFrameMax = 100.f;//経過時間最大フレーム(退場)

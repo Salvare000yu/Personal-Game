@@ -87,7 +87,7 @@ void GamePlayScene::Initialize()
 	time = frame / 60.f;	// 60fps想定
 
 	//------objからモデルデータ読み込み---
-	mod_ground.reset(Model::LoadFromOBJ("ground"));
+	//mod_ground.reset(Model::LoadFromOBJ("ground"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
@@ -103,35 +103,35 @@ void GamePlayScene::Initialize()
 
 	//------3dオブジェクト生成------//
 	// todo 上に書いたほうが手前にあったら描画されない
-	obj_ground.reset(Object3d::Create());
-	//obj_ground.emplace("ground_gre", Object3d::Create());
-	//obj_ground.emplace("ground_mag", Object3d::Create());
+	//obj_ground.reset(Object3d::Create());
+	obj_ground.emplace("ground_gre", Object3d::Create());
+	obj_ground.emplace("ground_mag", Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
 
-	//for (auto& i : obj_ground) {
-	//	mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first));
-	//	i.second->SetModel(mod_ground.at(i.first).get());
-	//	i.second->SetScale({ 80.0f, 20.0f, 500.0f });
-	//	i.second->SetPosition({ 0,-150,0 });
-	//}
-	//obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
+	for (auto& i : obj_ground) {
+		mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first));
+		i.second->SetModel(mod_ground.at(i.first).get());
+		i.second->SetScale({ 80.0f, 20.0f, 500.0f });
+		i.second->SetPosition({ 0,-150,0 });
+	}
+	obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
 
 	//------3dオブジェクトに3dモデルを紐づける------//
-	obj_ground->SetModel(mod_ground.get());
+	//obj_ground->SetModel(mod_ground.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
-	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
+	//obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
-	obj_ground->SetPosition({ 0,-150,0 });
+	//obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,1000 });
@@ -1179,7 +1179,18 @@ void GamePlayScene::Update()
 		}
 
 		//3dobjUPDATE
-		obj_ground->Update();
+		{
+			float num = std::sin((float)time * 5.f) * 10.f;
+			for (auto& i : obj_ground) {
+				XMFLOAT3 pos = i.second->GetPosition();
+				pos.y = num;
+				i.second->SetPosition(pos);
+				num = -num;
+
+				i.second->Update();
+			}
+		}
+		//obj_ground->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 
@@ -1294,10 +1305,10 @@ void GamePlayScene::Draw()
 	}
 
 	//3dオブジェ描画
-	//for (auto& i : obj_ground) {
-	//	i.second->Draw();
-	//}
-	obj_ground->Draw();
+	for (auto& i : obj_ground) {
+		i.second->Draw();
+	}
+	//obj_ground->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();

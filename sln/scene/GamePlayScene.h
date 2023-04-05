@@ -118,8 +118,8 @@ private:
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
 
-	std::unique_ptr < Model> mod_ground = nullptr;//
-	//std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
+	//std::unique_ptr < Model> mod_ground = nullptr;//
+	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
 	std::unique_ptr < Model> mod_smallenemy = nullptr;//雑魚敵
@@ -133,8 +133,8 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
-	std::unique_ptr < Object3d> obj_ground = nullptr;
-	//std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
+	//std::unique_ptr < Object3d> obj_ground = nullptr;
+	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
