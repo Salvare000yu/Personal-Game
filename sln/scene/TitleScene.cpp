@@ -106,15 +106,6 @@ void TitleScene::Initialize()
 
 	//スプライトポジション
 
-
-	//ポストエフェクト用テクスチャ読み込み
-	//SpriteBase::GetInstance()->LoadTexture(100, L"Resources/white1x1.png");
-	//ポストエフェクト初期化
-//	postEffect = new PostEffect();
-////	postEffect->Initialize();//100, { 0.0f, 0.0f }, false, falseいちおう
-//	postEffect->SetSize({ 500.0f,500.0f });
-//	postEffect->SetPosition({ 10,10,0 });
-//	postEffect->TransferVertexBuffer();
 #pragma endregion 描画初期化処理
 }
 

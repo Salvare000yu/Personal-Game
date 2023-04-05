@@ -187,6 +187,8 @@ bool Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 
 void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial)
 {
+	TransferBuffers();
+
 	//頂点バッファビューの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
 	//インデックスバッファビューの設定
@@ -413,13 +415,19 @@ void Model::CreateBuffers()
 		IID_PPV_ARGS(&constBuffB1));
 	assert(SUCCEEDED(result));
 
+	TransferBuffers();
+}
+
+void Model::TransferBuffers()
+{
 	//マテリアル用定数バッファへデータ転送
 	ConstBufferDataB1* constMap1 = nullptr;
-	result = constBuffB1->Map(0, nullptr, (void**)&constMap1);
+	HRESULT result = constBuffB1->Map(0, nullptr, (void**)&constMap1);
 	assert(SUCCEEDED(result));
 	constMap1->ambient = material.ambient;
 	constMap1->diffuse = material.diffuse;
 	constMap1->specular = material.specular;
 	constMap1->alpha = material.alpha;
+	constMap1->tiling = tiling;
 	constBuffB1->Unmap(0, nullptr);
 }

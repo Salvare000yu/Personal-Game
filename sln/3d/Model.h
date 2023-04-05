@@ -31,6 +31,7 @@ public:
 		float pad2;//パディング
 		DirectX::XMFLOAT3 specular;//スペキュラー係数
 		float alpha;//アルファ
+		DirectX::XMFLOAT2 tiling{ 1,1 };//タイリング
 	};
 
 	//マテリアル
@@ -71,6 +72,9 @@ public://静的メンバ関数
 	void SetAlpha(float alpha) { this->material.alpha = alpha; }
 	const float& GetAlpha() { return material.alpha; }
 
+	void SetTiling(const DirectX::XMFLOAT2& tiling) { this->tiling = tiling; }
+	const DirectX::XMFLOAT2& GetTiling() { return tiling; }
+
 private:
 	//借りるデバイス
 	static ID3D12Device* device;
@@ -81,6 +85,8 @@ private:
 	std::vector<unsigned short>indices;
 
 	Material material;
+
+	DirectX::XMFLOAT2 tiling{ 1,1 };
 
 	//テクスチャバッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> texbuff;
@@ -102,7 +108,7 @@ private:
 	//頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView;
 	//インデックスバッファビュー
-	 D3D12_INDEX_BUFFER_VIEW ibView;
+	D3D12_INDEX_BUFFER_VIEW ibView;
 
 private:
 	void LoadFromOBJInternal(const std::string& modelname);
@@ -112,5 +118,7 @@ private:
 
 	//各種バッファ生成
 	void CreateBuffers();
+
+	void TransferBuffers();
 };
 

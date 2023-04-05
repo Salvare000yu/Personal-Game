@@ -112,9 +112,10 @@ void GamePlayScene::Initialize()
 	obj_backwall.reset(Object3d::Create());
 
 	for (auto& i : obj_ground) {
-		mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first));
+		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
+		model->second->SetTiling({100,100});
 		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale({ 80.0f, 20.0f, 500.0f });
+		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
 		i.second->SetPosition({ 0,-150,0 });
 	}
 	obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
