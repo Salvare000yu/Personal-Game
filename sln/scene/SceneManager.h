@@ -21,6 +21,9 @@ public:
 
 	//次シーン予約
 	void SetNextScene(BaseScene* nextScene) { nextScene_ = nextScene; }
+
+	BaseScene* GetScene() { return scene_; }
+
 private:
 	//nowシーン
 	BaseScene* scene_ = nullptr;

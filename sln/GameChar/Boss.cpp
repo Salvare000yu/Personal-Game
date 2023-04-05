@@ -962,6 +962,15 @@ void Boss::Initialize()
 	obj_SideSquare->SetPosition({ 0,30,2500 });
 	obj_UpDown->SetPosition({ 0,30,2500 });
 	obj_VerticalCircle->SetPosition({ 0,30,2500 });
+	//‰ñ“]
+	obj_core->SetRotation({ 0, 180, 0 });
+	obj_AroundCore->SetRotation({ 0, 180, 0 });
+	obj_outside->SetRotation({ 0, 180, 0 });
+	obj_SideSquare->SetRotation({ 0, 180, 0 });
+	obj_UpDown->SetRotation({ 0, 180, 0 });
+	obj_VerticalCircle->SetRotation({ 0, 180, 0 });
+
+	obj->SetColor({ 1, 1, 1, 0.0f });
 
 	// ‰¹º“Ç‚Ýž‚Ý
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
@@ -1038,13 +1047,25 @@ void Boss::Update()
 	//‘_‚¢’e
 	PAimBul();
 
+	auto core_rot=obj_core->GetRotation();
+	core_rot.y++;
+	obj_core->SetRotation(core_rot);
+
+	XMFLOAT3 pos = obj->GetPosition();
+	obj_core->SetPosition(pos);
+	obj_AroundCore->SetPosition(pos);
+	obj_outside->SetPosition(pos);
+	obj_SideSquare->SetPosition(pos);
+	obj_UpDown->SetPosition(pos);
+	obj_VerticalCircle->SetPosition(pos);
+
 	obj->Update();
-	//obj_core->Update();
-	//obj_AroundCore->Update();
-	//obj_outside->Update();
-	//obj_SideSquare->Update();
-	//obj_UpDown->Update();
-	//obj_VerticalCircle->Update();
+	obj_core->Update();
+	obj_AroundCore->Update();
+	obj_outside->Update();
+	obj_SideSquare->Update();
+	obj_UpDown->Update();
+	obj_VerticalCircle->Update();
 }
 
 void Boss::Draw()
@@ -1061,11 +1082,11 @@ void Boss::Draw()
 	}
 
 	if (alive) {
-		obj->Draw();
-		//obj_core->Draw();
-		//obj_AroundCore->Draw();
-		//obj_outside->Draw();
-		//obj_SideSquare->Draw();
+		//obj->Draw();
+		obj_core->Draw();
+		obj_AroundCore->Draw();
+		obj_outside->Draw();
+		obj_SideSquare->Draw();
 		//obj_UpDown->Draw();
 		// todo ‚±‚ê‚ð•`‰æ‚·‚é‚ÆƒGƒ‰[‚É‚È‚é
 		//obj_VerticalCircle->Draw();

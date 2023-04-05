@@ -399,7 +399,6 @@ void GamePlayScene::BossBodyRed()
 			BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
 			BossDamFlag = false;//くらっていない状態に
 		}
-
 		bo->SetColor(col);
 	}
 }
@@ -1183,12 +1182,6 @@ void GamePlayScene::Update()
 		obj_ground->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
-		//obj_ground.at("ground_gre")->SetPosition({ std::sin(time)*100.f,
-		//	-150 + std::sin(time)*50.f,
-		//	std::cos(time)});
-		//for (auto& i : obj_ground) {
-		//	i.second->Update();
-		//}
 
 		//スプライト更新
 		sprite_back->Update();
@@ -1282,7 +1275,6 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
-	Pause* pause = Pause::GetInstance();
 
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
@@ -1333,10 +1325,18 @@ void GamePlayScene::Draw()
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
 
+}
+
+void GamePlayScene::DrawUI()
+{
+
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 
+	CharParameters* charParameters = CharParameters::GetInstance();
+
 	//---------------お手前スプライト描画
+	Pause* pause = Pause::GetInstance();
 	if (pause->GetPauseFlag() == false)
 	{
 		//sp_guide->Draw();
@@ -1347,7 +1347,7 @@ void GamePlayScene::Draw()
 	if (pause->GetPauseFlag()) {
 		pause->SpFlagTrueNowDraw();
 	}
-	else if (BossEnemyAdvent && NowBoHp > 0) {
+	else if (BossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
 		charParameters->boHpDraw();
 	}//ボス戦時のみ表示
 
@@ -1379,11 +1379,6 @@ void GamePlayScene::Draw()
 	if (charParameters->GetispDam() == false) {
 		pDamFlag = false;
 	}
-}
-
-void GamePlayScene::DrawUI()
-{
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	charParameters->DrawUI();
 }

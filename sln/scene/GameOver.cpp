@@ -235,40 +235,16 @@ void GameOver::Update()
 
 void GameOver::Draw()
 {
-	//// スプライト共通コマンド
-	SpriteBase::GetInstance()->PreDraw();
-	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// スプライト描画
-	gameover->Draw();
-	sp_retry->Draw();
-	sp_gotitle->Draw();
-	sp_Now->Draw();
-	////3dオブジェ描画前処理
-	//Object3d::PreDraw();
 
-	////3dオブジェ描画
-	//object3d_1->Draw();
-
-	////3dオブジェ描画後処理
-	//Object3d::PostDraw();
-
-	// ４．描画コマンドここから
-
-	//for (int i = 0; i < _countof(object3ds); i++)
-	//{
-	//    DrawObject3d(&object3ds[i], dxBase->GetCmdList(), basicDescHeap.Get(), vbView, ibView,
-	//        CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeap->GetGPUDescriptorHandleForHeapStart(), constantBufferNum, dxBase->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)),
-	//        indices, _countof(indices));
-	//}
-
-	//// スプライト共通コマンド
-	//SpriteBase::GetInstance()->PreDraw();
-	//SpriteBase(spriteBase, dxBase->GetCmdList());
-	//// スプライト描画
-	//sprite->Draw();
 }
 
 void GameOver::DrawUI()
 {
-	//DebugText::GetInstance()->Print("[ENTERorPAD_A]:Title", 430, 100, 3);
+	//// スプライト共通コマンド
+	SpriteBase::GetInstance()->PreDraw();
+	// スプライト描画
+	gameover->Draw();
+	sp_retry->Draw();
+	sp_gotitle->Draw();
+	sp_Now->Draw();
 }

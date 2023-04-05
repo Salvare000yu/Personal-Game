@@ -54,36 +54,12 @@ void ClearScene::Initialize()
 
 	// スプライトの生成
 	sprite.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
-	//for (int i = 0; i < 1; i++)
-	//{
-	//    int texNumber = 1;
-	//    Sprite* sprite = Sprite::Create(spriteBase, texNumber, { 0,0 }, false, false);
-
-	//    // スプライトの座標変更
-	//    sprite->SetPosition({ (float)(80),(float)(20),0 });
-	//    //sprite->SetRotation((float)(rand() % 360));
-	//    sprite->SetSize({ (float)(200), (float)(200) });
-
-	//    sprite->TransferVertexBuffer();
-
-	//    sprites.push_back(sprite);ClearScene
-	//}
 
 #pragma endregion 描画初期化処理
 }
 
 void ClearScene::Finalize()
 {
-
-	//スプライト解放
-	//delete sprite;
-
-	//3dオブジェクト解放
-	//delete object3d_1;
-	//delete object3d_2;
-	//delete object3d_3;
-	//delete model_1;
-	//delete model_2;
 }
 
 void ClearScene::Update()
@@ -111,47 +87,14 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
+
+}
+
+void ClearScene::DrawUI()
+{
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
 	//// スプライト描画
 	sprite->Draw();
-
-	////3dオブジェ描画前処理
-	//Object3d::PreDraw();
-
-	////3dオブジェ描画
-	//object3d_1->Draw();
-
-	////3dオブジェ描画後処理
-	//Object3d::PostDraw();
-
-	// ４．描画コマンドここから
-
-	//for (int i = 0; i < _countof(object3ds); i++)
-	//{
-	//    DrawObject3d(&object3ds[i], dxBase->GetCmdList(), basicDescHeap.Get(), vbView, ibView,
-	//        CD3DX12_GPU_DESCRIPTOR_HANDLE(basicDescHeap->GetGPUDescriptorHandleForHeapStart(), constantBufferNum, dxBase->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)),
-	//        indices, _countof(indices));
-	//}
-
-	//// スプライト共通コマンド
-	//SpriteBase::GetInstance()->PreDraw();
-	//SpriteBase(spriteBase, dxBase->GetCmdList());
-	//// スプライト描画
-	//sprite->Draw();
-}
-
-void ClearScene::DrawUI()
-{
-	//DebugText::GetInstance()->Print("[ENTERorPAD_A]:PLAYSCENE", 410, 100, 3.0f);
-
-	////時間
-	//{
-	//	Timer* timer = Timer::GetInstance();
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "ClearTime : %2.f", timer->time);
-	//	DebugText::GetInstance()->Print(tmp, 550, 430, 1);
-	//}
-
 }

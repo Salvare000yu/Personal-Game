@@ -376,6 +376,10 @@ void TitleScene::Draw()
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
 
+}
+
+void TitleScene::DrawUI()
+{
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
@@ -389,22 +393,4 @@ void TitleScene::Draw()
 	if (sceneChangeDirection->SceneChangeDirectionFlag) {//シーン遷移演出中なら
 		sceneChangeDirection->Draw();//シーン遷移演出描画
 	}
-
-}
-
-void TitleScene::DrawUI()
-{
-	//DebugText::GetInstance()->Print("[ENTERorGAMEPAD:A] PLAYSCENE", 300, 100, 3.0f);
-	//if (MoveStartFlag == true) { DebugText::GetInstance()->Print("MoveStartF:true", 300, 100, 3.0f); }
-	//else { DebugText::GetInstance()->Print("MoveStartF:false", 300, 100, 3.0f); }
-
-	//if (SceneChangeFlag == true) { DebugText::GetInstance()->Print("SceneChangeF:true", 300, 200, 3.0f);
-	//}
-	//else { DebugText::GetInstance()->Print("SceneChangeF:false", 300, 200, 3.0f); }
-
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f", (float)ToStartFrame);
-	//	DebugText::GetInstance()->Print(tmp, 300, 390, 3);
-	//}
 }

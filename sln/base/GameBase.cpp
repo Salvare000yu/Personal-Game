@@ -162,6 +162,7 @@ void GameBase::Draw()
 	PostEffect::GetInstance()->Draw();
 
 	spriteBase->PreDraw();
+	sceneManager_->GetScene()->DrawUI();
 	// デバッグテキスト描画
 	debugText->DrawAll();
 
