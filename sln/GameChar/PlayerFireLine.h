@@ -3,7 +3,7 @@
 
 #include <memory>
 
-class PlayerFireLine:public BaseObject
+class PlayerFireLine :public BaseObject
 {
 private:
 	////-----------------model
@@ -37,6 +37,4 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
-
 };
-

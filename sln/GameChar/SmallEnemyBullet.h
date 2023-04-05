@@ -8,9 +8,8 @@
 
 class SmallEnemyBullet :public BaseObject
 {
-
 private:
-	
+
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//é©ã@
 
@@ -46,7 +45,7 @@ public:
 	//float time;
 
 	//è¡Ç¶ÇÈÇ‹Ç≈
-	static const int32_t BulVanishTime = 60*5;//éıñΩ
+	static const int32_t BulVanishTime = 60 * 5;//éıñΩ
 
 	//è¡ñ≈ÇÃêÈçê
 	int32_t vanishTimer_ = BulVanishTime;
@@ -68,5 +67,4 @@ private:
 
 	float tmp;
 	short angle;
-
 };

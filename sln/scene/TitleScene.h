@@ -59,7 +59,7 @@ public:
 
 	bool PAppearFlag = true;//自機登場フラグ　true：登場中
 	float sp = 1.5;
-	float StartSp=1.5;
+	float StartSp = 1.5;
 
 	bool SceneChangeFlag = false;//シーンチェンジ開始前
 
@@ -73,7 +73,7 @@ public:
 
 	std::unique_ptr < Player> player_ = nullptr;
 
-	float time=0;
+	float time = 0;
 	float frame = 0;
 
 private:
@@ -142,4 +142,3 @@ private:
 	//const float NamePosYUpDownDef = 0.2;//デフォ
 	//float NamePosYUpDown = NamePosYUpDownDef;
 };
-

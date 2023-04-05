@@ -11,7 +11,6 @@
 /// </summary>
 class Model
 {
-
 public:
 	// 頂点データ構造体
 	struct VertexPosNormalUv
@@ -20,7 +19,6 @@ public:
 		DirectX::XMFLOAT3 normal; // 法線ベクトル
 		DirectX::XMFLOAT2 uv;  // uv座標
 	};
-
 
 	//定数バッファ用データ構造体B1
 	struct ConstBufferDataB1
@@ -121,4 +119,3 @@ private:
 
 	void TransferBuffers();
 };
-

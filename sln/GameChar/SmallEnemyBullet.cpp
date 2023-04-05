@@ -34,15 +34,14 @@ void SmallEnemyBullet::Initialize()
 	sePosMoment = {};//”­ŽËŽž‚ÌŽG‹›“GˆÊ’u
 	MoveSp = {};//’eˆÚ“®‘¬“x
 
-	ShotTagMomOnlyFlag =true;
-	ShotTagMoment={};
+	ShotTagMomOnlyFlag = true;
+	ShotTagMoment = {};
 
 	//-------ª‘_‚¢’eª-------//
 }
 
 void SmallEnemyBullet::Update()
 {
-
 	XMFLOAT3 sePos = obj->GetPosition();
 	sePos.x -= velocity.x;
 	sePos.y -= velocity.y;

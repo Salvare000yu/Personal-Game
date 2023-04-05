@@ -7,12 +7,10 @@ using namespace DirectX;
 
 CameraTracking::CameraTracking() :Camera(WinApp::window_width, WinApp::window_height)
 {
-
 }
 
 void CameraTracking::StartUpdate()
 {
-
 	// トラッキングターゲットが存在したら
 	if (trackingTarget) {
 		XMFLOAT3 target = trackingTarget->GetPosition();

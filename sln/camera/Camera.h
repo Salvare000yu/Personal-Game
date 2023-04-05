@@ -43,7 +43,7 @@ public: // メンバ関数
 	/// </summary>
 	void UpdateProjectionMatrix();
 
-	virtual void StartUpdate(){};
+	virtual void StartUpdate() {};
 
 	/// <summary>
 	/// ビュー行列の取得

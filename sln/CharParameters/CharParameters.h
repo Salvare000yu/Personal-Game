@@ -50,7 +50,7 @@ private:
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 
 	//“GHP
-	const float BossMaxHP = 1000;//‚Ä‚«‚³‚¢‚¾‚¢HP 
+	const float BossMaxHP = 1000;//‚Ä‚«‚³‚¢‚¾‚¢HP
 	float NowBossHP = BossMaxHP;//Œ»İ‚Ì“GHP
 
 	//©‹@HP
@@ -72,6 +72,4 @@ private:
 	//–hŒä—Í
 	const float BossDefenseDef = 60;
 	float BossDefense = BossDefenseDef;
-
 };
-

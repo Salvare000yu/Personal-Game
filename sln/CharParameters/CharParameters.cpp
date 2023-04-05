@@ -49,7 +49,6 @@ void CharParameters::Initialize()
 	NowPlayerHP = PlayerMaxHP;//
 	pNextPlaceGoFlag = true;
 	//pAtkPossibleFlag = false;
-
 }
 
 void CharParameters::pHpSizeChange()
@@ -66,7 +65,6 @@ void CharParameters::boHpSizeChange()
 
 void CharParameters::Update()
 {
-
 }
 
 void CharParameters::BarGetDislodged()

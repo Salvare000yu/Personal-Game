@@ -4,7 +4,7 @@
 
 #include <memory>
 
-class PlayerBullet:public BaseObject
+class PlayerBullet :public BaseObject
 {
 private:
 	// Microsoft::WRL::‚ðÈ—ª
@@ -38,5 +38,4 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
-
 };

@@ -30,4 +30,3 @@ private:
 	//next
 	BaseScene* nextScene_ = nullptr;
 };
-

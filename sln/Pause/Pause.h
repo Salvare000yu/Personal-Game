@@ -62,4 +62,3 @@ private:
 
 	bool SceneChangeTitleFlag = false;//ƒ^ƒCƒgƒ‹‚Ö
 };
-

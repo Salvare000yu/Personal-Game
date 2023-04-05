@@ -12,7 +12,6 @@
 
 void Boss::BossAppear()
 {
-
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	XMFLOAT3 pos = obj->GetPosition();
@@ -68,7 +67,6 @@ void Boss::Approach()
 		ChangeVerticalCount++;//縦攻撃するためのカウント進める
 		actionPattern_ = ActionPattern::Leave;
 	}
-
 }
 
 void Boss::Leave()
@@ -112,7 +110,6 @@ void Boss::Leave()
 		else {
 			actionPattern_ = ActionPattern::Approach;
 		}
-
 	}
 }
 void Boss::Vertical()
@@ -120,7 +117,6 @@ void Boss::Vertical()
 	XMFLOAT3 position = obj->GetPosition();
 
 	switch (verticalPattern_) {
-
 	case VerticalPattern::def://デフォルト
 		verticalPattern_ = VerticalPattern::StartVertical;//上昇開始
 		break;
@@ -235,7 +231,6 @@ void Boss::Vertical()
 		verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
 		actionPattern_ = ActionPattern::Approach;//大本の行動パターンをApproachに戻す
 		break;
-
 	}
 
 	obj->SetPosition(position);
@@ -243,7 +238,6 @@ void Boss::Vertical()
 
 void Boss::HpHalfPatStart()
 {
-
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	Nowframe++;
@@ -355,7 +349,6 @@ void Boss::CircularMotionMove()
 		addY = addYDef;
 		GetPosOnlyFlag = true;
 		actionPattern_ = ActionPattern::LeaveFirstPos;
-
 	}
 
 	//発射カウントをデクリメント
@@ -374,7 +367,6 @@ void Boss::CircularMotionMove()
 }
 void Boss::LeaveFirstPos()
 {
-
 	Nowframe++;
 
 	if (GetPosOnlyFlag)
@@ -385,7 +377,6 @@ void Boss::LeaveFirstPos()
 
 		//LeaveFirstPos2回で突っ込む
 		PlungeCount--;
-
 	}
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//移動速度＝（指定座標-最初位置）/かかる時間
@@ -438,7 +429,6 @@ void Boss::PlungeInto()
 
 	switch (plungeIntoPattern_)
 	{
-
 	case PlungeIntoPattern::Leave://一度離れて
 		position.z += LeaveVel;
 
@@ -476,7 +466,6 @@ void Boss::PlungeInto()
 		obj->SetPosition(PlungeNowPos);//その時の位置
 
 		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
-
 			boPosFlag = false;//一度きり読み込みリセ
 			pMemFlag = false;//一度きりセット
 
@@ -572,7 +561,6 @@ void Boss::PlungeInto()
 		}
 		break;
 	}
-
 }
 
 void Boss::AfterPlungeInto()
@@ -583,7 +571,6 @@ void Boss::AfterPlungeInto()
 
 		WaitTime--;//待ち時間
 		if (WaitTime == 0) {//指定時間待ったら
-
 			LoopCount++;//何回やったか数えるんだよ
 			WaitTime = WaitTimeDef;
 			Nowframe = NowframeDef;
@@ -673,7 +660,6 @@ void Boss::AfterPlungeInto()
 }
 
 void Boss::Shake() {
-
 	CharParameters* charParameters = CharParameters::GetInstance();
 	//pos揺らす
 	XMFLOAT3 pos = obj->GetPosition();
@@ -689,7 +675,6 @@ void Boss::Shake() {
 		pos.y = posMem.y + rand() % randShakeNow - 4.f;
 	}
 	obj->SetPosition(pos);
-
 }
 
 //-------攻撃系
@@ -883,7 +868,6 @@ void Boss::StraightAttack()
 
 //------攻撃系↑
 void Boss::Death() {
-
 	Nowframe++;
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
@@ -1047,7 +1031,7 @@ void Boss::Update()
 	//狙い弾
 	PAimBul();
 
-	auto core_rot=obj_core->GetRotation();
+	auto core_rot = obj_core->GetRotation();
 	core_rot.y++;
 	obj_core->SetRotation(core_rot);
 

@@ -11,7 +11,6 @@
 
 class Player :public BaseObject
 {
-
 	DirectX::XMVECTOR lookVec{};
 
 	DirectX::XMVECTOR position{};
@@ -37,7 +36,7 @@ private:
 	bool AttackIntervalFlag = false;
 
 public:
-	inline void SetPBulModel(Model* model) { pBulModel=model; }
+	inline void SetPBulModel(Model* model) { pBulModel = model; }
 	inline void SetPFiringLine(Model* model) { pFiringLine = model; }
 
 	/*static Player* GetInstance();*/
@@ -97,7 +96,7 @@ public:
 	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
 	const bool& GetpDeath() { return PlayerDeathFlag; }
 	//-------------------↑げったーせったー↑-------------------//
-	
+
 	//自機が攻撃できるようにするか true:攻撃できる
 	bool pAtkPossibleFlag = false;
 
@@ -120,7 +119,7 @@ private:
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
 	XMFLOAT3 NowPos = {};//その時の位置
 
-	float PartTimeInterval=0;
+	float PartTimeInterval = 0;
 	float ParticleFrame = 39;//パーティクル出すフレ
 
 	bool GetPosFlag = true;//一度きりの座標読み込み
@@ -133,6 +132,4 @@ private:
 
 	//自機死亡演出時　false:爆発してない
 	bool ExplosionFlag = false;
-
 };
-

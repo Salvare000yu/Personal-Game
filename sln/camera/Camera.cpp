@@ -4,7 +4,6 @@ using namespace DirectX;
 
 Camera::Camera(int window_width, int window_height)
 {
-
 	aspectRatio = (float)window_width / window_height;
 
 	//ビュー行列の計算
@@ -72,7 +71,7 @@ void Camera::UpdateViewMatrix()
 	cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
 
 	// ここまでで直交した3方向のベクトルが揃う
-	//（ワールド座標系でのカメラの右方向、上方向、前方向）	
+	//（ワールド座標系でのカメラの右方向、上方向、前方向）
 
 	// カメラ回転行列
 	XMMATRIX matCameraRot;

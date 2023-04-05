@@ -3,8 +3,6 @@
 #include "SpriteBase.h"
 #include "../PipelineSet.h"
 
-
-
 class PostEffect
 {
 public:

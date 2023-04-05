@@ -87,7 +87,6 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
-
 }
 
 void ClearScene::DrawUI()

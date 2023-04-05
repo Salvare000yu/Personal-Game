@@ -7,25 +7,24 @@
 #include "fbxsdk.h"//fbxsdk関数呼び出し
 
 LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-    // メッセージで分岐
-    switch (msg) {
-        case WM_DESTROY: // ウィンドウが破棄された
-            PostQuitMessage(0); // OSに対して、アプリの終了を伝える
-            return 0;
-    }
-    return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
+	// メッセージで分岐
+	switch (msg) {
+	case WM_DESTROY: // ウィンドウが破棄された
+		PostQuitMessage(0); // OSに対して、アプリの終了を伝える
+		return 0;
+	}
+	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-   
-    GameBase* game=new MyDirectXGame;
+	GameBase* game = new MyDirectXGame;
 
-    game->Run();
+	game->Run();
 
-    delete game;
+	delete game;
 
-    //FbxLoader::GetInstance()->Finalize();
+	//FbxLoader::GetInstance()->Finalize();
 
 	return 0;
 }

@@ -19,4 +19,3 @@ private:
 	Timer();
 	~Timer();
 };
-

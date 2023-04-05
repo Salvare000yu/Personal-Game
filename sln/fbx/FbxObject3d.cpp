@@ -229,7 +229,7 @@ void FbxObject3d::Update()
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
-		// ビュープロダクション行列
+	// ビュープロダクション行列
 	const XMMATRIX& matViewProjection =
 		camera->GetViewProjectionMatrix();
 
@@ -283,7 +283,6 @@ void FbxObject3d::Update()
 			* XMMatrixInverse(nullptr, fbxModel->GetModelTransform());
 	}
 	constBuffSkin->Unmap(0, nullptr);
-
 }
 
 void FbxObject3d::Draw(ID3D12GraphicsCommandList* cmdList)

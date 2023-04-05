@@ -90,7 +90,6 @@ void ParticleManager::Update()
 	for (std::forward_list<Particle>::iterator it = particles.begin();
 		it != particles.end();
 		it++) {
-
 		// 経過フレーム数をカウント
 		it->frame++;
 		// 進行度を0～1の範囲に換算
@@ -197,7 +196,7 @@ void ParticleManager::InitializeDescriptorHeap()
 {
 	HRESULT result = S_FALSE;
 
-	// デスクリプタヒープを生成	
+	// デスクリプタヒープを生成
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
@@ -494,5 +493,4 @@ void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, floa
 
 		Add(30, pos, vel, XMFLOAT3(vel.x / +10, vel.y / +10, vel.z / +10), startScale, 0);
 	}
-
 }

@@ -26,7 +26,6 @@ enum class Button {
 	BACK = XINPUT_GAMEPAD_BACK,
 };
 
-
 class Input
 {
 public:
@@ -56,7 +55,7 @@ public://メンバ関数
 	bool TriggerKey(BYTE keyNumber);
 
 	//--------------------Xinput↓
-	// 
+	//
 	// コントローラー初期化
 	void ControllerInitialize(DWORD controllerNum);
 	// コントローラー更新
@@ -160,6 +159,4 @@ private://メンバ変数
 	DIMOUSESTATE2 mouse{};
 	DIMOUSESTATE2 mousePre{};
 	ComPtr<IDirectInputDevice8> devmouse;
-
 };
-

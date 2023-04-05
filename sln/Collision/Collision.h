@@ -3,8 +3,6 @@
 #include "CollisionPrimitive.h"
 
 class Collision {
-
-
 public:
 	/// <summary>
 	/// ‹…‚Æ•½–Ê‚Ì“–‚½‚è”»’è

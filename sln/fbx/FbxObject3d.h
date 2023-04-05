@@ -13,7 +13,7 @@
 class FbxObject3d
 {
 protected: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -41,7 +41,7 @@ public: // サブクラス
 	};
 
 public: // 静的メンバ関数
-// setter
+	// setter
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
 	static void SetCamera(Camera* camera) { FbxObject3d::camera = camera; }
 
@@ -134,4 +134,3 @@ protected:
 	//アニメ―ション再生中
 	bool isPlay = false;
 };
-

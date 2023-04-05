@@ -25,7 +25,6 @@ PostEffect* PostEffect::GetInstance()
 
 void PostEffect::CreateGraphicsPipelineState()
 {
-
 	HRESULT result;
 
 	ComPtr<ID3DBlob> vsBlob = nullptr; // 頂点シェーダオブジェクト
@@ -156,7 +155,6 @@ void PostEffect::CreateGraphicsPipelineState()
 	gpipeline.pRootSignature = pipelineSet.rootsignature.Get();
 	result = device_->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelineSet.pipelinestate));
 	assert(SUCCEEDED(result));
-
 }
 
 void PostEffect::TransfarConstBuffer()
@@ -165,7 +163,7 @@ void PostEffect::TransfarConstBuffer()
 	ConstBufferData* constMap = nullptr;
 	HRESULT result = constBuff_->Map(0, nullptr, (void**)&constMap);
 	constMap->time = frame / 60.f;	// 60fps想定
-	constMap->windowSize = XMFLOAT2(WinApp::window_width,WinApp::window_height);
+	constMap->windowSize = XMFLOAT2(WinApp::window_width, WinApp::window_height);
 	constMap->vignettePow = vignettePow;
 	constBuff_->Unmap(0, nullptr);
 }
@@ -435,7 +433,6 @@ void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* commandList)
 	//深度バッファのクリア
 	commandList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0,
 		nullptr);
-
 }
 
 void PostEffect::PostDrawScene(ID3D12GraphicsCommandList* commandList)
@@ -519,5 +516,4 @@ void PostEffect::Draw()
 
 	// ポリゴンの描画（4頂点で四角形）
 	commandList->DrawInstanced(4, 1, 0, 0);
-
 }

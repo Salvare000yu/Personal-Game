@@ -1,4 +1,3 @@
-
 #include "ComplexInput.h"
 
 ComplexInput* ComplexInput::GetInstance()
@@ -20,7 +19,6 @@ bool ComplexInput::LeftMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::RightMove()
@@ -36,7 +34,6 @@ bool ComplexInput::RightMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::UpMove()
@@ -52,7 +49,6 @@ bool ComplexInput::UpMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::DownMove()
@@ -68,7 +64,6 @@ bool ComplexInput::DownMove()
 	}
 
 	return false;
-
 }
 //trigger↓
 bool ComplexInput::tLeftMove()
@@ -84,7 +79,6 @@ bool ComplexInput::tLeftMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::tRightMove()
@@ -100,7 +94,6 @@ bool ComplexInput::tRightMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::tUpMove()
@@ -116,7 +109,6 @@ bool ComplexInput::tUpMove()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::tDownMove()
@@ -132,9 +124,7 @@ bool ComplexInput::tDownMove()
 	}
 
 	return false;
-
 }
-
 
 bool ComplexInput::tUpArrow()
 {
@@ -149,7 +139,6 @@ bool ComplexInput::tUpArrow()
 	}
 
 	return false;
-
 }
 bool ComplexInput::tDownArrow()
 {
@@ -203,10 +192,10 @@ bool ComplexInput::Decision()
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
 	//パッド
 	const bool PadTriggerA = input->TriggerButton(static_cast<int>(Button::A));
-	if (TriggerEnter || PadTriggerA|| TriggerSPACE) {
+	if (TriggerEnter || PadTriggerA || TriggerSPACE) {
 		return true;
-	} 
-	
+	}
+
 	return false;
 }
 
@@ -223,7 +212,6 @@ bool ComplexInput::PauseOpenClose()
 	}
 
 	return false;
-
 }
 
 bool ComplexInput::PlayerDash()
@@ -237,10 +225,9 @@ bool ComplexInput::PlayerDash()
 	//パッド
 	const bool PadInputX = input->TriggerButton(static_cast<int>(Button::X));
 
-	if (TriggerMouseRight || TrigerLShift|| TrigerRShift|| PadInputX) {
+	if (TriggerMouseRight || TrigerLShift || TrigerRShift || PadInputX) {
 		return true;
 	}
 
 	return false;
-
 }

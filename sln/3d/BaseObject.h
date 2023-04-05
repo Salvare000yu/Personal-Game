@@ -6,7 +6,6 @@
 #include <memory>
 
 class BaseObject {
-
 protected:
 	std::unique_ptr<Object3d> obj;
 
@@ -28,7 +27,7 @@ public:
 	inline const DirectX::XMFLOAT4& GetColor() { return obj->GetColor(); }
 
 	//ƒ‚ƒfƒ‹‰Šú‰»ŠÖ”
-	inline void SetModel(Model* model ) { obj->SetModel(model); }
+	inline void SetModel(Model* model) { obj->SetModel(model); }
 
 	inline bool GetAlive() const { return alive; }
 
@@ -43,5 +42,4 @@ public:
 	virtual void Update();
 
 	virtual void Draw();
-
 };

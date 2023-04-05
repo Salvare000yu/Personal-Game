@@ -71,7 +71,6 @@ void Pause::EveryInit()
 
 void Pause::PauseNow()
 {
-
 	ComplexInput* cInput = ComplexInput::GetInstance();
 	Input* input = Input::GetInstance();
 	input->PadVibrationDef();
@@ -98,7 +97,6 @@ void Pause::PauseNow()
 	//if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
 	//	PauseFlag = false;
 	//}
-
 }
 void Pause::Update()
 {
@@ -120,7 +118,7 @@ void Pause::PauseConti()
 	sp_continuation->SetSize({ PauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
-	if (cInput->tDownArrow()||cInput->tDownMove()) {//1‚ðŽŸ‚Í‘I‘ð
+	if (cInput->tDownArrow() || cInput->tDownMove()) {//1‚ðŽŸ‚Í‘I‘ð
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 1;
@@ -147,7 +145,7 @@ void Pause::PauseOper()
 	sp_operation->TransferVertexBuffer();
 
 	//‘€ìà–¾ŠJ‚¢‚Ä‚È‚¢‚Æ‚«‚Ì‚Ý
-	if (OperWindOpenFlag == false!= cInput->Decision())
+	if (OperWindOpenFlag == false != cInput->Decision())
 	{
 		if (cInput->tDownArrow() || cInput->tDownMove()) {//‰º‚Å2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
@@ -180,7 +178,6 @@ void Pause::OperationWind()
 }
 void Pause::PauseGoTitle()
 {
-
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
@@ -207,7 +204,6 @@ void Pause::PauseGoTitle()
 
 void Pause::SpUpdate()
 {
-
 	sp_openpause->Update();
 	sp_pause->Update();
 	sp_continuation->Update();

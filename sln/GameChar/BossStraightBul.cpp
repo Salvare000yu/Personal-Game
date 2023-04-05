@@ -25,13 +25,10 @@ void BossStraightBul::Initialize()
 	//obj->SetScale({ 70.0f, 70.0f, 70.0f });
 	//êŠ
 	//obj->SetPosition({ position });
-
-
 }
 
 void BossStraightBul::Update()
 {
-
 	XMFLOAT3 position = obj->GetPosition();
 	position.x -= velocity.x;
 	position.y -= velocity.y;

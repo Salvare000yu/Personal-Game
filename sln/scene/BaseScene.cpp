@@ -2,5 +2,4 @@
 
 BaseScene::BaseScene()
 {
-
 }

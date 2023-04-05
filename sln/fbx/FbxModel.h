@@ -26,13 +26,12 @@ struct Node//ノード構造体
 	DirectX::XMMATRIX globalTransform;
 	//親ノード
 	Node* parent = nullptr;
-
 };
 
 class FbxModel
 {
 private: // エイリアス
-// Microsoft::WRL::を省略
+	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -128,4 +127,3 @@ public:
 	//デストラクタ―
 	~FbxModel();
 };
-

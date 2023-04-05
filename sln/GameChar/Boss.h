@@ -9,9 +9,8 @@
 
 #include <memory>
 
-class Boss:public BaseObject
+class Boss :public BaseObject
 {
-
 	//行動パターン enumclass
 	enum class ActionPattern {
 		BossAppear,
@@ -89,7 +88,7 @@ public:
 	void ApproachInit();
 
 	std::unique_ptr<Camera> camera; //カメラ
-	
+
 	float time;
 
 	//近づく速さ
@@ -115,7 +114,7 @@ public:
 	//フレームごとに発射
 	static const int AtkInterval = 10;
 	static const int AtkInterval_LeaveFirst = 20;
-	static const int DiffusionAtkInterval =20;
+	static const int DiffusionAtkInterval = 20;
 
 	//縦攻撃
 	VerticalPattern verticalPattern_ = VerticalPattern::def;
@@ -241,8 +240,8 @@ private:
 	//待ち時間
 	const int VerticalWaitCountDef = 50;
 	int VerticalWaitCount = VerticalWaitCountDef;
-	const XMFLOAT3 UpDownPosDef={-600,900,0};	//上昇下降開始座標
-	XMFLOAT3 UpDownPos= UpDownPosDef;
+	const XMFLOAT3 UpDownPosDef = { -600,900,0 };	//上昇下降開始座標
+	XMFLOAT3 UpDownPos = UpDownPosDef;
 	float UpStartPosY = -250;//上昇開始Y座標
 	float DownStartPosY = 950;//下降開始Y座標
 	const float NextMoveX = 200;//UpDownの最後にXをずらす値
@@ -276,8 +275,8 @@ private:
 
 	XMFLOAT3 CirclePosMem;//その時の座標取得
 	//移動値
-	const float addXDef=0.f;
-	float addX= addXDef;
+	const float addXDef = 0.f;
+	float addX = addXDef;
 	const float addYDef = 0.f;
 	float addY = addYDef;
 	//------HP半分以下円運動↑
@@ -336,8 +335,8 @@ private:
 
 	//----plungeとafter両立しないのでafterでも使う
 	//自機いた場所取得フラグ false:未取得
-	bool pMemFlag=false;
-	//自機いた場所 
+	bool pMemFlag = false;
+	//自機いた場所
 	XMFLOAT3 pPosMem{};
 
 	//突っ込み終わったか  false:まだ突っ込んでない
@@ -374,8 +373,8 @@ private:
 	int LoopCount = LoopCountDef;
 	//この回数でつぎへ
 	const int LoopCountMax = 7;
-	
-	// 
+
+	//
 	//-------AfterPlungeInto
 
 	//---シェイク
@@ -386,6 +385,5 @@ private:
 	//揺らし終えたか false:まだ
 	bool isShakeFinished = false;
 	//いた場所
-	XMFLOAT3 posMem={};
-
+	XMFLOAT3 posMem = {};
 };

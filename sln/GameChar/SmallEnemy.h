@@ -7,7 +7,7 @@
 
 #include <memory>
 
-class SmallEnemy:public BaseObject
+class SmallEnemy :public BaseObject
 {
 	//捌けパターン
 	enum class RetirePat {
@@ -41,7 +41,7 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	//消えるまで
-	static const int32_t BulVanishTime = 60*7;//寿命
+	static const int32_t BulVanishTime = 60 * 7;//寿命
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
 
@@ -103,5 +103,4 @@ private:
 	bool isRetire = false;
 	//向かってくる間だけ
 	bool isSeApproach = true;
-
 };

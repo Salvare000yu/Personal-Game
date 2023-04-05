@@ -12,7 +12,6 @@
 //directXŠî”Õ
 class DxBase
 {
-
 	DxBase(const DxBase& dxBase) = delete;
 	DxBase& operator=(const DxBase& dxBase) = delete;
 
@@ -81,4 +80,3 @@ private:
 	void UpdateFixFps();//XV
 	//-----
 };
-

@@ -40,4 +40,3 @@ private:
 	//ウィンドウクラスの設定
 	WNDCLASSEX w{};
 };
-

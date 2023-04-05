@@ -33,4 +33,3 @@ public:
 	bool Decision();//決定
 	bool PauseOpenClose();//ポーズ開閉
 };
-

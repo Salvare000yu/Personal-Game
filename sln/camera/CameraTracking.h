@@ -23,7 +23,4 @@ private:
 
 	// ƒJƒƒ‰‚Ì‹“_‚©‚ç’‹“_‚Ü‚Å‚Ì‹——£
 	float eyeToCameraTargetLength = 60;
-
-
 };
-

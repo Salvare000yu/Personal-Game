@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include "PostEffect.h"
-  
+
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace DirectX;
@@ -289,7 +289,6 @@ void Object3d::Update()
 	constMap->color = color;
 	constMap->mat = matWorld * matViewProjection;
 	constBuffB0->Unmap(0, nullptr);
-
 }
 
 void Object3d::Draw()

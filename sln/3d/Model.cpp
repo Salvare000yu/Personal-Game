@@ -12,7 +12,7 @@
 
 using namespace DirectX;
 
-ID3D12Device* Model::device=nullptr;
+ID3D12Device* Model::device = nullptr;
 
 Model* Model::GetInstance()
 {
@@ -22,11 +22,10 @@ Model* Model::GetInstance()
 
 Model* Model::LoadFromOBJ(const std::string& modelname)
 {
-
-    Model* model = new Model();
+	Model* model = new Model();
 
 	//↓------------------デスクリプタヒープ生成
-	
+
 	model->InitializeDescriptorHeap();
 
 	//↑------------------デスクリプタヒープ生成
@@ -38,12 +37,10 @@ Model* Model::LoadFromOBJ(const std::string& modelname)
 	model->CreateBuffers();
 
 	return model;
-
 }
 
 void Model::LoadMaterial(const std::string& directoryPath, const std::string& filename)
 {
-
 	//ファイルストリーム
 	std::ifstream file;
 	//マテリアルファイルを開く
@@ -99,7 +96,6 @@ void Model::LoadMaterial(const std::string& directoryPath, const std::string& fi
 	}
 	//ファイルを閉じる
 	file.close();
-
 }
 
 bool Model::LoadTexture(const std::string& directoryPath, const std::string& filename)
@@ -195,7 +191,7 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial
 	cmdList->IASetIndexBuffer(&ibView);
 
 	//マテリアル用定数バッファビューをセット
-	cmdList->SetGraphicsRootConstantBufferView(rootParamIndexMaterial,constBuffB1->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootConstantBufferView(rootParamIndexMaterial, constBuffB1->GetGPUVirtualAddress());
 
 	//デスクリプタヒープの配列
 	ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
@@ -207,12 +203,10 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial
 	}
 	//描画コマンド
 	cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
-
 }
 
 void Model::LoadFromOBJInternal(const std::string& modelname)
 {
-	
 	const std::string filename = modelname + ".obj";
 	const std::string directoryPath = "Resources/" + modelname + "/";
 
@@ -230,7 +224,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 	std::vector<XMFLOAT2>texcoords;//テクスチャＵＶ
 	//定数バッファ行ずつ読み込む
 	std::string line;
-	while (getline(file,line)) {
+	while (getline(file, line)) {
 		//1行分の文字列をストリームにして解析しやすくする
 		std::istringstream line_stream(line);
 
@@ -328,10 +322,10 @@ void Model::InitializeDescriptorHeap()
 {
 	assert(device);
 
-	HRESULT result=S_FALSE;
+	HRESULT result = S_FALSE;
 
 	//デスクリプタヒープ生成
-	   // デスクリプタヒープを生成 
+	   // デスクリプタヒープを生成
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
@@ -344,7 +338,6 @@ void Model::InitializeDescriptorHeap()
 
 	//デスクリプタサイズを取得
 	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
 }
 
 void Model::CreateBuffers()

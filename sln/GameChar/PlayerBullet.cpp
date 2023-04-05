@@ -16,7 +16,6 @@ void PlayerBullet::Initialize()
 	//êŠ
 
 	//obj->SetPosition({ BulletPos });
-
 }
 
 void PlayerBullet::Update()

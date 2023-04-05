@@ -61,7 +61,6 @@ float4 GaussianBlurHighLumi(Texture2D<float4> tex, float2 uv, float sigma = 0.00
 
 float4 main(VSOutput input) : SV_TARGET
 {
-
 	float4 texcolor0 = GaussianBlurHighLumi(tex0, input.uv);
 	float4 texcolor1 = texcolor0 + ChromaticAberration(input.uv);
 
@@ -69,7 +68,6 @@ float4 main(VSOutput input) : SV_TARGET
 
 	float dist = vignettePow * 2.f * distance(float2(0.5f, 0.5f), input.uv);
 	color.gb *= 1.f - dist;
-
 
 	return float4(color.rgb, 1);
 }

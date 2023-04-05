@@ -30,6 +30,10 @@
 #include <DirectXMath.h>
 #include <algorithm>
 
+#ifdef min
+#undef min
+#endif // min
+
 std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	bool commentFlag,
 	char divChar,
@@ -113,7 +117,7 @@ void GamePlayScene::Initialize()
 
 	for (auto& i : obj_ground) {
 		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		model->second->SetTiling({100,100});
+		model->second->SetTiling({ 100,100 });
 		i.second->SetModel(mod_ground.at(i.first).get());
 		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
 		i.second->SetPosition({ 0,-150,0 });
@@ -604,7 +608,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 	bool StopFlag = false;//停止してね
 
-	pNextPlaceGoSp = min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
+	pNextPlaceGoSp = std::min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
 	pNextPlaceGoSp += AccelVal;
 
 	if (pPos.z > charParams->StopPos) {//指定した場所超えたら
@@ -1287,7 +1291,6 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
-
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
 
@@ -1336,12 +1339,10 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
-
 }
 
 void GamePlayScene::DrawUI()
 {
-
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 

@@ -16,43 +16,42 @@ class GameBase
 {
 public:
 
-    /// <summary>
-    /// 実行
-    /// </summary>
-    void Run();
+	/// <summary>
+	/// 実行
+	/// </summary>
+	void Run();
 
-    /// <summary>
+	/// <summary>
 /// 初期化
 /// </summary>
-    virtual void Initialize();
+	virtual void Initialize();
 
-    /// <summary>
+	/// <summary>
 /// 終了
 /// </summary>
-    virtual void Finalize();
+	virtual void Finalize();
 
-    /// <summary>
-    /// 毎フレーム更新
-    /// </summary>
-    virtual void Update();
+	/// <summary>
+	/// 毎フレーム更新
+	/// </summary>
+	virtual void Update();
 
-    /// <summary>
+	/// <summary>
 /// 描画
 /// </summary>
-    virtual void Draw();
+	virtual void Draw();
 
-    virtual bool IsEndReq() { return endReq_; }
+	virtual bool IsEndReq() { return endReq_; }
 
 protected:
-    bool endReq_ = false;
-    //ポインタ系ここ
-    Input* input = nullptr;
-    WinApp* winApp = nullptr;
-    DxBase* dxBase = nullptr;
-    GameSound* gameSound = nullptr;
-    DebugText* debugText = nullptr;
-    SpriteBase* spriteBase = nullptr;
-    SceneManager* sceneManager_ = nullptr;
-    Camera* camera = nullptr;
+	bool endReq_ = false;
+	//ポインタ系ここ
+	Input* input = nullptr;
+	WinApp* winApp = nullptr;
+	DxBase* dxBase = nullptr;
+	GameSound* gameSound = nullptr;
+	DebugText* debugText = nullptr;
+	SpriteBase* spriteBase = nullptr;
+	SceneManager* sceneManager_ = nullptr;
+	Camera* camera = nullptr;
 };
-

@@ -11,23 +11,22 @@
 /// <summary>
 /// ゲーム固有クラス
 /// </summary>
-class MyDirectXGame:public GameBase
+class MyDirectXGame :public GameBase
 {
 public:
 
-    void Initialize() override;
+	void Initialize() override;
 
-    void Finalize() override;
+	void Finalize() override;
 
-    /// <summary>
-    /// 毎フレーム更新
-    /// </summary>
-    void Update() override;
-    /// <summary>
-    /// 描画
-    /// </summary>
-    void Draw() override;
+	/// <summary>
+	/// 毎フレーム更新
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw() override;
 
 private:
 };
-

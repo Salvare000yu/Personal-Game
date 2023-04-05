@@ -8,7 +8,6 @@
 
 class BossAimBul :public BaseObject
 {
-
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
@@ -27,7 +26,6 @@ private:
 	float frame = 0;
 
 	XMFLOAT3 velocity{ 0,0,0 };
-
 
 public:
 	//‰Šú‰»
@@ -62,5 +60,4 @@ public:
 	XMFLOAT3 boPosMoment;//”­Ë‚ÌG‹›“GˆÊ’u
 	XMFLOAT3 MoveSp;//’eˆÚ“®‘¬“x
 	XMFLOAT3 NowPos;//‚»‚Ì‚Ì’eˆÊ’u
-
 };

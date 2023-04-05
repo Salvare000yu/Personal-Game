@@ -13,7 +13,6 @@ void PlayerFireLine::Initialize()
 	//êŠ
 
 	//obj->SetPosition({ BulletPos });
-
 }
 
 void PlayerFireLine::Update()

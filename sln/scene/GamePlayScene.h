@@ -20,7 +20,6 @@ using namespace DirectX;
 
 class GamePlayScene :public BaseScene, public BaseObject
 {
-
 	DirectX::XMFLOAT2 cameraMoveVel{};
 
 	enum class BeforeBossPattern {
@@ -240,7 +239,7 @@ private:
 	//何行目まで出したか
 	int seIndex = -1;
 
-	//----自機ダッシュ 
+	//----自機ダッシュ
 	//false:してない
 	bool DashFlag = false;
 	//ダッシュ時間
@@ -261,6 +260,5 @@ private:
 	const float DashVelIncDef = 6;
 	float DashVelInc = DashVelIncDef;
 
-	//----自機ダッシュ 
+	//----自機ダッシュ
 };
-

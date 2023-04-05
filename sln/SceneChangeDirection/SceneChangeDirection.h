@@ -31,7 +31,7 @@ public:
 	//画面隠す　false:隠し始める前
 	bool HideTheScreenFlag;
 	//playsceneが始まり演出始める　false:まだ
-	bool GameReadyStartFlag;	
+	bool GameReadyStartFlag;
 	//開き切った　false:開く前
 	bool OpenTheScreenFlag;
 
@@ -42,5 +42,4 @@ private:
 	const float HideSp = 80;//画面隠す速度 画像サイズで割れる大きさ
 
 	float HideVel = 0;//実際に座標に足す値
-
 };

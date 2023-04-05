@@ -68,42 +68,17 @@ void Player::Attack()
 	}
 	if (AttackIntervalFlag)
 	{
-
-		if (--AtkInterval_ >= 0) {//クールタイム 0まで減らす	
-
-			//XMFLOAT3 PlayerPos = obj->GetPosition();
-			////弾生成
-			//std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
-			////bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
-			//madeBullet->Initialize();
-			//madeBullet->SetModel(pBulModel);
-			//madeBullet->SetPosition(PlayerPos);
-
-			//// velocityを算出
-			//XMVECTOR vecvelocity = XMVectorSet(0, 0, 3, 0);
-			//XMFLOAT3 xmfloat3velocity;
-			//XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
-
-			//madeBullet->SetVelocity(xmfloat3velocity);
-
-			//// 音声再生 鳴らしたいとき
-			//GameSound::GetInstance()->PlayWave("shot.wav", 0.3f);
-
-			////弾登録
-			//bullets_.push_back(std::move(madeBullet));
-
+		if (--AtkInterval_ >= 0) {//クールタイム 0まで減らす
 			if (AtkInterval_ <= 0) {
 				AttackIntervalFlag = false;
 			}//0なったらくらい状態解除
 		}
 		else { AtkInterval_ = AtkInterval; }
 	}
-
 }
 
 void Player::Move()
 {
-
 	Input* input = Input::GetInstance();
 	const bool inputW = input->PushKey(DIK_W);
 	const bool inputS = input->PushKey(DIK_S);
@@ -159,11 +134,10 @@ void Player::Move()
 }
 
 void Player::Shake() {
-
 	CharParameters* charParameters = CharParameters::GetInstance();
 	Input* input = Input::GetInstance();
 
-	if (--pShakeTimer_ >= 0) {// 0まで減らす			
+	if (--pShakeTimer_ >= 0) {// 0まで減らす
 		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
 		input->PadVibration();
@@ -178,13 +152,11 @@ void Player::Shake() {
 		if (pShakeTimer_ <= 0) {
 			input->PadVibrationDef();
 		}
-
 	}
 	else {
 		pShakeTimer_ = pShakeTime;
 		charParameters->SetispDam(false);
 	}
-
 }
 void Player::PlayerDeath()
 {
@@ -255,7 +227,6 @@ void Player::Initialize()
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("shot.wav");
-
 }
 
 void Player::Update()
@@ -287,7 +258,6 @@ void Player::Update()
 
 	//生きててHp０いじょうなら
 	if (alive && isPHpLessThan0 == false) {
-
 		if (pAtkPossibleFlag) {//攻撃していいときなら
 			Move();
 		}
@@ -314,7 +284,6 @@ void Player::Update()
 	}
 
 	obj->Update();
-
 }
 
 void Player::Draw()
@@ -330,5 +299,4 @@ void Player::Draw()
 	{
 		obj->Draw();
 	}
-
 }

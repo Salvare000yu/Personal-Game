@@ -31,4 +31,3 @@ private:
 	//Object3d* object3d_2 = nullptr;
 	//Object3d* object3d_3 = nullptr;
 };
-

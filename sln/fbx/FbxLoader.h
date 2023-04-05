@@ -98,5 +98,4 @@ public:
 	static const string baseDirectory;
 	//テクスチャがない場合のテクスチャファイル名
 	static const string defaultTextureFileName;
-
 };

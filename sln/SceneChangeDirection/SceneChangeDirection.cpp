@@ -21,12 +21,10 @@ void SceneChangeDirection::Initialize()
 	HideTheScreenFlag = false;
 	GameReadyStartFlag = false;
 	OpenTheScreenFlag = false;
-
 }
 
 void SceneChangeDirection::HideTheScreen()
 {
-
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
 	HideVel = -HideSp;//右から左に隠してく
@@ -41,7 +39,6 @@ void SceneChangeDirection::HideTheScreen()
 }
 void SceneChangeDirection::OpenTheScreen()
 {
-
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
 	HideVel = HideSp;//右から左に隠してく
@@ -49,7 +46,7 @@ void SceneChangeDirection::OpenTheScreen()
 	pos.x += HideVel;
 	sp_scenechange->SetPosition({ pos });
 
-	if (pos.x ==1280) {
+	if (pos.x == 1280) {
 		OpenTheScreenFlag = true;//完全に開き切った
 	}
 }

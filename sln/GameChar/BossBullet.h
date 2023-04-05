@@ -6,9 +6,8 @@
 
 #include <memory>
 
-class BossBullet:public BaseObject
+class BossBullet :public BaseObject
 {
-
 private:
 	////-----------------model
 	//std::unique_ptr < Model> mod_classplayer = nullptr;//Ž©‹@
@@ -27,7 +26,6 @@ private:
 	float frame = 0;
 
 	XMFLOAT3 velocity{ 0,0,0 };
-
 
 public:
 	//‰Šú‰»
@@ -54,5 +52,4 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
-
 };

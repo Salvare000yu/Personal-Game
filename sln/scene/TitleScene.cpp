@@ -11,7 +11,13 @@
 
 #include "PostEffect.h"
 
-//PostEffect* postEffect = nullptr;
+#ifdef max
+#undef max
+#endif // max
+
+#ifdef min
+#undef min
+#endif // min
 
 using namespace DirectX;
 
@@ -124,23 +130,19 @@ void TitleScene::Finalize()
 
 void TitleScene::PlayerStandby()
 {
-
 	XMFLOAT3 pos = player_->GetPosition();
 	//登場後の自機座標(=初期値)にカメラを固定して自機だけ動かす
 	camera->SetTarget(PlayerInitPos);
 	pos.y += 0.005f * sinf(time * 5.f);//振れ幅＊sin(時＊揺れ速度
 
 	player_->SetPosition(pos);
-
 }
 
 void TitleScene::PlayerAppear()
 {
-
 	XMFLOAT3 pos = player_->GetPosition();
 
 	if (PMoveFrame < PApMoveFrameMax) {//最大フレーム到達までやる
-
 		float raito = (float)PMoveFrame / PApMoveFrameMax;
 		PMoveFrame++;
 
@@ -162,11 +164,9 @@ void TitleScene::PlayerAppear()
 		ExitStartPPos = pos;//現在自機座標から退場始める
 		PAppearFlag = false;//登場完了
 	}
-
 }
 void TitleScene::DoorOpen()
 {
-
 	const int LDoorPosXRim = -2200;//左の壁開け終わる場所
 	const float DoorMoveSp = 7.2f;//ドアが開く速度
 
@@ -186,7 +186,6 @@ void TitleScene::DoorOpen()
 }
 void TitleScene::NextScene()
 {
-
 	Input* input = Input::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
@@ -226,7 +225,6 @@ void TitleScene::NextScene()
 
 	//シーン遷移演出更新
 	sceneChangeDirection->Update();
-
 }
 
 void TitleScene::ToStartSprite()
@@ -235,8 +233,7 @@ void TitleScene::ToStartSprite()
 	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
 	XMFLOAT4 color = sp_titleoper->GetColor();
 
-	ToStartFrame--;//透明でない時間
-	ToStartFrame = max(ToStartFrame, 0);//ToStartFrameの最小値は0
+	ToStartFrame = std::max(--ToStartFrame, 0);//ToStartFrameの最小値は0
 
 	if (ToStartFrame <= 0) {//指定時間たったら
 		color.w -= ColorWDec;
@@ -285,14 +282,14 @@ void TitleScene::LogoMove()
 
 	case LogoPattern::beforeNextScene:
 		LogoRotVel = 0;
-		pos.y = min(pos.y, PosYMax);//Y座標はPosYMaxまでしかいけないように
+		pos.y = std::min(pos.y, (float)PosYMax);//Y座標はPosYMaxまでしかいけないように
 		pos.y += PosYSp;
 		break;
 	}
 
 	//シーンチェンジフラグ経ってなかったら上下移動
 	if (!SceneChangeFlag) {
-		pos.y += 0.2f * sinf(time * 3.14159265358f);
+		pos.y += 0.2f * std::sin(time * 3.14159265358f);
 	}
 	else {
 		//シーンチェンジ開始したら
@@ -363,7 +360,6 @@ void TitleScene::Update()
 	// カメラの更新
 	camera->Update();
 	DrawUI();
-
 }
 
 void TitleScene::Draw()
@@ -385,7 +381,6 @@ void TitleScene::Draw()
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
-
 }
 
 void TitleScene::DrawUI()

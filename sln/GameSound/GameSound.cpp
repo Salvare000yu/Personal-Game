@@ -29,7 +29,6 @@ void GameSound::Initialize(const std::string& directoryPath)
 	// マスターボイスを生成
 	result = xAudio2_->CreateMasteringVoice(&masterVoice);
 	assert(SUCCEEDED(result));
-
 }
 
 void GameSound::Finalize()
@@ -39,7 +38,7 @@ void GameSound::Finalize()
 	// 音声データ解放
 	std::map<std::string, SoundData>::iterator it = soundDatas_.begin();
 
-	for (; it !=soundDatas_.end();++it) {
+	for (; it != soundDatas_.end(); ++it) {
 		Unload(&it->second);
 	}
 	soundDatas_.clear();
@@ -128,11 +127,11 @@ void GameSound::Unload(SoundData* soundData)
 	soundData->wfex = {};
 }
 
-void GameSound::PlayWave(const std::string& filename,float volumecont, int loopCount)
+void GameSound::PlayWave(const std::string& filename, float volumecont, int loopCount)
 {
 	HRESULT result;
 
-	std::map<std::string,SoundData>::iterator it=soundDatas_.find(filename);
+	std::map<std::string, SoundData>::iterator it = soundDatas_.find(filename);
 	//未読み込み
 	assert(it != soundDatas_.end());
 

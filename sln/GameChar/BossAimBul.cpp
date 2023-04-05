@@ -37,12 +37,10 @@ void BossAimBul::Initialize()
 	ShotTagMoment = {};
 
 	//-------ª‘_‚¢’eª-------//
-
 }
 
 void BossAimBul::Update()
 {
-
 	XMFLOAT3 position = obj->GetPosition();
 	position.x -= velocity.x;
 	position.y -= velocity.y;

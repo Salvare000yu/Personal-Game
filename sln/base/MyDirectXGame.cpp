@@ -5,36 +5,33 @@
 
 void MyDirectXGame::Initialize()
 {
-    //基底クラスの初期化処理
-    GameBase::Initialize();
+	//基底クラスの初期化処理
+	GameBase::Initialize();
 
 #pragma region シーン初期化処理
-    BaseScene* scene = new TitleScene();
-    //シーンマネージャに最初のシーンセット
-    sceneManager_->SetNextScene(scene);
+	BaseScene* scene = new TitleScene();
+	//シーンマネージャに最初のシーンセット
+	sceneManager_->SetNextScene(scene);
 
 #pragma region シーン初期化処理
-
 }
 
 void MyDirectXGame::Finalize()
 {
- 
-    //基底クラスの終了処理
-    GameBase::Finalize();
-
+	//基底クラスの終了処理
+	GameBase::Finalize();
 }
 
 void MyDirectXGame::Update()
 {
-    //基底クラスの更新処理
-    GameBase::Update();
+	//基底クラスの更新処理
+	GameBase::Update();
 
-    // DirectX毎フレーム処理　ここまで
+	// DirectX毎フレーム処理　ここまで
 #pragma endregion DirectX毎フレーム処理
 }
 
 void MyDirectXGame::Draw()
 {
-    GameBase::Draw();
+	GameBase::Draw();
 }

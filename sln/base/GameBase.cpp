@@ -20,7 +20,6 @@ void GameBase::Run()
 		}
 		//描画
 		Draw();
-
 	}
 	//終了
 	Finalize();
@@ -28,7 +27,6 @@ void GameBase::Run()
 
 void GameBase::Initialize()
 {
-
 	// FbxManager* fbxManager = FbxManager::Create();
 	 //windowsAPI初期化
 	winApp = WinApp::GetInstance();
@@ -90,7 +88,6 @@ void GameBase::Initialize()
 
 void GameBase::Finalize()
 {
-
 	//シーンマネージャ解放
 	delete sceneManager_;
 
@@ -139,7 +136,7 @@ void GameBase::Update()
 
 	//シーン更新
 	sceneManager_->Update();
-	
+
 	//終了
 	const bool TriggerESC = input->TriggerKey(DIK_ESCAPE);
 	if (TriggerESC) {

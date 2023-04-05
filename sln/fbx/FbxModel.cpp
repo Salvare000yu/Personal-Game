@@ -4,7 +4,7 @@ void FbxModel::CreateBuffers(ID3D12Device* device)
 {
 	HRESULT result;
 	//頂点全体のサイズ
-	UINT sizeVB = 
+	UINT sizeVB =
 		static_cast<UINT>(sizeof(VertexPosNormalUvSkin) *
 			vertices.size());
 	//頂点バッファ生成
@@ -87,7 +87,7 @@ void FbxModel::CreateBuffers(ID3D12Device* device)
 	descHeapDesc.NumDescriptors = 1; // テクスチャ枚数
 	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeapSRV)); // 生成
 
-		// シェーダリソースビュー(SRV)生成
+	// シェーダリソースビュー(SRV)生成
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
 	D3D12_RESOURCE_DESC resDesc = texBuff->GetDesc();
 

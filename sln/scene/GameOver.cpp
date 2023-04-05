@@ -66,8 +66,8 @@ void GameOver::Initialize()
 	float WindowWidthHalf_spPos = (winApp->window_width / 2) - 100;
 	float WindowHeightHalf_spPos = (winApp->window_height / 2) - 100;//-100はスプライト座標修正用　画像サイズ200半分の100
 
-	sp_retry->SetPosition({ WindowWidthHalf_spPos - 300,WindowHeightHalf_spPos / 2+300,0 });
-	sp_gotitle->SetPosition({ WindowWidthHalf_spPos + 300,WindowHeightHalf_spPos / 2+300,0 });
+	sp_retry->SetPosition({ WindowWidthHalf_spPos - 300,WindowHeightHalf_spPos / 2 + 300,0 });
+	sp_gotitle->SetPosition({ WindowWidthHalf_spPos + 300,WindowHeightHalf_spPos / 2 + 300,0 });
 	sp_Now->SetPosition({ sp_retry->GetPosition().x - 50,sp_retry->GetPosition().y - 50,0 });
 	//for (int i = 0; i < 1; i++)
 	//{
@@ -89,7 +89,6 @@ void GameOver::Initialize()
 
 void GameOver::Finalize()
 {
-
 }
 
 void GameOver::Retry()
@@ -144,10 +143,8 @@ void GameOver::Retry()
 	//--------↓セレクトパターンenum
 	//操作説明からスタートへ
 	if (selectPattern_ == SelectPattern::goTitle) {
-
 		selectPattern_ = SelectPattern::def;
 		SSOp0_1Flag = true;
-
 	}
 	//--------↑セレクトパターンenum
 }
@@ -203,10 +200,8 @@ void GameOver::GoTitle()
 	//--------↓セレクトパターンenum
 	//操作説明からスタートへ
 	if (selectPattern_ == SelectPattern::retry) {
-
 		selectPattern_ = SelectPattern::def;
 		SSOp0_1Flag = true;
-
 	}
 	//--------↑セレクトパターンenum
 }
@@ -222,7 +217,7 @@ void GameOver::Update()
 
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
-	
+
 	DrawUI();
 
 	//スプライト更新
@@ -230,12 +225,10 @@ void GameOver::Update()
 	sp_retry->Update();
 	sp_gotitle->Update();
 	sp_Now->Update();
-
 }
 
 void GameOver::Draw()
 {
-
 }
 
 void GameOver::DrawUI()

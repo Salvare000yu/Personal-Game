@@ -82,7 +82,7 @@ private: // 定数
 public:// 静的メンバ関数
 	static ParticleManager* GetInstance();
 
-public: // メンバ関数	
+public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>

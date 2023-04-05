@@ -17,7 +17,7 @@ BossBullet* BossBullet::GetInstance()
 void BossBullet::Initialize()
 {
 	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
-	
+
 	//ì‚é
 	obj.reset(Object3d::Create());
 	//-----«”CˆÓ«-----//
@@ -25,12 +25,10 @@ void BossBullet::Initialize()
 	obj->SetScale({ 10.0f, 10.0f, 10.0f });
 	//êŠ
 	//obj->SetPosition({ position });
-
 }
 
 void BossBullet::Update()
 {
-
 	XMFLOAT3 position = obj->GetPosition();
 	position.x -= velocity.x;
 	position.y -= velocity.y;

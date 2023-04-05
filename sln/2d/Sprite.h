@@ -11,7 +11,6 @@
 /// </summary>
 class Sprite
 {
-
 public:
 	/// <summary>
 /// コンストラクタ
@@ -53,7 +52,7 @@ public:
 	void TransferVertexBuffer();
 
 	/// <summary>
-	/// 
+	///
 	/// 描画
 	/// </summary>
 	void Draw();
@@ -115,6 +114,4 @@ protected:
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	//定数バッファ;
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-
 };
-

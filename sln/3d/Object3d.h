@@ -24,7 +24,7 @@ private: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-public: // サブクラス	
+public: // サブクラス
 
 	// パイプラインセット
 	struct PipelineSet
@@ -43,7 +43,6 @@ public: // サブクラス
 	};
 
 private: // 定数
-
 
 public: // 静的メンバ関数
 	/// <summary>
