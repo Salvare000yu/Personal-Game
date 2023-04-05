@@ -33,32 +33,40 @@ void TitleScene::Initialize()
 
 	////---objからモデルデータ読み込み---
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
-	mod_ground.reset(Model::LoadFromOBJ("ground"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_logo.reset(Model::LoadFromOBJ("STRIKER_Logo"));
+
+	obj_ground.emplace("ground_gre", Object3d::Create());
+	obj_ground.emplace("ground_mag", Object3d::Create());
+
+	for (auto& i : obj_ground) {
+		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
+		model->second->SetTiling({ 100,100 });
+		i.second->SetModel(mod_ground.at(i.first).get());
+		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
+		i.second->SetPosition({ 0,-150,0 });
+	}
+	obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
+
 	////---3dオブジェクト生成---
 	obj_tunnel.reset(Object3d::Create());
-	obj_ground.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_logo.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
 	obj_tunnel->SetModel(mod_tunnel.get());
-	obj_ground->SetModel(mod_ground.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_logo->SetModel(mod_logo.get());
 	//------object3dスケール------//
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
-	obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_logo->SetScale({ 40.f,40.f,40.f });
 	//------object3d位置------//
 	obj_tunnel->SetPosition({ 0,40,-500 });
-	obj_ground->SetPosition({ 0,-150,0 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
 	obj_logo->SetPosition({ 0,100,-1000 });
@@ -295,8 +303,7 @@ void TitleScene::LogoMove()
 	obj_logo->SetRotation(rot);
 	obj_logo->SetPosition(pos);
 
-	time = frame / 60;
-	frame++;
+	time = frame++ / 60.f;
 }
 
 void TitleScene::Update()
@@ -337,11 +344,21 @@ void TitleScene::Update()
 	LogoMove();//ロゴの動き
 
 	obj_tunnel->Update();
-	obj_ground->Update();
 	player_->Update();
 	obj_kaberight->Update();
 	obj_kabeleft->Update();
 	obj_logo->Update();
+	{
+		float num = std::sin((float)time * 5.f) * 10.f;
+		for (auto& i : obj_ground) {
+			XMFLOAT3 pos = i.second->GetPosition();
+			pos.y = num;
+			i.second->SetPosition(pos);
+			num = -num;
+
+			i.second->Update();
+		}
+	}
 
 	// カメラの更新
 	camera->Update();
@@ -358,11 +375,13 @@ void TitleScene::Draw()
 
 	//３DオブジェクトDraw
 	obj_tunnel->Draw();
-	obj_ground->Draw();
 	player_->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_logo->Draw();
+	for (auto& i : obj_ground) {
+		i.second->Draw();
+	}
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
