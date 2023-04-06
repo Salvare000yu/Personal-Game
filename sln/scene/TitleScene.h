@@ -97,6 +97,11 @@ private:
 	std::unique_ptr < Object3d> obj_logo = nullptr;//タイトルロゴ
 
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
+	//---地面
+	//地面二種類を上下に揺らす
+	const float SwingDist = 10.f;//揺らす距離
+	const float SwingSp = 2.f;//揺らす速度
+	float PosDef = -150;//地面を置く座標　ここ中心に上下
 
 	//----------登場退場共通----------//
 	const float PApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)

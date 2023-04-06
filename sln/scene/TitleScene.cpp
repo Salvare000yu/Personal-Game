@@ -52,9 +52,8 @@ void TitleScene::Initialize()
 		model->second->SetTiling({ 100,100 });
 		i.second->SetModel(mod_ground.at(i.first).get());
 		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
-		i.second->SetPosition({ 0,-150,0 });
 	}
-	obj_ground.at("ground_mag")->SetPosition({ 0,-149,0 });
+	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 
 	////---3dオブジェクト生成---
 	obj_tunnel.reset(Object3d::Create());
@@ -346,12 +345,13 @@ void TitleScene::Update()
 	obj_kabeleft->Update();
 	obj_logo->Update();
 	{
-		float num = std::sin((float)time * 5.f) * 10.f;
+		float num = std::sin((float)time * SwingSp) * SwingDist;
+		//地面の数だけ
 		for (auto& i : obj_ground) {
 			XMFLOAT3 pos = i.second->GetPosition();
-			pos.y = num;
+			pos.y = PosDef+num;//初期位置＋揺らす値
 			i.second->SetPosition(pos);
-			num = -num;
+			num = -num;//二枚目は逆に揺らす
 
 			i.second->Update();
 		}
