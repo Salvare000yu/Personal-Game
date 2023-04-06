@@ -43,6 +43,7 @@ void TitleScene::Initialize()
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_logo.reset(Model::LoadFromOBJ("STRIKER_Logo"));
+	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
 
 	obj_ground.emplace("ground_gre", Object3d::Create());
 	obj_ground.emplace("ground_mag", Object3d::Create());
@@ -60,21 +61,25 @@ void TitleScene::Initialize()
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_logo.reset(Object3d::Create());
+	obj_groundBottom.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_logo->SetModel(mod_logo.get());
+	obj_groundBottom->SetModel(mod_groundBottom.get());
 	//------object3dスケール------//
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_logo->SetScale({ 40.f,40.f,40.f });
+	obj_logo->SetScale({ 40.f,40.f,40.f }); 
+	obj_groundBottom->SetScale({ 10000.0f, 10000.0f, 10000.0f });
 	//------object3d位置------//
 	obj_tunnel->SetPosition({ 0,40,-500 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
 	obj_logo->SetPosition({ 0,100,-1000 });
+	obj_groundBottom->SetPosition({ 0,-190,0 });
 	//------object回転
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
@@ -344,6 +349,7 @@ void TitleScene::Update()
 	obj_kaberight->Update();
 	obj_kabeleft->Update();
 	obj_logo->Update();
+	obj_groundBottom->Update();
 	{
 		float num = std::sin((float)time * SwingSp) * SwingDist;
 		//地面の数だけ
@@ -375,6 +381,7 @@ void TitleScene::Draw()
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_logo->Draw();
+	obj_groundBottom->Draw();
 	for (auto& i : obj_ground) {
 		i.second->Draw();
 	}

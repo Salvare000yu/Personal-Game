@@ -117,6 +117,8 @@ private:
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
 
+	std::unique_ptr < Model> mod_groundBottom = nullptr;//‚µ‚½’n–Ê
+	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
 	//std::unique_ptr < Model> mod_ground = nullptr;//
 	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//’n–Ê
 	std::unique_ptr < Model> mod_kaberight = nullptr;//•Ç

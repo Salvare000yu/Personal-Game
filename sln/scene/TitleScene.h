@@ -84,6 +84,9 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 
+	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
+	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
+
 	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
 	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 

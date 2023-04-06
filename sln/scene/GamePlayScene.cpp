@@ -91,7 +91,7 @@ void GamePlayScene::Initialize()
 	time = frame / 60.f;	// 60fps想定
 
 	//------objからモデルデータ読み込み---
-	//mod_ground.reset(Model::LoadFromOBJ("ground"));
+	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
@@ -107,7 +107,7 @@ void GamePlayScene::Initialize()
 
 	//------3dオブジェクト生成------//
 	// todo 上に書いたほうが手前にあったら描画されない
-	//obj_ground.reset(Object3d::Create());
+	obj_groundBottom.reset(Object3d::Create());
 	obj_ground.emplace("ground_gre", Object3d::Create());
 	obj_ground.emplace("ground_mag", Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
@@ -124,18 +124,18 @@ void GamePlayScene::Initialize()
 	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 
 	//------3dオブジェクトに3dモデルを紐づける------//
-	//obj_ground->SetModel(mod_ground.get());
+	obj_groundBottom->SetModel(mod_groundBottom.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
-	//obj_ground->SetScale({ 80.0f, 20.0f, 500.0f });
+	obj_groundBottom->SetScale({ 10000.0f, 10000.0f, 10000.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
-	//obj_ground->SetPosition({ 0,-150,0 });
+	obj_groundBottom->SetPosition({ 0,-190,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,1000 });
@@ -1195,7 +1195,7 @@ void GamePlayScene::Update()
 				i.second->Update();
 			}
 		}
-		//obj_ground->Update();
+		obj_groundBottom->Update();
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 
@@ -1312,7 +1312,7 @@ void GamePlayScene::Draw()
 	for (auto& i : obj_ground) {
 		i.second->Draw();
 	}
-	//obj_ground->Draw();
+	obj_groundBottom->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
