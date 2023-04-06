@@ -1035,6 +1035,22 @@ void Boss::Update()
 	core_rot.y++;
 	obj_core->SetRotation(core_rot);
 
+	auto upDownRot = obj_UpDown->GetRotation();
+	upDownRot.y++;
+	obj_UpDown->SetRotation(upDownRot);
+
+	auto VertCircleRot = obj_VerticalCircle->GetRotation();
+	VertCircleRot.y--;
+	obj_VerticalCircle->SetRotation(VertCircleRot);
+
+	auto outSideRot = obj_outside->GetRotation();
+	outSideRot.x++;
+	obj_outside->SetRotation(outSideRot);
+
+	auto sideSquareRot = obj_SideSquare->GetRotation();
+	sideSquareRot.x--;
+	obj_SideSquare->SetRotation(sideSquareRot);
+
 	XMFLOAT3 pos = obj->GetPosition();
 	obj_core->SetPosition(pos);
 	obj_AroundCore->SetPosition(pos);
@@ -1071,8 +1087,7 @@ void Boss::Draw()
 		obj_AroundCore->Draw();
 		obj_outside->Draw();
 		obj_SideSquare->Draw();
-		//obj_UpDown->Draw();
-		// todo ‚±‚ê‚ð•`‰æ‚·‚é‚ÆƒGƒ‰[‚É‚È‚é
-		//obj_VerticalCircle->Draw();
+		obj_UpDown->Draw();
+		obj_VerticalCircle->Draw();
 	}
 }
