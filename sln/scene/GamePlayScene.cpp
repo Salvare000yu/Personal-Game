@@ -207,6 +207,9 @@ void GamePlayScene::Initialize()
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
+	sp_ready->isInvisible = false;
+	sp_ready_go->isInvisible = true;
+
 	sprite_back->TransferVertexBuffer();
 
 	charParameters->Initialize();
@@ -448,9 +451,6 @@ void GamePlayScene::PlayerMove()
 		const float PlayerMaxMoveLimY = 400;//下に行ける範囲
 		const float PlayerMinMoveLimY = 0;//上に行ける範囲
 
-		//const float PlayerMaxMoveLimZ = 290;//後ろ
-		//const float PlayerMinMoveLimZ = 200;
-
 		XMFLOAT3 PlayerPos = player_->GetPosition();
 		PlayerPos.x = std::clamp(PlayerPos.x, -PlayerMoveLimX, PlayerMoveLimX);
 		PlayerPos.y = std::clamp(PlayerPos.y, PlayerMinMoveLimY, PlayerMaxMoveLimY);
@@ -458,7 +458,6 @@ void GamePlayScene::PlayerMove()
 		//----------↑移動制限
 
 		//------プレイヤーも同じ移動------//
-		//bool OldInputFlag = FALSE;
 		constexpr float moveSpeed = 5.f;
 
 		if (cInput->DownMove()) {
@@ -487,6 +486,7 @@ void GamePlayScene::PlayerMove()
 			isRMove = true;//右移動中
 		}
 		player_->SetPosition(PlayerPos);
+		firingline_->SetPosition(PlayerPos);
 	}
 	else
 	{
@@ -503,6 +503,7 @@ void GamePlayScene::PlayerMove()
 	}
 
 	player_->SetRotation(rotation);
+	firingline_->SetRotation(rotation);
 }
 
 void GamePlayScene::PlayerDash()
@@ -524,8 +525,6 @@ void GamePlayScene::PlayerDash()
 	}
 	//ダッシュスタート
 	if (DashFlag) {
-		XMFLOAT3 pPos = player_->GetPosition();
-
 		//ダッシュする時間
 		DashCount--;
 
@@ -569,11 +568,11 @@ void GamePlayScene::PlayerDash()
 		}
 
 		//移動
+		XMFLOAT3 pPos = player_->GetPosition();
 		pPos.x += DashVel.x;
 		pPos.y += DashVel.y;
-		//pPos.z += DashVel.z;
-
 		player_->SetPosition(pPos);
+		firingline_->SetPosition(pPos);
 
 		if (DashCount == 0) {
 			playerDashDirection_ = PlayerDashDirection::def;//決定する前に戻す
@@ -587,8 +586,7 @@ void GamePlayScene::PlayerDash()
 
 	//インターバル計測なう
 	if (DashIntervalFlag) {
-		DashInterval--;
-		if (DashInterval == 0) {
+		if (--DashInterval == 0) {
 			//ダッシュしてよし
 			DashInterval = DashIntervalDef;
 			DashIntervalFlag = false;
@@ -607,18 +605,13 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	//攻撃できないように
 	player_->pAtkPossibleFlag = false;
 
-	XMFLOAT3 pPos = player_->GetPosition();
-
-	bool StopFlag = false;//停止してね
-
 	pNextPlaceGoSp = std::min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
 	pNextPlaceGoSp += AccelVal;
 
-	if (pPos.z > charParams->StopPos) {//指定した場所超えたら
-		StopFlag = true;//止まれ
-	}
+	XMFLOAT3 pPos = player_->GetPosition();
 
-	if (StopFlag) {
+	//指定した場所超えたら
+	if (pPos.z > charParams->StopPos) {
 		pNextPlaceGoSp -= DecelVal;
 
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
@@ -703,13 +696,6 @@ void GamePlayScene::UpdateCamera()
 		player_->SetRotation(rota);
 	}
 
-	{//自機射線
-		XMFLOAT3 PlayerPos = player_->GetPosition();
-		firingline_->SetPosition({ PlayerPos.x,PlayerPos.y,PlayerPos.z });
-
-		XMFLOAT3 PlayerRot = player_->GetRotation();
-		firingline_->SetRotation(PlayerRot);
-	}
 }
 
 void GamePlayScene::PadStickCamera()
@@ -999,15 +985,11 @@ bool GamePlayScene::GameReady()
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	XMFLOAT4 ReadyCol = sp_ready->GetColor();
-	XMFLOAT4 GOCol = sp_ready_go->GetColor();
-	XMFLOAT2 GOSize = sp_ready_go->GetSize();
-	XMFLOAT3 GOPos = sp_ready_go->GetPosition();
 
 	const float ReadyColWDecVal = 0.005f;//Readyを透明にしていく
-	const float GoColWDecVal = 0.01f;//GOを透明にしていく
 	const float GoSizeIncVal = 7.f;//Readyを透明にしていく
 
-	constexpr int frameMax = 300;
+	constexpr int frameMax = 60;
 
 	if (sceneChangeDirection->OpenTheScreenFlag == false) {//シーン遷移画像残ってるなら
 		sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった
@@ -1017,6 +999,8 @@ bool GamePlayScene::GameReady()
 	else {//演出画像開き切ったら
 		if (GameReadyFrame < frameMax)
 		{
+			sp_ready->isInvisible = false;
+
 			//最初演出中は動くな
 			PDontMoveFlag = true;
 
@@ -1035,12 +1019,20 @@ bool GamePlayScene::GameReady()
 			camera->SetTarget(pos);
 		}
 		else {
-			ready_GOFlag = true;
+
+			sp_ready->isInvisible = true;
+
+			XMFLOAT4 GOCol = sp_ready_go->GetColor();
+			XMFLOAT2 GOSize = sp_ready_go->GetSize();
+			XMFLOAT3 GOPos = sp_ready_go->GetPosition();
+
+			const float GoColWDecVal = 0.05f;//GOを透明にしていく
 			GOCol.w -= GoColWDecVal;
 			GOSize.x += GoSizeIncVal;
 			GOSize.y += GoSizeIncVal;
 			GOPos.x -= 3.2f;
 			GOPos.y -= 3.2f;
+			sp_ready_go->isInvisible = false;
 			sp_ready_go->SetSize({ GOSize });
 			sp_ready_go->TransferVertexBuffer();
 			sp_ready_go->SetColor({ GOCol });
@@ -1048,16 +1040,16 @@ bool GamePlayScene::GameReady()
 			sp_ready_go->Update();
 
 			camera->SetTrackingTarget(player_.get());
+			if (GOCol.w < 0.f) {//透明になったら
+				//アタック開始してよき
+				player_->pAtkPossibleFlag = true;
+				//動いていいよ
+				PDontMoveFlag = false;
+				sp_ready_go->isInvisible = true;
+
+				return false;
+			}
 		}
-	}
-
-	if (GOCol.w < 0.f) {//透明になったら
-		//アタック開始してよき
-		player_->pAtkPossibleFlag = true;
-		//動いていいよ
-		PDontMoveFlag = false;
-
-		return false;
 	}
 
 	return true;
@@ -1103,7 +1095,7 @@ void GamePlayScene::Update()
 		}
 		else if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
 			if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
-				if (cInput->PauseOpenClose() && (GameReady() == false)) {
+				if (cInput->PauseOpenClose()) {
 					pause->EveryInit();
 					GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 					pause->SetPauseFlag(true);
@@ -1143,9 +1135,6 @@ void GamePlayScene::Update()
 		UpdateMouse();
 		// カメラの更新
 		camera->Update();
-		if (GameReady() == false) {//ゲーム開始前演出終了後に自機の回転＝カメラ回転できるようになる
-			UpdateCamera();
-		}
 
 		if (pRotDef == false) { //一度だけ
 			Input::GetInstance()->PadVibrationDef();
@@ -1183,6 +1172,7 @@ void GamePlayScene::Update()
 
 		if (GameReady() == false)
 		{
+			UpdateCamera();
 			PlayTimer();
 
 			//敵のHPバー
@@ -1343,12 +1333,9 @@ void GamePlayScene::DrawUI()
 		sp_beforeboss->Draw();
 	}
 
-	//開始前中のみ
-	if (GameReady())
-	{
-		sp_ready->Draw();
-		if (ready_GOFlag) { sp_ready_go->Draw(); };
-	}
+	sp_ready->Draw();
+	sp_ready_go->Draw();
+
 
 	for (auto& bo : boss_) {
 		if (bo->GetisDeath()) {
