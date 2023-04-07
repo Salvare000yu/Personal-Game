@@ -164,8 +164,6 @@ private:
 	XMFLOAT3 ApStartPPos{};
 	//終了
 	XMFLOAT3 ApEndPPos{};
-	//追従カメラ一回だけセット
-	bool SetTagOnceFlag = false;
 
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
@@ -174,7 +172,7 @@ private:
 
 	//-----開始時演出
 
-	float frame = 0;
+	uint32_t frame = 0;
 
 	//雑魚敵出現用カウント
 	float SEneAppCount = 0;
@@ -203,7 +201,7 @@ private:
 	bool BodyDamFlag = false;
 	//↑のクールタイムカウント
 	const int BodyDamCountDef = 30;
-	int BodyDamCount = BodyDamCountDef;
+	uint32_t BodyDamCount = BodyDamCountDef;
 
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;

@@ -88,7 +88,7 @@ void GamePlayScene::Initialize()
 	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//時間
-	time = frame / 60.f;	// 60fps想定
+	time = (float)frame / 60.f;	// 60fps想定
 
 	//------objからモデルデータ読み込み---
 	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
@@ -1017,7 +1017,7 @@ bool GamePlayScene::GameReady()
 			PDontMoveFlag = true;
 
 			float raito = (float)GameReadyFrame / frameMax;
-			GameReadyFrame++;
+			++GameReadyFrame;
 			ReadyCol.w = 1.f - raito;
 			sp_ready->SetColor({ ReadyCol });
 			sp_ready->Update();
@@ -1043,14 +1043,11 @@ bool GamePlayScene::GameReady()
 			sp_ready_go->SetPosition({ GOPos });
 			sp_ready_go->Update();
 
-			if (SetTagOnceFlag == false) {
-				camera->SetTrackingTarget(player_.get());
-				SetTagOnceFlag = true;
-			}
+			camera->SetTrackingTarget(player_.get());
 		}
 	}
 
-	if (GOCol.w < 0.0) {//透明になったら
+	if (GOCol.w < 0.0f) {//透明になったら
 		if (MayDoPAtk_OnceFlag == false) {
 			//アタック開始してよき
 			player_->pAtkPossibleFlag = true;
@@ -1068,45 +1065,19 @@ bool GamePlayScene::GameReady()
 
 void GamePlayScene::BodyDamCoolTime()
 {
-	if (BodyDamFlag) {
-		BodyDamCount--;
-		if (BodyDamCount == 0) {
-			BodyDamCount = BodyDamCountDef;
-			BodyDamFlag = false;//もう一度喰らう
-		}
-	}
+	if (BodyDamFlag == false) { return; }
+	if (--BodyDamCount > 0) { return; }
+
+	BodyDamCount = BodyDamCountDef;
+	BodyDamFlag = false;//もう一度喰らう
 }
 
 void GamePlayScene::Update()
 {
-	frame += 1.f;
-	time = frame / 60.f;
+	time = ++frame / 60.f;
 
 	Pause* pause = Pause::GetInstance();
-
-	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	//const bool Trigger0 = input->TriggerKey(DIK_0);
-	const bool Trigger1 = input->TriggerKey(DIK_1);
-	//パッドトリガー
-	const bool PadTriggerStart = input->TriggerButton(static_cast<int>(Button::START));
-
-	//キー操作押している間
-	const bool inputT = input->PushKey(DIK_T);
-	const bool inputE = input->PushKey(DIK_E);
-
-	const bool inputI = input->PushKey(DIK_I);
-	const bool inputK = input->PushKey(DIK_K);
-	const bool inputJ = input->PushKey(DIK_J);
-	const bool inputL = input->PushKey(DIK_L);
-
-	const bool input3 = input->PushKey(DIK_3);
-	//押した瞬間
-	const bool TriggerM = input->TriggerKey(DIK_M);
-	const bool TriggerE = input->TriggerKey(DIK_E);
-	const bool TriggerR = input->TriggerKey(DIK_R);
-	const bool Trigger2 = input->TriggerKey(DIK_2);
-
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->WaitKeyP < 10 && pause->GetPauseFlag() == false) {
@@ -1127,7 +1098,7 @@ void GamePlayScene::Update()
 
 		if (pause->GetSceneChangeTitleFlag()) {
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			input->PadVibration();//振動
+			Input::GetInstance()->PadVibration();//振動
 			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");// 音声停止
 			//シーン切り替え
 			BaseScene* scene = new TitleScene();
@@ -1139,7 +1110,6 @@ void GamePlayScene::Update()
 	//--------------この外に出すとポーズ中も実行
 	if (pause->GetPauseFlag() == false)
 	{
-		Input* input = Input::GetInstance();
 		DxBase* dxBase = DxBase::GetInstance();
 
 		CharParameters* charParameters = CharParameters::GetInstance();
@@ -1177,7 +1147,7 @@ void GamePlayScene::Update()
 		}
 
 		if (pRotDef == false) { //一度だけ
-			input->PadVibrationDef();
+			Input::GetInstance()->PadVibrationDef();
 			player_->SetRotation({});
 			pRotDef = true;
 		}
@@ -1257,11 +1227,6 @@ void GamePlayScene::Update()
 				CollisionAll();
 			}
 
-			if (input->TriggerKey(DIK_O)) {
-				auto pos = camera->GetEye();
-				pos.z += 100;
-				ParticleManager::GetInstance()->CreateParticle(pos, 300, 80, 5);
-			}
 			// パーティクル更新
 			ParticleManager::GetInstance()->Update();
 

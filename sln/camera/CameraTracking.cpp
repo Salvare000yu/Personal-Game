@@ -5,62 +5,65 @@
 
 using namespace DirectX;
 
-CameraTracking::CameraTracking() :Camera(WinApp::window_width, WinApp::window_height)
+CameraTracking::CameraTracking() :
+	Camera(WinApp::window_width, WinApp::window_height),
+	trackingTarget(nullptr)
 {
 }
 
 void CameraTracking::StartUpdate()
 {
 	// トラッキングターゲットが存在したら
-	if (trackingTarget) {
-		XMFLOAT3 target = trackingTarget->GetPosition();
+	if (trackingTarget == nullptr) { return; }
 
-		float sinNum = sinf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
-		float cosNum = cosf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
+	XMFLOAT3 target = trackingTarget->GetPosition();
 
-		// x軸回転を反映した位置
-		XMFLOAT3 tempPosition = { 0,sinNum * eyeToCameraTargetLength ,-cosNum * eyeToCameraTargetLength };
+	float sinNum = sinf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
+	float cosNum = cosf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
 
-		sinNum = sinf(XMConvertToRadians(-trackingTarget->GetRotation().y));
-		cosNum = cosf(XMConvertToRadians(-trackingTarget->GetRotation().y));
+	// x軸回転を反映した位置
+	XMFLOAT3 tempPosition = { 0,sinNum * eyeToCameraTargetLength ,-cosNum * eyeToCameraTargetLength };
 
-		// y軸回転を反映した位置
-		XMFLOAT3 tempPosition2 = {
-			cosNum * tempPosition.x - sinNum * tempPosition.z,
-			tempPosition.y,
-			sinNum * tempPosition.x + cosNum * tempPosition.z
-		};
+	sinNum = sinf(XMConvertToRadians(-trackingTarget->GetRotation().y));
+	cosNum = cosf(XMConvertToRadians(-trackingTarget->GetRotation().y));
 
-		XMFLOAT3 eye = {
-		target.x + tempPosition2.x,
-		target.y + tempPosition2.y,
-		target.z + tempPosition2.z };
+	// y軸回転を反映した位置
+	XMFLOAT3 tempPosition2 = {
+		cosNum * tempPosition.x - sinNum * tempPosition.z,
+		tempPosition.y,
+		sinNum * tempPosition.x + cosNum * tempPosition.z
+	};
 
-		// 移動前の座標
-		XMFLOAT3 old = GetEye();
-		//ついてくついてくする速度
-		constexpr float interpolation = 1.1f;
-		// 移動幅 = 移動後の座標 - 移動前の座標
-		XMFLOAT3 vel =
-		{ (eye.x - old.x) * interpolation,
-		(eye.y - old.y) * interpolation,
-		(eye.z - old.z) * interpolation };
-		// 移動後の座標 = 移動前の座標 + 移動幅
-		eye = { old.x + vel.x,old.y + vel.y ,old.z + vel.z };
-		// 移動後の座標を適用
-		SetEye(eye);
+	XMFLOAT3 eye = {
+	target.x + tempPosition2.x,
+	target.y + tempPosition2.y,
+	target.z + tempPosition2.z };
 
-		//
-		XMFLOAT3 tag;
-		XMStoreFloat3(&tag, XMVector3Transform(XMVectorSet(
-			trackingTargetToCameraTarget.x,
-			trackingTargetToCameraTarget.y,
-			trackingTargetToCameraTarget.z, 1),
-			trackingTarget->GetMatRotation()));
+	// 移動前の座標
+	XMFLOAT3 old = GetEye();
+	//ついてくついてくする速度
+	constexpr float interpolation = 1.1f;
+	// 移動幅 = 移動後の座標 - 移動前の座標
+	XMFLOAT3 vel =
+	{ (eye.x - old.x) * interpolation,
+	(eye.y - old.y) * interpolation,
+	(eye.z - old.z) * interpolation };
+	// 移動後の座標 = 移動前の座標 + 移動幅
+	eye = { old.x + vel.x,old.y + vel.y ,old.z + vel.z };
+	// 移動後の座標を適用
+	SetEye(eye);
 
-		target.x += tag.x;
-		target.y += tag.y;
-		target.z += tag.z;
-		SetTarget(target);
-	}
+	//
+	XMFLOAT3 tag;
+	XMStoreFloat3(&tag, XMVector3Transform(XMVectorSet(
+		trackingTargetToCameraTarget.x,
+		trackingTargetToCameraTarget.y,
+		trackingTargetToCameraTarget.z, 1),
+		trackingTarget->GetMatRotation()));
+
+	target.x += tag.x;
+	target.y += tag.y;
+	target.z += tag.z;
+	SetTarget(target);
+
 }
