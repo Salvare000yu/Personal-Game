@@ -19,10 +19,10 @@ void Boss::BossAppear()
 	//移動完了確認しだい
 	if (charParams->pNextPlaceGoFlag == false) {
 		ActionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
-		actionPattern_ = ActionPattern::Approach;
+		pFunc = std::bind(&Boss::Approach, this);
 	}
 
-	pos.y += 2.f * sinf(time * 3.14159265358f);
+	pos.y += 2.f * std::sin(time * 3.14159265358f);
 
 	obj->SetPosition(pos);
 }
@@ -65,7 +65,7 @@ void Boss::Approach()
 	if (ApproachCount == 0) {
 		ApproachCount = ApproachCountDef;
 		ChangeVerticalCount++;//縦攻撃するためのカウント進める
-		actionPattern_ = ActionPattern::Leave;
+		pFunc = std::bind(&Boss::Leave, this);
 	}
 }
 
@@ -105,10 +105,10 @@ void Boss::Leave()
 		else { even_odd_NumFlag = true; }
 
 		if (ChangeVerticalCount == ChangeVerticalNeces) {//縦攻撃カウントが一定に達したら
-			actionPattern_ = ActionPattern::Vertical;//縦攻撃
+			pFunc = std::bind(&Boss::Vertical, this);
 		}
 		else {
-			actionPattern_ = ActionPattern::Approach;
+			pFunc = std::bind(&Boss::Approach, this);
 		}
 	}
 }
@@ -229,7 +229,8 @@ void Boss::Vertical()
 		VerticalWaitCount = VerticalWaitCountDef;//待ちカウントデフォルトに戻す
 		ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
 		verticalPattern_ = VerticalPattern::def;//また使えるようにデフォに戻しとく
-		actionPattern_ = ActionPattern::Approach;//大本の行動パターンをApproachに戻す
+		//大本の行動パターンをApproachに戻す
+		pFunc = std::bind(&Boss::Approach, this);
 		break;
 	}
 
@@ -305,7 +306,7 @@ void Boss::HpHalfPatStart()
 		NowPos = {};
 
 		isHpHalfPattern = true;//この処理全部終了したからもうやんない
-		actionPattern_ = ActionPattern::CircularMotionMove;
+		pFunc = std::bind(&Boss::CircularMotionMove, this);
 	}
 }
 void Boss::CircularMotionMove()
@@ -348,7 +349,7 @@ void Boss::CircularMotionMove()
 		addX = addXDef;
 		addY = addYDef;
 		GetPosOnlyFlag = true;
-		actionPattern_ = ActionPattern::LeaveFirstPos;
+		pFunc = std::bind(&Boss::LeaveFirstPos, this);
 	}
 
 	//発射カウントをデクリメント
@@ -413,11 +414,10 @@ void Boss::LeaveFirstPos()
 		if (PlungeCount == 0) {//LeaveFirstPosを指定回数したら突撃
 			XMFLOAT3 boPos = obj->GetPosition();
 			WasPosMem = boPos;//突っ込み行動へ移行する前に最後にいた場所を記憶する
-			actionPattern_ = ActionPattern::PlungeInto;
+			pFunc = std::bind(&Boss::PlungeInto, this);
 		}
 		else {
-			plungeIntoPattern_ = PlungeIntoPattern::Leave;
-			actionPattern_ = ActionPattern::CircularMotionMove;
+			pFunc = std::bind(&Boss::CircularMotionMove, this);
 		}
 	}
 }
@@ -513,7 +513,8 @@ void Boss::PlungeInto()
 			PlungeCount = PlungeCountDef;
 			BeforeReversePosMemFlag = false;
 			plungeIntoPattern_ = PlungeIntoPattern::Leave;
-			actionPattern_ = ActionPattern::AfterPlungeInto;//突っ込み一連終わった後の行動へ
+			//突っ込み一連終わった後の行動へ
+			pFunc = std::bind(&Boss::AfterPlungeInto, this);
 		}
 
 		break;
@@ -652,7 +653,8 @@ void Boss::AfterPlungeInto()
 				Nowframe = 0;
 				PlungeFinOnlyFlag = false;
 				afterPlungePattern_ = AfterPlungePattern::Wait;//ここの行動戻す
-				actionPattern_ = ActionPattern::CircularMotionMove;//次の行動
+				//次の行動
+				pFunc = std::bind(&Boss::CircularMotionMove, this);
 			}
 		}
 		break;
@@ -671,7 +673,7 @@ void Boss::Shake() {
 		ShakePosMemFlag = true;
 	}
 	if (ShakePosMemFlag) {
-		pos.x = posMem.x + rand() % randShakeNow - 4.f;//a~bまでのrandShakeNowの最大値から半分を引いて負の数も含むように
+		pos.x = posMem.x + rand() % randShakeNow - 4.f;
 		pos.y = posMem.y + rand() % randShakeNow - 4.f;
 	}
 	obj->SetPosition(pos);
@@ -680,12 +682,6 @@ void Boss::Shake() {
 //-------攻撃系
 void Boss::Attack()
 {
-	//キー入力使う
-	//Input* input = Input::GetInstance();
-
-	//triggerkey
-	//const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-
 	// 音声再生 鳴らしたいとき
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
@@ -693,7 +689,6 @@ void Boss::Attack()
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
 	std::unique_ptr<BossAimBul> madeAimBullet = std::make_unique<BossAimBul>();
-	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeAimBullet->Initialize();
 	madeAimBullet->SetModel(AimBulModel);
 	madeAimBullet->SetPosition(position);
@@ -962,6 +957,9 @@ void Boss::Initialize()
 
 	//近づくパターン初期化
 	ApproachInit();
+
+	//デフォルトの行動を設定
+	pFunc = std::bind(&Boss::BossAppear, this);
 }
 
 void Boss::Update()
@@ -986,19 +984,19 @@ void Boss::Update()
 		});
 
 	//メンバ関数ポインタ対応したボスの動きをする
-	if (actionPattern_ == ActionPattern::BossAppear) { pFunc = &Boss::BossAppear; }
-	if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
-	if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
-	if (actionPattern_ == ActionPattern::Vertical) { pFunc = &Boss::Vertical; }
-	if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }
-	if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
-	if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }
-	if (actionPattern_ == ActionPattern::LeaveFirstPos) { pFunc = &Boss::LeaveFirstPos; }
-	if (actionPattern_ == ActionPattern::PlungeInto) { pFunc = &Boss::PlungeInto; }
-	if (actionPattern_ == ActionPattern::AfterPlungeInto) { pFunc = &Boss::AfterPlungeInto; }
+	//if (actionPattern_ == ActionPattern::BossAppear) { pFunc = &Boss::BossAppear; }
+	//if (actionPattern_ == ActionPattern::Approach) { pFunc = &Boss::Approach; }
+	//if (actionPattern_ == ActionPattern::Leave) { pFunc = &Boss::Leave; }
+	//if (actionPattern_ == ActionPattern::Vertical) { pFunc = &Boss::Vertical; }
+	//if (actionPattern_ == ActionPattern::HpHalfPatStart) { pFunc = &Boss::HpHalfPatStart; }
+	////if (actionPattern_ == ActionPattern::Death) { pFunc = &Boss::Death; }
+	//if (actionPattern_ == ActionPattern::CircularMotionMove) { pFunc = &Boss::CircularMotionMove; }
+	//if (actionPattern_ == ActionPattern::LeaveFirstPos) { pFunc = &Boss::LeaveFirstPos; }
+	//if (actionPattern_ == ActionPattern::PlungeInto) { pFunc = &Boss::PlungeInto; }
+	//if (actionPattern_ == ActionPattern::AfterPlungeInto) { pFunc = &Boss::AfterPlungeInto; }
 
 	if (isDeath) {
-		actionPattern_ = ActionPattern::Death;
+		pFunc = std::bind(&Boss::Death, this);
 		if (IsFirst_Death == false) {
 			Nowframe = NowframeDef;
 			IsFirst_Death = true;
@@ -1006,7 +1004,7 @@ void Boss::Update()
 	}
 	if (isHpHalfPattern == false) {
 		if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
-			actionPattern_ = ActionPattern::HpHalfPatStart;
+			pFunc = std::bind(&Boss::HpHalfPatStart, this);
 		}
 	}
 
@@ -1015,7 +1013,7 @@ void Boss::Update()
 	}
 
 	//メンバ関数ポインタ呼び出し
-	(this->*pFunc)();
+	pFunc();
 
 	//弾更新
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {

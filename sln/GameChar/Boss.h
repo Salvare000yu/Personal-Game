@@ -8,22 +8,23 @@
 #include "BaseObject.h"
 
 #include <memory>
+#include <functional>
 
 class Boss :public BaseObject
 {
 	//行動パターン enumclass
-	enum class ActionPattern {
-		BossAppear,
-		Approach,//近づいてくる
-		Leave,//離れる
-		Vertical,//縦攻撃
-		HpHalfPatStart,//Hp半分以下になったらタゲまで移動
-		CircularMotionMove,//ぐるぐる
-		LeaveFirstPos,//元の場所へ一旦引く
-		PlungeInto,//突っ込む
-		AfterPlungeInto,//突っ込み後
-		Death,//死亡
-	};
+	//enum class ActionPattern {
+	//	BossAppear,
+	//	Approach,//近づいてくる
+	//	Leave,//離れる
+	//	Vertical,//縦攻撃
+	//	HpHalfPatStart,//Hp半分以下になったらタゲまで移動
+	//	CircularMotionMove,//ぐるぐる
+	//	LeaveFirstPos,//元の場所へ一旦引く
+	//	PlungeInto,//突っ込む
+	//	AfterPlungeInto,//突っ込み後
+	//	Death,//死亡
+	//};
 
 	enum class VerticalPattern {//縦の攻撃パターン
 		def,//デフォルトから始まる
@@ -102,10 +103,10 @@ public:
 	//離れられる距離
 	float LeaveLim = 90;
 
-	void  (Boss::* pFunc)();
+	std::function<void()> pFunc;
 
 	//初期パターン enumclassは　　　　型名　　:: 　列挙子
-	ActionPattern actionPattern_ = ActionPattern::BossAppear;
+	//ActionPattern actionPattern_ = ActionPattern::BossAppear;
 
 	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
 	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾

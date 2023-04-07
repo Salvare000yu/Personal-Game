@@ -12,6 +12,8 @@ protected:
 	bool alive = true;
 
 public:
+	inline Object3d* GetObj() { return obj.get(); }
+
 	inline void SetAlive(bool Alive) { alive = Alive; }
 
 	inline void SetPosition(const DirectX::XMFLOAT3& position) { obj->SetPosition(position); }
