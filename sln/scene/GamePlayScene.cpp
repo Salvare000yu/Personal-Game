@@ -135,7 +135,7 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
-	obj_groundBottom->SetPosition({ 0,-190,0 });
+	obj_groundBottom->SetPosition({ 0,-220,0 });
 	obj_kaberight->SetPosition({ 490,340,2000 });
 	obj_kabeleft->SetPosition({ -490,340,2000 });
 	obj_tunnel->SetPosition({ 0,40,1000 });

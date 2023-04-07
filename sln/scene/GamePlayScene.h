@@ -155,7 +155,7 @@ private:
 	//地面二種類を上下に揺らす
 	const float SwingDist = 10.f;//揺らす距離
 	const float SwingSp = 4.f;//揺らす速度
-	float PosDef = -150;//地面を置く座標　ここ中心に上下
+	float PosDef = -200;//地面を置く座標　ここ中心に上下
 
 	//-----開始時演出
 	//ゲーム開始時フレーム

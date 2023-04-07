@@ -33,6 +33,8 @@ public://メンバ関数
 	//コマンドリスト取得
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }
 
+	inline float GetFps()const { return fps; }
+
 private:
 	//デバイス
 	//Microsoft::WRL::ComPtr<ID3D12Device>dev;
@@ -59,6 +61,8 @@ private:
 
 	//FPS固定 時間記録
 	std::chrono::steady_clock::time_point reference_;
+
+	float fps = -1;
 private:
 	bool InitializeCommand();
 

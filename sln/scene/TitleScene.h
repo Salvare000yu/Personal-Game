@@ -55,8 +55,6 @@ public:
 	void Draw() override;
 	void DrawUI() override;
 
-	DxBase* dxBase = nullptr;
-
 	bool PAppearFlag = true;//自機登場フラグ　true：登場中
 	float sp = 1.5;
 	float StartSp = 1.5;

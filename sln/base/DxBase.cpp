@@ -381,9 +381,9 @@ void DxBase::InitFixFps()
 void DxBase::UpdateFixFps()
 {
 	//1/60ジャスト
-	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+	constexpr std::chrono::microseconds kMinTime(uint64_t(1'000'000.0f / 60.0f));
 	//1/60よりちょっとだけ短い時間
-	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+	constexpr std::chrono::microseconds kMinCheckTime(uint64_t(1'000'000.0f / 65.0f));
 
 	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
 	//前回記録からの経過時間取得
@@ -400,4 +400,6 @@ void DxBase::UpdateFixFps()
 	}
 	//現在時間記録
 	reference_ = std::chrono::steady_clock::now();
+
+	fps = 1'000'000.0f / elapsed.count();
 }
