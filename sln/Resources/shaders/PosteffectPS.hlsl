@@ -4,7 +4,7 @@ Texture2D<float4> tex0 : register(t0); // 0番スロットに設定されたテクスチャ
 Texture2D<float4> tex1 : register(t1);
 SamplerState smp : register(s0); // 0番スロットに設定されたサンプラー
 
-float4 ChromaticAberration(float2 uv, float level = 3.f, float spread = 0.02f)
+float4 ChromaticAberration(float2 uv, float level = 3.f, float spread = 0.015f)
 {
 	float2 offset = (uv - 0.5f) * float2(1.f, -1.f);
 	float3 sum = float3(0.f, 0.f, 0.f);

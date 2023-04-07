@@ -117,9 +117,9 @@ void GamePlayScene::Initialize()
 
 	for (auto& i : obj_ground) {
 		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		model->second->SetTiling({ 100,100 });
+		model->second->SetTiling({ 10,100 });
 		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
+		i.second->SetScale({ 1000.0f, 1.f, 10000.0f });
 	}
 	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 
@@ -1257,6 +1257,11 @@ void GamePlayScene::Update()
 				CollisionAll();
 			}
 
+			if (input->TriggerKey(DIK_O)) {
+				auto pos = camera->GetEye();
+				pos.z += 100;
+				ParticleManager::GetInstance()->CreateParticle(pos, 300, 80, 5);
+			}
 			// パーティクル更新
 			ParticleManager::GetInstance()->Update();
 
