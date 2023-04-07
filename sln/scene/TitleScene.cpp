@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+ï»¿#include "TitleScene.h"
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
@@ -23,21 +23,21 @@ using namespace DirectX;
 
 void TitleScene::Initialize()
 {
-#pragma region •`‰æ‰Šú‰»ˆ—
+#pragma region æç”»åˆæœŸåŒ–å‡¦ç†
 
 	WinApp* winApp = WinApp::GetInstance();
 
 	CharParameters* charParameters = CharParameters::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
-	// ƒ}ƒEƒXƒJ[ƒ\ƒ‹”ñ•\¦
+	// ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«éè¡¨ç¤º
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
 
 	camera.reset(new CameraTracking());
 	Object3d::SetCamera(camera.get());
 
-	////---obj‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^“Ç‚İ‚İ---
+	////---objã‹ã‚‰ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿---
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
@@ -56,75 +56,75 @@ void TitleScene::Initialize()
 	}
 	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 
-	////---3dƒIƒuƒWƒFƒNƒg¶¬---
+	////---3dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ---
 	obj_tunnel.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_logo.reset(Object3d::Create());
 	obj_groundBottom.reset(Object3d::Create());
-	////---3dƒIƒuƒWƒFƒNƒg‚É3dƒ‚ƒfƒ‹‚ğ•R‚Ã‚¯‚é---
+	////---3dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«3dãƒ¢ãƒ‡ãƒ«ã‚’ç´ã¥ã‘ã‚‹---
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_logo->SetModel(mod_logo.get());
 	obj_groundBottom->SetModel(mod_groundBottom.get());
-	//------object3dƒXƒP[ƒ‹------//
+	//------object3dã‚¹ã‚±ãƒ¼ãƒ«------//
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_logo->SetScale({ 40.f,40.f,40.f }); 
+	obj_logo->SetScale({ 40.f,40.f,40.f });
 	obj_groundBottom->SetScale({ 10000.0f, 10000.0f, 10000.0f });
-	//------object3dˆÊ’u------//
+	//------object3dä½ç½®------//
 	obj_tunnel->SetPosition({ 0,40,-500 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
 	obj_logo->SetPosition({ 0,100,-1000 });
 	obj_groundBottom->SetPosition({ 0,-190,0 });
-	//------object‰ñ“]
+	//------objectå›è»¢
 	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
 
-	//‚¢‚ë‚¢‚ë¶¬
+	//ã„ã‚ã„ã‚ç”Ÿæˆ
 	player_.reset(new Player());
-	//‚¢‚ë‚¢‚ëƒLƒƒƒ‰‰Šú‰»
+	//ã„ã‚ã„ã‚ã‚­ãƒ£ãƒ©åˆæœŸåŒ–
 	player_->Initialize();
 	player_->SetPosition({ PlayerInitPos });
 	player_->SetModel(mod_player.get());
 
-	player_->pAtkPossibleFlag = false;//ƒ^ƒCƒgƒ‹‚Å‚Í’e‚ğ‘Å‚½‚È‚¢
+	player_->pAtkPossibleFlag = false;//ã‚¿ã‚¤ãƒˆãƒ«ã§ã¯å¼¾ã‚’æ‰“ãŸãªã„
 
-	//©‹@“oê‰‰o
+	//è‡ªæ©Ÿç™»å ´æ¼”å‡º
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 1200;//‚±‚±‚©‚ç©‹@‚Ì‰ŠúˆÊ’u‚Ü‚Åw’èƒtƒŒ[ƒ€Š|‚¯‚Ä“®‚­
+	ApStartPPos.z -= 1200;//ã“ã“ã‹ã‚‰è‡ªæ©Ÿã®åˆæœŸä½ç½®ã¾ã§æŒ‡å®šãƒ•ãƒ¬ãƒ¼ãƒ æ›ã‘ã¦å‹•ã
 
 	camera->SetTarget(player_->GetPosition());
-	const float EyeXDef = 10;//ÅIˆÊ’u
-	const float EyeX = EyeXDef - (CamEyeMoveSpX * PApMoveFrameMax);//ÅIˆÊ’u[i©‹@“oêŠÔ–‚¸‚ç‚·’lj@“oêŠÔ•ª‚¸‚ç‚·‚©‚ç
-	camera->SetEye({ EyeX,160,-2000 });//‚±‚±‚ÉƒJƒƒ‰‚ğ‚¨‚¢‚ÄAÅ‰‚Ì‰‰o‚Å©‹@‚ğ’Ç‚¢‚©‚¯‚é
+	const float EyeXDef = 10;//æœ€çµ‚ä½ç½®
+	const float EyeX = EyeXDef - (CamEyeMoveSpX * PApMoveFrameMax);//æœ€çµ‚ä½ç½®ãƒ¼ï¼ˆè‡ªæ©Ÿç™»å ´æ™‚é–“ï¼Šãšã‚‰ã™å€¤ï¼‰ã€€ç™»å ´æ™‚é–“åˆ†ãšã‚‰ã™ã‹ã‚‰
+	camera->SetEye({ EyeX,160,-2000 });//ã“ã“ã«ã‚«ãƒ¡ãƒ©ã‚’ãŠã„ã¦ã€æœ€åˆã®æ¼”å‡ºã§è‡ªæ©Ÿã‚’è¿½ã„ã‹ã‘ã‚‹
 
 	charParameters->Initialize();
-	//ƒV[ƒ“‘JˆÚ‰‰o‰Šú‰»
+	//ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºåˆæœŸåŒ–
 	sceneChangeDirection->Initialize();
 
-	// ‰¹º“Ç‚İ‚İ
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
-	// ‰¹ºÄ¶
+	// éŸ³å£°å†ç”Ÿ
 	GameSound::GetInstance()->PlayWave("A_rhythmaze_125.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 
-	// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/title_prac.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/Title_oper.png");
 
-	// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
 	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	//ƒXƒvƒ‰ƒCƒgƒ|ƒWƒVƒ‡ƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒã‚¸ã‚·ãƒ§ãƒ³
 
-#pragma endregion •`‰æ‰Šú‰»ˆ—
+#pragma endregion æç”»åˆæœŸåŒ–å‡¦ç†
 }
 
 void TitleScene::Finalize()
@@ -135,9 +135,9 @@ void TitleScene::Finalize()
 void TitleScene::PlayerStandby()
 {
 	XMFLOAT3 pos = player_->GetPosition();
-	//“oêŒã‚Ì©‹@À•W(=‰Šú’l)‚ÉƒJƒƒ‰‚ğŒÅ’è‚µ‚Ä©‹@‚¾‚¯“®‚©‚·
+	//ç™»å ´å¾Œã®è‡ªæ©Ÿåº§æ¨™(=åˆæœŸå€¤)ã«ã‚«ãƒ¡ãƒ©ã‚’å›ºå®šã—ã¦è‡ªæ©Ÿã ã‘å‹•ã‹ã™
 	camera->SetTarget(PlayerInitPos);
-	pos.y += 0.005f * sinf(time * 5.f);//U‚ê•–sin(–—h‚ê‘¬“x
+	pos.y += 0.005f * sinf(time * 5.f);//æŒ¯ã‚Œå¹…ï¼Šsin(æ™‚ï¼Šæºã‚Œé€Ÿåº¦
 
 	player_->SetPosition(pos);
 }
@@ -146,7 +146,7 @@ void TitleScene::PlayerAppear()
 {
 	XMFLOAT3 pos = player_->GetPosition();
 
-	if (PMoveFrame < PApMoveFrameMax) {//Å‘åƒtƒŒ[ƒ€“’B‚Ü‚Å‚â‚é
+	if (PMoveFrame < PApMoveFrameMax) {//æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ åˆ°é”ã¾ã§ã‚„ã‚‹
 		float raito = (float)PMoveFrame / PApMoveFrameMax;
 		PMoveFrame++;
 
@@ -162,22 +162,22 @@ void TitleScene::PlayerAppear()
 
 		camera->SetTarget(pos);
 	}
-	else {//Å‘åƒtƒŒ[ƒ€Œã
-		PMoveFrame = PMoveFrameDef;//ƒV[ƒ“Ø‚è‘Ö‚¦‚È‚¢‚Å‚àg‚¤‚Ì‚ÅƒfƒtƒHƒ‹ƒg‚É–ß‚·
-		ExitEndPPos = { pos.x,pos.y,ExitPosZ };//‘Şê‚Íw’èZ‚Ü‚Ås‚Á‚Ä‚¨‚í‚é
-		ExitStartPPos = pos;//Œ»İ©‹@À•W‚©‚ç‘Şên‚ß‚é
-		PAppearFlag = false;//“oêŠ®—¹
+	else {//æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ å¾Œ
+		PMoveFrame = PMoveFrameDef;//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆãªã„ã§ã‚‚ä½¿ã†ã®ã§ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«æˆ»ã™
+		ExitEndPPos = { pos.x,pos.y,ExitPosZ };//é€€å ´ã¯æŒ‡å®šZã¾ã§è¡Œã£ã¦ãŠã‚ã‚‹
+		ExitStartPPos = pos;//ç¾åœ¨è‡ªæ©Ÿåº§æ¨™ã‹ã‚‰é€€å ´å§‹ã‚ã‚‹
+		PAppearFlag = false;//ç™»å ´å®Œäº†
 	}
 }
 void TitleScene::DoorOpen()
 {
-	const int LDoorPosXRim = -2200;//¶‚Ì•ÇŠJ‚¯I‚í‚éêŠ
-	const float DoorMoveSp = 7.2f;//ƒhƒA‚ªŠJ‚­‘¬“x
+	const int LDoorPosXRim = -2200;//å·¦ã®å£é–‹ã‘çµ‚ã‚ã‚‹å ´æ‰€
+	const float DoorMoveSp = 7.2f;//ãƒ‰ã‚¢ãŒé–‹ãé€Ÿåº¦
 
 	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
 	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
 
-	//¶‚Ì•Ç‚ªˆê’ès‚Á‚½‚çI‚í‚è
+	//å·¦ã®å£ãŒä¸€å®šè¡Œã£ãŸã‚‰çµ‚ã‚ã‚Š
 	if (!(LDoorPos.x < LDoorPosXRim)) {
 		LDoorPos.x -= DoorMoveSp;
 		RDoorPos.x += DoorMoveSp;
@@ -193,14 +193,14 @@ void TitleScene::NextScene()
 	Input* input = Input::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
-	DoorOpen();//”à‚ğŠJ‚¯‚é
+	DoorOpen();//æ‰‰ã‚’é–‹ã‘ã‚‹
 
-	//w’èŠÔ‚¾‚¯U“®‚·‚é
+	//æŒ‡å®šæ™‚é–“ã ã‘æŒ¯å‹•ã™ã‚‹
 	if (--SceneChangeVibCount == 0) {
 		input->PadVibrationDef();
 	}
 
-	{//w’èŠÔ‚ÅˆÚ“®
+	{//æŒ‡å®šæ™‚é–“ã§ç§»å‹•
 		float raito = (float)PMoveFrame / PExitMoveFrameMax;
 		PMoveFrame++;
 
@@ -212,40 +212,40 @@ void TitleScene::NextScene()
 
 		camera->SetTarget(pos);
 	}
-	//©‹@‚ªƒV[ƒ“‘JˆÚ‰‰oŠJnˆÊ’u‚É“’B‚µ‚½‚ç
+	//è‡ªæ©ŸãŒã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºé–‹å§‹ä½ç½®ã«åˆ°é”ã—ãŸã‚‰
 	if (player_->GetPosition().z >= SceneChangeDirecPosZ && HideTheScreenOnly == false) {
-		sceneChangeDirection->HideTheScreenFlag = true;//‰æ–Ê‰B‚·ŠJn
+		sceneChangeDirection->HideTheScreenFlag = true;//ç”»é¢éš ã™é–‹å§‹
 		HideTheScreenOnly = true;
 	}
 
-	if (sceneChangeDirection->SceneChangeCompFlag)//ƒV[ƒ“‘JˆÚŠ®—¹‚µ‚½‚ç
+	if (sceneChangeDirection->SceneChangeCompFlag)//ã‚·ãƒ¼ãƒ³é·ç§»å®Œäº†ã—ãŸã‚‰
 	{
-		// ‰¹º’â~
+		// éŸ³å£°åœæ­¢
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
-		//ƒV[ƒ“Ø‚è‘Ö‚¦
+		//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
-	//ƒV[ƒ“‘JˆÚ‰‰oXV
+	//ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºæ›´æ–°
 	sceneChangeDirection->Update();
 }
 
 void TitleScene::ToStartSprite()
 {
-	constexpr float ColorWDec = 0.012f;//“§–¾‚É‚µ‚Ä‚¢‚­‘¬“x
-	constexpr float Transparency = 0.5f;//ÅI“I‚È“§–¾“x‚ª‚Ç‚±‚Ü‚Ås‚­‚©B‚±‚±‚Ü‚Å‚¢‚Á‚½‚çƒfƒtƒH’l‚É–ß‚·
+	constexpr float ColorWDec = 0.012f;//é€æ˜ã«ã—ã¦ã„ãé€Ÿåº¦
+	constexpr float Transparency = 0.5f;//æœ€çµ‚çš„ãªé€æ˜åº¦ãŒã©ã“ã¾ã§è¡Œãã‹ã€‚ã“ã“ã¾ã§ã„ã£ãŸã‚‰ãƒ‡ãƒ•ã‚©å€¤ã«æˆ»ã™
 	XMFLOAT4 color = sp_titleoper->GetColor();
 
-	ToStartFrame = std::max(--ToStartFrame, 0);//ToStartFrame‚ÌÅ¬’l‚Í0
+	ToStartFrame = std::max(--ToStartFrame, 0);//ToStartFrameã®æœ€å°å€¤ã¯0
 
-	if (ToStartFrame <= 0) {//w’èŠÔ‚½‚Á‚½‚ç
+	if (ToStartFrame <= 0) {//æŒ‡å®šæ™‚é–“ãŸã£ãŸã‚‰
 		color.w -= ColorWDec;
 	}
 
 	if (color.w <= Transparency) {
-		ToStartFrame = ToStartFrameDef;//‚Ü‚½‚±‚ÌŠÔ•ª‚Ü‚Â
-		color.w = 1.f;//ˆê”Ô–¾‚é‚¢ó‘Ô
+		ToStartFrame = ToStartFrameDef;//ã¾ãŸã“ã®æ™‚é–“åˆ†ã¾ã¤
+		color.w = 1.f;//ä¸€ç•ªæ˜ã‚‹ã„çŠ¶æ…‹
 	}
 
 	sp_titleoper->SetColor(color);
@@ -258,45 +258,45 @@ void TitleScene::LogoMove()
 	XMFLOAT3 rot = obj_logo->GetRotation();
 	XMFLOAT3 pos = obj_logo->GetPosition();
 
-	constexpr float RotSp = 0.03f;//‰ñ“]‘¬“x
-	constexpr float RotMax = 1.7f;//‚Ç‚±‚Ü‚Å‰ñ“]‚·‚é‚©
-	constexpr int PosYSp = 5;//ã‚É‚¸‚ç‚·’l
-	constexpr int PosYMax = 300;//YÀ•W‚ÌÅ‘å’l
+	constexpr float RotSp = 0.03f;//å›è»¢é€Ÿåº¦
+	constexpr float RotMax = 1.7f;//ã©ã“ã¾ã§å›è»¢ã™ã‚‹ã‹
+	constexpr int PosYSp = 5;//ä¸Šã«ãšã‚‰ã™å€¤
+	constexpr int PosYMax = 300;//Yåº§æ¨™ã®æœ€å¤§å€¤
 
 	switch (logoPattern_) {
 	case LogoPattern::def:
-		if (PAppearFlag == false) {//“oê‚ªI‚í‚Á‚½‚ç
+		if (PAppearFlag == false) {//ç™»å ´ãŒçµ‚ã‚ã£ãŸã‚‰
 			logoPattern_ = LogoPattern::rightRot;
 		}
 		break;
 
 	case LogoPattern::rightRot:
 		LogoRotVel = -RotSp;
-		if (rot.y <= -RotMax) {//Å‘å’l‚Ü‚Å‰ñ“]‚µ‚½‚ç
-			logoPattern_ = LogoPattern::leftRot;//Ÿ¶‰ñ“]
+		if (rot.y <= -RotMax) {//æœ€å¤§å€¤ã¾ã§å›è»¢ã—ãŸã‚‰
+			logoPattern_ = LogoPattern::leftRot;//æ¬¡å·¦å›è»¢
 		}
 		break;
 
 	case LogoPattern::leftRot:
 		LogoRotVel = RotSp;
-		if (rot.y >= RotMax) {//Å‘å’l‚Ü‚Å‰ñ“]‚µ‚½‚ç
-			logoPattern_ = LogoPattern::rightRot;//Ÿ‰E‰ñ“]
+		if (rot.y >= RotMax) {//æœ€å¤§å€¤ã¾ã§å›è»¢ã—ãŸã‚‰
+			logoPattern_ = LogoPattern::rightRot;//æ¬¡å³å›è»¢
 		}
 		break;
 
 	case LogoPattern::beforeNextScene:
 		LogoRotVel = 0;
-		pos.y = std::min(pos.y, (float)PosYMax);//YÀ•W‚ÍPosYMax‚Ü‚Å‚µ‚©‚¢‚¯‚È‚¢‚æ‚¤‚É
+		pos.y = std::min(pos.y, (float)PosYMax);//Yåº§æ¨™ã¯PosYMaxã¾ã§ã—ã‹ã„ã‘ãªã„ã‚ˆã†ã«
 		pos.y += PosYSp;
 		break;
 	}
 
-	//ƒV[ƒ“ƒ`ƒFƒ“ƒWƒtƒ‰ƒOŒo‚Á‚Ä‚È‚©‚Á‚½‚çã‰ºˆÚ“®
+	//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸ãƒ•ãƒ©ã‚°çµŒã£ã¦ãªã‹ã£ãŸã‚‰ä¸Šä¸‹ç§»å‹•
 	if (!SceneChangeFlag) {
 		pos.y += 0.2f * std::sin(time * 3.14159265358f);
 	}
 	else {
-		//ƒV[ƒ“ƒ`ƒFƒ“ƒWŠJn‚µ‚½‚ç
+		//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸é–‹å§‹ã—ãŸã‚‰
 		logoPattern_ = LogoPattern::beforeNextScene;
 	}
 
@@ -313,36 +313,36 @@ void TitleScene::Update()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
-	//ƒZƒŒƒNƒg‚©‚çU“®­‚µ‘±‚¯‚é
+	//ã‚»ãƒ¬ã‚¯ãƒˆã‹ã‚‰æŒ¯å‹•å°‘ã—ç¶šã‘ã‚‹
 	if (--VibCount == 0) {
 		input->PadVibrationDef();
 	}
 
 	if (PAppearFlag) {
-		PlayerAppear();//©‹@“oê
+		PlayerAppear();//è‡ªæ©Ÿç™»å ´
 	}
 
-	//“oêŠ®—¹‚µ‚Ä‘Şê‘O
+	//ç™»å ´å®Œäº†ã—ã¦é€€å ´å‰
 	if (PAppearFlag == false && SceneChangeFlag == false)
 	{
-		if ((cInput->Decision()))     // ƒXƒy[ƒXƒL[orEnter‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
+		if ((cInput->Decision()))     // ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼orEnterãŒæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			SceneChangeFlag = true;//ƒ`ƒFƒ“ƒWˆÚ“®ƒtƒ‰ƒO—§‚Ä‚é
+			SceneChangeFlag = true;//ãƒã‚§ãƒ³ã‚¸ç§»å‹•ãƒ•ãƒ©ã‚°ç«‹ã¦ã‚‹
 			input->PadVibration();
 		}
 
-		PlayerStandby();//‚½‚¢‚«‚à[‚µ‚å‚ñ
-		ToStartSprite();//ENTER‰Ÿ‚µ‚Ä‚Ë“I‚È‰æ‘œŠÖŒW
+		PlayerStandby();//ãŸã„ãã‚‚ãƒ¼ã—ã‚‡ã‚“
+		ToStartSprite();//ENTERæŠ¼ã—ã¦ã­çš„ãªç”»åƒé–¢ä¿‚
 		//postEffect->Update();
 	}
 
 	if (SceneChangeFlag) {
 		sceneChangeDirection->SceneChangeDirectionFlag = true;
-		NextScene();//ƒ`ƒFƒ“ƒWˆÚ“®ŠJn
+		NextScene();//ãƒã‚§ãƒ³ã‚¸ç§»å‹•é–‹å§‹
 	}
 
-	LogoMove();//ƒƒS‚Ì“®‚«
+	LogoMove();//ãƒ­ã‚´ã®å‹•ã
 
 	obj_tunnel->Update();
 	player_->Update();
@@ -352,30 +352,30 @@ void TitleScene::Update()
 	obj_groundBottom->Update();
 	{
 		float num = std::sin((float)time * SwingSp) * SwingDist;
-		//’n–Ê‚Ì”‚¾‚¯
+		//åœ°é¢ã®æ•°ã ã‘
 		for (auto& i : obj_ground) {
 			XMFLOAT3 pos = i.second->GetPosition();
-			pos.y = PosDef+num;//‰ŠúˆÊ’u{—h‚ç‚·’l
+			pos.y = PosDef + num;//åˆæœŸä½ç½®ï¼‹æºã‚‰ã™å€¤
 			i.second->SetPosition(pos);
-			num = -num;//“ñ–‡–Ú‚Í‹t‚É—h‚ç‚·
+			num = -num;//äºŒæšç›®ã¯é€†ã«æºã‚‰ã™
 
 			i.second->Update();
 		}
 	}
 
-	// ƒJƒƒ‰‚ÌXV
+	// ã‚«ãƒ¡ãƒ©ã®æ›´æ–°
 	camera->Update();
 	DrawUI();
 }
 
 void TitleScene::Draw()
 {
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ìæ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
-	//3dƒIƒuƒWƒF•`‰æ‘Oˆ—
+	//3dã‚ªãƒ–ã‚¸ã‚§æç”»å‰å‡¦ç†
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
-	//‚RDƒIƒuƒWƒFƒNƒgDraw
+	//ï¼“Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆDraw
 	obj_tunnel->Draw();
 	player_->Draw();
 	obj_kaberight->Draw();
@@ -386,23 +386,23 @@ void TitleScene::Draw()
 		i.second->Draw();
 	}
 
-	//3dƒIƒuƒWƒF•`‰æŒãˆ—
+	//3dã‚ªãƒ–ã‚¸ã‚§æç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 }
 
 void TitleScene::DrawUI()
 {
-	//// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒRƒ}ƒ“ƒh
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šã‚³ãƒãƒ³ãƒ‰
 	SpriteBase::GetInstance()->PreDraw();
-	//// ƒXƒvƒ‰ƒCƒg•`‰æ
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 
-	if (PAppearFlag == false && SceneChangeFlag == false)//©‹@“oêI‚í‚Á‚Ä‚é‚©‚ÂENTER‰Ÿ‚³‚ê‚é‘O‚È‚ç
+	if (PAppearFlag == false && SceneChangeFlag == false)//è‡ªæ©Ÿç™»å ´çµ‚ã‚ã£ã¦ã‚‹ã‹ã¤ENTERæŠ¼ã•ã‚Œã‚‹å‰ãªã‚‰
 	{
-		sp_titleoper->Draw();//ENTER‚ÅŠJn‚·‚é‚æI‰æ‘œ
+		sp_titleoper->Draw();//ENTERã§é–‹å§‹ã™ã‚‹ã‚ˆï¼ç”»åƒ
 	}
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
-	if (sceneChangeDirection->SceneChangeDirectionFlag) {//ƒV[ƒ“‘JˆÚ‰‰o’†‚È‚ç
-		sceneChangeDirection->Draw();//ƒV[ƒ“‘JˆÚ‰‰o•`‰æ
+	if (sceneChangeDirection->SceneChangeDirectionFlag) {//ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºä¸­ãªã‚‰
+		sceneChangeDirection->Draw();//ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºæç”»
 	}
 }

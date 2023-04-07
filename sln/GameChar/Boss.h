@@ -12,7 +12,6 @@
 
 class Boss :public BaseObject
 {
-
 	enum class VerticalPattern {//縦の攻撃パターン
 		def,//デフォルトから始まる
 		Wait,//待ち

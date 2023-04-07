@@ -1,4 +1,4 @@
-#include "CameraTracking.h"
+ï»¿#include "CameraTracking.h"
 #include "WinApp.h"
 
 #include <DirectXMath.h>
@@ -13,7 +13,7 @@ CameraTracking::CameraTracking() :
 
 void CameraTracking::StartUpdate()
 {
-	// ƒgƒ‰ƒbƒLƒ“ƒOƒ^[ƒQƒbƒg‚ª‘¶İ‚µ‚½‚ç
+	// ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒå­˜åœ¨ã—ãŸã‚‰
 	if (trackingTarget == nullptr) { return; }
 
 	XMFLOAT3 target = trackingTarget->GetPosition();
@@ -21,13 +21,13 @@ void CameraTracking::StartUpdate()
 	float sinNum = sinf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
 	float cosNum = cosf(XMConvertToRadians(trackingTarget->GetRotation().x + 15));
 
-	// x²‰ñ“]‚ğ”½‰f‚µ‚½ˆÊ’u
+	// xè»¸å›è»¢ã‚’åæ˜ ã—ãŸä½ç½®
 	XMFLOAT3 tempPosition = { 0,sinNum * eyeToCameraTargetLength ,-cosNum * eyeToCameraTargetLength };
 
 	sinNum = sinf(XMConvertToRadians(-trackingTarget->GetRotation().y));
 	cosNum = cosf(XMConvertToRadians(-trackingTarget->GetRotation().y));
 
-	// y²‰ñ“]‚ğ”½‰f‚µ‚½ˆÊ’u
+	// yè»¸å›è»¢ã‚’åæ˜ ã—ãŸä½ç½®
 	XMFLOAT3 tempPosition2 = {
 		cosNum * tempPosition.x - sinNum * tempPosition.z,
 		tempPosition.y,
@@ -39,18 +39,18 @@ void CameraTracking::StartUpdate()
 	target.y + tempPosition2.y,
 	target.z + tempPosition2.z };
 
-	// ˆÚ“®‘O‚ÌÀ•W
+	// ç§»å‹•å‰ã®åº§æ¨™
 	XMFLOAT3 old = GetEye();
-	//‚Â‚¢‚Ä‚­‚Â‚¢‚Ä‚­‚·‚é‘¬“x
+	//ã¤ã„ã¦ãã¤ã„ã¦ãã™ã‚‹é€Ÿåº¦
 	constexpr float interpolation = 1.1f;
-	// ˆÚ“®• = ˆÚ“®Œã‚ÌÀ•W - ˆÚ“®‘O‚ÌÀ•W
+	// ç§»å‹•å¹… = ç§»å‹•å¾Œã®åº§æ¨™ - ç§»å‹•å‰ã®åº§æ¨™
 	XMFLOAT3 vel =
 	{ (eye.x - old.x) * interpolation,
 	(eye.y - old.y) * interpolation,
 	(eye.z - old.z) * interpolation };
-	// ˆÚ“®Œã‚ÌÀ•W = ˆÚ“®‘O‚ÌÀ•W + ˆÚ“®•
+	// ç§»å‹•å¾Œã®åº§æ¨™ = ç§»å‹•å‰ã®åº§æ¨™ + ç§»å‹•å¹…
 	eye = { old.x + vel.x,old.y + vel.y ,old.z + vel.z };
-	// ˆÚ“®Œã‚ÌÀ•W‚ğ“K—p
+	// ç§»å‹•å¾Œã®åº§æ¨™ã‚’é©ç”¨
 	SetEye(eye);
 
 	//
@@ -65,5 +65,4 @@ void CameraTracking::StartUpdate()
 	target.y += tag.y;
 	target.z += tag.z;
 	SetTarget(target);
-
 }
