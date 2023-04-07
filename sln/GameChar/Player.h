@@ -89,8 +89,9 @@ public:
 	//弾威力
 	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
 	const float& GetpBulPow() { return pBulPower; }
-	//自機体力が0より少ないか多いか
+	//自機体力が0より少ないか
 	void SetPHpLessThan0(bool isPHpLessThan0) { this->isPHpLessThan0 = isPHpLessThan0; }
+	//自機体力が0より少ないか
 	const bool& GetPHpLessThan0() { return isPHpLessThan0; }
 	//自機安否確認
 	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }

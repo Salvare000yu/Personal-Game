@@ -88,7 +88,6 @@ public:
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
 
-	//Enemy* enemy_ = nullptr;
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
 	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
@@ -100,9 +99,6 @@ public:
 
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
-
-	std::vector<XMVECTOR> points;
-	size_t splineStartIndex;
 
 	BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
 
@@ -119,7 +115,6 @@ private:
 
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
-	//std::unique_ptr < Model> mod_ground = nullptr;//
 	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
@@ -134,15 +129,11 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
-	//std::unique_ptr < Object3d> obj_ground = nullptr;
 	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 	std::unique_ptr < Object3d> obj_backwall = nullptr;
-
-	FbxModel* fbxModel_1 = nullptr;
-	FbxObject3d* fbxObject_1 = nullptr;
 
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
@@ -155,9 +146,9 @@ private:
 	//地面二種類を上下に揺らす
 	const float SwingDist = 10.f;//揺らす距離
 	const float SwingSp = 4.f;//揺らす速度
-	float PosDef = -200;//地面を置く座標　ここ中心に上下
+	float groundPosDef = -200;//地面を置く座標　ここ中心に上下
 
-	//-----開始時演出
+	//<<<<<開始時演出
 	//ゲーム開始時フレーム
 	int GameReadyFrame = 0;
 	//開始時自機座標
@@ -167,10 +158,7 @@ private:
 
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
-	//一度きり攻撃許可出す false:まだだしてない
-	bool MayDoPAtk_OnceFlag = false;
-
-	//-----開始時演出
+	//>>>>>開始時演出
 
 	uint32_t frame = 0;
 
@@ -220,17 +208,8 @@ private:
 
 	//自機動くなフラグ true:動 く な　false:動いてよい
 	bool PDontMoveFlag = true;
-	//自機移動中かどうか false:してない
-	bool isLMove = false;
-	bool isRMove = false;
 
 	bool DoorOpenFlag = false;//扉開けてない
-
-	//自機死亡演出中初回自機座標取得　false:やっていない
-	bool PDeathDirection_PosMemOnlyFlag = false;
-
-	//関数始まったときのみ false:まだ
-	bool PDeathEffect_PosMemOnlyFlag = false;
 
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 10.f;
@@ -249,8 +228,8 @@ private:
 	//false:してない
 	bool DashFlag = false;
 	//ダッシュ時間
-	const int DashCountDef = 30;
-	int DashCount = DashCountDef;
+	const uint32_t DashCountDef = 30;
+	uint32_t DashCount = DashCountDef;
 	//ダッシュカウントがこの分引いた値になったら減衰
 	const int DashAttenuation = 10;
 	bool DashAttenuationFlag = false;//減衰開始 fasle:まだしてない

@@ -322,12 +322,12 @@ void GamePlayScene::DoorOpen()
 	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
 
 	//左の壁が一定行ったら終わり
-	if (!(LDoorPos.x < LDoorPosXRim)) {
-		LDoorPos.x -= DoorMoveSp;
-		RDoorPos.x += DoorMoveSp;
+	if (LDoorPos.x < LDoorPosXRim) {
+		DoorOpenFlag = true;
 	}
 	else {
-		DoorOpenFlag = true;
+		LDoorPos.x -= DoorMoveSp;
+		RDoorPos.x += DoorMoveSp;
 	}
 	obj_kabeleft->SetPosition(LDoorPos);
 	obj_kaberight->SetPosition(RDoorPos);
@@ -434,6 +434,10 @@ void GamePlayScene::PlayerMove()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	XMFLOAT3 rotation = player_->GetRotation();
+
+	//自機移動中かどうか false:してない
+	bool isLMove = false;
+	bool isRMove = false;
 
 	//------------------↓プレイヤー移動＆姿勢
 	if (cInput->LeftMove() || cInput->RightMove() || cInput->UpMove() || cInput->DownMove())// inputQ || inputZ ||
@@ -1047,15 +1051,11 @@ bool GamePlayScene::GameReady()
 		}
 	}
 
-	if (GOCol.w < 0.0f) {//透明になったら
-		if (MayDoPAtk_OnceFlag == false) {
-			//アタック開始してよき
-			player_->pAtkPossibleFlag = true;
-			//動いていいよ
-			PDontMoveFlag = false;
-
-			MayDoPAtk_OnceFlag = true;
-		}
+	if (GOCol.w < 0.f) {//透明になったら
+		//アタック開始してよき
+		player_->pAtkPossibleFlag = true;
+		//動いていいよ
+		PDontMoveFlag = false;
 
 		return false;
 	}
@@ -1080,18 +1080,6 @@ void GamePlayScene::Update()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	if (pause->WaitKeyP < 10 && pause->GetPauseFlag() == false) {
-		pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
-	}
-	if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
-		if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
-			if (cInput->PauseOpenClose() && (GameReady() == false) && pause->GetPauseFlag() == false) {
-				pause->EveryInit();
-				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-				pause->SetPauseFlag(true);
-			}
-		}
-	}
 	if (pause->GetPauseFlag()) {
 		pause->PauseNow();
 		UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
@@ -1110,6 +1098,19 @@ void GamePlayScene::Update()
 	//--------------この外に出すとポーズ中も実行
 	if (pause->GetPauseFlag() == false)
 	{
+		if (pause->WaitKeyP < 10) {
+			pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
+		}
+		else if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
+			if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
+				if (cInput->PauseOpenClose() && (GameReady() == false)) {
+					pause->EveryInit();
+					GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+					pause->SetPauseFlag(true);
+				}
+			}
+		}
+
 		DxBase* dxBase = DxBase::GetInstance();
 
 		CharParameters* charParameters = CharParameters::GetInstance();
@@ -1125,6 +1126,7 @@ void GamePlayScene::Update()
 
 		charParameters->BarGetDislodged();
 
+		// 自機体力が0より多ければ
 		if (player_->GetPHpLessThan0() == false)
 		{
 			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
@@ -1134,8 +1136,7 @@ void GamePlayScene::Update()
 			}
 		}
 
-		DrawUI();
-		//パッド右スティックカメラ視点
+		//パッド右スティックカメラ視点移動
 		PadStickCamera();
 
 		// マウス情報の更新
@@ -1158,7 +1159,7 @@ void GamePlayScene::Update()
 			//地面の数だけ
 			for (auto& i : obj_ground) {
 				XMFLOAT3 pos = i.second->GetPosition();
-				pos.y = PosDef + num;//初期位置＋揺らす値
+				pos.y = groundPosDef + num;//初期位置＋揺らす値
 				i.second->SetPosition(pos);
 				num = -num;//二枚目は逆に揺らす
 
