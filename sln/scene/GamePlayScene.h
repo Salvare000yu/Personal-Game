@@ -202,8 +202,9 @@ private:
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
-	//黒画像を強くする値
-	const float colordec = 0.006f;
+	uint32_t pClearMoveCount = 120;//ボス撃破から自機移動開始まで
+	uint32_t clearPMoveFrame = 0;//クリア演出自機移動ふれ
+	XMFLOAT3 pBossBattlePos;
 
 	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;
@@ -246,6 +247,6 @@ private:
 	//実際に増やす値
 	const float DashVelIncDef = 6;
 	float DashVelInc = DashVelIncDef;
-
+	
 	//----自機ダッシュ
 };

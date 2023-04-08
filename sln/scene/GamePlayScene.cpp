@@ -407,9 +407,39 @@ void GamePlayScene::BossBodyRed()
 
 void GamePlayScene::BossDeathEffect()
 {
-	//もう移動攻撃しない
-	player_->pAtkPossibleFlag = false;
-	PDontMoveFlag = true;
+	pTracking = false;
+	camera->SetTrackingTarget(nullptr);
+
+	//{
+	//	const uint32_t frameMax = 60;//この時間かけて戻す
+	//	pRotReturnFrame++;
+	//	std::call_once(flag, f);
+	//	XMFLOAT3 rot{};
+	//	rot.x = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
+	//	rot.y = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
+	//	rot.z = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
+	//	player_->SetRotation(rot);
+	//	カメラ回転と自機の回転同時戻す
+
+	//		終わったら
+	//	//もう移動攻撃しない
+	//	if(pRotReturnFrame ==frameMax)
+	//	player_->pAtkPossibleFlag = false;
+	//	PDontMoveFlag = true;
+	//}
+
+	if (pClearMoveCount==0) {
+		const uint32_t frameMax = 120;//この時間かけて移動する
+		const float pClearMoveEndPos = pBossBattlePos.z + 2000;//ここまで移動
+		float raito = (float)clearPMoveFrame / frameMax;
+		++clearPMoveFrame;
+		XMFLOAT3 pos=player_->GetPosition();
+		pos.z = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
+		player_->SetPosition(pos);
+	}
+	else {
+		pClearMoveCount--;
+	}
 
 	//todo 決めうちなおす
 	if (boss_.front()->GetPosition().y < -150.f)
@@ -609,6 +639,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 		if ((pNextPlaceGoSp - DecelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;
+			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
 			player_->pAtkPossibleFlag = true;
 		}
@@ -1084,7 +1115,6 @@ void GamePlayScene::Update()
 	}
 	if (pTracking) {//todo stdfunctionするまでこうしとく
 		camera->SetTrackingTarget(player_.get());
-		//camera->SetTrackingTarget(nullptr);
 	}
 
 	//ポーズでないとき～
@@ -1173,7 +1203,11 @@ void GamePlayScene::Update()
 
 		if (gameReadyFlag==false)
 		{
-			UpdateCamera();
+			for (std::unique_ptr<Boss>& boss : boss_) {
+				if (boss->GetisDeath()==false) {
+					UpdateCamera();
+				}
+			}
 			PlayTimer();
 
 			//敵のHPバー
