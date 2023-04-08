@@ -198,14 +198,12 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
-	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/BlackWindow.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_blackwindow.reset(Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sp_ready->isInvisible = false;
 	sp_ready_go->isInvisible = true;
@@ -216,9 +214,6 @@ void GamePlayScene::Initialize()
 
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
-
-	//スプライトカラー
-	sp_blackwindow->SetColor({ 1, 1, 1, 0 });
 
 	// パーティクル初期化
 	ParticleManager::GetInstance()->SetCamera(camera.get());
@@ -412,17 +407,15 @@ void GamePlayScene::BossBodyRed()
 
 void GamePlayScene::BossDeathEffect()
 {
-	XMFLOAT4 color = sp_blackwindow->GetColor();
-	color.w += colordec;
-	sp_blackwindow->SetColor(color);
+	//もう移動攻撃しない
+	player_->pAtkPossibleFlag = false;
+	PDontMoveFlag = true;
 
 	//todo 決めうちなおす
 	if (boss_.front()->GetPosition().y < -150.f)
 	{
 		boss_.front()->SetAlive(false);
 	}
-
-	sp_blackwindow->Update();
 
 	//ボス撃破でクリア　Update内だと一瞬画面見えちゃうからここに
 	if (!boss_.front()->GetAlive()) {
@@ -979,7 +972,7 @@ void GamePlayScene::CollisionAll()
 
 //------------------------------↑当たり判定ZONE↑-----------------------------//
 
-bool GamePlayScene::GameReady()
+void GamePlayScene::GameReady()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
@@ -1016,6 +1009,10 @@ bool GamePlayScene::GameReady()
 			pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
 			player_->SetPosition(pos);
 
+			if (GameReadyFrame == frameMax) {
+				pTracking = true;
+			}
+
 			camera->SetTarget(pos);
 		}
 		else {
@@ -1039,20 +1036,16 @@ bool GamePlayScene::GameReady()
 			sp_ready_go->SetPosition({ GOPos });
 			sp_ready_go->Update();
 
-			camera->SetTrackingTarget(player_.get());
 			if (GOCol.w < 0.f) {//透明になったら
 				//アタック開始してよき
 				player_->pAtkPossibleFlag = true;
 				//動いていいよ
 				PDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
-
-				return false;
+				gameReadyFlag = false;//開始演出終わり
 			}
 		}
 	}
-
-	return true;
 }
 
 void GamePlayScene::BodyDamCoolTime()
@@ -1084,6 +1077,14 @@ void GamePlayScene::Update()
 			BaseScene* scene = new TitleScene();
 			sceneManager_->SetNextScene(scene);
 		}
+	}
+
+	if (gameReadyFlag == true) {
+		GameReady();
+	}
+	if (pTracking) {//todo stdfunctionするまでこうしとく
+		camera->SetTrackingTarget(player_.get());
+		//camera->SetTrackingTarget(nullptr);
 	}
 
 	//ポーズでないとき～
@@ -1170,7 +1171,7 @@ void GamePlayScene::Update()
 			firingline_->Update();//射線
 		}
 
-		if (GameReady() == false)
+		if (gameReadyFlag==false)
 		{
 			UpdateCamera();
 			PlayTimer();
@@ -1335,13 +1336,6 @@ void GamePlayScene::DrawUI()
 
 	sp_ready->Draw();
 	sp_ready_go->Draw();
-
-
-	for (auto& bo : boss_) {
-		if (bo->GetisDeath()) {
-			sp_blackwindow->Draw();
-		}
-	}
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画

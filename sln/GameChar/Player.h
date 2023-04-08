@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -16,14 +16,14 @@ class Player :public BaseObject
 	DirectX::XMVECTOR position{};
 private:
 	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//è‡ªæ©Ÿ
 
 	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//è‡ªæ©Ÿ
 
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -32,7 +32,7 @@ private:
 	Model* pBulModel = nullptr;
 	Model* pFiringLine = nullptr;
 
-	//UŒ‚‚ÌƒCƒ“ƒ^[ƒoƒ‹‚Ì‚½‚ß‚Ìƒtƒ‰ƒO ”­Ë‘O
+	//æ”»æ’ƒã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã®ãŸã‚ã®ãƒ•ãƒ©ã‚° ç™ºå°„å‰
 	bool AttackIntervalFlag = false;
 
 public:
@@ -41,16 +41,16 @@ public:
 
 	/*static Player* GetInstance();*/
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize() override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
-	//UŒ‚
+	//æ”»æ’ƒ
 	void Attack();
 
 	void Move();
@@ -59,78 +59,78 @@ public:
 
 	void PlayerDeath();
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
 	//PlayerBullet* bullet_ = nullptr;
-	std::list <std::unique_ptr<PlayerBullet>> bullets_;//ƒvƒŒƒCƒ„[‚Ì’e@ƒ†ƒj[ƒNƒ|ƒCƒ“ƒ^
+	std::list <std::unique_ptr<PlayerBullet>> bullets_;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¼¾ã€€ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒã‚¤ãƒ³ã‚¿
 
-	//’eƒŠƒXƒg‚ğæ“¾ gamescene‚É©’e‘İ‚·‚½‚ß
+	//å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾— gamesceneã«è‡ªå¼¾è²¸ã™ãŸã‚
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 	Player()
 		: lookVec(DirectX::XMVectorSet(0, 0, 1, 0)),
 		position(DirectX::XMVectorSet(0, 0, 0, 1)) {
 	}
-	//Œü‚«æ“¾
+	//å‘ãå–å¾—
 	inline const DirectX::XMVECTOR& GetLookVec() { return lookVec; }
 	inline DirectX::XMVECTOR GetPosVec() { return position; }
 
-	//UŒ‚ƒCƒ“ƒ^[ƒoƒ‹
+	//æ”»æ’ƒã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
 	static const int32_t AtkInterval = 15;
-	//UŒ‚ƒCƒ“ƒ^[ƒoƒ‹ƒ^ƒCƒ}[
+	//æ”»æ’ƒã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«ã‚¿ã‚¤ãƒãƒ¼
 	int32_t AtkInterval_ = AtkInterval;
 
-	//—h‚ê‚éŠÔ
+	//æºã‚Œã‚‹æ™‚é–“
 	static const int32_t pShakeTime = 60 / 2;
-	//—h‚ê‚½‚¢‚Ü[
+	//æºã‚ŒãŸã„ã¾ãƒ¼
 	int32_t pShakeTimer_ = pShakeTime;
 
-	//-------------------«‚°‚Á‚½[‚¹‚Á‚½[«-------------------//
-	//’eˆĞ—Í
+	//-------------------â†“ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†“-------------------//
+	//å¼¾å¨åŠ›
 	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
 	const float& GetpBulPow() { return pBulPower; }
-	//©‹@‘Ì—Í‚ª0‚æ‚è­‚È‚¢‚©
+	//è‡ªæ©Ÿä½“åŠ›ãŒ0ã‚ˆã‚Šå°‘ãªã„ã‹
 	void SetPHpLessThan0(bool isPHpLessThan0) { this->isPHpLessThan0 = isPHpLessThan0; }
-	//©‹@‘Ì—Í‚ª0‚æ‚è­‚È‚¢‚©
+	//è‡ªæ©Ÿä½“åŠ›ãŒ0ã‚ˆã‚Šå°‘ãªã„ã‹
 	const bool& GetPHpLessThan0() { return isPHpLessThan0; }
-	//©‹@ˆÀ”ÛŠm”F
+	//è‡ªæ©Ÿå®‰å¦ç¢ºèª
 	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
 	const bool& GetpDeath() { return PlayerDeathFlag; }
-	//-------------------ª‚°‚Á‚½[‚¹‚Á‚½[ª-------------------//
+	//-------------------â†‘ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†‘-------------------//
 
-	//©‹@‚ªUŒ‚‚Å‚«‚é‚æ‚¤‚É‚·‚é‚© true:UŒ‚‚Å‚«‚é
+	//è‡ªæ©ŸãŒæ”»æ’ƒã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã‹ true:æ”»æ’ƒã§ãã‚‹
 	bool pAtkPossibleFlag = false;
 
 private:
-	//©‹@’Êí’eˆĞ—Í
-	//const float pBulPowerMax = 100;
-	const float pBulPowerMax = 95;
+	//è‡ªæ©Ÿé€šå¸¸å¼¾å¨åŠ›
+	//const float pBulPowerMax = 95;
+	const float pBulPowerMax = 150;
 	float pBulPower = pBulPowerMax;
 
-	//©‹@‘Ì—Í‚ª0‚æ‚è­‚È‚¢‚Æ‚« false:@‚O‚æ‚è‘½‚¢
+	//è‡ªæ©Ÿä½“åŠ›ãŒ0ã‚ˆã‚Šå°‘ãªã„ã¨ã false:ã€€ï¼ã‚ˆã‚Šå¤šã„
 	bool isPHpLessThan0 = false;
 
 	const float pDeathRot = 0.4f;
 
-	//-----©‹@€–S‰‰o
+	//-----è‡ªæ©Ÿæ­»äº¡æ¼”å‡º
 	XMFLOAT3 pPosDeath = {};
-	float Nowframe = 0;//Œ»İƒtƒŒ
-	const float NecesFrame = 180.0f;//‚©‚©‚éŠÔ
-	XMFLOAT3 MoveSp = {};//ˆÚ“®‘¬“x
-	XMFLOAT3 TargetPos = { 0,-150,0 };//–Ú•WÀ•W
-	XMFLOAT3 NowPos = {};//‚»‚Ì‚ÌˆÊ’u
+	float Nowframe = 0;//ç¾åœ¨ãƒ•ãƒ¬
+	const float NecesFrame = 180.0f;//ã‹ã‹ã‚‹æ™‚é–“
+	XMFLOAT3 MoveSp = {};//ç§»å‹•é€Ÿåº¦
+	XMFLOAT3 TargetPos = { 0,-150,0 };//ç›®æ¨™åº§æ¨™
+	XMFLOAT3 NowPos = {};//ãã®æ™‚ã®ä½ç½®
 
 	float PartTimeInterval = 0;
-	float ParticleFrame = 39;//ƒp[ƒeƒBƒNƒ‹o‚·ƒtƒŒ
+	float ParticleFrame = 39;//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«å‡ºã™ãƒ•ãƒ¬
 
-	bool GetPosFlag = true;//ˆê“x‚«‚è‚ÌÀ•W“Ç‚İ‚İ
+	bool GetPosFlag = true;//ä¸€åº¦ãã‚Šã®åº§æ¨™èª­ã¿è¾¼ã¿
 
-	bool PlayerDeathFlag = false;//©‹@€–S@false:‚²‘¶–½
+	bool PlayerDeathFlag = false;//è‡ªæ©Ÿæ­»äº¡ã€€false:ã”å­˜å‘½
 
-	//—h‚ê
+	//æºã‚Œ
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 
-	//©‹@€–S‰‰o@false:”š”­‚µ‚Ä‚È‚¢
+	//è‡ªæ©Ÿæ­»äº¡æ¼”å‡ºæ™‚ã€€false:çˆ†ç™ºã—ã¦ãªã„
 	bool ExplosionFlag = false;
 };

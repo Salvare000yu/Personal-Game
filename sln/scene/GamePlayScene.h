@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseScene.h"
 #include "Sprite.h"
 #include "Object3d.h"
@@ -37,7 +37,7 @@ class GamePlayScene :public BaseScene, public BaseObject
 	};
 
 private:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public:
@@ -51,11 +51,11 @@ public:
 
 	void PadStickCamera();
 
-	void CollisionAll();//”»’è
+	void CollisionAll();//åˆ¤å®š
 
-	bool GameReady();//ŠJn‡}
+	void GameReady();//é–‹å§‹åˆå›³
 
-	void BodyDamCoolTime();//‘Ìƒ_ƒ[ƒWƒN[ƒ‹ƒ^ƒCƒ€
+	void BodyDamCoolTime();//ä½“ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ 
 
 	void Update() override;
 
@@ -64,25 +64,25 @@ public:
 
 	void PlayTimer();
 
-	void SmallEnemyCreate();	//G‹›“G¶¬
-	void SmallEnemyAppear();	//G‹›“GoŒ»
+	void SmallEnemyCreate();	//é›‘é­šæ•µç”Ÿæˆ
+	void SmallEnemyAppear();	//é›‘é­šæ•µå‡ºç¾
 
-	void BossConditionComp();//ƒ{ƒXíğŒ‚½‚Á‚¹‚¢
+	void BossConditionComp();//ãƒœã‚¹æˆ¦æ¡ä»¶ãŸã£ã›ã„
 
-	void DoorOpen();//”à‚ªŠJ‚­
-	void pHeadingToTheNextPlace();//Ÿ‚ÌêŠ‚Ös‚­
+	void DoorOpen();//æ‰‰ãŒé–‹ã
+	void pHeadingToTheNextPlace();//æ¬¡ã®å ´æ‰€ã¸è¡Œã
 	void BeforeBossAppear();
-	void BossBodyRed();//‘ÌÔ‚­‚·‚é
+	void BossBodyRed();//ä½“èµ¤ãã™ã‚‹
 	void BossDeathEffect();
 
 	void PlayerMove();
-	void PlayerDash();//ƒ_ƒbƒVƒ…
+	void PlayerDash();//ãƒ€ãƒƒã‚·ãƒ¥
 
 	void CoolTime();
 
 	float time = 0;
 
-	//w’èƒtƒŒ[ƒ€‚²‚Æ‚ÉG‹›oŒ»
+	//æŒ‡å®šãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«é›‘é­šå‡ºç¾
 	static const int SEneAppInterval = 60;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
@@ -92,17 +92,17 @@ public:
 	SmallEnemy* sEnemys_ = nullptr;
 	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
-	//—h‚ê‚éŠÔ
+	//æºã‚Œã‚‹æ™‚é–“
 	static const int32_t pShakeTime = 60 / 2;
-	//—h‚ê‚½‚¢‚Ü[
+	//æºã‚ŒãŸã„ã¾ãƒ¼
 	int32_t pShakeTimer_ = pShakeTime;
 
-	//©‹@ƒ_ƒ[ƒWƒtƒ‰ƒO ‹ò‚ç‚Á‚Ä‚È‚¢
+	//è‡ªæ©Ÿãƒ€ãƒ¡ãƒ¼ã‚¸ãƒ•ãƒ©ã‚° å–°ã‚‰ã£ã¦ãªã„
 	bool pDamFlag = false;
 
 	BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
 
-	//ƒ_ƒbƒVƒ…‚·‚é•ûŒü
+	//ãƒ€ãƒƒã‚·ãƒ¥ã™ã‚‹æ–¹å‘
 	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
 
 private:
@@ -111,23 +111,22 @@ private:
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
-	std::unique_ptr < Sprite> sp_blackwindow = nullptr;
 
-	std::unique_ptr < Model> mod_groundBottom = nullptr;//‚µ‚½’n–Ê
+	std::unique_ptr < Model> mod_groundBottom = nullptr;//ã—ãŸåœ°é¢
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
-	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//’n–Ê
-	std::unique_ptr < Model> mod_kaberight = nullptr;//•Ç
-	std::unique_ptr < Model> mod_kabeleft = nullptr;//•Ç
-	std::unique_ptr < Model> mod_smallenemy = nullptr;//G‹›“G
-	std::unique_ptr < Model> mod_playerbullet = nullptr;//©‹@’e
-	std::unique_ptr < Model> mod_enemybullet = nullptr;//“G’e
-	std::unique_ptr < Model> mod_bossaimbullet = nullptr;//“G‘_‚¢’e
-	std::unique_ptr < Model> mod_straightbul = nullptr;//’¼ü’e
-	std::unique_ptr < Model> mod_player = nullptr;// ©‹@
+	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//åœ°é¢
+	std::unique_ptr < Model> mod_kaberight = nullptr;//å£
+	std::unique_ptr < Model> mod_kabeleft = nullptr;//å£
+	std::unique_ptr < Model> mod_smallenemy = nullptr;//é›‘é­šæ•µ
+	std::unique_ptr < Model> mod_playerbullet = nullptr;//è‡ªæ©Ÿå¼¾
+	std::unique_ptr < Model> mod_enemybullet = nullptr;//æ•µå¼¾
+	std::unique_ptr < Model> mod_bossaimbullet = nullptr;//æ•µç‹™ã„å¼¾
+	std::unique_ptr < Model> mod_straightbul = nullptr;//ç›´ç·šå¼¾
+	std::unique_ptr < Model> mod_player = nullptr;// è‡ªæ©Ÿ
 	std::unique_ptr < Model> mod_enemy = nullptr;
 	std::unique_ptr < Model> mod_firingline = nullptr;
-	std::unique_ptr < Model> mod_tunnel = nullptr;//ƒgƒ“ƒlƒ‹
-	std::unique_ptr < Model> mod_backwall = nullptr;//‰¼ÅŒã‚Ì•Ç
+	std::unique_ptr < Model> mod_tunnel = nullptr;//ãƒˆãƒ³ãƒãƒ«
+	std::unique_ptr < Model> mod_backwall = nullptr;//ä»®æœ€å¾Œã®å£
 
 	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
@@ -135,115 +134,118 @@ private:
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 	std::unique_ptr < Object3d> obj_backwall = nullptr;
 
-	// ƒJƒƒ‰
+	// ã‚«ãƒ¡ãƒ©
 	std::unique_ptr<CameraTracking> camera;
 
-	//----ƒ|ƒXƒgƒGƒtƒFƒNƒgŠÖ˜A
-	//ƒ”ƒBƒlƒbƒg‹­‚³
+	//----ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆé–¢é€£
+	//ãƒ´ã‚£ãƒãƒƒãƒˆå¼·ã•
 	float vignettePow = 0;
 
-	//---’n–Ê
-	//’n–Ê“ñí—Ş‚ğã‰º‚É—h‚ç‚·
-	const float SwingDist = 10.f;//—h‚ç‚·‹——£
-	const float SwingSp = 4.f;//—h‚ç‚·‘¬“x
-	float groundPosDef = -200;//’n–Ê‚ğ’u‚­À•W@‚±‚±’†S‚Éã‰º
+	//---åœ°é¢
+	//åœ°é¢äºŒç¨®é¡ã‚’ä¸Šä¸‹ã«æºã‚‰ã™
+	const float SwingDist = 10.f;//æºã‚‰ã™è·é›¢
+	const float SwingSp = 4.f;//æºã‚‰ã™é€Ÿåº¦
+	float groundPosDef = -200;//åœ°é¢ã‚’ç½®ãåº§æ¨™ã€€ã“ã“ä¸­å¿ƒã«ä¸Šä¸‹
 
-	//<<<<<ŠJn‰‰o
-	//ƒQ[ƒ€ŠJnƒtƒŒ[ƒ€
+	//<<<<<é–‹å§‹æ™‚æ¼”å‡º
+	bool gameReadyFlag = true;//é–‹å§‹æ¼”å‡ºä¸­
+	//ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ãƒ•ãƒ¬ãƒ¼ãƒ 
 	int GameReadyFrame = 0;
-	//ŠJn©‹@À•W
+	//é–‹å§‹æ™‚è‡ªæ©Ÿåº§æ¨™
 	XMFLOAT3 ApStartPPos{};
-	//I—¹
+	//çµ‚äº†
 	XMFLOAT3 ApEndPPos{};
 
-	//GO‚ğ‚¾‚·ƒtƒ‰ƒO
-	bool ready_GOFlag = false;//false”ñ•\¦
-	//>>>>>ŠJn‰‰o
+	//GOã‚’ã ã™ãƒ•ãƒ©ã‚°
+	bool ready_GOFlag = false;//falseéè¡¨ç¤º
+	//>>>>>é–‹å§‹æ™‚æ¼”å‡º
 
 	uint32_t frame = 0;
 
-	//G‹›“GoŒ»—pƒJƒEƒ“ƒg
+	bool pTracking = false;//true:è‡ªæ©Ÿè¿½å¾“ä¸­
+
+	//é›‘é­šæ•µå‡ºç¾ç”¨ã‚«ã‚¦ãƒ³ãƒˆ
 	float SEneAppCount = 0;
 
-	//“GŒ‚”j”
+	//æ•µæ’ƒç ´æ•°
 	float sEnemyMurdersNum = 0;
-	//ƒ{ƒXí‚Ü‚Å‚Ì“GEŠQ•K—v”
+	//ãƒœã‚¹æˆ¦ã¾ã§ã®æ•µæ®ºå®³å¿…è¦æ•°
 	float BossTermsEMurdersNum = 0;
-	//ƒ{ƒXoŒ»ğŒ’B¬I
+	//ãƒœã‚¹å‡ºç¾æ¡ä»¶é”æˆï¼
 	bool BossEnemyAdvent = false;
-	//ƒ{ƒXoŒ»‘O‰‰oƒtƒ‰ƒO
+	//ãƒœã‚¹å‡ºç¾å‰æ¼”å‡ºãƒ•ãƒ©ã‚°
 	bool BeforeBossAppearFlag = false;
-	//true:¡‚â‚Á‚Ä‚é
+	//true:ä»Šã‚„ã£ã¦ã‚‹
 	bool BeforeBossAppearNow = false;
 
-	//ƒ{ƒXƒ_ƒ[ƒWó‚¯‚½‘ÌÔ‚­‚·‚é false:‚­‚ç‚Á‚Ä‚È‚¢
+	//ãƒœã‚¹ãƒ€ãƒ¡ãƒ¼ã‚¸å—ã‘ãŸæ™‚ä½“èµ¤ãã™ã‚‹ false:ãã‚‰ã£ã¦ãªã„
 	bool BossDamFlag = false;
-	//Ô‚­‚·‚éŠÔ
+	//èµ¤ãã™ã‚‹æ™‚é–“
 	const int BossBodyRedTimeDef = 10;
 	int BossBodyRedTime = BossBodyRedTimeDef;
-	//Ô‚©‚ç–ß‚µ‚Ä‚¢‚­F
-	float ReCol = 0.f;//Ôó‘Ô
-	float ReColVal = 0.05f;//–ß‚·”’l
+	//èµ¤ã‹ã‚‰æˆ»ã—ã¦ã„ãè‰²
+	float ReCol = 0.f;//èµ¤çŠ¶æ…‹
+	float ReColVal = 0.05f;//æˆ»ã™æ•°å€¤
 
-	//ƒ{ƒX‚Ì‘Ì‚ÆÕ“Ëƒ_ƒ[ƒWƒN[ƒ‹ƒ^ƒCƒ€ false:‹ò‚ç‚¤‘O
+	//ãƒœã‚¹ã®ä½“ã¨è¡çªãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ  false:å–°ã‚‰ã†å‰
 	bool BodyDamFlag = false;
-	//ª‚ÌƒN[ƒ‹ƒ^ƒCƒ€ƒJƒEƒ“ƒg
+	//â†‘ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã‚«ã‚¦ãƒ³ãƒˆ
 	const int BodyDamCountDef = 30;
 	uint32_t BodyDamCount = BodyDamCountDef;
 
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 
-	int BBPaternCount = 0;//1¨0‚Å++
+	int BBPaternCount = 0;//1â†’0ã§++
 
-	bool AlertSoundFlag = true;//Œx‰¹ŒJ‚è•Ô‚µ‚Éˆê‰ñ‚Ì‚İ
+	bool AlertSoundFlag = true;//è­¦å‘ŠéŸ³ç¹°ã‚Šè¿”ã—ã«ä¸€å›ã®ã¿
 
-	bool pRotDef = false;//ƒJƒƒ‰Å‰‚Éƒ}ƒEƒX‚ÌêŠ‚ÅƒYƒŒ‚¿‚á‚¤‚©‚çˆê“x³–Ê‚ÉŒü‚¯‚é
+	bool pRotDef = false;//ã‚«ãƒ¡ãƒ©æœ€åˆã«ãƒã‚¦ã‚¹ã®å ´æ‰€ã§ã‚ºãƒ¬ã¡ã‚ƒã†ã‹ã‚‰ä¸€åº¦æ­£é¢ã«å‘ã‘ã‚‹
 
-	//•‰æ‘œ‚ğ‹­‚­‚·‚é’l
+	//é»’ç”»åƒã‚’å¼·ãã™ã‚‹å€¤
 	const float colordec = 0.006f;
 
-	//ƒ_ƒ[ƒW‰æ–Ê’[Ô‚­@falseF‚Ü‚¾‚â‚Á‚Ä‚È‚¢
+	//ãƒ€ãƒ¡ãƒ¼ã‚¸ç”»é¢ç«¯èµ¤ãã€€falseï¼šã¾ã ã‚„ã£ã¦ãªã„
 	bool DamEfRedFlag = false;
 
-	//©‹@“®‚­‚Èƒtƒ‰ƒO true:“® ‚­ ‚È@false:“®‚¢‚Ä‚æ‚¢
+	//è‡ªæ©Ÿå‹•ããªãƒ•ãƒ©ã‚° true:å‹• ã ãªã€€false:å‹•ã„ã¦ã‚ˆã„
 	bool PDontMoveFlag = true;
 
-	bool DoorOpenFlag = false;//”àŠJ‚¯‚Ä‚È‚¢
+	bool DoorOpenFlag = false;//æ‰‰é–‹ã‘ã¦ãªã„
 
-	//Ÿ‚ÌêŠ‚Ös‚­ƒXƒs[ƒh
+	//æ¬¡ã®å ´æ‰€ã¸è¡Œãã‚¹ãƒ”ãƒ¼ãƒ‰
 	const float pNextPlaceGoSpMax = 10.f;
 	float pNextPlaceGoSp = 2.f;
-	float AccelVal = 0.1f;//‰Á‘¬’l
-	float DecelVal = 0.2f;//Œ¸‘¬’l
+	float AccelVal = 0.1f;//åŠ é€Ÿå€¤
+	float DecelVal = 0.2f;//æ¸›é€Ÿå€¤
 
-	//—^‚¦‚éˆĞ—Í
+	//ä¸ãˆã‚‹å¨åŠ›
 	float Damage{};
 
 	std::vector<std::vector<std::string>> csvData;
-	//‰½s–Ú‚Ü‚Åo‚µ‚½‚©
+	//ä½•è¡Œç›®ã¾ã§å‡ºã—ãŸã‹
 	int seIndex = -1;
 
-	//----©‹@ƒ_ƒbƒVƒ…
-	//false:‚µ‚Ä‚È‚¢
+	//----è‡ªæ©Ÿãƒ€ãƒƒã‚·ãƒ¥
+	//false:ã—ã¦ãªã„
 	bool DashFlag = false;
-	//ƒ_ƒbƒVƒ…ŠÔ
+	//ãƒ€ãƒƒã‚·ãƒ¥æ™‚é–“
 	const uint32_t DashCountDef = 30;
 	uint32_t DashCount = DashCountDef;
-	//ƒ_ƒbƒVƒ…ƒJƒEƒ“ƒg‚ª‚±‚Ì•ªˆø‚¢‚½’l‚É‚È‚Á‚½‚çŒ¸Š
+	//ãƒ€ãƒƒã‚·ãƒ¥ã‚«ã‚¦ãƒ³ãƒˆãŒã“ã®åˆ†å¼•ã„ãŸå€¤ã«ãªã£ãŸã‚‰æ¸›è¡°
 	const int DashAttenuation = 10;
-	bool DashAttenuationFlag = false;//Œ¸ŠŠJn fasle:‚Ü‚¾‚µ‚Ä‚È‚¢
-	//Œ¸Š”’l
+	bool DashAttenuationFlag = false;//æ¸›è¡°é–‹å§‹ fasle:ã¾ã ã—ã¦ãªã„
+	//æ¸›è¡°æ•°å€¤
 	float Attenuation = -0.2f;
-	//ƒ_ƒbƒVƒ…ƒN[ƒ‹ƒCƒ“ƒ^[ƒoƒ‹
+	//ãƒ€ãƒƒã‚·ãƒ¥ã‚¯ãƒ¼ãƒ«ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
 	const int DashIntervalDef = 40;
 	int DashInterval = DashIntervalDef;
-	bool DashIntervalFlag = false;//false:Œv‘ª‘O true:ƒ_ƒbƒVƒ…‚Å‚«‚È‚¢
-	//ƒ_ƒbƒVƒ…‘¬“x
+	bool DashIntervalFlag = false;//false:è¨ˆæ¸¬å‰ true:ãƒ€ãƒƒã‚·ãƒ¥ã§ããªã„æ™‚
+	//ãƒ€ãƒƒã‚·ãƒ¥é€Ÿåº¦
 	XMFLOAT3 DashVel = { 0,0,0 };
-	//ÀÛ‚É‘‚â‚·’l
+	//å®Ÿéš›ã«å¢—ã‚„ã™å€¤
 	const float DashVelIncDef = 6;
 	float DashVelInc = DashVelIncDef;
 
-	//----©‹@ƒ_ƒbƒVƒ…
+	//----è‡ªæ©Ÿãƒ€ãƒƒã‚·ãƒ¥
 };
