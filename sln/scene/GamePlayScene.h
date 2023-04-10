@@ -46,28 +46,39 @@ public:
 
 	void Finalize() override;
 
+	void GroundMove();
+
 	void UpdateMouse();
 	void UpdateCamera();
 
+	//-----シーン移動
+	void ChangeGameOverScene();//ゲームオーバーシーンへ
+
 	void PadStickCamera();
+
+	void PlayerErase();//自機死亡時消す
 
 	void CollisionAll();//判定
 
-	void GameReady();//開始合図
-
 	void BodyDamCoolTime();//体ダメージクールタイム
+
+	//std::func
+	void GameReadyUpdate();//開始前
+	void SmallEnemyBattleUpdate();//雑魚戦
+	void BossBattleReadyUpdate();//ボス戦開始前
+	void BossBattleUpdate();//ボス戦
+	void AfterBossBattleUpdate();//ボス撃破後
 
 	void Update() override;
 
 	void Draw() override;
 	void DrawUI() override;
 
-	void PlayTimer();
+	void SmallEnemyCreate();//雑魚敵生成
+	void SmallEnemyAppear();//雑魚敵出現
+	void SmallEnemyAimBul();//雑魚的狙い弾
 
-	void SmallEnemyCreate();	//雑魚敵生成
-	void SmallEnemyAppear();	//雑魚敵出現
-
-	void BossConditionComp();//ボス戦条件たっせい
+	//void BossConditionComp();//ボス戦条件たっせい
 
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
@@ -81,6 +92,8 @@ public:
 	void CoolTime();
 
 	float time = 0;
+
+	std::function<void()> updatePattern;
 
 	//指定フレームごとに雑魚出現
 	static const int SEneAppInterval = 60;
@@ -148,7 +161,7 @@ private:
 	float groundPosDef = -200;//地面を置く座標　ここ中心に上下
 
 	//<<<<<開始時演出
-	bool gameReadyFlag = true;//開始演出中
+	//bool gameReadyFlag = true;//開始演出中
 	//ゲーム開始時フレーム
 	int GameReadyFrame = 0;
 	//開始時自機座標
@@ -170,7 +183,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 1;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ
