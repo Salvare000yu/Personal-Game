@@ -205,6 +205,8 @@ private:
 	uint32_t pClearMoveCount = 120;//ボス撃破から自機移動開始まで
 	uint32_t clearPMoveFrame = 0;//クリア演出自機移動ふれ
 	XMFLOAT3 pBossBattlePos;
+	uint32_t pRotReturnFrame = 0;
+	XMFLOAT3 pClearRot;//ボス撃破時自機回転
 
 	//ダメージ画面端赤く　false：まだやってない
 	bool DamEfRedFlag = false;

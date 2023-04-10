@@ -407,26 +407,25 @@ void GamePlayScene::BossBodyRed()
 
 void GamePlayScene::BossDeathEffect()
 {
-	pTracking = false;
-	camera->SetTrackingTarget(nullptr);
-
-	//{
-	//	const uint32_t frameMax = 60;//この時間かけて戻す
-	//	pRotReturnFrame++;
-	//	std::call_once(flag, f);
-	//	XMFLOAT3 rot{};
-	//	rot.x = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
-	//	rot.y = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
-	//	rot.z = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
-	//	player_->SetRotation(rot);
-	//	カメラ回転と自機の回転同時戻す
-
-	//		終わったら
-	//	//もう移動攻撃しない
-	//	if(pRotReturnFrame ==frameMax)
-	//	player_->pAtkPossibleFlag = false;
-	//	PDontMoveFlag = true;
-	//}
+	{
+		//カメラ回転と自機の回転同時戻す
+		const uint32_t frameMax = 60;//この時間かけて戻す
+		if (!(pRotReturnFrame == frameMax)) {
+			pRotReturnFrame++;
+			float raito = (float)pRotReturnFrame / frameMax;
+			XMFLOAT3 rot{};
+			rot.x = std::lerp(pClearRot.x, 0.f, raito);
+			rot.y = std::lerp(pClearRot.y, 0.f, raito);
+			rot.z = std::lerp(pClearRot.z, 0.f, raito);
+			player_->SetRotation(rot);
+		}//終わったらもう移動攻撃しない
+		else {
+			player_->pAtkPossibleFlag = false;
+			PDontMoveFlag = true;
+			pTracking = false;
+			camera->SetTrackingTarget(nullptr);
+		}
+	}
 
 	if (pClearMoveCount==0) {
 		const uint32_t frameMax = 120;//この時間かけて移動する
@@ -802,6 +801,8 @@ void GamePlayScene::CollisionAll()
 						if (NowBoHp <= 0) {
 							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
 							bo->SetisDeath(true);
+							XMFLOAT3 pRot = player_->GetRotation();
+							pClearRot = pRot;//ボス撃破時自機どれくらい回転してたか
 							//残っている雑魚敵はもういらない
 							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
 								bob->SetAlive(false);//消す
