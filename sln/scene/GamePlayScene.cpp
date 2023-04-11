@@ -1075,7 +1075,6 @@ void GamePlayScene::GameReadyUpdate()
 				//動いていいよ
 				PDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
-				//gameReadyFlag = false;//開始演出終わり
 				//次は雑魚戦
 				updatePattern = std::bind(&GamePlayScene::SmallEnemyBattleUpdate, this);
 			}
@@ -1090,10 +1089,6 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	UpdateCamera();
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
-
-	if (player_->GetpDeath()) {
-		PlayerErase();//自機死亡時消す
-	}
 
 	//雑魚敵更新
 	if (BossEnemyAdvent == false)
@@ -1116,17 +1111,18 @@ void GamePlayScene::BossBattleReadyUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 
-	////撃破数達成でボス戦
-	//if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
 	CharParameters* charParams = CharParameters::GetInstance();
 
+	//雑魚敵更新
+	if (BossEnemyAdvent == false)
+	{
+		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+			smallEnemy->Update();
+		}
+	}
 	//残っている雑魚敵はもういらない
 	for (auto& se : smallEnemys_) {//いる雑魚敵の分だけ
 		se->SetAlive(false);//消す
-		//雑魚敵弾も消す
-		for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
-			seb->SetAlive(false);
-		}
 	}
 
 	//ボス戦前の演出
@@ -1153,7 +1149,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	}
 	//アラート画像
 	sp_beforeboss->Update();
-	//}
+	charParams->boHpUpdate();
 }
 
 void GamePlayScene::BossBattleUpdate()
@@ -1183,16 +1179,17 @@ void GamePlayScene::BossBattleUpdate()
 		boss->Update();//ボス更新
 
 		if (boss->GetisDeath()) {
-			BossDeathEffect();//死亡条件達成で死亡時えふぇくと
+			updatePattern = std::bind(&GamePlayScene::AfterBossBattleUpdate, this);//ボス撃破
 		}
 	}
 }
 
 void GamePlayScene::AfterBossBattleUpdate()
 {
-
-
-
+	for (std::unique_ptr<Boss>& boss : boss_) {
+		boss->Update();//ボス更新
+	}
+	BossDeathEffect();//死亡条件達成で死亡時えふぇくと
 }
 
 void GamePlayScene::BodyDamCoolTime()
@@ -1227,9 +1224,6 @@ void GamePlayScene::Update()
 
 	UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
-	//if (gameReadyFlag == true) {
-	//	GameReadyUpdate();
-	//}
 	if (pTracking) {
 		camera->SetTrackingTarget(player_.get());
 	}
@@ -1253,13 +1247,6 @@ void GamePlayScene::Update()
 
 		DxBase* dxBase = DxBase::GetInstance();
 
-		//float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
-		//float BossDefense = charParams->GetBossDefense();//ボス防御力取得
-		//float NowpHp = charParams->GetNowpHp();//自機体力取得
-
-		//float pMaxHp = charParams->GetpMaxHp();
-		//float boMaxHp = charParams->GetboMaxHp();
-
 		//自機のHPバー
 		charParams->pHpSizeChange();
 
@@ -1274,31 +1261,16 @@ void GamePlayScene::Update()
 				PlayerDash();
 			}
 		}
+		if (player_->GetpDeath()) {
+			PlayerErase();//自機死亡時消す
+		}
 
-		////パッド右スティックカメラ視点移動
-		//PadStickCamera();
-
-		// マウス情報の更新
-		//UpdateMouse();
 		// カメラの更新
 		camera->Update();
 
 		//メンバ関数ポインタ呼び出し
 		updatePattern();
 
-		////3dobjUPDATE
-		//{
-		//	float num = std::sin((float)time * SwingSp) * SwingDist;
-		//	//地面の数だけ
-		//	for (auto& i : obj_ground) {
-		//		XMFLOAT3 pos = i.second->GetPosition();
-		//		pos.y = groundPosDef + num;//初期位置＋揺らす値
-		//		i.second->SetPosition(pos);
-		//		num = -num;//二枚目は逆に揺らす
-
-		//		i.second->Update();
-		//	}
-		//}
 		GroundMove();//地面揺らす
 		obj_groundBottom->Update();
 		obj_kaberight->Update();
@@ -1317,44 +1289,9 @@ void GamePlayScene::Update()
 			firingline_->Update();//射線
 		}
 
-		//if (gameReadyFlag==false)
-		//{
-		//for (std::unique_ptr<Boss>& boss : boss_) {
-		//	if (boss->GetisDeath() == false) {
-		//		UpdateCamera();
-		//	}
-		//}
-
-		////敵のHPバー
-		//if (BossEnemyAdvent)
-		//{
-		//	charParameters->boHpSizeChange();
-		//}
-
-		//SmallEnemyAppear();//雑魚的出現関数
-
-		////------狙い弾↓
-		////雑魚敵の撃つ弾がプレイヤーのいた場所に飛んでいく
-		//for (auto& se : smallEnemys_) {
-		//	//ターゲット
-		//	se->SetShotTag(player_.get());
-		//}
-		//for (auto& bo : boss_) {
-		//	bo->SetShotTag(player_.get());
-		//}
-		//------狙い弾↑
-
-		////自機側で死亡確認したら消す
-		//if (player_->GetpDeath()) {
-		//	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
-		//	player_->SetAlive(false);
-		//}
 		//----------------↓シーン切り替え関連↓----------------//
 		//自機HP0でゲームオーバー
 		if (!player_->GetAlive()) {
-			//GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");//BGMやめ
-			//BaseScene* scene = new GameOver();
-			//sceneManager_->SetNextScene(scene);
 			ChangeGameOverScene();
 		}
 		//----------------↑シーン切り替え関連↑---------------//
@@ -1371,27 +1308,6 @@ void GamePlayScene::Update()
 		// パーティクル更新
 		ParticleManager::GetInstance()->Update();
 
-		////雑魚敵更新
-		//if (BossEnemyAdvent == false)
-		//{
-		//	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-		//		smallEnemy->Update();
-		//	}
-		//}
-		
-		////ボス戦条件達成でボス戦行くための準備
-		//BossConditionComp();
-
-		// FBX Update
-		//fbxObject_1->Update();
-
-		//sp_beforeboss->Update();
-		////敵のHPバー
-		//if (BossEnemyAdvent && NowBoHp > 0)
-		//{
-		//	charParameters->boHpUpdate();
-		//}
-		//}
 	}//ここまでポーズしてないとき
 
 	//くらったらクールタイム
