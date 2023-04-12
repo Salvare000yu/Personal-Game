@@ -7,7 +7,6 @@
 #include "FbxLoader.h"
 #include "Timer.h"
 #include "DxBase.h"
-#include "ParticleManager.h"
 #include "CharParameters.h"
 #include "Pause.h"
 #include "SceneChangeDirection.h"
@@ -77,6 +76,8 @@ void GamePlayScene::Initialize()
 	camera.reset(new CameraTracking());
 
 	Object3d::SetCamera(camera.get());
+
+	particle.reset(new ParticleManager());
 
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
@@ -218,7 +219,7 @@ void GamePlayScene::Initialize()
 	sprite_back->SetPosition({ -11400,0,0 });
 
 	// パーティクル初期化
-	ParticleManager::GetInstance()->SetCamera(camera.get());
+	particle->SetCamera(camera.get());
 
 	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
 
@@ -227,7 +228,7 @@ void GamePlayScene::Initialize()
 	timer->TimerPlay(false);
 
 	//今あるパーティクルを削除する
-	ParticleManager::GetInstance()->DeleteParticles();
+	particle->DeleteParticles();
 }
 
 void GamePlayScene::Finalize()
@@ -780,7 +781,7 @@ void GamePlayScene::CollisionAll()
 
 						//喰らってまだ生きてたら
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
-							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
+							particle->CreateParticle(boPos, 100, 50, 5);
 							bo->BossDamageEffectFlag = true;//くらい演出オン
 						}
 						Damage = pBulPow - BossDefense;
@@ -829,7 +830,7 @@ void GamePlayScene::CollisionAll()
 					sEnemyMurdersNum++;//撃破数
 					// パーティクルの発生
 					XMFLOAT3 sePos = se->GetPosition();
-					ParticleManager::GetInstance()->CreateParticle(sePos, 300, 80, 5);
+					particle->CreateParticle(sePos, 300, 80, 5);
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
@@ -1279,7 +1280,7 @@ void GamePlayScene::Update()
 		}
 
 		// パーティクル更新
-		ParticleManager::GetInstance()->Update();
+		particle->Update();
 
 	}//ここまでポーズしてないとき
 
@@ -1332,7 +1333,7 @@ void GamePlayScene::Draw()
 
 	// パーティクル描画
 	DxBase* dxBase = DxBase::GetInstance();
-	ParticleManager::GetInstance()->Draw(dxBase->GetCmdList());
+	particle->Draw(dxBase->GetCmdList());
 
 	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
 

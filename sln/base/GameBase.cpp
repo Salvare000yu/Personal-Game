@@ -72,8 +72,6 @@ void GameBase::Initialize()
 	gameSound = GameSound::GetInstance();
 	gameSound->Initialize();
 
-	ParticleManager::GetInstance()->Initialize(dxBase->GetDevice());
-
 	//3dオブジェクト静的初期化
 	Object3d::StaticInitialize(dxBase->GetDevice(), camera);
 

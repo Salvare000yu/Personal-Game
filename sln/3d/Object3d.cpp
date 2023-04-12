@@ -198,9 +198,6 @@ void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 
 	// コマンドリストをセット
 	Object3d::cmdList = cmdList;
-
-	// プリミティブ形状を設定
-	Object3d::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Object3d::PostDraw()
@@ -302,6 +299,8 @@ void Object3d::Draw()
 		return;
 	}
 
+	// プリミティブ形状を設定
+	Object3d::cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelineSet.pipelinestate.Get());
 	// ルートシグネチャの設定

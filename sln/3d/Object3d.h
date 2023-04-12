@@ -85,6 +85,11 @@ public: // 静的メンバ関数
 		Object3d::camera = camera;
 	}
 
+	static Camera* GetCamera()
+	{
+		return Object3d::camera;
+	}
+
 private: // 静的メンバ変数
 
 	//カメラ初期化

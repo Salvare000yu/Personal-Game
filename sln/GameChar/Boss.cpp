@@ -5,6 +5,7 @@
 #include "DebugText.h"
 #include "ParticleManager.h"
 #include "CharParameters.h"
+#include "DxBase.h"
 
 #include <DirectXMath.h>
 
@@ -906,7 +907,7 @@ void Boss::Death() {
 	if (PartTimeInterval == 1) {
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
+		particle->CreateParticle(NowPos, 100, 80, 10);
 		PartTimeInterval = 0;
 		ParticleFrame = 0;
 	}
@@ -915,6 +916,9 @@ void Boss::Death() {
 
 void Boss::Initialize()
 {
+	particle.reset(new ParticleManager());
+	particle->SetCamera(this->obj->GetCamera());
+
 	mod_core.reset(Model::LoadFromOBJ("boss_core"));
 	mod_AroundCore.reset(Model::LoadFromOBJ("boss_AroundCore"));
 	mod_outside.reset(Model::LoadFromOBJ("boss_outside"));
@@ -1069,6 +1073,9 @@ void Boss::Update()
 	obj_SideSquare->Update();
 	obj_UpDown->Update();
 	obj_VerticalCircle->Update();
+
+	// パーティクル更新
+	particle->Update();
 }
 
 void Boss::Draw()
@@ -1093,4 +1100,6 @@ void Boss::Draw()
 		obj_UpDown->Draw();
 		obj_VerticalCircle->Draw();
 	}
+	DxBase* dxBase = DxBase::GetInstance();
+	particle->Draw(dxBase->GetCmdList());
 }

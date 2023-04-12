@@ -5,6 +5,7 @@
 #include "PlayerBullet.h"
 #include "BaseObject.h"
 #include "PlayerFireLine.h"
+#include "ParticleManager.h"
 
 #include <memory>
 #include <list>//STL
@@ -102,6 +103,9 @@ public:
 	bool pAtkPossibleFlag = false;
 
 private:
+	//パーティクル
+	std::unique_ptr< ParticleManager> particle;
+
 	//自機通常弾威力
 	//const float pBulPowerMax = 95;
 	const float pBulPowerMax = 150;

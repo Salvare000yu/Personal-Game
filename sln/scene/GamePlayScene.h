@@ -6,6 +6,7 @@
 #include "CameraTracking.h"
 
 #include "Camera.h"
+#include "ParticleManager.h"
 
 #include "FbxObject3d.h"
 
@@ -146,6 +147,8 @@ private:
 
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
+	//パーティクル
+	std::unique_ptr< ParticleManager> particle;
 
 	//----ポストエフェクト関連
 	//ヴィネット強さ

@@ -5,16 +5,11 @@
 #include "CharParameters.h"
 #include "ParticleManager.h"
 #include "DebugText.h"
+#include "DxBase.h"
 
 #include <DirectXMath.h>
 
 using namespace DirectX;
-
-//Player* Player::GetInstance()
-//{
-//	static Player instance;
-//	return &instance;
-//}
 
 void Player::Attack()
 {
@@ -189,7 +184,7 @@ void Player::PlayerDeath()
 		ExplosionFlag = true;
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		ParticleManager::GetInstance()->CreateParticle(NowPos, 50, 30, 10);
+		particle->CreateParticle(NowPos, 50, 30, 10);
 		PartTimeInterval = 0;
 		ParticleFrame = 0;
 	}
@@ -215,7 +210,8 @@ void Player::PlayerDeath()
 
 void Player::Initialize()
 {
-	//定義とか仮おいておこう
+	particle.reset(new ParticleManager());
+	particle->SetCamera(this->obj->GetCamera());
 
 	//作る
 	obj.reset(Object3d::Create());
@@ -254,7 +250,7 @@ void Player::Update()
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
-		ParticleManager::GetInstance()->Add(30, bullet->GetPosition(), { 0,0,0 }, { 0,0,0 }, 50.f, 0.f);
+		particle->Add(30, bullet->GetPosition(), { 0,0,0 }, { 0,0,0 }, 50.f, 0.f);
 	}
 
 	//生きててHp０いじょうなら
@@ -278,6 +274,9 @@ void Player::Update()
 		}
 	}
 
+	// パーティクル更新
+	particle->Update();
+
 	obj->Update();
 }
 
@@ -294,4 +293,6 @@ void Player::Draw()
 	{
 		obj->Draw();
 	}
+	DxBase* dxBase = DxBase::GetInstance();
+	particle->Draw(dxBase->GetCmdList());
 }

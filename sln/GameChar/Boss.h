@@ -6,6 +6,7 @@
 #include "BossAimBul.h"
 #include "BossStraightBul.h"
 #include "BaseObject.h"
+#include "ParticleManager.h"
 
 #include <memory>
 #include <functional>
@@ -164,6 +165,9 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+
+	//パーティクル
+	std::unique_ptr< ParticleManager> particle;
 
 	//フレーム
 	float frame = 0;
