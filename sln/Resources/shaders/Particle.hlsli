@@ -1,18 +1,20 @@
 cbuffer cbuff0 : register(b0)
 {
-	matrix mat; // ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ
-	matrix matBillboard; // ƒrƒ‹ƒ{[ƒhs—ñ
+	matrix mat; // ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—
+	matrix matBillboard; // ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰è¡Œåˆ—
 };
 
-// ’¸“_ƒVƒF[ƒ_[‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[‚Ö‚Ì‚â‚èæ‚è‚Ég—p‚·‚é\‘¢‘Ì
+// é ‚ç‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‹ã‚‰ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¸ã®ã‚„ã‚Šå–ã‚Šã«ä½¿ç”¨ã™ã‚‹æ§‹é€ ä½“
 struct VSOutput
 {
-	float4 pos : POSITION; // ’¸“_À•W
-	float scale : TEXCOORD; // ƒXƒP[ƒ‹
+	float4 pos : POSITION; // é ‚ç‚¹åº§æ¨™
+	float scale : TEXCOORD; // ã‚¹ã‚±ãƒ¼ãƒ«
+	float3 color : COLOR;	// è‰²
 };
 
 struct GSOutput
 {
-	float4 svpos : SV_POSITION; // ƒVƒXƒeƒ€—p’¸“_À•W
-	float2 uv : TEXCOORD; // uv’l
+	float4 svpos : SV_POSITION; // ã‚·ã‚¹ãƒ†ãƒ ç”¨é ‚ç‚¹åº§æ¨™
+	float2 uv : TEXCOORD; // uvå€¤
+	float3 color : COLOR;	// è‰²
 };

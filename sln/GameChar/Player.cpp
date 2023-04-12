@@ -250,7 +250,12 @@ void Player::Update()
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
-		particle->Add(30, bullet->GetPosition(), { 0,0,0 }, { 0,0,0 }, 50.f, 0.f);
+		particle->Add(30,
+			bullet->GetPosition(),
+			{ 0,0,0 },
+			{ 0,0,0 },
+			50.f, 0.f,
+			{ 0,1,1 }, { 1,0,1 });
 	}
 
 	//生きててHp０いじょうなら

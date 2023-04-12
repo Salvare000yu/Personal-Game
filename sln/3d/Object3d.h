@@ -137,6 +137,17 @@ public: // メンバ関数
 	const XMFLOAT4& GetColor() { return color; }
 
 	/// <summary>
+	/// ワールド行列からワールド座標を抽出する
+	/// </summary>
+	/// <returns>ワールド座標</returns>
+	XMFLOAT3 GetWorldPos()
+	{
+		return XMFLOAT3(matWorld.r[3].m128_f32[0],
+						matWorld.r[3].m128_f32[1],
+						matWorld.r[3].m128_f32[2]);
+	}
+
+	/// <summary>
 	/// 座標の設定
 	/// </summary>
 	/// <param name="position">座標</param>

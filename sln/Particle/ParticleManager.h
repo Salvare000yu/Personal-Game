@@ -29,6 +29,7 @@ public: // サブクラス
 	{
 		XMFLOAT3 pos; // xyz座標
 		float scale; // スケール
+		XMFLOAT3 color; // 色
 	};
 
 	// 定数バッファ用データ構造体
@@ -116,7 +117,14 @@ public: // メンバ関数
 	/// <param name="accel">加速度</param>
 	/// <param name="start_scale">開始時スケール</param>
 	/// <param name="end_scale">終了時スケール</param>
-	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale);
+	/// <param name="startColor">開始時色</param>
+	/// <param name="endColor">終了時色</param>
+	void Add(int life,
+		XMFLOAT3 position,
+		XMFLOAT3 velocity,
+		XMFLOAT3 accel,
+		float start_scale, float end_scale,
+		XMFLOAT3 startColor = { 1,1,1 }, XMFLOAT3 endColor = { 1,1,1 });
 
 	/// <summary>
 	/// デスクリプタヒープの初期化
