@@ -68,6 +68,8 @@ public:
 	void DiffusionAttackEavenNumber();
 	//直線攻撃
 	void StraightAttack();
+	//くらい演出　体赤く
+	void DamageEffect();
 
 	void Death();
 
@@ -88,6 +90,8 @@ public:
 	//float ApproachLim;
 	//離れられる距離
 	float LeaveLim = 90;
+
+	bool BossDamageEffectFlag = false;//ダメージ演出　false:やってない
 
 	std::function<void()> actionPattern;
 
@@ -361,7 +365,7 @@ private:
 	//
 	//-------AfterPlungeInto
 
-	//---シェイク
+	//<<<<<<シェイク
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 	//いた場所保存 false:保存前
@@ -370,4 +374,13 @@ private:
 	bool isShakeFinished = false;
 	//いた場所
 	XMFLOAT3 posMem = {};
+	//>>>>>>シェイク
+
+	//<<<<<<ダメージ受けた時体赤くする演出
+	const int BossBodyRedTimeDef = 10;
+	int BossBodyRedTime = BossBodyRedTimeDef;
+	//赤から戻していく色
+	float ReCol = 0.f;//赤状態
+	float ReColVal = 0.05f;//戻す数値
+	//>>>>>>ダメージ受けた時体赤くする演出
 };

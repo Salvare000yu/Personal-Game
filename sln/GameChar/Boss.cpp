@@ -857,6 +857,25 @@ void Boss::StraightAttack()
 	straightBullets_.push_back(std::move(madeBullet));
 }
 
+void Boss::DamageEffect()
+{
+	BossBodyRedTime--;//この時間赤くする
+
+	XMFLOAT4 col = obj->GetColor();
+
+	col = { 1,ReCol,ReCol,1 };//赤
+	ReCol += ReColVal;
+
+	if (BossBodyRedTime == 0) {//時間になったら
+		ReCol = 0.f;//戻す
+		col = { 1,1,1,1 };//本来の色
+		BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
+		BossDamageEffectFlag = false;//くらっていない状態に
+	}
+	obj->SetColor(col);
+
+}
+
 //------攻撃系↑
 void Boss::Death() {
 	Nowframe++;
@@ -1013,6 +1032,10 @@ void Boss::Update()
 	//狙い弾
 	PAimBul();
 
+	if (BossDamageEffectFlag) {//ダメージ演出フラグたったら
+		DamageEffect();//体赤くする
+	}
+
 	auto core_rot = obj_core->GetRotation();
 	core_rot.y++;
 	obj_core->SetRotation(core_rot);
@@ -1064,7 +1087,7 @@ void Boss::Draw()
 	}
 
 	if (alive) {
-		//obj->Draw();
+		obj->Draw();
 		obj_core->Draw();
 		obj_AroundCore->Draw();
 		obj_outside->Draw();

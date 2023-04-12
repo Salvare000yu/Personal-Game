@@ -375,26 +375,6 @@ void GamePlayScene::BeforeBossAppear()
 	sp_beforeboss->SetColor(SP_BossWarning);
 }
 
-void GamePlayScene::BossBodyRed()
-{
-	BossBodyRedTime--;//この時間赤くする
-
-	for (auto& bo : boss_) {//赤くする
-		XMFLOAT4 col = bo->GetColor();
-
-		col = { 1,ReCol,ReCol,1 };//赤
-		ReCol += ReColVal;
-
-		if (BossBodyRedTime == 0) {//時間になったら
-			ReCol = 0.f;//戻す
-			col = { 1,1,1,1 };//本来の色
-			BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
-			BossDamFlag = false;//くらっていない状態に
-		}
-		bo->SetColor(col);
-	}
-}
-
 void GamePlayScene::BossDeathEffect()
 {
 	{
@@ -442,6 +422,14 @@ void GamePlayScene::BossDeathEffect()
 		BaseScene* scene = new ClearScene();
 		sceneManager_->SetNextScene(scene);
 	}
+}
+void GamePlayScene::BodyDamCoolTime()
+{
+	if (BodyDamFlag == false) { return; }
+	if (--BodyDamCount > 0) { return; }
+
+	BodyDamCount = BodyDamCountDef;
+	BodyDamFlag = false;//もう一度喰らう
 }
 
 void GamePlayScene::PlayerMove()
@@ -642,8 +630,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 
 void GamePlayScene::CoolTime()
 {
-	//Input* input = Input::GetInstance();
-	const float DamEffectPow = 0.03f;
+	constexpr float DamEffectPow = 0.03f;
 
 	//くーーーーるたいむ仮　今は文字だけ
 	if (pDamFlag) {
@@ -794,7 +781,7 @@ void GamePlayScene::CollisionAll()
 						//喰らってまだ生きてたら
 						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
 							ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
-							BossDamFlag = true;//赤くする
+							bo->BossDamageEffectFlag = true;//くらい演出オン
 						}
 						Damage = pBulPow - BossDefense;
 						NowBoHp -= Damage;
@@ -1181,6 +1168,8 @@ void GamePlayScene::BossBattleUpdate()
 			updatePattern = std::bind(&GamePlayScene::AfterBossBattleUpdate, this);//ボス撃破
 		}
 	}
+
+	BodyDamCoolTime();//体継続ダメージ
 }
 
 void GamePlayScene::AfterBossBattleUpdate()
@@ -1189,15 +1178,6 @@ void GamePlayScene::AfterBossBattleUpdate()
 		boss->Update();//ボス更新
 	}
 	BossDeathEffect();//死亡条件達成で死亡時えふぇくと
-}
-
-void GamePlayScene::BodyDamCoolTime()
-{
-	if (BodyDamFlag == false) { return; }
-	if (--BodyDamCount > 0) { return; }
-
-	BodyDamCount = BodyDamCountDef;
-	BodyDamFlag = false;//もう一度喰らう
 }
 
 void GamePlayScene::Update()
@@ -1294,11 +1274,6 @@ void GamePlayScene::Update()
 			ChangeGameOverScene();
 		}
 		//----------------↑シーン切り替え関連↑---------------//
-
-		BodyDamCoolTime();//体継続ダメージ
-		if (BossDamFlag == true) {
-			BossBodyRed();//ダメージ中赤く
-		}
 
 		if (player_->GetPHpLessThan0() == false){
 			CollisionAll();

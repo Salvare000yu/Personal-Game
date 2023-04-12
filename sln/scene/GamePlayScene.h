@@ -60,8 +60,6 @@ public:
 
 	void CollisionAll();//判定
 
-	void BodyDamCoolTime();//体ダメージクールタイム
-
 	//std::func
 	void GameReadyUpdate();//開始前
 	void SmallEnemyBattleUpdate();//雑魚戦
@@ -82,14 +80,13 @@ public:
 
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
+	void CoolTime();
 	void BeforeBossAppear();
-	void BossBodyRed();//体赤くする
 	void BossDeathEffect();
+	void BodyDamCoolTime();//体ダメージクールタイム
 
 	void PlayerMove();
 	void PlayerDash();//ダッシュ
-
-	void CoolTime();
 
 	float time = 0;
 
@@ -190,15 +187,6 @@ private:
 	bool BeforeBossAppearFlag = false;
 	//true:今やってる
 	bool BeforeBossAppearNow = false;
-
-	//ボスダメージ受けた時体赤くする false:くらってない
-	bool BossDamFlag = false;
-	//赤くする時間
-	const int BossBodyRedTimeDef = 10;
-	int BossBodyRedTime = BossBodyRedTimeDef;
-	//赤から戻していく色
-	float ReCol = 0.f;//赤状態
-	float ReColVal = 0.05f;//戻す数値
 
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
 	bool BodyDamFlag = false;
