@@ -899,8 +899,6 @@ void Boss::Death() {
 	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;
 	NowPos.z = boPosDeath.z + MoveSp.z * Nowframe;
 
-	//boRot.y += +1.0;
-	//boPos.y += -0.5;
 	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 	obj->SetPosition(NowPos);//その時の位置
 
@@ -1087,7 +1085,7 @@ void Boss::Draw()
 	}
 
 	if (alive) {
-		obj->Draw();
+		//obj->Draw();
 		obj_core->Draw();
 		obj_AroundCore->Draw();
 		obj_outside->Draw();

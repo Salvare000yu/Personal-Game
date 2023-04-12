@@ -1,4 +1,4 @@
-#include "Player.h"
+ï»¿#include "Player.h"
 //#include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
@@ -18,14 +18,14 @@ using namespace DirectX;
 
 void Player::Attack()
 {
-	//ƒL[“ü—Íg‚¤
+	//ã‚­ãƒ¼å…¥åŠ›ä½¿ã†
 	Input* input = Input::GetInstance();
 
 	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//triggerkey
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
-	//ƒpƒbƒh‰Ÿ‚µ‚½uŠÔ‚Ì‚İ
+	//ãƒ‘ãƒƒãƒ‰æŠ¼ã—ãŸç¬é–“ã®ã¿
 	const bool PadTriggerRB = input->TriggerButton(static_cast<int>(Button::RB));
 
 	const bool TriggerMouseLEFT = input->TriggerMouse(0);
@@ -35,31 +35,31 @@ void Player::Attack()
 	const bool PadInputRB = input->PushButton(static_cast<int>(Button::RB));
 	const bool InputMouseLEFT = input->PushMouse(0);
 
-	//’e‘¬
+	//å¼¾é€Ÿ
 	const int pBulVel = 60;
 
-	//’·‰Ÿ‚µ”­Ë
+	//é•·æŠ¼ã—ç™ºå°„
 	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
 	{
 		XMFLOAT3 PlayerPos = obj->GetPosition();
-		//’e¶¬
+		//å¼¾ç”Ÿæˆ
 		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
-		//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+		//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 		madeBullet->Initialize();
 		madeBullet->SetModel(pBulModel);
 		madeBullet->SetPosition(PlayerPos);
 
-		// velocity‚ğZo ’e”­Ë‘¬“xz
+		// velocityã‚’ç®—å‡º å¼¾ç™ºå°„é€Ÿåº¦z
 		DirectX::XMVECTOR vecvelocity = XMVectorSet(0, 0, pBulVel, 0);
 		XMFLOAT3 xmfloat3velocity;
 		XMStoreFloat3(&xmfloat3velocity, XMVector3Transform(vecvelocity, obj->GetMatRot()));
 
 		madeBullet->SetVelocity(xmfloat3velocity);
 
-		// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+		// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 		GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
 
-		//’e“o˜^
+		//å¼¾ç™»éŒ²
 		bullets_.push_back(std::move(madeBullet));
 
 		//input->PadVibrationDef();
@@ -68,10 +68,10 @@ void Player::Attack()
 	}
 	if (AttackIntervalFlag)
 	{
-		if (--AtkInterval_ >= 0) {//ƒN[ƒ‹ƒ^ƒCƒ€ 0‚Ü‚ÅŒ¸‚ç‚·
+		if (--AtkInterval_ >= 0) {//ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ  0ã¾ã§æ¸›ã‚‰ã™
 			if (AtkInterval_ <= 0) {
 				AttackIntervalFlag = false;
-			}//0‚È‚Á‚½‚ç‚­‚ç‚¢ó‘Ô‰ğœ
+			}//0ãªã£ãŸã‚‰ãã‚‰ã„çŠ¶æ…‹è§£é™¤
 		}
 		else { AtkInterval_ = AtkInterval; }
 	}
@@ -96,7 +96,7 @@ void Player::Move()
 	const bool inputDown = input->PushKey(DIK_DOWN);
 	const bool inputRight = input->PushKey(DIK_RIGHT);
 	const bool inputLeft = input->PushKey(DIK_LEFT);
-	//ƒpƒbƒh‰Ÿ‚µ‚Ä‚¢‚éŠÔ
+	//ãƒ‘ãƒƒãƒ‰æŠ¼ã—ã¦ã„ã‚‹é–“
 	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
 	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));
 	const bool PadInputLEFT = input->PushButton(static_cast<int>(Button::LEFT));
@@ -106,7 +106,7 @@ void Player::Move()
 
 	XMFLOAT3 rotation = obj->GetRotation();
 
-	//©•ª‰ñ“]
+	//è‡ªåˆ†å›è»¢
 	if (inputL)
 	{
 		//XMFLOAT3 rotation = obj->GetRotation();
@@ -137,15 +137,15 @@ void Player::Shake() {
 	CharParameters* charParameters = CharParameters::GetInstance();
 	Input* input = Input::GetInstance();
 
-	if (--pShakeTimer_ >= 0) {// 0‚Ü‚ÅŒ¸‚ç‚·
+	if (--pShakeTimer_ >= 0) {// 0ã¾ã§æ¸›ã‚‰ã™
 		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
 		input->PadVibration();
 
-		//pos—h‚ç‚·
+		//posæºã‚‰ã™
 		XMFLOAT3 pos = obj->GetPosition();
 		randShakeNow = 1 + 1;//a~b
-		pos.x = pos.x + rand() % randShakeNow - 0.5f;//a~b‚Ü‚Å‚ÌrandShakeNow‚ÌÅ‘å’l‚©‚ç”¼•ª‚ğˆø‚¢‚Ä•‰‚Ì”‚àŠÜ‚Ş‚æ‚¤‚É
+		pos.x = pos.x + rand() % randShakeNow - 0.5f;//a~bã¾ã§ã®randShakeNowã®æœ€å¤§å€¤ã‹ã‚‰åŠåˆ†ã‚’å¼•ã„ã¦è² ã®æ•°ã‚‚å«ã‚€ã‚ˆã†ã«
 		pos.y = pos.y + rand() % randShakeNow - 0.5f;
 		obj->SetPosition(pos);
 
@@ -168,26 +168,26 @@ void Player::PlayerDeath()
 
 	if (GetPosFlag)
 	{
-		//Å‰‚ÌˆÊ’u
+		//æœ€åˆã®ä½ç½®
 		pPosDeath = obj->GetPosition();
 		GetPosFlag = false;
 	}
 
-	//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
-	MoveSp.x = (pPosDeath.x - pPosDeath.x) / NecesFrame;//‚±‚±‚Ìw’èÀ•W‚Í©‹@Å‰‚ÌXÀ•W‚É‚µ‚Ä^‰º‚É—‚¿‚é‚æ‚¤‚É‚·‚é
+	//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
+	MoveSp.x = (pPosDeath.x - pPosDeath.x) / NecesFrame;//ã“ã“ã®æŒ‡å®šåº§æ¨™ã¯è‡ªæ©Ÿæœ€åˆã®Xåº§æ¨™ã«ã—ã¦çœŸä¸‹ã«è½ã¡ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	MoveSp.y = (TargetPos.y - pPosDeath.y) / NecesFrame;
-	MoveSp.z = (pPosDeath.z - pPosDeath.z) / NecesFrame;//‰œs‚«‚Â‚¢‚½‚ç‚±‚±‚à‚»‚¤‚·‚é
-	//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+	MoveSp.z = (pPosDeath.z - pPosDeath.z) / NecesFrame;//å¥¥è¡Œãã¤ã„ãŸã‚‰ã“ã“ã‚‚ãã†ã™ã‚‹
+	//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 	NowPos.x = pPosDeath.x + MoveSp.x * Nowframe;
 	NowPos.y = pPosDeath.y + MoveSp.y * Nowframe;
 	NowPos.z = pPosDeath.z + MoveSp.z * Nowframe;
 
-	obj->SetPosition(NowPos);//‚»‚Ì‚ÌˆÊ’u
+	obj->SetPosition(NowPos);//ãã®æ™‚ã®ä½ç½®
 
-	//ˆê’èŠÔ‚²‚Æ‚Éƒp[ƒeƒBƒNƒ‹
+	//ä¸€å®šæ™‚é–“ã”ã¨ã«ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	if (PartTimeInterval == 1) {
 		ExplosionFlag = true;
-		// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+		// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
 		ParticleManager::GetInstance()->CreateParticle(NowPos, 50, 30, 10);
 		PartTimeInterval = 0;
@@ -201,31 +201,31 @@ void Player::PlayerDeath()
 		}
 	}
 
-	//‰ñ“]
+	//å›è»¢
 	XMFLOAT3 pRot = obj->GetRotation();
 	pRot.z += pDeathRot;
 	obj->SetRotation(pRot);
 
 	if (obj->GetPosition().y < TargetPos.y)
 	{
-		//–Ú•W“’B‚Å€–Sƒtƒ‰ƒOƒIƒ“
+		//ç›®æ¨™åˆ°é”ã§æ­»äº¡ãƒ•ãƒ©ã‚°ã‚ªãƒ³
 		PlayerDeathFlag = true;
 	}
 }
 
 void Player::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
 
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
 	obj->SetScale({ 5.0f, 5.0f, 5.0f });
-	//êŠ
+	//å ´æ‰€
 	obj->SetPosition({ 0,70,-250 });
 
-	// ‰¹º“Ç‚İ‚İ
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("shot.wav");
 }
 
@@ -235,52 +235,47 @@ void Player::Update()
 
 	float pHp = charParameters->GetNowpHp();
 	if (pHp <= 0) {
-		isPHpLessThan0 = true;//©‹@‘Ì—Í‚ª0‚ğ‰º‰ñ‚Á‚Ä‚¢‚é
+		isPHpLessThan0 = true;//è‡ªæ©Ÿä½“åŠ›ãŒ0ã‚’ä¸‹å›ã£ã¦ã„ã‚‹
 	}
 
-	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
+	//æ¶ˆæ»…ãƒ•ãƒ©ã‚°ç«‹ã£ãŸã‚‰ãã®å¼¾ã¯æ­»ã—ã¦æ‹ã›ã‚ˆ
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
 
-	//UŒ‚‚µ‚Ä‚æ‚¢ó‹µ‚È‚ç
+	//æ”»æ’ƒã—ã¦ã‚ˆã„çŠ¶æ³ãªã‚‰
 	if (pAtkPossibleFlag) {
-		//”­Ëˆ— ¶‚«‚Ä‚ÄHp0ˆÈã‚È‚ç
+		//ç™ºå°„å‡¦ç† ç”Ÿãã¦ã¦Hp0ä»¥ä¸Šãªã‚‰
 		if (alive && isPHpLessThan0 == false) {
 			Attack();
 		}
 	}
 
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Update();
+		ParticleManager::GetInstance()->Add(30, bullet->GetPosition(), { 0,0,0 }, { 0,0,0 }, 50.f, 0.f);
 	}
 
-	//¶‚«‚Ä‚ÄHp‚O‚¢‚¶‚å‚¤‚È‚ç
+	//ç”Ÿãã¦ã¦Hpï¼ã„ã˜ã‚‡ã†ãªã‚‰
 	if (alive && isPHpLessThan0 == false) {
-		if (pAtkPossibleFlag) {//UŒ‚‚µ‚Ä‚¢‚¢‚Æ‚«‚È‚ç
+		if (pAtkPossibleFlag) {//æ”»æ’ƒã—ã¦ã„ã„ã¨ããªã‚‰
 			Move();
 		}
 	}
 	else {
-		//0ˆÈ‰º‚È‚Á‚½‚çUŒ‚•s‰Âƒtƒ‰ƒO‚½‚Ä‚Ä€–S‰‰o
+		//0ä»¥ä¸‹ãªã£ãŸã‚‰æ”»æ’ƒä¸å¯ãƒ•ãƒ©ã‚°ãŸã¦ã¦æ­»äº¡æ¼”å‡º
 		pAtkPossibleFlag = false;
 		PlayerDeath();
 	}
 
-	//©‹@‚ª‹ò‚ç‚Á‚Ä‚éó‘Ô‚É‚È‚Á‚½‚ç
+	//è‡ªæ©ŸãŒå–°ã‚‰ã£ã¦ã‚‹çŠ¶æ…‹ã«ãªã£ãŸã‚‰
 	if (charParameters->GetispDam()) {
-		//HP0ˆÈ‰º‚È‚ç‚â‚ç‚È‚¢‚æ‚¤‚É@€–S‰‰o‚â‚Á‚Ä‚é‚à‚ñ‚Ë
+		//HP0ä»¥ä¸‹ãªã‚‰ã‚„ã‚‰ãªã„ã‚ˆã†ã«ã€€æ­»äº¡æ¼”å‡ºã‚„ã£ã¦ã‚‹ã‚‚ã‚“ã­
 		if (charParameters->GetNowpHp() > 0)
 		{
 			Shake();
 		}
-	}
-
-	//©‹@‚Ì’eˆĞ—Í‚ªƒ}ƒCƒiƒX’l‚É‚È‚ç‚È‚¢
-	//0ˆÈ‰º‚È‚ç‚P‚É‚·‚é
-	if (pBulPower <= 0) {
-		pBulPower = 1;
 	}
 
 	obj->Update();
@@ -290,7 +285,7 @@ void Player::Draw()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
 
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}

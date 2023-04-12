@@ -171,7 +171,7 @@ void GamePlayScene::Initialize()
 	ApStartPPos.z -= 1000;
 
 	boss_.emplace_front();
-	for (std::unique_ptr<Boss>& boss : boss_){//ボス
+	for (std::unique_ptr<Boss>& boss : boss_) {//ボス
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
 		boss->SetModel(mod_bossColli.get());
@@ -237,17 +237,15 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::GroundMove()
 {
-	{
-		float num = std::sin((float)time * SwingSp) * SwingDist;
-		//地面の数だけ
-		for (auto& i : obj_ground) {
-			XMFLOAT3 pos = i.second->GetPosition();
-			pos.y = groundPosDef + num;//初期位置＋揺らす値
-			i.second->SetPosition(pos);
-			num = -num;//二枚目は逆に揺らす
+	float num = std::sin((float)time * SwingSp) * SwingDist;
+	//地面の数だけ
+	for (auto& i : obj_ground) {
+		XMFLOAT3 pos = i.second->GetPosition();
+		pos.y = groundPosDef + num;//初期位置＋揺らす値
+		i.second->SetPosition(pos);
+		num = -num;//二枚目は逆に揺らす
 
-			i.second->Update();
-		}
+		i.second->Update();
 	}
 }
 
@@ -442,6 +440,8 @@ void GamePlayScene::PlayerMove()
 	bool isLMove = false;
 	bool isRMove = false;
 
+	XMFLOAT3 PlayerPos = player_->GetPosition();
+
 	//------------------↓プレイヤー移動＆姿勢
 	if (cInput->LeftMove() || cInput->RightMove() || cInput->UpMove() || cInput->DownMove())// inputQ || inputZ ||
 	{
@@ -451,7 +451,6 @@ void GamePlayScene::PlayerMove()
 		const float PlayerMaxMoveLimY = 400;//下に行ける範囲
 		const float PlayerMinMoveLimY = 0;//上に行ける範囲
 
-		XMFLOAT3 PlayerPos = player_->GetPosition();
 		PlayerPos.x = std::clamp(PlayerPos.x, -PlayerMoveLimX, PlayerMoveLimX);
 		PlayerPos.y = std::clamp(PlayerPos.y, PlayerMinMoveLimY, PlayerMaxMoveLimY);
 
@@ -486,7 +485,6 @@ void GamePlayScene::PlayerMove()
 			isRMove = true;//右移動中
 		}
 		player_->SetPosition(PlayerPos);
-		firingline_->SetPosition(PlayerPos);
 	}
 	else
 	{
@@ -501,6 +499,8 @@ void GamePlayScene::PlayerMove()
 	if (rotation.z < 0 && isRMove == false) {
 		rotation.z += 1.f;
 	}
+
+	firingline_->SetPosition(PlayerPos);
 
 	player_->SetRotation(rotation);
 	firingline_->SetRotation(rotation);
@@ -1112,7 +1112,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	}
 
 	//ボス戦前の演出
-	if (BeforeBossAppearFlag){//演出終わったら
+	if (BeforeBossAppearFlag) {//演出終わったら
 		//ボス戦突入のお知らせです
 		BossEnemyAdvent = true;
 	}
@@ -1133,7 +1133,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	if (charParams->pNextPlaceGoFlag) {
 		pHeadingToTheNextPlace();
 	}
-	
+
 	sp_beforeboss->Update();//アラート画像
 	charParams->boHpUpdate();//Hp画像
 }
@@ -1146,7 +1146,7 @@ void GamePlayScene::BossBattleUpdate()
 
 	CharParameters* charParams = CharParameters::GetInstance();
 	//敵のHPバー
-	if (BossEnemyAdvent){
+	if (BossEnemyAdvent) {
 		charParams->boHpSizeChange();
 	}
 	//敵のHPバー
@@ -1232,8 +1232,7 @@ void GamePlayScene::Update()
 		charParams->BarGetDislodged();
 
 		// 自機体力が0より多ければ
-		if (player_->GetPHpLessThan0() == false)
-		{
+		if (player_->GetPHpLessThan0() == false){
 			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
 				//プレイヤー移動-上に書くと移動かくつかない
 				PlayerMove();
@@ -1275,7 +1274,7 @@ void GamePlayScene::Update()
 		}
 		//----------------↑シーン切り替え関連↑---------------//
 
-		if (player_->GetPHpLessThan0() == false){
+		if (player_->GetPHpLessThan0() == false) {
 			CollisionAll();
 		}
 

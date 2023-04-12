@@ -105,12 +105,12 @@ void DxBase::PostDraw()
 		CloseHandle(event);
 	}
 
-	//FPS固定更新 VSyncを残し追加で待つので実行完了待ち直後に
-	UpdateFixFps();
-
 	cmdAllocator->Reset(); // キューをクリア
 	cmdList->Reset(cmdAllocator.Get(), nullptr);  // 再びコマンドリストを貯める準備
 #pragma endregion グラフィックスコマンド
+
+	//FPS固定更新
+	UpdateFixFps();
 }
 
 bool DxBase::InitializeDevice()

@@ -175,6 +175,9 @@ private:
 	//当たり判定取るか true:取る
 	bool doCollision = true;
 
+	//ボス回転
+	float bossRot = 1.f;
+
 	//攻撃用カウント
 	int AtkCount = 0;
 	int DiffusionAtkCount = 0;
