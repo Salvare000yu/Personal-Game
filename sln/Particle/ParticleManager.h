@@ -149,7 +149,8 @@ public: // メンバ関数
 	/// </summary>
 	void CreateModel();
 
-	void CreateParticle(const XMFLOAT3& pos, UINT particleNum, float startScale, float vel);
+	void CreateParticle(const XMFLOAT3& pos, UINT particleNum, float startScale, float vel,
+		XMFLOAT3 startColor = { 1,1,1 }, XMFLOAT3 endColor = { 1,1,1 });
 
 private: // メンバ変数
 	// デバイス

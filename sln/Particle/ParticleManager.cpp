@@ -491,7 +491,8 @@ void ParticleManager::CreateModel()
 	vbView.StrideInBytes = sizeof(VertexPos);
 }
 
-void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, float startScale, float vel)
+void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, float startScale, float vel,
+		XMFLOAT3 startColor, XMFLOAT3 endColor)
 {
 	for (UINT i = 0; i <= particleNum; i++) {
 		const float thata = rand() % 180 / 180.f * XM_PI;
@@ -503,6 +504,6 @@ void ParticleManager::CreateParticle(const XMFLOAT3& pos, UINT particleNum, floa
 	r * cosf(thata),
 	r * sinf(thata) * sinf(phi) };
 
-		Add(30, pos, vel, XMFLOAT3(vel.x / +10, vel.y / +10, vel.z / +10), startScale, 0);
+		Add(30, pos, vel, XMFLOAT3(vel.x / +10, vel.y / +10, vel.z / +10), startScale, 0, startColor, endColor);
 	}
 }
