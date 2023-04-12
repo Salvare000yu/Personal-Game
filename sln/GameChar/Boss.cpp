@@ -1,4 +1,4 @@
-#include "Boss.h"
+ï»¿#include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
@@ -16,9 +16,9 @@ void Boss::BossAppear()
 
 	XMFLOAT3 pos = obj->GetPosition();
 
-	//ˆÚ“®Š®—¹Šm”F‚µ‚¾‚¢
+	//ç§»å‹•å®Œäº†ç¢ºèªã—ã ã„
 	if (charParams->pNextPlaceGoFlag == false) {
-		ActionStartPos = obj->GetPosition();//UŒ‚‚ÉˆÚ‚é‚Æ‚«‚ÌÀ•Wæ“¾Leave‚Å—£‚ê‚éŒÀŠE’l‚Åg‚¤
+		ActionStartPos = obj->GetPosition();//æ”»æ’ƒã«ç§»ã‚‹ã¨ãã®åº§æ¨™å–å¾—Leaveã§é›¢ã‚Œã‚‹é™ç•Œå€¤ã§ä½¿ã†
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
 
@@ -29,7 +29,7 @@ void Boss::BossAppear()
 
 void Boss::ApproachInit()
 {
-	//UŒ‚—pƒJƒEƒ“ƒg‰Šú‰»‚µ‚ÄŠÔŠu‘ã“ü‚·‚ê‚Îˆê’U‘Ò‚Á‚Ä‚©‚ç”­Ë‰Â”\
+	//æ”»æ’ƒç”¨ã‚«ã‚¦ãƒ³ãƒˆåˆæœŸåŒ–ã—ã¦é–“éš”ä»£å…¥ã™ã‚Œã°ä¸€æ—¦å¾…ã£ã¦ã‹ã‚‰ç™ºå°„å¯èƒ½
 	AtkCount = AtkInterval;
 	DiffusionAtkCount = DiffusionAtkInterval;
 	Circular_AtkCount = Circular_AtkInterval;
@@ -37,18 +37,18 @@ void Boss::ApproachInit()
 
 void Boss::Approach()
 {
-	//---“ËŒ‚---//
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//---çªæ’ƒ---//
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	AtkCount--;
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (AtkCount == 0) {
-		//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+		//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 		if (alive) { Attack(); }
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		AtkCount = AtkInterval;
 	}
 
-	//“G‚ÌˆÚ“®
+	//æ•µã®ç§»å‹•
 	XMFLOAT3 position = obj->GetPosition();
 	position.z -= ApproachSpZ;
 	position.y += ApproachSpY;
@@ -57,50 +57,50 @@ void Boss::Approach()
 
 	ApproachCount--;
 
-	//‚ ‚é’ö“x‹ß‚Ã‚¢‚½‚ç—£‚ê‚é
+	//ã‚ã‚‹ç¨‹åº¦è¿‘ã¥ã„ãŸã‚‰é›¢ã‚Œã‚‹
 	if (ApproachCount == 0) {
 		ApproachCount = ApproachCountDef;
-		ChangeVerticalCount++;//cUŒ‚‚·‚é‚½‚ß‚ÌƒJƒEƒ“ƒgi‚ß‚é
+		ChangeVerticalCount++;//ç¸¦æ”»æ’ƒã™ã‚‹ãŸã‚ã®ã‚«ã‚¦ãƒ³ãƒˆé€²ã‚ã‚‹
 		actionPattern = std::bind(&Boss::Leave, this);
 	}
 }
 
 void Boss::Leave()
 {
-	//---Œã‘Ş---//
+	//---å¾Œé€€---//
 
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	DiffusionAtkCount--;
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (DiffusionAtkCount == 0) {
-		//¶‘¶‚Ì‚İ”­Ë
+		//ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 		if (alive) {
-			if (even_odd_NumFlag)//Šï”’e
+			if (even_odd_NumFlag)//å¥‡æ•°å¼¾
 			{
 				DiffusionAttack();
 			}
 			else { DiffusionAttackEavenNumber(); }
 		}
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		DiffusionAtkCount = DiffusionAtkInterval;
 	}
 
-	//---Œã‘Ş---//
+	//---å¾Œé€€---//
 	XMFLOAT3 positionBack = obj->GetPosition();
 	positionBack.z += LeaveSpZ;
 	positionBack.y -= LeaveSpY;
 	obj->SetPosition(positionBack);
 
-	//—£‚ê‚é§ŒÀ‚Í©‹@‚ÌêŠ‚É©‹@‚Æ—£‚µ‚½‚¢‹——£•ªŠÔ‚ğŠJ‚¯‚é
+	//é›¢ã‚Œã‚‹åˆ¶é™ã¯è‡ªæ©Ÿã®å ´æ‰€ã«è‡ªæ©Ÿã¨é›¢ã—ãŸã„è·é›¢åˆ†é–“ã‚’é–‹ã‘ã‚‹
 	const int SpaceDistance = 400;
 	LeaveLim = shotTag->GetPosition().z + SpaceDistance;
 
-	//‚ ‚é’ö“x—£‚ê‚½‚ç‹ß‚Ã‚¢‚Ä‚­‚é
+	//ã‚ã‚‹ç¨‹åº¦é›¢ã‚ŒãŸã‚‰è¿‘ã¥ã„ã¦ãã‚‹
 	if (positionBack.z > ActionStartPos.z && positionBack.y < ActionStartPos.y) {
 		if (even_odd_NumFlag) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
 
-		if (ChangeVerticalCount == ChangeVerticalNeces) {//cUŒ‚ƒJƒEƒ“ƒg‚ªˆê’è‚É’B‚µ‚½‚ç
+		if (ChangeVerticalCount == ChangeVerticalNeces) {//ç¸¦æ”»æ’ƒã‚«ã‚¦ãƒ³ãƒˆãŒä¸€å®šã«é”ã—ãŸã‚‰
 			actionPattern = std::bind(&Boss::Vertical, this);
 		}
 		else {
@@ -113,119 +113,119 @@ void Boss::Vertical()
 	XMFLOAT3 position = obj->GetPosition();
 
 	switch (verticalPattern_) {
-	case VerticalPattern::def://ƒfƒtƒHƒ‹ƒg
-		verticalPattern_ = VerticalPattern::StartVertical;//ã¸ŠJn
+	case VerticalPattern::def://ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
+		verticalPattern_ = VerticalPattern::StartVertical;//ä¸Šæ˜‡é–‹å§‹
 		break;
 
-	case VerticalPattern::StartVertical://‚Ü‚¸‚Íã¸
+	case VerticalPattern::StartVertical://ã¾ãšã¯ä¸Šæ˜‡
 		position.y += StartVerticalVal;
 		StartVerticalVal++;
 
-		if (position.y > DownStartPosY) {//ˆê’è’´‚¦‚½‚ç”»’èØ‚Á‚Ä‚©‚ç‘Ò‚¿
-			StartVerticalVal = StartVerticalValDef;//Å‰‚Ìã¸’l–ß‚·
-			verticalPattern_ = VerticalPattern::Wait;//ã¸ŠJn
+		if (position.y > DownStartPosY) {//ä¸€å®šè¶…ãˆãŸã‚‰åˆ¤å®šåˆ‡ã£ã¦ã‹ã‚‰å¾…ã¡
+			StartVerticalVal = StartVerticalValDef;//æœ€åˆã®ä¸Šæ˜‡å€¤æˆ»ã™
+			verticalPattern_ = VerticalPattern::Wait;//ä¸Šæ˜‡é–‹å§‹
 		}
 		break;
 
 	case VerticalPattern::Wait:
-		doCollision = false;//Wait‚Í‰æ–ÊŠO‚È‚Ì‚Å“–‚½‚è”»’èæ‚ç‚È‚¢
-		VerticalWaitCount--;//‘Ò‚¿ƒJƒEƒ“ƒgŒ¸‚ç‚·
+		doCollision = false;//Waitæ™‚ã¯ç”»é¢å¤–ãªã®ã§å½“ãŸã‚Šåˆ¤å®šå–ã‚‰ãªã„
+		VerticalWaitCount--;//å¾…ã¡ã‚«ã‚¦ãƒ³ãƒˆæ¸›ã‚‰ã™
 
 		if (VerticalWaitCount == 0) {
-			VerticalWaitCount = VerticalWaitCountDef / 2;//‰‰ñˆÈ~‚ÍƒfƒtƒH/2‚ÉƒJƒEƒ“ƒg–ß‚·
-			doCollision = true;//“–‚½‚è”»’èƒIƒ“‚É‚µ‚Ä‚©‚çŸs“®
+			VerticalWaitCount = VerticalWaitCountDef / 2;//åˆå›ä»¥é™ã¯ãƒ‡ãƒ•ã‚©/2ã«ã‚«ã‚¦ãƒ³ãƒˆæˆ»ã™
+			doCollision = true;//å½“ãŸã‚Šåˆ¤å®šã‚ªãƒ³ã«ã—ã¦ã‹ã‚‰æ¬¡è¡Œå‹•
 
-			if (VerticalLoopCount != 0) {//UpDownƒ‹[ƒv‰ñ”‚ª0‚Å‚È‚¯‚ê‚ÎAŒp‘±
-				if (NextDown) {//Ÿ‰º~‚È‚ç
-					NextDown = false;//–ß‚µ‚Ä‚©‚ç
-					verticalPattern_ = VerticalPattern::Down;//‰ºˆÚ“®
+			if (VerticalLoopCount != 0) {//UpDownãƒ«ãƒ¼ãƒ—å›æ•°ãŒ0ã§ãªã‘ã‚Œã°ã€ç¶™ç¶š
+				if (NextDown) {//æ¬¡ä¸‹é™ãªã‚‰
+					NextDown = false;//æˆ»ã—ã¦ã‹ã‚‰
+					verticalPattern_ = VerticalPattern::Down;//ä¸‹ç§»å‹•
 				}
-				if (NextUp) {//Ÿã¸‚È‚ç
-					NextUp = false;//–ß‚µ‚Ä‚©‚ç
-					verticalPattern_ = VerticalPattern::Up;//ãˆÚ“®
+				if (NextUp) {//æ¬¡ä¸Šæ˜‡ãªã‚‰
+					NextUp = false;//æˆ»ã—ã¦ã‹ã‚‰
+					verticalPattern_ = VerticalPattern::Up;//ä¸Šç§»å‹•
 				}
 			}
-			else {//‚é[‚Õ‚ªw’è”‚¨‚í‚Á‚½‚çiƒJƒEƒ“ƒg0‚Åj
-				//Ÿ‚Ì“®‚«–ß‚·
+			else {//ã‚‹ãƒ¼ã·ãŒæŒ‡å®šæ•°ãŠã‚ã£ãŸã‚‰ï¼ˆã‚«ã‚¦ãƒ³ãƒˆ0ã§ï¼‰
+				//æ¬¡ã®å‹•ãæˆ»ã™
 				NextUp = false;
-				NextDown = true;//Å‰‚Í‰º~
+				NextDown = true;//æœ€åˆã¯ä¸‹é™
 				VerticalLoopCount = VerticalLoopCountDef;
-				verticalPattern_ = VerticalPattern::Reverse;//–ß‚éƒpƒ^[ƒ“‚Ö
+				verticalPattern_ = VerticalPattern::Reverse;//æˆ»ã‚‹ãƒ‘ã‚¿ãƒ¼ãƒ³ã¸
 			}
 		}
 		break;
 
 	case VerticalPattern::Down:
-		if (VerticalStartPosFlag == false) {//Å‰‚ÉŠJnˆÊ’uŒˆ‚ß‚é
-			UpDownPos = { UpDownPos.x, DownStartPosY,position.z };//Y‚ÍŠJnˆÊ’u@Z‚ÍŒ³‚¢‚½ˆÊ’u
-			position = UpDownPos;//¡‚ÌˆÊ’u‚ğ‰º‚É‰º‚ª‚éŠJnˆÊ’u‚É‚·‚é
-			VerticalStartPosFlag = true;//Å‰‚ÌŠJnˆÊ’u‚ğŒˆ‚ßI‚í‚Á‚½
+		if (VerticalStartPosFlag == false) {//æœ€åˆã«é–‹å§‹ä½ç½®æ±ºã‚ã‚‹
+			UpDownPos = { UpDownPos.x, DownStartPosY,position.z };//Yã¯é–‹å§‹ä½ç½®ã€€Zã¯å…ƒã„ãŸä½ç½®
+			position = UpDownPos;//ä»Šã®ä½ç½®ã‚’ä¸‹ã«ä¸‹ãŒã‚‹é–‹å§‹ä½ç½®ã«ã™ã‚‹
+			VerticalStartPosFlag = true;//æœ€åˆã®é–‹å§‹ä½ç½®ã‚’æ±ºã‚çµ‚ã‚ã£ãŸ
 		}
-		position.y -= VerticalSp;//ˆÚ“®
-		if (position.y <= UpStartPosY) {//ã¸ŠJnˆÊ’u‚ÌY‚Ü‚Å‚«‚½‚ç
-			UpDownPos.x += NextMoveX;//Ÿ‚ÌˆÚ“®‚Ì‚½‚ß‚ÉX‘«‚µ‚Æ‚­
-			//«‘Ò‚¿ŠÔ‹²‚ñ‚Å‚Ë@Wait‚Í”»’èØ‚é
-			VerticalStartPosFlag = false;//ŠJnˆÊ’uŒˆ’èƒtƒ‰ƒO–ß‚·
-			NextUp = true;//Ÿã¸
-			VerticalLoopCount--;//Down”²‚¯‚é‚Æ‚«‚ÉƒfƒNƒŠƒƒ“ƒg
-			verticalPattern_ = VerticalPattern::Wait;//‚Ü‚Á‚Ä‚©
+		position.y -= VerticalSp;//ç§»å‹•
+		if (position.y <= UpStartPosY) {//ä¸Šæ˜‡é–‹å§‹ä½ç½®ã®Yã¾ã§ããŸã‚‰
+			UpDownPos.x += NextMoveX;//æ¬¡ã®ç§»å‹•æ™‚ã®ãŸã‚ã«Xè¶³ã—ã¨ã
+			//â†“å¾…ã¡æ™‚é–“æŒŸã‚“ã§ã­ã€€Waitæ™‚ã¯åˆ¤å®šåˆ‡ã‚‹
+			VerticalStartPosFlag = false;//é–‹å§‹ä½ç½®æ±ºå®šãƒ•ãƒ©ã‚°æˆ»ã™
+			NextUp = true;//æ¬¡ä¸Šæ˜‡
+			VerticalLoopCount--;//DownæŠœã‘ã‚‹ã¨ãã«ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
+			verticalPattern_ = VerticalPattern::Wait;//ã¾ã£ã¦ã‹
 		}
 
-		//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+		//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 		AtkCount--;
-		//‚ª–‚¿‚½‚ç
+		//æ™‚ãŒæº€ã¡ãŸã‚‰
 		if (AtkCount == 0) {
-			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
-			if (alive) { Attack(); }//’Ç”ö’e
-			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
+			if (alive) { Attack(); }//è¿½å°¾å¼¾
+			//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 			AtkCount = Vertical_AtkInterval;
 		}
 		break;
 
 	case VerticalPattern::Up:
-		if (VerticalStartPosFlag == false) {//Å‰‚ÉŠJnˆÊ’uŒˆ‚ß‚é
-			UpDownPos = { UpDownPos.x, UpStartPosY,position.z };//Y‚ÍŠJnˆÊ’u@Z‚ÍŒ³‚¢‚½ˆÊ’u
-			position = UpDownPos;//¡‚ÌˆÊ’u‚ğ‰º‚É‰º‚ª‚éŠJnˆÊ’u‚É‚·‚é
-			VerticalStartPosFlag = true;//Å‰‚ÌŠJnˆÊ’u‚ğŒˆ‚ßI‚í‚Á‚½
+		if (VerticalStartPosFlag == false) {//æœ€åˆã«é–‹å§‹ä½ç½®æ±ºã‚ã‚‹
+			UpDownPos = { UpDownPos.x, UpStartPosY,position.z };//Yã¯é–‹å§‹ä½ç½®ã€€Zã¯å…ƒã„ãŸä½ç½®
+			position = UpDownPos;//ä»Šã®ä½ç½®ã‚’ä¸‹ã«ä¸‹ãŒã‚‹é–‹å§‹ä½ç½®ã«ã™ã‚‹
+			VerticalStartPosFlag = true;//æœ€åˆã®é–‹å§‹ä½ç½®ã‚’æ±ºã‚çµ‚ã‚ã£ãŸ
 		}
-		position.y += VerticalSp;//ˆÚ“®
-		if (position.y >= DownStartPosY) {//ã¸ŠJnˆÊ’u‚ÌY‚Ü‚Å‚«‚½‚ç
-			UpDownPos.x += NextMoveX;//Ÿ‚ÌˆÚ“®‚Ì‚½‚ß‚ÉX‘«‚µ‚Æ‚­
-			//«‘Ò‚¿ŠÔ‹²‚ñ‚Å‚Ë@Wait‚Í”»’èØ‚é
-			VerticalStartPosFlag = false;//ŠJnˆÊ’uŒˆ’èƒtƒ‰ƒO–ß‚·
-			NextDown = true;//Ÿã¸
-			verticalPattern_ = VerticalPattern::Wait;//‚Ü‚Á‚Ä‚©‚ç
+		position.y += VerticalSp;//ç§»å‹•
+		if (position.y >= DownStartPosY) {//ä¸Šæ˜‡é–‹å§‹ä½ç½®ã®Yã¾ã§ããŸã‚‰
+			UpDownPos.x += NextMoveX;//æ¬¡ã®ç§»å‹•æ™‚ã®ãŸã‚ã«Xè¶³ã—ã¨ã
+			//â†“å¾…ã¡æ™‚é–“æŒŸã‚“ã§ã­ã€€Waitæ™‚ã¯åˆ¤å®šåˆ‡ã‚‹
+			VerticalStartPosFlag = false;//é–‹å§‹ä½ç½®æ±ºå®šãƒ•ãƒ©ã‚°æˆ»ã™
+			NextDown = true;//æ¬¡ä¸Šæ˜‡
+			verticalPattern_ = VerticalPattern::Wait;//ã¾ã£ã¦ã‹ã‚‰
 		}
 
 		AtkCount--;
-		//‚ª–‚¿‚½‚ç
+		//æ™‚ãŒæº€ã¡ãŸã‚‰
 		if (AtkCount == 0) {
-			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+			//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 			if (alive) { StraightAttack(); }
-			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 			AtkCount = Vertical_AtkInterval;
 		}
 		break;
 
 	case VerticalPattern::Reverse:
-		if (ReverseStartPosFlag == false) {//‚±‚±‚©‚ç–ß‚èn‚ß‚é
-			position = { ReverseStartPos.x,position.y,position.z };//XAY‚ÍÅŒã‚Ì‚‚³‚Ì‚Ü‚ÜAZ
+		if (ReverseStartPosFlag == false) {//ã“ã“ã‹ã‚‰æˆ»ã‚Šå§‹ã‚ã‚‹
+			position = { ReverseStartPos.x,position.y,position.z };//Xã€Yã¯æœ€å¾Œã®é«˜ã•ã®ã¾ã¾ã€Z
 			ReverseStartPosFlag = true;
 		}
 		position.y += VerticalSp;
 
-		if (position.y >= ReverseStartPos.y) {//ƒ{ƒXíŠJn‚ÌYÀ•W“’B‚Ås“®I‚í‚è
+		if (position.y >= ReverseStartPos.y) {//ãƒœã‚¹æˆ¦é–‹å§‹æ™‚ã®Yåº§æ¨™åˆ°é”ã§è¡Œå‹•çµ‚ã‚ã‚Š
 			ReverseStartPosFlag = false;
-			verticalPattern_ = VerticalPattern::EndVertical;//cƒpƒ^[ƒ“‚Ìs“®I—¹‚·‚é‘O‚É‚â‚é‚±‚Æ
+			verticalPattern_ = VerticalPattern::EndVertical;//ç¸¦ãƒ‘ã‚¿ãƒ¼ãƒ³ã®è¡Œå‹•çµ‚äº†ã™ã‚‹å‰ã«ã‚„ã‚‹ã“ã¨
 		}
 		break;
 
 	case VerticalPattern::EndVertical:
-		UpDownPos = UpDownPosDef;//ã‚Æ‰º—p‚ÌÀ•W‚àŒ³‚É–ß‚·
-		VerticalWaitCount = VerticalWaitCountDef;//‘Ò‚¿ƒJƒEƒ“ƒgƒfƒtƒHƒ‹ƒg‚É–ß‚·
-		ChangeVerticalCount = ChangeVerticalCountDef;//cUŒ‚‚·‚é‚½‚ß‚É•K—v‚ÈƒJƒEƒ“ƒg‚ğƒfƒtƒH‚É–ß‚·
-		verticalPattern_ = VerticalPattern::def;//‚Ü‚½g‚¦‚é‚æ‚¤‚ÉƒfƒtƒH‚É–ß‚µ‚Æ‚­
-		//‘å–{‚Ìs“®ƒpƒ^[ƒ“‚ğApproach‚É–ß‚·
+		UpDownPos = UpDownPosDef;//ä¸Šã¨ä¸‹ç”¨ã®åº§æ¨™ã‚‚å…ƒã«æˆ»ã™
+		VerticalWaitCount = VerticalWaitCountDef;//å¾…ã¡ã‚«ã‚¦ãƒ³ãƒˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã«æˆ»ã™
+		ChangeVerticalCount = ChangeVerticalCountDef;//ç¸¦æ”»æ’ƒã™ã‚‹ãŸã‚ã«å¿…è¦ãªã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ãƒ•ã‚©ã«æˆ»ã™
+		verticalPattern_ = VerticalPattern::def;//ã¾ãŸä½¿ãˆã‚‹ã‚ˆã†ã«ãƒ‡ãƒ•ã‚©ã«æˆ»ã—ã¨ã
+		//å¤§æœ¬ã®è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’Approachã«æˆ»ã™
 		actionPattern = std::bind(&Boss::Approach, this);
 		break;
 	}
@@ -239,58 +239,58 @@ void Boss::HpHalfPatStart()
 
 	Nowframe++;
 
-	//©‹@‚ÌêŠ
+	//è‡ªæ©Ÿã®å ´æ‰€
 	XMFLOAT3 pPos = shotTag->GetPosition();
-	//w’èÀ•W‚Å©‹@‚ÌZ‚©‚ç‚Ç‚ê‚­‚ç‚¢ŠÔ‚ğ‚ ‚¯‚é‚©
+	//æŒ‡å®šåº§æ¨™ã§è‡ªæ©Ÿã®Zã‹ã‚‰ã©ã‚Œãã‚‰ã„é–“ã‚’ã‚ã‘ã‚‹ã‹
 	const int SpaceDistance = 500;
 
 	if (GetPosOnlyFlag)
 	{
-		//Å‰‚ÌˆÊ’u
+		//æœ€åˆã®ä½ç½®
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosOnlyFlag = false;
 
-		//w’èÀ•W‚Ç‚±‚©
+		//æŒ‡å®šåº§æ¨™ã©ã“ã‹
 		TargetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
-		//–hŒä—Íã‚ª‚é
+		//é˜²å¾¡åŠ›ä¸ŠãŒã‚‹
 		float Defence = charParams->GetBossDefense();
 		Defence += 30;
 		charParams->SetBossDefense(Defence);
 	}
 
-	//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
+	//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
 	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
 	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesHpHalfFrame;
 	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesHpHalfFrame;
-	//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+	//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
 	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
 	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
 
 	obj->SetPosition({ NowPos });
 
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	DiffusionAtkCount--;
 	if (DiffusionAtkCount == 0) {
-		//¶‘¶‚Ì‚İ”­Ë
+		//ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 		if (alive) {
-			if (even_odd_NumFlag)//Šï”’e
+			if (even_odd_NumFlag)//å¥‡æ•°å¼¾
 			{
 				DiffusionAttack();
 			}
 			else { DiffusionAttackEavenNumber(); }
 		}
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		DiffusionAtkCount = DiffusionAtkInterval;
 	}
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	AtkCount--;
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (AtkCount == 0) {
-		//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
-		if (alive) { Attack(); }//’Ç”ö’e
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
+		if (alive) { Attack(); }//è¿½å°¾å¼¾
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		AtkCount = AtkInterval;
 	}
 
@@ -301,44 +301,44 @@ void Boss::HpHalfPatStart()
 		MoveSp = {};
 		NowPos = {};
 
-		isHpHalfPattern = true;//‚±‚Ìˆ—‘S•”I—¹‚µ‚½‚©‚ç‚à‚¤‚â‚ñ‚È‚¢
+		isHpHalfPattern = true;//ã“ã®å‡¦ç†å…¨éƒ¨çµ‚äº†ã—ãŸã‹ã‚‰ã‚‚ã†ã‚„ã‚“ãªã„
 		actionPattern = std::bind(&Boss::CircularMotionMove, this);
 	}
 }
 void Boss::CircularMotionMove()
 {
-	const float ApproachZ = 0.15f;//‹ß‚Ã‚­’l
+	const float ApproachZ = 0.15f;//è¿‘ã¥ãå€¤
 
-	//“G‚ÌˆÚ“®
+	//æ•µã®ç§»å‹•
 	XMFLOAT3 position = obj->GetPosition();
-	//ŒÊ“x–@
+	//å¼§åº¦æ³•
 	HpHalf_rad = HpHalf_Angle * 3.1415926535f / 180.0f;
 
-	//‰~‚ÌˆÊ’u‚ğOŠpŠÖ”‚Å‚¾‚·
+	//å††ã®ä½ç½®ã‚’ä¸‰è§’é–¢æ•°ã§ã ã™
 	addX = cosf(HpHalf_rad) * HpHalf_Length;
 	addY = sinf(HpHalf_rad) * HpHalf_Length;
 
 	if (GetPosOnlyFlag)
 	{
-		//Å‰‚ÌˆÊ’u
+		//æœ€åˆã®ä½ç½®
 		CirclePosMem = obj->GetPosition();
 		GetPosOnlyFlag = false;
 	}
 
 	XMFLOAT3 pPos = shotTag->GetPosition();
-	//’†SÀ•W‚ÉˆÚ“®—Ê‚ğ‘«‚µ‚½’l‚ğÀ•W‚É
+	//ä¸­å¿ƒåº§æ¨™ã«ç§»å‹•é‡ã‚’è¶³ã—ãŸå€¤ã‚’åº§æ¨™ã«
 	position.x = CirclePosMem.x + addX;
 	position.y = CircularY + addY;
-	position.z -= ApproachZ;//’n–¡‚É”—‚Á‚Ä‚­‚é
+	position.z -= ApproachZ;//åœ°å‘³ã«è¿«ã£ã¦ãã‚‹
 
 	obj->SetPosition(position);
 
-	HpHalf_Angle += 5.0f;//Šp“x@‘‚â‚·‚ÆˆÚ“®‘¬‚­‚È‚é
-	HpHalf_Length += 0.3f;//‰Q‚ğŠª‚­‚æ‚¤‚ÉL‚°‚½‚¢
+	HpHalf_Angle += 5.0f;//è§’åº¦ã€€å¢—ã‚„ã™ã¨ç§»å‹•é€Ÿããªã‚‹
+	HpHalf_Length += 0.3f;//æ¸¦ã‚’å·»ãã‚ˆã†ã«åºƒã’ãŸã„
 
-	//”¼Œa‚ªˆê’èˆÈã‚Ås“®•Ï‚¦‚é
+	//åŠå¾„ãŒä¸€å®šä»¥ä¸Šã§è¡Œå‹•å¤‰ãˆã‚‹
 	if (HpHalf_Length >= 150) {
-		//---‰~‰^“®—Ş
+		//---å††é‹å‹•é¡
 		HpHalf_Angle = HpHalf_AngleDef;
 		HpHalf_rad = HpHalf_radDef;
 		HpHalf_Length = HpHalf_LengthDef;
@@ -348,17 +348,17 @@ void Boss::CircularMotionMove()
 		actionPattern = std::bind(&Boss::LeaveFirstPos, this);
 	}
 
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	Circular_AtkCount--;
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (Circular_AtkCount == 0) {
-		//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
-		if (alive) { Attack(); }//’Ç”ö’e
+		//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
+		if (alive) { Attack(); }//è¿½å°¾å¼¾
 
-		//‚¾‚ñ‚¾‚ñ’e‚Ì”­ËŠÔŠu‘¬‚­
+		//ã ã‚“ã ã‚“å¼¾ã®ç™ºå°„é–“éš”é€Ÿã
 		Circular_AtkInterval -= 2;
 
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		Circular_AtkCount = Circular_AtkInterval;
 	}
 }
@@ -368,32 +368,32 @@ void Boss::LeaveFirstPos()
 
 	if (GetPosOnlyFlag)
 	{
-		//Å‰‚ÌˆÊ’u
+		//æœ€åˆã®ä½ç½®
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosOnlyFlag = false;
 
-		//LeaveFirstPos2‰ñ‚Å“Ë‚Á‚Ş
+		//LeaveFirstPos2å›ã§çªã£è¾¼ã‚€
 		PlungeCount--;
 	}
 	XMFLOAT3 pPos = shotTag->GetPosition();
-	//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
+	//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
 	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesLeaveFirstFrame;
 	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesLeaveFirstFrame;
 	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesLeaveFirstFrame;
-	//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+	//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
 	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
 	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
 
 	obj->SetPosition({ NowPos });
 
-	//”­ËƒJƒEƒ“ƒg‚ğƒfƒNƒŠƒƒ“ƒg
+	//ç™ºå°„ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 	AtkCount--;
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (AtkCount == 0) {
-		//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
-		if (alive) { Attack(); }//’Ç”ö’e
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
+		if (alive) { Attack(); }//è¿½å°¾å¼¾
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		AtkCount = AtkInterval_LeaveFirst;
 	}
 
@@ -404,12 +404,12 @@ void Boss::LeaveFirstPos()
 		MoveSp = {};
 		NowPos = {};
 
-		//’e‚Ì”­ËŠÔŠu‚ğŒ³‚É–ß‚·
+		//å¼¾ã®ç™ºå°„é–“éš”ã‚’å…ƒã«æˆ»ã™
 		Circular_AtkInterval = Circular_AtkIntervalDef;
 
-		if (PlungeCount == 0) {//LeaveFirstPos‚ğw’è‰ñ”‚µ‚½‚ç“ËŒ‚
+		if (PlungeCount == 0) {//LeaveFirstPosã‚’æŒ‡å®šå›æ•°ã—ãŸã‚‰çªæ’ƒ
 			XMFLOAT3 boPos = obj->GetPosition();
-			WasPosMem = boPos;//“Ë‚Á‚İs“®‚ÖˆÚs‚·‚é‘O‚ÉÅŒã‚É‚¢‚½êŠ‚ğ‹L‰¯‚·‚é
+			WasPosMem = boPos;//çªã£è¾¼ã¿è¡Œå‹•ã¸ç§»è¡Œã™ã‚‹å‰ã«æœ€å¾Œã«ã„ãŸå ´æ‰€ã‚’è¨˜æ†¶ã™ã‚‹
 			actionPattern = std::bind(&Boss::PlungeInto, this);
 		}
 		else {
@@ -425,7 +425,7 @@ void Boss::PlungeInto()
 
 	switch (plungeIntoPattern_)
 	{
-	case PlungeIntoPattern::Leave://ˆê“x—£‚ê‚Ä
+	case PlungeIntoPattern::Leave://ä¸€åº¦é›¢ã‚Œã¦
 		position.z += LeaveVel;
 
 		if (position.z >= LeavePos) {
@@ -436,43 +436,43 @@ void Boss::PlungeInto()
 
 		break;
 
-	case PlungeIntoPattern::PlungeInto://“Ë‚Á‚ñ‚Å‚­‚é
+	case PlungeIntoPattern::PlungeInto://çªã£è¾¼ã‚“ã§ãã‚‹
 
 		Nowframe++;
 
-		//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
+		//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
 		PlungeSp.x = (pPosMem.x - boPosMom.x);
 		PlungeSp.y = (pPosMem.y - boPosMom.y);
 		PlungeSp.z = (pPosMem.z - boPosMom.z);
 
-		//XMVECTOR‚É•ÏŠ·‚µ‚ÄxmvecMoveSp‚É‚¢‚ê‚é
+		//XMVECTORã«å¤‰æ›ã—ã¦xmvecMoveSpã«ã„ã‚Œã‚‹
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&PlungeSp);
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
-		// ‘å‚«‚³‚ğ”CˆÓ’l‚É(‘¬“x)
+		// å¤§ãã•ã‚’ä»»æ„å€¤ã«(é€Ÿåº¦)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 50.f);
-		// FLOAT3‚É•ÏŠ·
+		// FLOAT3ã«å¤‰æ›
 		XMStoreFloat3(&PlungeSp, xmvecMoveSp);
 
-		//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+		//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 		PlungeNowPos.x = boPosMom.x + PlungeSp.x * Nowframe;
 		PlungeNowPos.y = boPosMom.y + PlungeSp.y * Nowframe;
 		PlungeNowPos.z = boPosMom.z + PlungeSp.z * Nowframe;
 
-		obj->SetPosition(PlungeNowPos);//‚»‚Ì‚ÌˆÊ’u
+		obj->SetPosition(PlungeNowPos);//ãã®æ™‚ã®ä½ç½®
 
-		if (position.z < shotTag->GetPosition().z) {//“ËŒ‚I‚í‚Á‚½‚ç
-			boPosFlag = false;//ˆê“x‚«‚è“Ç‚İ‚İƒŠƒZ
-			pMemFlag = false;//ˆê“x‚«‚èƒZƒbƒg
+		if (position.z < shotTag->GetPosition().z) {//çªæ’ƒçµ‚ã‚ã£ãŸã‚‰
+			boPosFlag = false;//ä¸€åº¦ãã‚Šèª­ã¿è¾¼ã¿ãƒªã‚»
+			pMemFlag = false;//ä¸€åº¦ãã‚Šã‚»ãƒƒãƒˆ
 
 			Nowframe = NowframeDef;
-			//‚à‚¤“Ë‚Á‚ñ‚¾
+			//ã‚‚ã†çªã£è¾¼ã‚“ã 
 			PlungeCompletFlag = true;
-			plungeIntoPattern_ = PlungeIntoPattern::Wait;//‘Ò‚Á‚Ä‚©‚ç
+			plungeIntoPattern_ = PlungeIntoPattern::Wait;//å¾…ã£ã¦ã‹ã‚‰
 		}
 		break;
 
-	case PlungeIntoPattern::Reverse://“Ë‚Á‚İI‚í‚Á‚½‚©‚ç–ß‚ê
+	case PlungeIntoPattern::Reverse://çªã£è¾¼ã¿çµ‚ã‚ã£ãŸã‹ã‚‰æˆ»ã‚Œ
 
 		ReversePos = { 0,100,shotTag->GetPosition().z + 1000 };
 
@@ -483,44 +483,44 @@ void Boss::PlungeInto()
 			BeforeReversePosMemFlag = true;
 		}
 
-		//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
+		//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
 		ReverseSp.x = (ReversePos.x - BeforeReversePosMem.x);
 		ReverseSp.y = (ReversePos.y - BeforeReversePosMem.y);
 		ReverseSp.z = (ReversePos.z - BeforeReversePosMem.z);
 
-		//XMVECTOR‚É•ÏŠ·‚µ‚ÄxmvecMoveSp‚É‚¢‚ê‚é
+		//XMVECTORã«å¤‰æ›ã—ã¦xmvecMoveSpã«ã„ã‚Œã‚‹
 		XMVECTOR xmvecRevMoveSp = XMLoadFloat3(&ReverseSp);
 		//normalize
 		xmvecRevMoveSp = XMVector3Normalize(xmvecRevMoveSp);
-		// ‘å‚«‚³‚ğ”CˆÓ’l‚É(‘¬“x)
+		// å¤§ãã•ã‚’ä»»æ„å€¤ã«(é€Ÿåº¦)
 		xmvecRevMoveSp = XMVectorScale(xmvecRevMoveSp, 10.f);
-		// FLOAT3‚É•ÏŠ·
+		// FLOAT3ã«å¤‰æ›
 		XMStoreFloat3(&ReverseSp, xmvecRevMoveSp);
 
-		//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+		//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 		ReverseNowPos.x = BeforeReversePosMem.x + ReverseSp.x * Nowframe;
 		ReverseNowPos.y = BeforeReversePosMem.y + ReverseSp.y * Nowframe;
 		ReverseNowPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
 
-		obj->SetPosition(ReverseNowPos);//‚»‚Ì‚ÌˆÊ’u
+		obj->SetPosition(ReverseNowPos);//ãã®æ™‚ã®ä½ç½®
 
-		//zÀ•W‚ªw’èÀ•W‚É‚È‚Á‚½‚ç
+		//zåº§æ¨™ãŒæŒ‡å®šåº§æ¨™ã«ãªã£ãŸã‚‰
 		if (position.z >= ReversePos.z) {
 			PlungeCount = PlungeCountDef;
 			BeforeReversePosMemFlag = false;
 			plungeIntoPattern_ = PlungeIntoPattern::Leave;
-			//“Ë‚Á‚İˆê˜AI‚í‚Á‚½Œã‚Ìs“®‚Ö
+			//çªã£è¾¼ã¿ä¸€é€£çµ‚ã‚ã£ãŸå¾Œã®è¡Œå‹•ã¸
 			actionPattern = std::bind(&Boss::AfterPlungeInto, this);
 		}
 
 		break;
 
-	case PlungeIntoPattern::Wait://‘Ò‹@‚µ‚Ä‚©‚çs“®
-		//---------------------—\’›‚Í‚±‚±‚Å ƒVƒFƒCƒN
-		//‘Ò‹@ŠÔƒfƒNƒŠƒƒ“ƒg
+	case PlungeIntoPattern::Wait://å¾…æ©Ÿã—ã¦ã‹ã‚‰è¡Œå‹•
+		//---------------------äºˆå…†ã¯ã“ã“ã§ ã‚·ã‚§ã‚¤ã‚¯
+		//å¾…æ©Ÿæ™‚é–“ãƒ‡ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
 		PlungeIntoWaitCount--;
 
-		//“ËŒ‚Œã‚È‚ç“Ë‚Á‚ñ‚¾êŠ‚Å‚Ü‚Â
+		//çªæ’ƒå¾Œãªã‚‰çªã£è¾¼ã‚“ã å ´æ‰€ã§ã¾ã¤
 		if (PlungeCompletFlag) {
 			obj->SetPosition(pPosMem);
 		}
@@ -531,9 +531,9 @@ void Boss::PlungeInto()
 		}
 
 		if (PlungeIntoWaitCount == 0) {
-			if (PlungeCompletFlag == false) {//“Ë‚Á‚İŠ®—¹‘O‚È‚ç
-				//‚»‚Ì‚Ìƒ^[ƒQƒbƒgÀ•W
-				//ˆê“x‚«‚è@“Ë‚Á‚İ‚Ég‚¤À•W
+			if (PlungeCompletFlag == false) {//çªã£è¾¼ã¿å®Œäº†å‰ãªã‚‰
+				//ãã®æ™‚ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™
+				//ä¸€åº¦ãã‚Šã€€çªã£è¾¼ã¿ã«ä½¿ã†åº§æ¨™
 				if (pMemFlag == false) {
 					pPosMem = shotTag->GetPosition();
 					pMemFlag = true;
@@ -541,19 +541,19 @@ void Boss::PlungeInto()
 
 				if (boPosFlag == false)
 				{
-					//Å‰‚ÌˆÊ’u
+					//æœ€åˆã®ä½ç½®
 					boPosMom = obj->GetPosition();
 					boPosFlag = true;
 				}
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
 				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
 			}
-			else {//“Ë‚Á‚İŒã
-				PlungeCompletFlag = false;//ƒŠƒZƒbƒg
+			else {//çªã£è¾¼ã¿å¾Œ
+				PlungeCompletFlag = false;//ãƒªã‚»ãƒƒãƒˆ
 				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-				ShakePosMemFlag = false;//ƒVƒFƒCƒNI‚í‚è
-				Nowframe = NowframeDef;//–ß‚³‚È‚¢‚ÆŸ‚Ìs“®‚ÉƒJƒNƒcƒL‚ªo‚é
-				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//Œ³‚ÌêŠ‚ÖŒü‚©‚¤
+				ShakePosMemFlag = false;//ã‚·ã‚§ã‚¤ã‚¯çµ‚ã‚ã‚Š
+				Nowframe = NowframeDef;//æˆ»ã•ãªã„ã¨æ¬¡ã®è¡Œå‹•ã«ã‚«ã‚¯ãƒ„ã‚­ãŒå‡ºã‚‹
+				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//å…ƒã®å ´æ‰€ã¸å‘ã‹ã†
 			}
 		}
 		break;
@@ -564,29 +564,29 @@ void Boss::AfterPlungeInto()
 {
 	switch (afterPlungePattern_)
 	{
-	case AfterPlungePattern::Wait://‘Ò‹@‚µ‚Ä‚©‚çs“®
+	case AfterPlungePattern::Wait://å¾…æ©Ÿã—ã¦ã‹ã‚‰è¡Œå‹•
 
-		WaitTime--;//‘Ò‚¿ŠÔ
-		if (WaitTime == 0) {//w’èŠÔ‘Ò‚Á‚½‚ç
-			LoopCount++;//‰½‰ñ‚â‚Á‚½‚©”‚¦‚é‚ñ‚¾‚æ
+		WaitTime--;//å¾…ã¡æ™‚é–“
+		if (WaitTime == 0) {//æŒ‡å®šæ™‚é–“å¾…ã£ãŸã‚‰
+			LoopCount++;//ä½•å›ã‚„ã£ãŸã‹æ•°ãˆã‚‹ã‚“ã ã‚ˆ
 			WaitTime = WaitTimeDef;
 			Nowframe = NowframeDef;
-			afterPlungePattern_ = AfterPlungePattern::Attack;//UŒ‚‚Ö
+			afterPlungePattern_ = AfterPlungePattern::Attack;//æ”»æ’ƒã¸
 		}
 
 		AtkCount--;
-		//‚ª–‚¿‚½‚ç
+		//æ™‚ãŒæº€ã¡ãŸã‚‰
 		if (AtkCount == 0) {
-			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+			//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 			if (alive) { StraightAttack(); }
-			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 			AtkCount = AtkInterval;
 		}
 
-		//s“®‚ğˆê’è”ŒJ‚è•Ô‚µ‚½‚çs“®•Ï‚¦‚é
+		//è¡Œå‹•ã‚’ä¸€å®šæ•°ç¹°ã‚Šè¿”ã—ãŸã‚‰è¡Œå‹•å¤‰ãˆã‚‹
 		if (LoopCount == LoopCountMax) {
 			Nowframe = 0;
-			afterPlungePattern_ = AfterPlungePattern::Fin;//s“®–ß‚é‘O‚ÉÅŒã‚ÉŒ³‚ÌêŠ‚Ö
+			afterPlungePattern_ = AfterPlungePattern::Fin;//è¡Œå‹•æˆ»ã‚‹å‰ã«æœ€å¾Œã«å…ƒã®å ´æ‰€ã¸
 			LoopCount = LoopCountDef;
 		}
 
@@ -597,28 +597,28 @@ void Boss::AfterPlungeInto()
 		Nowframe++;
 
 		if (pPosMemFlag == false) {
-			pPosMem = shotTag->GetPosition();//©‹@‚¢‚½êŠ
-			boPosMem = obj->GetPosition();//ƒ{ƒX‚¢‚½êŠ
+			pPosMem = shotTag->GetPosition();//è‡ªæ©Ÿã„ãŸå ´æ‰€
+			boPosMem = obj->GetPosition();//ãƒœã‚¹ã„ãŸå ´æ‰€
 			pPosMemFlag = true;
 		}
-		//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
+		//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
 		AtkMoveSp.x = (pPosMem.x - boPosMem.x) / NecesAtkMoveTime;
 		AtkMoveSp.y = (pPosMem.y - boPosMem.y) / NecesAtkMoveTime;
 		AtkMoveSp.z = (pPosMem.z + 800 - boPosMem.z) / NecesAtkMoveTime;
 
-		//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+		//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 		boNowPos.x = boPosMem.x + AtkMoveSp.x * Nowframe;
 		boNowPos.y = boPosMem.y + AtkMoveSp.y * Nowframe;
 		boNowPos.z = boPosMem.z + AtkMoveSp.z * Nowframe;
 
-		obj->SetPosition(boNowPos);//‚»‚Ì‚ÌˆÊ’u
+		obj->SetPosition(boNowPos);//ãã®æ™‚ã®ä½ç½®
 
 		AfterPlungePatAtkCount--;
-		//‚ª–‚¿‚½‚ç
+		//æ™‚ãŒæº€ã¡ãŸã‚‰
 		if (AfterPlungePatAtkCount == 0) {
-			//“ËŒ‚A¶‘¶‚Ì‚İ”­Ë
+			//çªæ’ƒæ™‚ã€ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 			if (alive) { Attack(); }
-			//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+			//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 			AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
 		}
 
@@ -631,7 +631,7 @@ void Boss::AfterPlungeInto()
 		break;
 
 	case AfterPlungePattern::Fin:
-		if (PlungeFinOnlyFlag == false) {//Å‰‚ÌÀ•W
+		if (PlungeFinOnlyFlag == false) {//æœ€åˆã®åº§æ¨™
 			boPosMem = obj->GetPosition();
 			PlungeFinOnlyFlag = true;
 		}
@@ -639,7 +639,7 @@ void Boss::AfterPlungeInto()
 			float raito = (float)Nowframe / PlungeFinFrameMax;
 			Nowframe++;
 
-			//‰~s“®‚É‡‚¤‚æ‚¤‚É‚»‚ÌêŠ‚ÖˆÚ“®
+			//å††è¡Œå‹•ã«åˆã†ã‚ˆã†ã«ãã®å ´æ‰€ã¸ç§»å‹•
 			XMFLOAT3 pos{};
 			pos.x = std::lerp(boPosMem.x, obj->GetPosition().x, raito);
 			pos.y = std::lerp(boPosMem.y, CircularY, raito);
@@ -648,8 +648,8 @@ void Boss::AfterPlungeInto()
 			if (Nowframe == PlungeFinFrameMax) {
 				Nowframe = 0;
 				PlungeFinOnlyFlag = false;
-				afterPlungePattern_ = AfterPlungePattern::Wait;//‚±‚±‚Ìs“®–ß‚·
-				//Ÿ‚Ìs“®
+				afterPlungePattern_ = AfterPlungePattern::Wait;//ã“ã“ã®è¡Œå‹•æˆ»ã™
+				//æ¬¡ã®è¡Œå‹•
 				actionPattern = std::bind(&Boss::CircularMotionMove, this);
 			}
 		}
@@ -659,7 +659,7 @@ void Boss::AfterPlungeInto()
 
 void Boss::Shake() {
 	CharParameters* charParameters = CharParameters::GetInstance();
-	//pos—h‚ç‚·
+	//posæºã‚‰ã™
 	XMFLOAT3 pos = obj->GetPosition();
 
 	randShakeNow = 7 + 1;//a~b
@@ -675,29 +675,29 @@ void Boss::Shake() {
 	obj->SetPosition(pos);
 }
 
-//-------UŒ‚Œn
+//-------æ”»æ’ƒç³»
 void Boss::Attack()
 {
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
-	//’e”­Ë
+	//å¼¾ç™ºå°„
 	XMFLOAT3 position = obj->GetPosition();
-	//’e¶¬
+	//å¼¾ç”Ÿæˆ
 	std::unique_ptr<BossAimBul> madeAimBullet = std::make_unique<BossAimBul>();
 	madeAimBullet->Initialize();
 	madeAimBullet->SetModel(AimBulModel);
 	madeAimBullet->SetPosition(position);
 
-	//’e“o˜^
+	//å¼¾ç™»éŒ²
 	aimBullets_.push_back(std::move(madeAimBullet));
 }
 void Boss::PAimBul()
 {
-	//’eˆê‚Â‚¸‚Â
+	//å¼¾ä¸€ã¤ãšã¤
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
-		//‚»‚Ì‚Ìƒ^[ƒQƒbƒgÀ•W
-	//ˆê“x‚«‚è
+		//ãã®æ™‚ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™
+	//ä¸€åº¦ãã‚Š
 		if (aimBullet->ShotTagMomOnlyFlag) {
 			aimBullet->ShotTagMoment = shotTag->GetPosition();
 			aimBullet->ShotTagMomOnlyFlag = false;
@@ -706,12 +706,12 @@ void Boss::PAimBul()
 		aimBullet->Nowframe++;
 		if (aimBullet->GetPosOnlyFlag)
 		{
-			//Å‰‚ÌˆÊ’u
+			//æœ€åˆã®ä½ç½®
 			aimBullet->boPosMoment = obj->GetPosition();
 			aimBullet->GetPosOnlyFlag = false;
 		}
-		//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
-		// //â‘Î“–‚½‚é
+		//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
+		// //çµ¶å¯¾å½“ãŸã‚‹
 		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
 		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
 		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
@@ -719,35 +719,35 @@ void Boss::PAimBul()
 		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
 		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
 
-		//XMVECTOR‚É•ÏŠ·‚µ‚ÄxmvecMoveSp‚É‚¢‚ê‚é
+		//XMVECTORã«å¤‰æ›ã—ã¦xmvecMoveSpã«ã„ã‚Œã‚‹
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->MoveSp);
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
-		// ‘å‚«‚³‚ğ”CˆÓ’l‚É(‘¬“x)
+		// å¤§ãã•ã‚’ä»»æ„å€¤ã«(é€Ÿåº¦)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 9.f);
-		// FLOAT3‚É•ÏŠ·
+		// FLOAT3ã«å¤‰æ›
 		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
 
-		//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+		//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 		aimBullet->NowPos.x = aimBullet->boPosMoment.x + aimBullet->MoveSp.x * aimBullet->Nowframe;
 		aimBullet->NowPos.y = aimBullet->boPosMoment.y + aimBullet->MoveSp.y * aimBullet->Nowframe;
 		aimBullet->NowPos.z = aimBullet->boPosMoment.z + aimBullet->MoveSp.z * aimBullet->Nowframe;
 
-		aimBullet->SetPosition(aimBullet->NowPos);//‚»‚Ì‚ÌˆÊ’u
+		aimBullet->SetPosition(aimBullet->NowPos);//ãã®æ™‚ã®ä½ç½®
 	}
 }
 void Boss::DiffusionAttack()
 {
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
-	//’e”­Ë
+	//å¼¾ç™ºå°„
 	XMFLOAT3 position = obj->GetPosition();
-	//’e¶¬
+	//å¼¾ç”Ÿæˆ
 	std::unique_ptr<BossBullet> madeBullet_center = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_L = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_R = std::make_unique<BossBullet>();
-	//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+	//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	madeBullet_center->Initialize();
 	madeBullet_L->Initialize();
 	madeBullet_R->Initialize();
@@ -760,8 +760,8 @@ void Boss::DiffusionAttack()
 	madeBullet_L->SetPosition(position);
 	madeBullet_R->SetPosition(position);
 
-	// velocity‚ğZo
-	const float MoveZ = 1.7f;//ˆÚ“®—Ê
+	// velocityã‚’ç®—å‡º
+	const float MoveZ = 1.7f;//ç§»å‹•é‡
 	const float MoveX = 2.f;
 	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
@@ -777,24 +777,24 @@ void Boss::DiffusionAttack()
 	madeBullet_L->SetVelocity(xmfloat3velocity_L);
 	madeBullet_R->SetVelocity(xmfloat3velocity_R);
 
-	//’e“o˜^
+	//å¼¾ç™»éŒ²
 	bullets_.push_back(std::move(madeBullet_center));
 	bullets_.push_back(std::move(madeBullet_L));
 	bullets_.push_back(std::move(madeBullet_R));
 }
 void Boss::DiffusionAttackEavenNumber()
 {
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
-	//’e”­Ë
+	//å¼¾ç™ºå°„
 	XMFLOAT3 position = obj->GetPosition();
-	//’e¶¬
+	//å¼¾ç”Ÿæˆ
 	std::unique_ptr<BossBullet> madeBullet_L1 = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_L2 = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_R1 = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_R2 = std::make_unique<BossBullet>();
-	//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+	//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	madeBullet_L1->Initialize();
 	madeBullet_L2->Initialize();
 	madeBullet_R1->Initialize();
@@ -810,10 +810,10 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R1->SetPosition(position);
 	madeBullet_R2->SetPosition(position);
 
-	// velocity‚ğZo
-	const float MoveZ = 1.7f;//ˆÚ“®—Ê
-	const float MoveEdgeX = 3.f;//’[’eˆÚ“®—Ê
-	const float MoveX = 0.5f;//ˆÚ“®—Ê
+	// velocityã‚’ç®—å‡º
+	const float MoveZ = 1.7f;//ç§»å‹•é‡
+	const float MoveEdgeX = 3.f;//ç«¯å¼¾ç§»å‹•é‡
+	const float MoveX = 0.5f;//ç§»å‹•é‡
 	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-MoveEdgeX, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_R1 = DirectX::XMVectorSet(MoveX, 0, MoveZ, 0);
@@ -832,7 +832,7 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R1->SetVelocity(xmfloat3velocity_R1);
 	madeBullet_R2->SetVelocity(xmfloat3velocity_R2);
 
-	//’e“o˜^
+	//å¼¾ç™»éŒ²
 	bullets_.push_back(std::move(madeBullet_L1));
 	bullets_.push_back(std::move(madeBullet_L2));
 	bullets_.push_back(std::move(madeBullet_R1));
@@ -840,24 +840,24 @@ void Boss::DiffusionAttackEavenNumber()
 }
 void Boss::StraightAttack()
 {
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.3f);
 
-	//’e”­Ë
+	//å¼¾ç™ºå°„
 	XMFLOAT3 position = obj->GetPosition();
-	//’e¶¬
+	//å¼¾ç”Ÿæˆ
 	std::unique_ptr<BossStraightBul> madeBullet = std::make_unique<BossStraightBul>();
-	//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+	//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 	madeBullet->Initialize();
 	madeBullet->SetModel(StraightBulModel);
 	madeBullet->SetPosition(position);
 	madeBullet->SetScale({ 30.f, 30.f, 30.f });
 
-	//’e“o˜^
+	//å¼¾ç™»éŒ²
 	straightBullets_.push_back(std::move(madeBullet));
 }
 
-//------UŒ‚Œnª
+//------æ”»æ’ƒç³»â†‘
 void Boss::Death() {
 	Nowframe++;
 	ParticleFrame++;
@@ -865,17 +865,17 @@ void Boss::Death() {
 
 	if (GetPosDeathOnlyFlag)
 	{
-		//Å‰‚ÌˆÊ’u
+		//æœ€åˆã®ä½ç½®
 		boPosDeath = obj->GetPosition();
 		GetPosDeathOnlyFlag = false;
 	}
 
 	//XMFLOAT3 boRot = obj->GetRotation();
-	//ˆÚ“®‘¬“xiw’èÀ•W-Å‰ˆÊ’uj/‚©‚©‚éŠÔ
-	MoveSp.x = (boPosDeath.x - boPosDeath.x) / NecesFrame;//w’èÀ•WX‚Í€‚ñ‚¾êŠ‚©‚ç^‰º‚É—‚¿‚é‚æ‚¤‚É€‚ñ‚¾XÀ•W
+	//ç§»å‹•é€Ÿåº¦ï¼ï¼ˆæŒ‡å®šåº§æ¨™-æœ€åˆä½ç½®ï¼‰/ã‹ã‹ã‚‹æ™‚é–“
+	MoveSp.x = (boPosDeath.x - boPosDeath.x) / NecesFrame;//æŒ‡å®šåº§æ¨™Xã¯æ­»ã‚“ã å ´æ‰€ã‹ã‚‰çœŸä¸‹ã«è½ã¡ã‚‹ã‚ˆã†ã«æ­»ã‚“ã Xåº§æ¨™
 	MoveSp.y = (TargetPos.y - boPosDeath.y) / NecesFrame;
-	MoveSp.z = (boPosDeath.z - boPosDeath.z) / NecesFrame;//V
-	//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+	MoveSp.z = (boPosDeath.z - boPosDeath.z) / NecesFrame;//ã€ƒ
+	//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 	NowPos.x = boPosDeath.x + MoveSp.x * Nowframe;
 	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;
 	NowPos.z = boPosDeath.z + MoveSp.z * Nowframe;
@@ -883,11 +883,11 @@ void Boss::Death() {
 	//boRot.y += +1.0;
 	//boPos.y += -0.5;
 	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
-	obj->SetPosition(NowPos);//‚»‚Ì‚ÌˆÊ’u
+	obj->SetPosition(NowPos);//ãã®æ™‚ã®ä½ç½®
 
-	//ˆê’èŠÔ‚²‚Æ‚Éƒp[ƒeƒBƒNƒ‹
+	//ä¸€å®šæ™‚é–“ã”ã¨ã«ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	if (PartTimeInterval == 1) {
-		// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+		// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
 		ParticleManager::GetInstance()->CreateParticle(NowPos, 100, 80, 10);
 		PartTimeInterval = 0;
@@ -904,7 +904,7 @@ void Boss::Initialize()
 	mod_SideSquare.reset(Model::LoadFromOBJ("boss_SideSquare"));
 	mod_UpDown.reset(Model::LoadFromOBJ("boss_UpDown"));
 	mod_VerticalCircle.reset(Model::LoadFromOBJ("boss_VerticalCircle"));
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
 	obj_core.reset(Object3d::Create());
 	obj_AroundCore.reset(Object3d::Create());
@@ -920,16 +920,16 @@ void Boss::Initialize()
 	obj_UpDown->SetModel(mod_UpDown.get());
 	obj_VerticalCircle->SetModel(mod_VerticalCircle.get());
 
-	//-----«”CˆÓ«-----//
-		//‘å‚«‚³
-	obj->SetScale({ 60.0f, 60.0f, 60.0f });
+	//-----â†“ä»»æ„â†“-----//
+		//å¤§ãã•
+	obj->SetScale({ 130.0f, 130.0f, 130.0f });
 	obj_core->SetScale({ 40.f, 40.f, 40.f });
 	obj_AroundCore->SetScale({ 40.f, 40.f, 40.f });
 	obj_outside->SetScale({ 40.f, 40.f, 40.f });
 	obj_SideSquare->SetScale({ 40.f, 40.f, 40.f });
 	obj_UpDown->SetScale({ 40.f, 40.f, 40.f });
 	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
-	//êŠ
+	//å ´æ‰€
 	obj->SetPosition({ 0,0,3300 });
 	obj_core->SetPosition({ 0,30,2500 });
 	obj_AroundCore->SetPosition({ 0,30,2500 });
@@ -937,7 +937,7 @@ void Boss::Initialize()
 	obj_SideSquare->SetPosition({ 0,30,2500 });
 	obj_UpDown->SetPosition({ 0,30,2500 });
 	obj_VerticalCircle->SetPosition({ 0,30,2500 });
-	//‰ñ“]
+	//å›è»¢
 	obj_core->SetRotation({ 0, 180, 0 });
 	obj_AroundCore->SetRotation({ 0, 180, 0 });
 	obj_outside->SetRotation({ 0, 180, 0 });
@@ -947,14 +947,14 @@ void Boss::Initialize()
 
 	obj->SetColor({ 1, 1, 1, 0.0f });
 
-	// ‰¹º“Ç‚İ‚İ
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
 	GameSound::GetInstance()->LoadWave("destruction1.wav");
 
-	//‹ß‚Ã‚­ƒpƒ^[ƒ“‰Šú‰»
+	//è¿‘ã¥ããƒ‘ã‚¿ãƒ¼ãƒ³åˆæœŸåŒ–
 	ApproachInit();
 
-	//ƒfƒtƒHƒ‹ƒg‚Ìs“®‚ğİ’è
+	//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¡Œå‹•ã‚’è¨­å®š
 	actionPattern = std::bind(&Boss::BossAppear, this);
 }
 
@@ -968,7 +968,7 @@ void Boss::Update()
 	time = frame / 60.f;
 	frame += 1.f;
 
-	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
+	//æ¶ˆæ»…ãƒ•ãƒ©ã‚°ç«‹ã£ãŸã‚‰ãã®å¼¾ã¯æ­»ã—ã¦æ‹ã›ã‚ˆ
 	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
@@ -996,21 +996,21 @@ void Boss::Update()
 		Shake();
 	}
 
-	//ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^ŒÄ‚Ño‚µ
+	//ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿å‘¼ã³å‡ºã—
 	actionPattern();
 
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Update();
 	}
-	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//‘_‚¢’e
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//ç‹™ã„å¼¾
 		aimBullet->Update();
 	}
-	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//‘_‚¢’e
+	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//ç‹™ã„å¼¾
 		straightBullet->Update();
 	}
 
-	//‘_‚¢’e
+	//ç‹™ã„å¼¾
 	PAimBul();
 
 	auto core_rot = obj_core->GetRotation();
@@ -1052,14 +1052,14 @@ void Boss::Update()
 
 void Boss::Draw()
 {
-	//’e
+	//å¼¾
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}
-	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//‘_‚¢’e
+	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {//ç‹™ã„å¼¾
 		aimBullet->Draw();
 	}
-	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//’¼ü’e
+	for (std::unique_ptr<BossStraightBul>& straightBullet : straightBullets_) {//ç›´ç·šå¼¾
 		straightBullet->Draw();
 	}
 

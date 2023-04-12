@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -12,44 +12,44 @@
 
 class Boss :public BaseObject
 {
-	enum class VerticalPattern {//c‚ÌUŒ‚ƒpƒ^[ƒ“
-		def,//ƒfƒtƒHƒ‹ƒg‚©‚çn‚Ü‚é
-		Wait,//‘Ò‚¿
-		StartVertical,//Å‰‚Éã‚Ö
-		Down,//‰ºˆÚ“®
-		Up,//ãˆÚ“®
-		Reverse,//–ß‚é
-		EndVertical,//cs“®I‚í‚è
+	enum class VerticalPattern {//ç¸¦ã®æ”»æ’ƒãƒ‘ã‚¿ãƒ¼ãƒ³
+		def,//ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‹ã‚‰å§‹ã¾ã‚‹
+		Wait,//å¾…ã¡
+		StartVertical,//æœ€åˆã«ä¸Šã¸
+		Down,//ä¸‹ç§»å‹•
+		Up,//ä¸Šç§»å‹•
+		Reverse,//æˆ»ã‚‹
+		EndVertical,//ç¸¦è¡Œå‹•çµ‚ã‚ã‚Š
 	};
 
-	enum class PlungeIntoPattern {//“Ë‚Á‚İ
-		Leave,//‘O€”õ‚Å—£‚ê‚é
-		PlungeInto,//“Ë‚Á‚Ş
-		Reverse,//–ß‚Á‚Ä‚­‚é
-		Wait,//ŠÔ‹ó‚¯‚Ä‚©‚çs“®
+	enum class PlungeIntoPattern {//çªã£è¾¼ã¿
+		Leave,//å‰æº–å‚™ã§é›¢ã‚Œã‚‹
+		PlungeInto,//çªã£è¾¼ã‚€
+		Reverse,//æˆ»ã£ã¦ãã‚‹
+		Wait,//æ™‚é–“ç©ºã‘ã¦ã‹ã‚‰è¡Œå‹•
 	};
 
-	enum class AfterPlungePattern {//“Ë‚Á‚İŒãs“®
-		Wait,//ŠÔ‹ó‚¯‚Ä‚©‚çs“®
-		Attack,//UŒ‚
-		Fin,//ÅŒãw’è‚ÌêŠ‚Ö
+	enum class AfterPlungePattern {//çªã£è¾¼ã¿å¾Œè¡Œå‹•
+		Wait,//æ™‚é–“ç©ºã‘ã¦ã‹ã‚‰è¡Œå‹•
+		Attack,//æ”»æ’ƒ
+		Fin,//æœ€å¾ŒæŒ‡å®šã®å ´æ‰€ã¸
 	};
 
 public:
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
-	//ƒVƒFƒCƒN
+	//ã‚·ã‚§ã‚¤ã‚¯
 	void Shake();
 
-	//UŒ‚
+	//æ”»æ’ƒ
 	void Attack();
 
 	void PAimBul();
@@ -62,53 +62,53 @@ public:
 	void LeaveFirstPos();
 	void PlungeInto();
 	void AfterPlungeInto();
-	//ŠgUUŒ‚
+	//æ‹¡æ•£æ”»æ’ƒ
 	void DiffusionAttack();
-	//ŠgU‹ô”’e
+	//æ‹¡æ•£å¶æ•°å¼¾
 	void DiffusionAttackEavenNumber();
-	//’¼üUŒ‚
+	//ç›´ç·šæ”»æ’ƒ
 	void StraightAttack();
 
 	void Death();
 
-	//‹ß‚Ã‚­ˆ—‰Šú‰»
+	//è¿‘ã¥ãå‡¦ç†åˆæœŸåŒ–
 	void ApproachInit();
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
 	float time;
 
-	//‹ß‚Ã‚­‘¬‚³
+	//è¿‘ã¥ãé€Ÿã•
 	const float ApproachSpZ = 3.f;
 	const float ApproachSpY = 2.f;
-	//—£‚ê‚é‘¬‚³
+	//é›¢ã‚Œã‚‹é€Ÿã•
 	const float LeaveSpZ = 3.f;
 	const float LeaveSpY = 2.f;
-	////‹ß‚Ã‚¯‚é‹——£
+	////è¿‘ã¥ã‘ã‚‹è·é›¢
 	//float ApproachLim;
-	//—£‚ê‚ç‚ê‚é‹——£
+	//é›¢ã‚Œã‚‰ã‚Œã‚‹è·é›¢
 	float LeaveLim = 90;
 
 	std::function<void()> actionPattern;
 
-	std::list <std::unique_ptr<BossBullet>> bullets_;//ƒ{ƒX‚Ì’e@ƒ†ƒj[ƒNƒ|ƒCƒ“ƒ^
-	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ƒ{ƒX‚Ì‘_‚¢’e
-	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ƒ{ƒX‚Ì’¼ü’e
+	std::list <std::unique_ptr<BossBullet>> bullets_;//ãƒœã‚¹ã®å¼¾ã€€ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒã‚¤ãƒ³ã‚¿
+	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ãƒœã‚¹ã®ç‹™ã„å¼¾
+	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ãƒœã‚¹ã®ç›´ç·šå¼¾
 
-	//ƒtƒŒ[ƒ€‚²‚Æ‚É”­Ë
+	//ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«ç™ºå°„
 	static const int AtkInterval = 10;
 	static const int AtkInterval_LeaveFirst = 20;
 	static const int DiffusionAtkInterval = 20;
 
-	//cUŒ‚
+	//ç¸¦æ”»æ’ƒ
 	VerticalPattern verticalPattern_ = VerticalPattern::def;
-	//ˆê“x—£‚ê‚Ä‚©‚ç“Ë‚Á‚Şs“®ƒpƒ^[ƒ“@Å‰—£‚ê‚é
+	//ä¸€åº¦é›¢ã‚Œã¦ã‹ã‚‰çªã£è¾¼ã‚€è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã€€æœ€åˆé›¢ã‚Œã‚‹
 	PlungeIntoPattern plungeIntoPattern_ = PlungeIntoPattern::Leave;
-	//“Ë‚Á‚İŒã‚Ìs“®ƒpƒ^[ƒ“ Å‰‘Ò‚¿
+	//çªã£è¾¼ã¿å¾Œã®è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ æœ€åˆå¾…ã¡
 	AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
 
-	//-----------------«‚°‚Á‚½[‚¹‚Á‚½[«------------------//
-	//’eƒŠƒXƒg‚ğæ“¾
+	//-----------------â†“ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†“------------------//
+	//å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
 	const std::list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
 	const std::list<std::unique_ptr<BossStraightBul>>& GetStraightBullets() { return straightBullets_; }
@@ -117,26 +117,26 @@ public:
 	inline void SetAimBulModel(Model* model) { AimBulModel = model; }
 	inline void SetStraightBulModel(Model* model) { StraightBulModel = model; }
 
-	//’Êí’eˆĞ—Í
+	//é€šå¸¸å¼¾å¨åŠ›
 	const float& GetBulPow() { return BulPow; }
-	//‘_‚¢’eˆĞ—Í
+	//ç‹™ã„å¼¾å¨åŠ›
 	const float& GetAimBulPow() { return AimBulPow; }
-	//’¼üˆĞ—Í
+	//ç›´ç·šå¨åŠ›
 	const float& GetStraightBulPow() { return StraightBulPow; }
-	//ƒ{ƒX–{‘Ì‚É‚Ô‚Â‚©‚Á‚½‚ÌˆĞ—Í
+	//ãƒœã‚¹æœ¬ä½“ã«ã¶ã¤ã‹ã£ãŸæ™‚ã®å¨åŠ›
 	const int& GetBodyPow() { return BodyPow; }
 
-	//ƒ{ƒX¶€
+	//ãƒœã‚¹ç”Ÿæ­»
 	void SetisDeath(bool isDeath) { this->isDeath = isDeath; }
 	const bool& GetisDeath() { return isDeath; }
 
-	//ƒ{ƒX“–‚½‚è”»’è‚·‚é‚©
+	//ãƒœã‚¹å½“ãŸã‚Šåˆ¤å®šã™ã‚‹ã‹
 	void SetDoCollision(bool doCollision) { this->doCollision = doCollision; }
 	const bool& GetDoCollision() { return doCollision; }
 
-	//‘_‚¢’e@‘Å‚Â‘Šè
+	//ç‹™ã„å¼¾ã€€æ‰“ã¤ç›¸æ‰‹
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
-	//-----------------ª‚°‚Á‚½[‚¹‚Á‚½[ª------------------//
+	//-----------------â†‘ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†‘------------------//
 
 private:
 	std::unique_ptr < Model> mod_core = nullptr;
@@ -153,221 +153,221 @@ private:
 	std::unique_ptr < Object3d> obj_UpDown = nullptr;
 	std::unique_ptr < Object3d> obj_VerticalCircle = nullptr;
 
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	//ƒtƒŒ[ƒ€
+	//ãƒ•ãƒ¬ãƒ¼ãƒ 
 	float frame = 0;
 
-	//ƒtƒŒ[ƒ€Œv‘ª
+	//ãƒ•ãƒ¬ãƒ¼ãƒ è¨ˆæ¸¬
 	const int NowframeDef = 0;
 	int Nowframe = NowframeDef;
 
-	//“–‚½‚è”»’èæ‚é‚© true:æ‚é
+	//å½“ãŸã‚Šåˆ¤å®šå–ã‚‹ã‹ true:å–ã‚‹
 	bool doCollision = true;
 
-	//UŒ‚—pƒJƒEƒ“ƒg
+	//æ”»æ’ƒç”¨ã‚«ã‚¦ãƒ³ãƒˆ
 	int AtkCount = 0;
 	int DiffusionAtkCount = 0;
-	int Circular_AtkCount = 0;	//‚®‚é‚®‚éUŒ‚—pƒJƒEƒ“ƒg
-	int AfterPlungePatAtkCount = 10;//“Ë‚Á‚İŒãs“®‚ÌUŒ‚ƒJƒEƒ“ƒg
+	int Circular_AtkCount = 0;	//ãã‚‹ãã‚‹æ™‚æ”»æ’ƒç”¨ã‚«ã‚¦ãƒ³ãƒˆ
+	int AfterPlungePatAtkCount = 10;//çªã£è¾¼ã¿å¾Œè¡Œå‹•ã®æ”»æ’ƒã‚«ã‚¦ãƒ³ãƒˆ
 
-	bool even_odd_NumFlag = true;//Šï”’e
+	bool even_odd_NumFlag = true;//å¥‡æ•°å¼¾
 
 	Model* BulModel = nullptr;
 	Model* AimBulModel = nullptr;
 	Model* StraightBulModel = nullptr;
 
-	//’eˆĞ—Í
+	//å¼¾å¨åŠ›
 	const float BulPow = 200;
 	const float AimBulPow = 150;
 	const float StraightBulPow = 170;
 
-	//ƒ{ƒX–{‘Ì‚ÌˆĞ—Í
+	//ãƒœã‚¹æœ¬ä½“ã®å¨åŠ›
 	const int BodyPow = 250;
 
-	//falseF‚Ü‚¾€‚ñ‚Å‚È‚¢
+	//falseï¼šã¾ã æ­»ã‚“ã§ãªã„
 	bool isDeath = false;
 
-	//€‚ñ‚¾‚Æ‚«ˆê“x
+	//æ­»ã‚“ã ã¨ãä¸€åº¦
 	bool IsFirst_Death = false;
 
 	XMFLOAT3 boPosDeath = {};
-	bool GetPosOnlyFlag = true;//ˆê“x‚«‚è‚ÌÀ•W“Ç‚İ‚İ
-	bool GetPosDeathOnlyFlag = true;//ˆê“x‚«‚è‚ÌÀ•W“Ç‚İ‚İ
-	const float NecesFrame = 190.0f;//‚©‚©‚éŠÔ
-	XMFLOAT3 MoveSp = {};//ˆÚ“®‘¬“x
-	XMFLOAT3 TargetPos = { 0,-150,0 };//–Ú•WÀ•W
-	XMFLOAT3 NowPos = {};//‚»‚Ì‚ÌˆÊ’u
+	bool GetPosOnlyFlag = true;//ä¸€åº¦ãã‚Šã®åº§æ¨™èª­ã¿è¾¼ã¿
+	bool GetPosDeathOnlyFlag = true;//ä¸€åº¦ãã‚Šã®åº§æ¨™èª­ã¿è¾¼ã¿
+	const float NecesFrame = 190.0f;//ã‹ã‹ã‚‹æ™‚é–“
+	XMFLOAT3 MoveSp = {};//ç§»å‹•é€Ÿåº¦
+	XMFLOAT3 TargetPos = { 0,-150,0 };//ç›®æ¨™åº§æ¨™
+	XMFLOAT3 NowPos = {};//ãã®æ™‚ã®ä½ç½®
 
 	float PartTimeInterval;
-	float ParticleFrame = 39;//ƒp[ƒeƒBƒNƒ‹o‚·ƒtƒŒ
+	float ParticleFrame = 39;//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«å‡ºã™ãƒ•ãƒ¬
 
-	//‚±‚ÌŠÔ‚¾‚¯‚±‚Ìs“®‚ğ‚·‚é
+	//ã“ã®æ™‚é–“ã ã‘ã“ã®è¡Œå‹•ã‚’ã™ã‚‹
 	const int ApproachCountDef = 150;
 	int ApproachCount = ApproachCountDef;
 
-	//------c‚É—h‚ê‚éUŒ‚F
-	const int ChangeVerticalCountDef = 0;//ƒfƒtƒH0@I‚í‚Á‚½‚çÁ‚µ‚Ä‚ñ
+	//------ç¸¦ã«æºã‚Œã‚‹æ”»æ’ƒF
+	const int ChangeVerticalCountDef = 0;//ãƒ‡ãƒ•ã‚©0ã€€çµ‚ã‚ã£ãŸã‚‰æ¶ˆã—ã¦ã‚“
 	int ChangeVerticalCount = ChangeVerticalCountDef;
-	const int ChangeVerticalNeces = 3;//cUŒ‚‚ÉˆÚ‚éˆ×‚É•K—vƒJƒEƒ“ƒg
-	//Å‰‚Ìã¸’l
+	const int ChangeVerticalNeces = 3;//ç¸¦æ”»æ’ƒã«ç§»ã‚‹ç‚ºã«å¿…è¦ã‚«ã‚¦ãƒ³ãƒˆ
+	//æœ€åˆã®ä¸Šæ˜‡å€¤
 	const int StartVerticalValDef = -5;
 	int StartVerticalVal = StartVerticalValDef;
-	//ã¸‰º~‘¬“x
+	//ä¸Šæ˜‡ä¸‹é™é€Ÿåº¦
 	float VerticalSp = 15;
-	//‘Ò‚¿ŠÔ
+	//å¾…ã¡æ™‚é–“
 	const int VerticalWaitCountDef = 50;
 	int VerticalWaitCount = VerticalWaitCountDef;
-	const XMFLOAT3 UpDownPosDef = { -600,900,0 };	//ã¸‰º~ŠJnÀ•W
+	const XMFLOAT3 UpDownPosDef = { -600,900,0 };	//ä¸Šæ˜‡ä¸‹é™é–‹å§‹åº§æ¨™
 	XMFLOAT3 UpDownPos = UpDownPosDef;
-	float UpStartPosY = -250;//ã¸ŠJnYÀ•W
-	float DownStartPosY = 950;//‰º~ŠJnYÀ•W
-	const float NextMoveX = 200;//UpDown‚ÌÅŒã‚ÉX‚ğ‚¸‚ç‚·’l
-	//UpDown‚ÌÅ‰‚ÉŠJnˆÊ’uŒˆ‚ß‚éƒtƒ‰ƒO false:Œˆ‚ß‚é‘O
+	float UpStartPosY = -250;//ä¸Šæ˜‡é–‹å§‹Yåº§æ¨™
+	float DownStartPosY = 950;//ä¸‹é™é–‹å§‹Yåº§æ¨™
+	const float NextMoveX = 200;//UpDownã®æœ€å¾Œã«Xã‚’ãšã‚‰ã™å€¤
+	//UpDownæ™‚ã®æœ€åˆã«é–‹å§‹ä½ç½®æ±ºã‚ã‚‹ãƒ•ãƒ©ã‚° false:æ±ºã‚ã‚‹å‰
 	bool VerticalStartPosFlag = false;
-	//Ÿ‚Ì“®‚« false:‚±‚ê‚¶‚á‚È‚¢
+	//æ¬¡ã®å‹•ã false:ã“ã‚Œã˜ã‚ƒãªã„
 	bool NextUp = false;
-	bool NextDown = true;//Å‰‚Í‰º~
-	//UpDown‰½‰ñƒ‹[ƒv‚³‚¹‚é‚©
+	bool NextDown = true;//æœ€åˆã¯ä¸‹é™
+	//UpDownä½•å›ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹ã‹
 	const int VerticalLoopCountDef = 4;
 	int VerticalLoopCount = VerticalLoopCountDef;
-	//–ß‚és“®ŠJnÀ•W‚ÉˆÚ“®
+	//æˆ»ã‚‹è¡Œå‹•é–‹å§‹åº§æ¨™ã«ç§»å‹•
 	XMFLOAT3 ReverseStartPos;
-	//–ß‚és“®ŠJnÀ•W‚ğÅ‰‚Éˆê‰ñ‚â‚é@false:‚Ü‚¾
+	//æˆ»ã‚‹è¡Œå‹•é–‹å§‹åº§æ¨™ã‚’æœ€åˆã«ä¸€å›ã‚„ã‚‹ã€€false:ã¾ã 
 	bool ReverseStartPosFlag = false;
-	//cUŒ‚—pƒCƒ“ƒ^[ƒoƒ‹
+	//ç¸¦æ”»æ’ƒç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
 	static const int Vertical_AtkInterval = 7;
 
 	//------
 
-	//------HP”¼•ªˆÈ‰º‰~‰^“®«
+	//------HPåŠåˆ†ä»¥ä¸‹å††é‹å‹•â†“
 	const float HpHalf_AngleDef = 20.f;
 	float HpHalf_Angle = HpHalf_AngleDef;
 	const float HpHalf_radDef = 100.f;
 	float HpHalf_rad = HpHalf_radDef;
 
-	const float HpHalf_LengthDef = 10.f;//‰~‰^“®‚Ì”¼Œa‚Ì’·‚³
+	const float HpHalf_LengthDef = 10.f;//å††é‹å‹•ã®åŠå¾„ã®é•·ã•
 	float HpHalf_Length = HpHalf_LengthDef;
 
-	const float CircularY = 40;//‚Ç‚Ì‚‚³‚Å‰ñ‚é‚©
+	const float CircularY = 40;//ã©ã®é«˜ã•ã§å›ã‚‹ã‹
 
-	XMFLOAT3 CirclePosMem;//‚»‚Ì‚ÌÀ•Wæ“¾
-	//ˆÚ“®’l
+	XMFLOAT3 CirclePosMem;//ãã®æ™‚ã®åº§æ¨™å–å¾—
+	//ç§»å‹•å€¤
 	const float addXDef = 0.f;
 	float addX = addXDef;
 	const float addYDef = 0.f;
 	float addY = addYDef;
-	//------HP”¼•ªˆÈ‰º‰~‰^“®ª
+	//------HPåŠåˆ†ä»¥ä¸‹å††é‹å‹•â†‘
 
 	static const int Circular_AtkIntervalDef = 45;
 	int Circular_AtkInterval = Circular_AtkIntervalDef;
 
-	//“Ë‚Á‚İŒãs“®‚ÌAimBulƒCƒ“ƒ^[ƒoƒ‹
+	//çªã£è¾¼ã¿å¾Œè¡Œå‹•ã®AimBulã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒ«
 	static const int AfterPlungePatAtkInterval = 15;
 
-	//-------«HPHALF«------//
-	bool isHpHalfPattern = false;//hp”¼•ªˆÈ‰ºs“®‚µ‚Ä‚È‚¢
+	//-------â†“HPHALFâ†“------//
+	bool isHpHalfPattern = false;//hpåŠåˆ†ä»¥ä¸‹è¡Œå‹•ã—ã¦ãªã„
 
 	XMFLOAT3 HpHalfMomentPos = {};
-	//‚Ü‚¸‚±‚ÌˆÊ’u‚És‚­
+	//ã¾ãšã“ã®ä½ç½®ã«è¡Œã
 	XMFLOAT3 TargetHpHalfPos;
-	const float NecesHpHalfFrame = 100.0f;//HP”¼•ª‚±‚ÌƒtƒŒ[ƒ€•ªˆÚ“®‚Ü‚ÅŠÔ‚©‚©‚é
+	const float NecesHpHalfFrame = 100.0f;//HPåŠåˆ†æ™‚ã“ã®ãƒ•ãƒ¬ãƒ¼ãƒ åˆ†ç§»å‹•ã¾ã§æ™‚é–“ã‹ã‹ã‚‹
 
 	const float NecesLeaveFirstFrame = 180.f;
-	//-------ªHPHALFª------//
+	//-------â†‘HPHALFâ†‘------//
 
-	BaseObject* shotTag;//’e‚¤‚Âƒ^[ƒQƒbƒg
+	BaseObject* shotTag;//å¼¾ã†ã¤ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 
-	//“oê‚©‚çs“®‚ğŠJn‚ÉˆÚ‚Á‚½‚ÌÀ•W
+	//ç™»å ´ã‹ã‚‰è¡Œå‹•ã‚’é–‹å§‹ã«ç§»ã£ãŸæ™‚ã®åº§æ¨™
 	XMFLOAT3 ActionStartPos;
 
 	//-------PlungeInto
-	//2‰ñLeave‚ğ‚µ‚½‚ç“Ë‚Á‚Şs“®@@ƒfƒtƒH2
+	//2å›Leaveã‚’ã—ãŸã‚‰çªã£è¾¼ã‚€è¡Œå‹•ã€€ã€€ãƒ‡ãƒ•ã‚©2
 	const int PlungeCountDef = 1;
 	int PlungeCount = PlungeCountDef;
-	//“Ë‚Á‚İs“®‚ÖˆÚs‚·‚é‘O‚ÉÅŒã‚É‚¢‚½êŠ‚ğ‹L‰¯‚·‚é
+	//çªã£è¾¼ã¿è¡Œå‹•ã¸ç§»è¡Œã™ã‚‹å‰ã«æœ€å¾Œã«ã„ãŸå ´æ‰€ã‚’è¨˜æ†¶ã™ã‚‹
 	XMFLOAT3 WasPosMem;
-	//—£‚ê‚é‘¬“x
+	//é›¢ã‚Œã‚‹é€Ÿåº¦
 	const int LeaveVel = 20;
-	//Leave‚Ì‚Ç‚Ì’ö“x‰º‚ª‚é‚©
+	//Leaveã®æ™‚ã©ã®ç¨‹åº¦ä¸‹ãŒã‚‹ã‹
 	const int LeavePos = 5000;
-	//–ß‚é‘¬“x
+	//æˆ»ã‚‹é€Ÿåº¦
 	XMFLOAT3 ReverseSp;
-	//–ß‚é‘O‚ÌÀ•Wæ“¾ƒtƒ‰ƒO@false:‚µ‚Ä‚È‚¢
+	//æˆ»ã‚‹å‰ã®åº§æ¨™å–å¾—ãƒ•ãƒ©ã‚°ã€€false:ã—ã¦ãªã„
 	bool BeforeReversePosMemFlag = false;
-	//–ß‚é‘OÀ•W“ü‚ê‚é
+	//æˆ»ã‚‹å‰åº§æ¨™å…¥ã‚Œã‚‹
 	XMFLOAT3 BeforeReversePosMem;
-	//¡‚ÌêŠ
+	//ä»Šã®å ´æ‰€
 	XMFLOAT3 ReverseNowPos;
-	//‚Ç‚±‚É–ß‚é‚©‚ÌêŠ
+	//ã©ã“ã«æˆ»ã‚‹ã‹ã®å ´æ‰€
 	XMFLOAT3 ReversePos;
-	//“Ë‚Á‚İ‘Ò‚¿‘Ò‹@ŠÔ ‚Å‚Ó‚§180
+	//çªã£è¾¼ã¿å¾…ã¡å¾…æ©Ÿæ™‚é–“ ã§ãµã‰140
 	const int PlungeIntoWaitCountDef = 140;
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-	//“ËŒ‚‘¬“x
+	//çªæ’ƒé€Ÿåº¦
 	const int PlungeVel = 50;
-	//ÅŒã’èˆÊ’u–ß‚é‚Ì‚É‚©‚©‚éŠÔ
+	//æœ€å¾Œå®šä½ç½®æˆ»ã‚‹ã®ã«ã‹ã‹ã‚‹æ™‚é–“
 	const int PlungeFinFrameMax = 60;
-	//Fin‚ÅÅ‰‚¢‚½ˆê“xˆÊ’uæ“¾ false:‚Ü‚¾
+	//Finã§æœ€åˆã„ãŸä¸€åº¦ä½ç½®å–å¾— false:ã¾ã 
 	bool PlungeFinOnlyFlag = false;
 
-	//----plunge‚Æafter—¼—§‚µ‚È‚¢‚Ì‚Åafter‚Å‚àg‚¤
-	//©‹@‚¢‚½êŠæ“¾ƒtƒ‰ƒO false:–¢æ“¾
+	//----plungeã¨afterä¸¡ç«‹ã—ãªã„ã®ã§afterã§ã‚‚ä½¿ã†
+	//è‡ªæ©Ÿã„ãŸå ´æ‰€å–å¾—ãƒ•ãƒ©ã‚° false:æœªå–å¾—
 	bool pMemFlag = false;
-	//©‹@‚¢‚½êŠ
+	//è‡ªæ©Ÿã„ãŸå ´æ‰€
 	XMFLOAT3 pPosMem{};
 
-	//“Ë‚Á‚İI‚í‚Á‚½‚©  false:‚Ü‚¾“Ë‚Á‚ñ‚Å‚È‚¢
+	//çªã£è¾¼ã¿çµ‚ã‚ã£ãŸã‹  false:ã¾ã çªã£è¾¼ã‚“ã§ãªã„
 	bool PlungeCompletFlag = false;
-	//“Ë‚Á‚İ
+	//çªã£è¾¼ã¿
 	//float PlungerFame = 0;
-	//ƒ{ƒXÅ‰‚ÌêŠ
+	//ãƒœã‚¹æœ€åˆã®å ´æ‰€
 	bool boPosFlag = false;
-	//ƒ{ƒX‚¢‚½êŠ
+	//ãƒœã‚¹ã„ãŸå ´æ‰€
 	XMFLOAT3 boPosMom{};
-	//“Ë‚Á‚İ‘¬“x
+	//çªã£è¾¼ã¿é€Ÿåº¦
 	XMFLOAT3 PlungeSp{};
-	//‚»‚Ì‚Ìƒ{ƒX‚ÌˆÊ’u
+	//ãã®æ™‚ã®ãƒœã‚¹ã®ä½ç½®
 	XMFLOAT3 PlungeNowPos;
 	//-------PlungeInto
 
 	//-------AfterPlungeInto
 	//
-	//‘Ò‚¿ŠÔ
+	//å¾…ã¡æ™‚é–“
 	const int WaitTimeDef = 60;
 	int WaitTime = WaitTimeDef;
-	//UŒ‚‚·‚é‚½‚ß‚Ì©‹@‚¢‚½êŠæ“¾ƒtƒ‰ƒO false:æ“¾‘O
+	//æ”»æ’ƒã™ã‚‹ãŸã‚ã®è‡ªæ©Ÿã„ãŸå ´æ‰€å–å¾—ãƒ•ãƒ©ã‚° false:å–å¾—å‰
 	bool pPosMemFlag = false;
-	//UŒ‚‚É©‹@‚Ì‚¢‚½êŠ‚ÖiXYjˆÚ“®‚·‚é‘¬“x
+	//æ”»æ’ƒæ™‚ã«è‡ªæ©Ÿã®ã„ãŸå ´æ‰€ã¸ï¼ˆXYï¼‰ç§»å‹•ã™ã‚‹é€Ÿåº¦
 	XMFLOAT3 AtkMoveSp;
-	//ƒ{ƒX‚¢‚½êŠ
+	//ãƒœã‚¹ã„ãŸå ´æ‰€
 	XMFLOAT3 boPosMem;
-	//ƒ{ƒX‚ÌŒ»İ’n
+	//ãƒœã‚¹ã®ç¾åœ¨åœ°
 	XMFLOAT3 boNowPos;
-	//UŒ‚‚ÉˆÚ“®‚É‚©‚©‚éâ‘ÎŠÔ
+	//æ”»æ’ƒã«ç§»å‹•ã«ã‹ã‹ã‚‹çµ¶å¯¾æ™‚é–“
 	const int NecesAtkMoveTime = 60;
-	//Wait‚ÆAttackŒJ‚è•Ô‚µ‚½‰ñ”
+	//Waitã¨Attackç¹°ã‚Šè¿”ã—ãŸå›æ•°
 	const int LoopCountDef = 0;
 	int LoopCount = LoopCountDef;
-	//‚±‚Ì‰ñ”‚Å‚Â‚¬‚Ö
+	//ã“ã®å›æ•°ã§ã¤ãã¸
 	const int LoopCountMax = 7;
 
 	//
 	//-------AfterPlungeInto
 
-	//---ƒVƒFƒCƒN
+	//---ã‚·ã‚§ã‚¤ã‚¯
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
-	//‚¢‚½êŠ•Û‘¶ false:•Û‘¶‘O
+	//ã„ãŸå ´æ‰€ä¿å­˜ false:ä¿å­˜å‰
 	bool ShakePosMemFlag = false;
-	//—h‚ç‚µI‚¦‚½‚© false:‚Ü‚¾
+	//æºã‚‰ã—çµ‚ãˆãŸã‹ false:ã¾ã 
 	bool isShakeFinished = false;
-	//‚¢‚½êŠ
+	//ã„ãŸå ´æ‰€
 	XMFLOAT3 posMem = {};
 };

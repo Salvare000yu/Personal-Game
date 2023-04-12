@@ -103,7 +103,7 @@ void GamePlayScene::Initialize()
 	mod_bossaimbullet.reset(Model::LoadFromOBJ("BossAimBul"));
 	mod_straightbul.reset(Model::LoadFromOBJ("StraightBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
-	mod_enemy.reset(Model::LoadFromOBJ("bullet2"));
+	mod_bossColli.reset(Model::LoadFromOBJ("boss_Colli"));
 	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
@@ -171,11 +171,10 @@ void GamePlayScene::Initialize()
 	ApStartPPos.z -= 1000;
 
 	boss_.emplace_front();
-	for (std::unique_ptr<Boss>& boss : boss_)//ボス
-	{
+	for (std::unique_ptr<Boss>& boss : boss_){//ボス
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
-		boss->SetModel(mod_enemy.get());
+		boss->SetModel(mod_bossColli.get());
 		boss->SetBulModel(mod_enemybullet.get());
 		boss->SetAimBulModel(mod_bossaimbullet.get());//狙い弾
 		boss->SetStraightBulModel(mod_straightbul.get());//直線弾
@@ -856,7 +855,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z + 2;
+		playerForm.radius = player_->GetScale().z;
 		//ボスHPがあるとき
 		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
@@ -864,7 +863,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& bob : bo->GetBullets()) {
 					Sphere eBulForm;
 					eBulForm.center = XMLoadFloat3(&bob->GetPosition());
-					eBulForm.radius = bob->GetScale().z + 2.f;
+					eBulForm.radius = bob->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
 						pDamFlag = true;
@@ -884,7 +883,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z + 2;
+		playerForm.radius = player_->GetScale().z;
 		//ボスのHPあるとき
 		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
@@ -892,7 +891,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& boaimbul : bo->GetAimBullets()) {
 					Sphere aimBulForm;
 					aimBulForm.center = XMLoadFloat3(&boaimbul->GetPosition());
-					aimBulForm.radius = boaimbul->GetScale().z + 2.f;
+					aimBulForm.radius = boaimbul->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
 						pDamFlag = true;
@@ -913,7 +912,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z + 2;
+		playerForm.radius = player_->GetScale().z;
 		//ボスのHPあるとき
 		if (player_->GetAlive() && (NowBoHp > 0)) {
 			for (auto& bo : boss_) {
@@ -921,7 +920,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& boStraightBul : bo->GetStraightBullets()) {
 					Sphere straightBulForm;
 					straightBulForm.center = XMLoadFloat3(&boStraightBul->GetPosition());
-					straightBulForm.radius = boStraightBul->GetScale().z + 2.f;
+					straightBulForm.radius = boStraightBul->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, straightBulForm)) {
 						pDamFlag = true;
@@ -942,7 +941,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z + 2;
+		playerForm.radius = player_->GetScale().z;
 
 		if (player_->GetAlive()) {
 			for (auto& se : smallEnemys_) {
@@ -950,7 +949,7 @@ void GamePlayScene::CollisionAll()
 				for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
 					Sphere seBulForm;
 					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
-					seBulForm.radius = seb->GetScale().z + 1;//余裕
+					seBulForm.radius = seb->GetScale().z;
 
 					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
 						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
@@ -972,7 +971,7 @@ void GamePlayScene::CollisionAll()
 	{
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z + 2;
+		playerForm.radius = player_->GetScale().z;
 
 		if (player_->GetAlive()) {
 			// 衝突判定をする
@@ -1147,9 +1146,9 @@ void GamePlayScene::BossBattleReadyUpdate()
 	if (charParams->pNextPlaceGoFlag) {
 		pHeadingToTheNextPlace();
 	}
-	//アラート画像
-	sp_beforeboss->Update();
-	charParams->boHpUpdate();
+	
+	sp_beforeboss->Update();//アラート画像
+	charParams->boHpUpdate();//Hp画像
 }
 
 void GamePlayScene::BossBattleUpdate()
