@@ -1,4 +1,4 @@
-#include "PlayerBullet.h"
+ï»¿#include "PlayerBullet.h"
 #include "Input.h"
 
 #include <DirectXMath.h>
@@ -7,32 +7,29 @@ using namespace DirectX;
 
 void PlayerBullet::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
-	//ì‚é
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
-	obj->SetScale({ 8.f, 8.f, 8.f });
-	//êŠ
-
-	//obj->SetPosition({ BulletPos });
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
+	obj->SetScale({ 15.f, 15.f, 15.f });
 }
 
 void PlayerBullet::Update()
 {
 	XMFLOAT3 BulletPos = obj->GetPosition();
-	//’e”­Ë‘¬“x
+	//å¼¾ç™ºå°„é€Ÿåº¦
 	BulletPos.z += velocity.z;
 	BulletPos.x += velocity.x;
 	BulletPos.y += velocity.y;
 
 	obj->SetPosition(BulletPos);
 
-	//if (TriggerR) {//ƒŠƒZƒbƒg
+	//if (TriggerR) {//ãƒªã‚»ãƒƒãƒˆ
 	//	obj->SetPosition({ 0,40,-170 });
 	//}
 
-	//ŠÔŒo‰ßÁ–Å
+	//æ™‚é–“çµŒéæ¶ˆæ»…
 	if (--vanishTimer_ <= 0) { alive = false; }
 
 	obj->Update();

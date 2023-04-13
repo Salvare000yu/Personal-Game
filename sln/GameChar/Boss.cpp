@@ -748,7 +748,7 @@ void Boss::DiffusionAttack()
 	std::unique_ptr<BossBullet> madeBullet_center = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_L = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_R = std::make_unique<BossBullet>();
-	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
+	
 	madeBullet_center->Initialize();
 	madeBullet_L->Initialize();
 	madeBullet_R->Initialize();
@@ -890,7 +890,6 @@ void Boss::Death() {
 		GetPosDeathOnlyFlag = false;
 	}
 
-	//XMFLOAT3 boRot = obj->GetRotation();
 	//移動速度＝（指定座標-最初位置）/かかる時間
 	MoveSp.x = (boPosDeath.x - boPosDeath.x) / NecesFrame;//指定座標Xは死んだ場所から真下に落ちるように死んだX座標
 	MoveSp.y = (TargetPos.y - boPosDeath.y) / NecesFrame;
@@ -900,18 +899,16 @@ void Boss::Death() {
 	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;
 	NowPos.z = boPosDeath.z + MoveSp.z * Nowframe;
 
-	//ParticleManager::GetInstance()->CreateParticle(boPos, 100, 50, 5);
 	obj->SetPosition(NowPos);//その時の位置
 
 	//一定時間ごとにパーティクル
 	if (PartTimeInterval == 1) {
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		particle->CreateParticle(NowPos, 100, 80, 10);
+		particle->CreateParticle(NowPos, 100, 80, 10, { 1,0.1f,0.8f }, { 1,0,0 });
 		PartTimeInterval = 0;
 		ParticleFrame = 0;
 	}
-	//obj->SetRotation(boRot);
 }
 
 void Boss::Initialize()

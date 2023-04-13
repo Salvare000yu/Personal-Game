@@ -830,7 +830,7 @@ void GamePlayScene::CollisionAll()
 					sEnemyMurdersNum++;//撃破数
 					// パーティクルの発生
 					XMFLOAT3 sePos = se->GetPosition();
-					particle->CreateParticle(sePos, 300, 80, 5);
+					particle->CreateParticle(sePos, 300, 80, 5, { 1,0.1f,0.8f }, { 1,0,0 });
 					se->SetAlive(false);
 					pb->SetAlive(false);
 					break;
