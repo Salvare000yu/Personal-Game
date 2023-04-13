@@ -257,6 +257,19 @@ private:
 
 	//------
 
+	//-------↓HPHALF↓------//
+	bool isHpHalfPattern = false;//hp半分以下行動してない
+
+	XMFLOAT3 HpHalfMomentPos = {};
+	//まずこの位置に行く
+	XMFLOAT3 TargetHpHalfPos;
+	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
+
+	const float NecesLeaveFirstFrame = 180.f;
+
+	XMFLOAT4 coreCol{0,0,1,1};//コアの色
+	//-------↑HPHALF↑------//
+	
 	//------HP半分以下円運動↓
 	const float HpHalf_AngleDef = 20.f;
 	float HpHalf_Angle = HpHalf_AngleDef;
@@ -281,17 +294,6 @@ private:
 
 	//突っ込み後行動のAimBulインターバル
 	static const int AfterPlungePatAtkInterval = 15;
-
-	//-------↓HPHALF↓------//
-	bool isHpHalfPattern = false;//hp半分以下行動してない
-
-	XMFLOAT3 HpHalfMomentPos = {};
-	//まずこの位置に行く
-	XMFLOAT3 TargetHpHalfPos;
-	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
-
-	const float NecesLeaveFirstFrame = 180.f;
-	//-------↑HPHALF↑------//
 
 	BaseObject* shotTag;//弾うつターゲット
 

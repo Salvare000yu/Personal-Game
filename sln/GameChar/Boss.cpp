@@ -244,6 +244,10 @@ void Boss::HpHalfPatStart()
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//指定座標で自機のZからどれくらい間をあけるか
 	const int SpaceDistance = 500;
+	
+	coreCol.x += 0.01f;
+	coreCol.z -= 0.01f;
+	obj_core->SetColor(coreCol);
 
 	if (GetPosOnlyFlag)
 	{
@@ -964,6 +968,7 @@ void Boss::Initialize()
 	obj_VerticalCircle->SetRotation({ 0, 180, 0 });
 
 	obj->SetColor({ 1, 1, 1, 0.0f });
+	obj_core->SetColor({ coreCol });
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
