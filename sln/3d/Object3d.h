@@ -136,6 +136,9 @@ public: // メンバ関数
 	//色取得
 	const XMFLOAT4& GetColor() { return color; }
 
+	//親
+	const Object3d* GetParent() { return parent; }
+
 	/// <summary>
 	/// ワールド行列からワールド座標を抽出する
 	/// </summary>
@@ -173,6 +176,9 @@ public: // メンバ関数
 	void SetModel(Model* model) { this->model = model; }
 
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
+
+	//親
+	void SetParent(Object3d* parent) { this->parent = parent; }
 
 private: // メンバ変数
 	//借りる3Dモデル

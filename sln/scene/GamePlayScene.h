@@ -101,7 +101,7 @@ public:
 
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
-	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
+	//std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
 	//揺れる時間
 	static const int32_t pShakeTime = 60 / 2;
@@ -135,7 +135,7 @@ private:
 	std::unique_ptr < Model> mod_straightbul = nullptr;//直線弾
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
 	std::unique_ptr < Model> mod_bossColli = nullptr;
-	std::unique_ptr < Model> mod_firingline = nullptr;
+	//std::unique_ptr < Model> mod_firingline = nullptr;
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 

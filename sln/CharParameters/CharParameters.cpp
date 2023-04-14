@@ -1,4 +1,4 @@
-//‚«‚á‚çŒÅ—L’l
+ï»¿//ãã‚ƒã‚‰å›ºæœ‰å€¤
 #include "CharParameters.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -15,24 +15,24 @@ CharParameters* CharParameters::GetInstance()
 }
 void CharParameters::Initialize()
 {
-	// -----------------ƒXƒvƒ‰ƒCƒg‹¤’ÊƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// -----------------ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
 	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 
-	//ƒXƒvƒ‰ƒCƒg¶¬
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 	sp_enemyhpbar.reset(Sprite::Create(3, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	//ƒXƒvƒ‰ƒCƒgƒ|ƒWƒVƒ‡ƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒã‚¸ã‚·ãƒ§ãƒ³
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
 	sp_playerhpbar->SetPosition({ -70,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
-	//ƒXƒvƒ‰ƒCƒgƒTƒCƒY
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚µã‚¤ã‚º
 	//sp_playerhpbarwaku->size_.x = PlayerMaxHP;
 	//sp_playerhpbarwaku->TransferVertexBuffer();
 	BarPosControlOnlyOnceFlag1 = false;
@@ -43,7 +43,7 @@ void CharParameters::Initialize()
 	BarPosControlOnlyOnceFlag6 = false;
 	BarPosControlOnlyOnceFlag7 = false;
 
-	//ƒpƒ‰ƒ[ƒ^ŠÖ˜A‰Šú‰»
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é–¢é€£åˆæœŸåŒ–
 	BossDefense = BossDefenseDef;
 	NowBossHP = BossMaxHP;//
 	NowPlayerHP = PlayerMaxHP;//
@@ -58,7 +58,7 @@ void CharParameters::pHpSizeChange()
 }
 void CharParameters::boHpSizeChange()
 {
-	//ƒTƒCƒY•ÏX
+	//ã‚µã‚¤ã‚ºå¤‰æ›´
 	sp_enemyhpbar->size_.x = sp_enemyhpbar->texSize_.x * (float)NowBossHP / BossMaxHP;
 	sp_enemyhpbar->TransferVertexBuffer();
 }
@@ -69,7 +69,7 @@ void CharParameters::Update()
 
 void CharParameters::BarGetDislodged()
 {
-	//ƒTƒCƒY•ÏX‚É‚æ‚éƒYƒŒ--‚¢‚Â‚©Á‚·‚©‚ç‰¼
+	//ã‚µã‚¤ã‚ºå¤‰æ›´ã«ã‚ˆã‚‹ã‚ºãƒ¬--ã„ã¤ã‹æ¶ˆã™ã‹ã‚‰ä»®
 	{
 		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
 		if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
@@ -108,7 +108,7 @@ void CharParameters::pHpUpdate()
 
 void CharParameters::boHpUpdate()
 {
-	//XV
+	//æ›´æ–°
 	sp_enemyhpbar->Update();
 	sp_enemyhpbarwaku->Update();
 }
@@ -124,12 +124,12 @@ void CharParameters::pHpDraw()
 void CharParameters::boHpDraw()
 {
 	sp_enemyhpbar->Draw();
-	sp_enemyhpbarwaku->Draw();
+	//sp_enemyhpbarwaku->Draw();
 }
 
 void CharParameters::DrawUI()
 {
-	////©‹@‚Æ“G‚Ì‘Ì—Í
+	////è‡ªæ©Ÿã¨æ•µã®ä½“åŠ›
 	//{
 	//	char tmp[32]{};
 	//	sprintf_s(tmp, 32, "%2.f", NowPlayerHP);

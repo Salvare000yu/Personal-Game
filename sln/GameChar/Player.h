@@ -16,11 +16,6 @@ class Player :public BaseObject
 
 	DirectX::XMVECTOR position{};
 private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
 
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -38,7 +33,7 @@ private:
 
 public:
 	inline void SetPBulModel(Model* model) { pBulModel = model; }
-	inline void SetPFiringLine(Model* model) { pFiringLine = model; }
+	//inline void SetPFiringLine(Model* model) { pFiringLine = model; }
 
 	/*static Player* GetInstance();*/
 
@@ -86,6 +81,8 @@ public:
 	//揺れたいまー
 	int32_t pShakeTimer_ = pShakeTime;
 
+	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;//射線
+
 	//-------------------↓げったーせったー↓-------------------//
 	//弾威力
 	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
@@ -103,12 +100,14 @@ public:
 	bool pAtkPossibleFlag = false;
 
 private:
+	std::unique_ptr < Model> mod_firingline = nullptr;
+
 	//パーティクル
 	std::unique_ptr< ParticleManager> particle;
 
 	//自機通常弾威力
 	//const float pBulPowerMax = 95;
-	const float pBulPowerMax = 150;
+	const float pBulPowerMax = 95;
 	float pBulPower = pBulPowerMax;
 
 	//自機体力が0より少ないとき false:　０より多い

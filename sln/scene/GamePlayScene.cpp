@@ -105,7 +105,7 @@ void GamePlayScene::Initialize()
 	mod_straightbul.reset(Model::LoadFromOBJ("StraightBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_bossColli.reset(Model::LoadFromOBJ("boss_Colli"));
-	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
+	//mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 
@@ -140,8 +140,8 @@ void GamePlayScene::Initialize()
 	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
 	//------object3d位置------//
 	obj_groundBottom->SetPosition({ 0,-220,0 });
-	obj_kaberight->SetPosition({ 490,340,2000 });
-	obj_kabeleft->SetPosition({ -490,340,2000 });
+	obj_kaberight->SetPosition({ 490,300,2000 });
+	obj_kabeleft->SetPosition({ -490,300,2000 });
 	obj_tunnel->SetPosition({ 0,40,1000 });
 	obj_backwall->SetPosition({ 0,40,7000 });
 	//------object回転------//
@@ -155,16 +155,16 @@ void GamePlayScene::Initialize()
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
-	player_->SetPFiringLine(mod_firingline.get());
+	//player_->SetPFiringLine(mod_firingline.get());
 	camera->SetTarget(player_->GetPosition());
 	camera->SetEye({ 0,100,-1000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	//いろいろ生成
-	firingline_.reset(new PlayerFireLine());
+	//firingline_.reset(new PlayerFireLine());
 	//いろいろキャラ初期化
-	firingline_ = std::make_unique<PlayerFireLine>();
-	firingline_->Initialize();
-	firingline_->SetModel(mod_firingline.get());
+	//firingline_ = std::make_unique<PlayerFireLine>();
+	//firingline_->Initialize();
+	//firingline_->SetModel(mod_firingline.get());
 
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
@@ -485,10 +485,12 @@ void GamePlayScene::PlayerMove()
 			}
 			isRMove = true;//右移動中
 		}
+		
 		player_->SetPosition(PlayerPos);
+
+		PlayerDash();
 	}
-	else
-	{
+	else {
 		isLMove = false;
 		isRMove = false;
 	}
@@ -501,10 +503,10 @@ void GamePlayScene::PlayerMove()
 		rotation.z += 1.f;
 	}
 
-	firingline_->SetPosition(PlayerPos);
+	//firingline_->SetPosition(PlayerPos);
 
 	player_->SetRotation(rotation);
-	firingline_->SetRotation(rotation);
+	//firingline_->SetRotation(rotation);
 }
 
 void GamePlayScene::PlayerDash()
@@ -573,7 +575,7 @@ void GamePlayScene::PlayerDash()
 		pPos.x += DashVel.x;
 		pPos.y += DashVel.y;
 		player_->SetPosition(pPos);
-		firingline_->SetPosition(pPos);
+		//firingline_->SetPosition(pPos);
 
 		if (DashCount == 0) {
 			playerDashDirection_ = PlayerDashDirection::def;//決定する前に戻す
@@ -1078,8 +1080,7 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	PadStickCamera();
 
 	//雑魚敵更新
-	if (BossEnemyAdvent == false)
-	{
+	if (BossEnemyAdvent == false) {
 		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 			smallEnemy->Update();
 		}
@@ -1101,8 +1102,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//雑魚敵更新
-	if (BossEnemyAdvent == false)
-	{
+	if (BossEnemyAdvent == false) {
 		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 			smallEnemy->Update();
 		}
@@ -1152,8 +1152,7 @@ void GamePlayScene::BossBattleUpdate()
 	}
 	//敵のHPバー
 	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
-	if (BossEnemyAdvent && NowBoHp > 0)
-	{
+	if (BossEnemyAdvent && NowBoHp > 0) {
 		charParams->boHpUpdate();
 	}
 
@@ -1210,8 +1209,7 @@ void GamePlayScene::Update()
 
 	//ポーズでないとき～
 	//--------------この外に出すとポーズ中も実行
-	if (pause->GetPauseFlag() == false)
-	{
+	if (pause->GetPauseFlag() == false) {
 		if (pause->WaitKeyP < 10) {
 			pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 		}
@@ -1233,11 +1231,10 @@ void GamePlayScene::Update()
 		charParams->BarGetDislodged();
 
 		// 自機体力が0より多ければ
-		if (player_->GetPHpLessThan0() == false){
+		if (player_->GetPHpLessThan0() == false) {
 			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
 				//プレイヤー移動-上に書くと移動かくつかない
 				PlayerMove();
-				PlayerDash();
 			}
 		}
 		if (player_->GetpDeath()) {
@@ -1264,9 +1261,9 @@ void GamePlayScene::Update()
 		pause->SpUpdate();
 
 		player_->Update();
-		if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
-			firingline_->Update();//射線
-		}
+		//if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
+			//firingline_->Update();//射線
+		//}
 
 		//----------------↓シーン切り替え関連↓----------------//
 		//自機HP0でゲームオーバー
@@ -1327,9 +1324,9 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
-	if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
-		firingline_->Draw();
-	}
+	//if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
+	//	firingline_->Draw();
+	//}
 
 	// パーティクル描画
 	DxBase* dxBase = DxBase::GetInstance();

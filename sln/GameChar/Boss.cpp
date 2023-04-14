@@ -245,12 +245,13 @@ void Boss::HpHalfPatStart()
 	//指定座標で自機のZからどれくらい間をあけるか
 	const int SpaceDistance = 500;
 	
-	coreCol.x += 0.01f;
-	coreCol.z -= 0.01f;
+	//コアの色を赤に
+	constexpr float coreColChangeVal = 0.01f;//マイフレ変える値
+	coreCol.x += coreColChangeVal;
+	coreCol.z -= coreColChangeVal;
 	obj_core->SetColor(coreCol);
 
-	if (GetPosOnlyFlag)
-	{
+	if (GetPosOnlyFlag){
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosOnlyFlag = false;

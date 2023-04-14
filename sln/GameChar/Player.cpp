@@ -221,6 +221,15 @@ void Player::Initialize()
 	//場所
 	obj->SetPosition({ 0,70,-250 });
 
+	mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
+	//いろいろ生成
+	firingline_.reset(new PlayerFireLine());
+	//いろいろキャラ初期化
+	firingline_ = std::make_unique<PlayerFireLine>();
+	firingline_->Initialize();
+	firingline_->SetModel(mod_firingline.get());
+	firingline_->GetObj()->SetParent(this->GetObj());
+
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("shot.wav");
 }
@@ -283,6 +292,7 @@ void Player::Update()
 	particle->Update();
 
 	obj->Update();
+	firingline_->Update();//射線
 }
 
 void Player::Draw()
@@ -297,6 +307,7 @@ void Player::Draw()
 	if (alive)
 	{
 		obj->Draw();
+		firingline_->Draw();//射線
 	}
 	DxBase* dxBase = DxBase::GetInstance();
 	particle->Draw(dxBase->GetCmdList());

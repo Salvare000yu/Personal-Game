@@ -267,7 +267,7 @@ private:
 
 	const float NecesLeaveFirstFrame = 180.f;
 
-	XMFLOAT4 coreCol{0,0,1,1};//コアの色
+	XMFLOAT4 coreCol{0,0,1,1};//コアの色　最初青
 	//-------↑HPHALF↑------//
 	
 	//------HP半分以下円運動↓
