@@ -33,7 +33,6 @@ private:
 
 public:
 	inline void SetPBulModel(Model* model) { pBulModel = model; }
-	//inline void SetPFiringLine(Model* model) { pFiringLine = model; }
 
 	/*static Player* GetInstance();*/
 
@@ -94,6 +93,8 @@ public:
 	//自機安否確認
 	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
 	const bool& GetpDeath() { return PlayerDeathFlag; }
+	//射線表示フラグ
+	void SetFireLineDrawFlag(bool flag) { firingline_->SetAlive(flag); }
 	//-------------------↑げったーせったー↑-------------------//
 
 	//自機が攻撃できるようにするか true:攻撃できる

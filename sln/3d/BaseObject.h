@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Model.h"
 #include "Object3d.h"
@@ -15,6 +15,7 @@ public:
 	inline Object3d* GetObj() { return obj.get(); }
 
 	inline void SetAlive(bool Alive) { alive = Alive; }
+	inline bool GetAlive() const { return alive; }
 
 	inline void SetPosition(const DirectX::XMFLOAT3& position) { obj->SetPosition(position); }
 	inline const DirectX::XMFLOAT3& GetPosition() { return obj->GetPosition(); }
@@ -28,15 +29,14 @@ public:
 	inline void SetColor(const DirectX::XMFLOAT4& color) { obj->SetColor(color); }
 	inline const DirectX::XMFLOAT4& GetColor() { return obj->GetColor(); }
 
-	//ƒ‚ƒfƒ‹‰Šú‰»ŠÖ”
+	//ãƒ¢ãƒ‡ãƒ«åˆæœŸåŒ–é–¢æ•°
 	inline void SetModel(Model* model) { obj->SetModel(model); }
 
-	inline bool GetAlive() const { return alive; }
 
 	/// <summary>
-	/// ‰ñ“]s—ñ‚Ìæ“¾
+	/// å›è»¢è¡Œåˆ—ã®å–å¾—
 	/// </summary>
-	/// <returns>‰ñ“]s—ñ</returns>
+	/// <returns>å›è»¢è¡Œåˆ—</returns>
 	inline const DirectX::XMMATRIX& GetMatRotation() const { return obj->GetMatRot(); }
 
 	virtual void Initialize();

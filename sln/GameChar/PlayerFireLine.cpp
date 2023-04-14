@@ -1,18 +1,15 @@
-#include "PlayerFireLine.h"
+ï»¿#include "PlayerFireLine.h"
 
 using namespace DirectX;
 
 void PlayerFireLine::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
-	//ì‚é
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
 	obj->SetScale({ 3.f, 3.f, 3.f });
-	//êŠ
-
-	//obj->SetPosition({ BulletPos });
 }
 
 void PlayerFireLine::Update()
@@ -26,5 +23,7 @@ void PlayerFireLine::Update()
 
 void PlayerFireLine::Draw()
 {
-	obj->Draw();
+	if (this->GetAlive()) {
+		obj->Draw();
+	}
 }

@@ -159,13 +159,6 @@ void GamePlayScene::Initialize()
 	camera->SetTarget(player_->GetPosition());
 	camera->SetEye({ 0,100,-1000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
-	//いろいろ生成
-	//firingline_.reset(new PlayerFireLine());
-	//いろいろキャラ初期化
-	//firingline_ = std::make_unique<PlayerFireLine>();
-	//firingline_->Initialize();
-	//firingline_->SetModel(mod_firingline.get());
-
 	//最初の演出
 	ApEndPPos = player_->GetPosition();
 	ApStartPPos = ApEndPPos;
@@ -622,6 +615,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
 			player_->pAtkPossibleFlag = true;
+			player_->SetFireLineDrawFlag(true);//射線表示してから雑魚戦
 			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
 		}
 	}
@@ -1064,6 +1058,8 @@ void GamePlayScene::GameReadyUpdate()
 				//動いていいよ
 				PDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
+
+				player_->SetFireLineDrawFlag(true);//射線表示してから雑魚戦
 				//次は雑魚戦
 				updatePattern = std::bind(&GamePlayScene::SmallEnemyBattleUpdate, this);
 			}
@@ -1088,6 +1084,7 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 
 	//撃破数達成
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+		player_->SetFireLineDrawFlag(false);//射線表示解除
 		//ボス戦前演出
 		updatePattern = std::bind(&GamePlayScene::BossBattleReadyUpdate, this);
 	}
@@ -1165,6 +1162,7 @@ void GamePlayScene::BossBattleUpdate()
 		boss->Update();//ボス更新
 
 		if (boss->GetisDeath()) {
+			player_->SetFireLineDrawFlag(false);
 			updatePattern = std::bind(&GamePlayScene::AfterBossBattleUpdate, this);//ボス撃破
 		}
 	}
@@ -1261,9 +1259,6 @@ void GamePlayScene::Update()
 		pause->SpUpdate();
 
 		player_->Update();
-		//if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
-			//firingline_->Update();//射線
-		//}
 
 		//----------------↓シーン切り替え関連↓----------------//
 		//自機HP0でゲームオーバー
@@ -1324,9 +1319,6 @@ void GamePlayScene::Draw()
 
 	//自キャラ描画
 	player_->Draw();
-	//if (player_->pAtkPossibleFlag) {//攻撃可能時のみ
-	//	firingline_->Draw();
-	//}
 
 	// パーティクル描画
 	DxBase* dxBase = DxBase::GetInstance();

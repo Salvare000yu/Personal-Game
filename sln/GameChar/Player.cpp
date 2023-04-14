@@ -229,6 +229,8 @@ void Player::Initialize()
 	firingline_->Initialize();
 	firingline_->SetModel(mod_firingline.get());
 	firingline_->GetObj()->SetParent(this->GetObj());
+	firingline_->SetScale({ 0.2f,0.2f,1000 });
+	firingline_->SetAlive(false);
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("shot.wav");
