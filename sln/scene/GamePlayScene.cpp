@@ -1143,10 +1143,7 @@ void GamePlayScene::BossBattleUpdate()
 	PadStickCamera();
 
 	CharParameters* charParams = CharParameters::GetInstance();
-	//敵のHPバー
-	if (BossEnemyAdvent) {
-		charParams->boHpSizeChange();
-	}
+
 	//敵のHPバー
 	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
 	if (BossEnemyAdvent && NowBoHp > 0) {
@@ -1222,9 +1219,6 @@ void GamePlayScene::Update()
 		}
 
 		DxBase* dxBase = DxBase::GetInstance();
-
-		//自機のHPバー
-		charParams->pHpSizeChange();
 
 		// 自機体力が0より多ければ
 		if (player_->GetPHpLessThan0() == false) {

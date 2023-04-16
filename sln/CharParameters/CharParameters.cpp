@@ -6,6 +6,14 @@
 #include "DebugText.h"
 #include <DirectXMath.h>
 
+#ifdef max
+#undef max
+#endif // max
+
+#ifdef min
+#undef min
+#endif // min
+
 using namespace DirectX;
 
 CharParameters* CharParameters::GetInstance()
@@ -32,7 +40,9 @@ void CharParameters::Initialize()
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
 	sp_playerhpbar->SetPosition({ 80,520,0 });
 	sp_playerhpbarwaku->SetPosition({ 30,520,0 });
-	//スプライトサイズ
+	//ｰｰ色
+	///自機HPバー最初の色
+	sp_playerhpbar->SetColor({ 0,1,0,1 });
 
 	//パラメータ関連初期化
 	BossDefense = BossDefenseDef;
@@ -57,14 +67,45 @@ void CharParameters::Update()
 {
 }
 
+void CharParameters::PlayerHpBarColorChange() 
+{
+	constexpr float ColorWDec = 0.012f;//透明にしていく速度
+	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+
+	XMFLOAT4 color = sp_playerhpbar->GetColor();
+	color.x = 1.f;
+
+	if (pHpBarFrame <= 0) {//指定時間たったら
+		color.w -= ColorWDec;
+	}
+
+	if (color.w <= Transparency) {
+		pHpBarFrame = pHpBarFrameDef;//またこの時間分まつ
+		color.w = 1.f;//一番明るい状態
+	}
+
+	pHpBarFrame = std::max(--pHpBarFrame, 0);//ToStartFrameの最小値は0
+
+	sp_playerhpbar->SetColor(color);
+	sp_playerhpbar->TransferVertexBuffer();
+}
+
 void CharParameters::pHpUpdate()
 {
+	pHpSizeChange();
+
+	//自機HPが一定以上削られたら
+	if (NowPlayerHP <= PlayerMaxHP / 3.f) {
+		PlayerHpBarColorChange();
+	}
+
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
 }
 
 void CharParameters::boHpUpdate()
 {
+	boHpSizeChange();
 	//更新
 	sp_enemyhpbar->Update();
 	sp_enemyhpbarwaku->Update();

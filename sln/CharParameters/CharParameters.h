@@ -12,6 +12,7 @@ public:
 	void pHpSizeChange();
 	void boHpSizeChange();
 	void Update()override;
+	void PlayerHpBarColorChange();
 	void pHpUpdate();
 	void boHpUpdate();
 	void Draw()override;
@@ -55,6 +56,10 @@ private:
 	//自機HP
 	const float PlayerMaxHP = 1000;//じきさいだいHP
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
+
+	//------自機HPスプライト点滅
+	const int pHpBarFrameDef = 40;//透明じゃない時間
+	int pHpBarFrame = pHpBarFrameDef;
 
 	//自機がダメージ喰らった false:喰らってない
 	bool ispDam = false;
