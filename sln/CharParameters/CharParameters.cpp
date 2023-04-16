@@ -30,8 +30,8 @@ void CharParameters::Initialize()
 	//スプライトポジション
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ 100,500,0 });
-	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
+	sp_playerhpbar->SetPosition({ 80,520,0 });
+	sp_playerhpbarwaku->SetPosition({ 30,520,0 });
 	//スプライトサイズ
 
 	//パラメータ関連初期化
