@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseObject.h"
 #include "Object3d.h"
 #include "Sprite.h"
@@ -12,7 +12,6 @@ public:
 	void pHpSizeChange();
 	void boHpSizeChange();
 	void Update()override;
-	void BarGetDislodged();//‚¢‚Â‚©Á‚·
 	void pHpUpdate();
 	void boHpUpdate();
 	void Draw()override;
@@ -20,27 +19,27 @@ public:
 	void boHpDraw();
 	void DrawUI();
 
-	//-----------------------«‚°‚Á‚½[‚¹‚Á‚½[«-----------------------//
-	//Œ»İƒ{ƒXHP
+	//-----------------------â†“ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†“-----------------------//
+	//ç¾åœ¨ãƒœã‚¹HP
 	void SetNowBoHp(float NowBossHP) { this->NowBossHP = NowBossHP; }
 	const float& GetNowBoHp() { return NowBossHP; }
-	//©‹@Œ»İHP
+	//è‡ªæ©Ÿç¾åœ¨HP
 	void SetNowpHp(float NowPlayerHP) { this->NowPlayerHP = NowPlayerHP; }
 	const float& GetNowpHp() { return NowPlayerHP; }
-	//©‹@‹ò‚ç‚Á‚½
+	//è‡ªæ©Ÿå–°ã‚‰ã£ãŸ
 	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
 	const bool& GetispDam() { return ispDam; }
-	//©‹@HPMax
+	//è‡ªæ©ŸHPMax
 	const float& GetpMaxHp() { return PlayerMaxHP; }
-	//ƒ{ƒXHPMax
+	//ãƒœã‚¹HPMax
 	const float& GetboMaxHp() { return BossMaxHP; }
-	//ƒ{ƒX–hŒä—Í
+	//ãƒœã‚¹é˜²å¾¡åŠ›
 	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
 	const float& GetBossDefense() { return BossDefense; }
-	//-----------------------ª‚°‚Á‚½[‚¹‚Á‚½[ª-----------------------//
+	//-----------------------â†‘ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†‘-----------------------//
 
-	const int StopPos = 1800;//©‹@ŸÀ•W‚Ö‚ÌˆÚ“®‚Ì’â~êŠ
-	//Ÿ‚ÌêŠ‚ÖŒü‚©‚¤@trueFŒü‚©‚Á‚Ä‚¢‚é false:Š®—¹
+	const int StopPos = 1800;//è‡ªæ©Ÿæ¬¡åº§æ¨™ã¸ã®ç§»å‹•ã®åœæ­¢å ´æ‰€
+	//æ¬¡ã®å ´æ‰€ã¸å‘ã‹ã†ã€€trueï¼šå‘ã‹ã£ã¦ã„ã‚‹ false:å®Œäº†
 	bool pNextPlaceGoFlag = true;
 
 private:
@@ -49,27 +48,18 @@ private:
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 
-	//“GHP
-	const float BossMaxHP = 1000;//‚Ä‚«‚³‚¢‚¾‚¢HP
-	float NowBossHP = BossMaxHP;//Œ»İ‚Ì“GHP
+	//æ•µHP
+	const float BossMaxHP = 1000;//ã¦ãã•ã„ã ã„HP
+	float NowBossHP = BossMaxHP;//ç¾åœ¨ã®æ•µHP
 
-	//©‹@HP
-	const float PlayerMaxHP = 1000;//‚¶‚«‚³‚¢‚¾‚¢HP
-	float NowPlayerHP = PlayerMaxHP;//Œ»İ‚Ì©‹@HP
+	//è‡ªæ©ŸHP
+	const float PlayerMaxHP = 1000;//ã˜ãã•ã„ã ã„HP
+	float NowPlayerHP = PlayerMaxHP;//ç¾åœ¨ã®è‡ªæ©ŸHP
 
-	//©‹@‚ªƒ_ƒ[ƒW‹ò‚ç‚Á‚½ false:‹ò‚ç‚Á‚Ä‚È‚¢
+	//è‡ªæ©ŸãŒãƒ€ãƒ¡ãƒ¼ã‚¸å–°ã‚‰ã£ãŸ false:å–°ã‚‰ã£ã¦ãªã„
 	bool ispDam = false;
 
-	//ƒo[‚Ì‚¸‚ê]]‚¢‚Â‚©Á‚·
-	bool BarPosControlOnlyOnceFlag1 = false;
-	bool BarPosControlOnlyOnceFlag2 = false;
-	bool BarPosControlOnlyOnceFlag3 = false;
-	bool BarPosControlOnlyOnceFlag4 = false;
-	bool BarPosControlOnlyOnceFlag5 = false;
-	bool BarPosControlOnlyOnceFlag6 = false;
-	bool BarPosControlOnlyOnceFlag7 = false;
-
-	//–hŒä—Í
+	//é˜²å¾¡åŠ›
 	const float BossDefenseDef = 60;
 	float BossDefense = BossDefenseDef;
 };

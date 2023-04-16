@@ -30,25 +30,15 @@ void CharParameters::Initialize()
 	//スプライトポジション
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ -70,500,0 });
+	sp_playerhpbar->SetPosition({ 100,500,0 });
 	sp_playerhpbarwaku->SetPosition({ -70,500,0 });
 	//スプライトサイズ
-	//sp_playerhpbarwaku->size_.x = PlayerMaxHP;
-	//sp_playerhpbarwaku->TransferVertexBuffer();
-	BarPosControlOnlyOnceFlag1 = false;
-	BarPosControlOnlyOnceFlag2 = false;
-	BarPosControlOnlyOnceFlag3 = false;
-	BarPosControlOnlyOnceFlag4 = false;
-	BarPosControlOnlyOnceFlag5 = false;
-	BarPosControlOnlyOnceFlag6 = false;
-	BarPosControlOnlyOnceFlag7 = false;
 
 	//パラメータ関連初期化
 	BossDefense = BossDefenseDef;
 	NowBossHP = BossMaxHP;//
 	NowPlayerHP = PlayerMaxHP;//
 	pNextPlaceGoFlag = true;
-	//pAtkPossibleFlag = false;
 }
 
 void CharParameters::pHpSizeChange()
@@ -65,39 +55,6 @@ void CharParameters::boHpSizeChange()
 
 void CharParameters::Update()
 {
-}
-
-void CharParameters::BarGetDislodged()
-{
-	//サイズ変更によるズレ--いつか消すから仮
-	{
-		XMFLOAT3 pHpBar = sp_playerhpbar->GetPosition();
-		if (NowPlayerHP <= 700 && BarPosControlOnlyOnceFlag3 == false) {
-			pHpBar.x += 30;
-			BarPosControlOnlyOnceFlag3 = true;
-		}
-		if (NowPlayerHP <= 600 && BarPosControlOnlyOnceFlag1 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag1 = true;
-		}
-		if (NowPlayerHP <= 500 && BarPosControlOnlyOnceFlag4 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag4 = true;
-		}
-		if (NowPlayerHP <= 400 && BarPosControlOnlyOnceFlag5 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag5 = true;
-		}
-		if (NowPlayerHP <= 300 && BarPosControlOnlyOnceFlag6 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag6 = true;
-		}
-		if (NowPlayerHP <= 200 && BarPosControlOnlyOnceFlag7 == false) {
-			pHpBar.x += 10;
-			BarPosControlOnlyOnceFlag7 = true;
-		}
-		sp_playerhpbar->SetPosition(pHpBar);
-	}
 }
 
 void CharParameters::pHpUpdate()
@@ -124,20 +81,10 @@ void CharParameters::pHpDraw()
 void CharParameters::boHpDraw()
 {
 	sp_enemyhpbar->Draw();
-	//sp_enemyhpbarwaku->Draw();
+	sp_enemyhpbarwaku->Draw();
 }
 
 void CharParameters::DrawUI()
 {
-	////自機と敵の体力
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f", NowPlayerHP);
-	//	DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	//}
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "%2.f", NowBossHP);
-	//	DebugText::GetInstance()->Print(tmp, 430, 460, 3);
-	//}
+
 }

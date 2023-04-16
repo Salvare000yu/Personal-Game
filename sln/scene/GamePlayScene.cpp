@@ -1226,8 +1226,6 @@ void GamePlayScene::Update()
 		//自機のHPバー
 		charParams->pHpSizeChange();
 
-		charParams->BarGetDislodged();
-
 		// 自機体力が0より多ければ
 		if (player_->GetPHpLessThan0() == false) {
 			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
