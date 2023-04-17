@@ -244,14 +244,14 @@ void Boss::HpHalfPatStart()
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//指定座標で自機のZからどれくらい間をあけるか
 	const int SpaceDistance = 500;
-	
+
 	//コアの色を赤に
 	constexpr float coreColChangeVal = 0.01f;//マイフレ変える値
 	coreCol.x += coreColChangeVal;
 	coreCol.z -= coreColChangeVal;
 	obj_core->SetColor(coreCol);
 
-	if (GetPosOnlyFlag){
+	if (GetPosOnlyFlag) {
 		//最初の位置
 		HpHalfMomentPos = obj->GetPosition();
 		GetPosOnlyFlag = false;
@@ -265,16 +265,12 @@ void Boss::HpHalfPatStart()
 		charParams->SetBossDefense(Defence);
 	}
 
-	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesHpHalfFrame;
-	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesHpHalfFrame;
-	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesHpHalfFrame;
-	//その時の位置＝最初位置＋移動速度＊経過時間
-	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
-	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
-	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
-
-	obj->SetPosition({ NowPos });
+	float raito = (float)Nowframe / NecesHpHalfFrame;
+	//場所移動
+	lerpMovePos.x = std::lerp(HpHalfMomentPos.x, TargetHpHalfPos.x, raito);
+	lerpMovePos.y = std::lerp(HpHalfMomentPos.y, TargetHpHalfPos.y, raito);
+	lerpMovePos.z = std::lerp(HpHalfMomentPos.z, TargetHpHalfPos.z, raito);
+	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
 	DiffusionAtkCount--;
@@ -304,9 +300,6 @@ void Boss::HpHalfPatStart()
 		Nowframe = NowframeDef;
 		GetPosOnlyFlag = true;
 		HpHalfMomentPos = {};
-		MoveSp = {};
-		NowPos = {};
-
 		isHpHalfPattern = true;//この処理全部終了したからもうやんない
 		actionPattern = std::bind(&Boss::CircularMotionMove, this);
 	}
@@ -382,16 +375,14 @@ void Boss::LeaveFirstPos()
 		PlungeCount--;
 	}
 	XMFLOAT3 pPos = shotTag->GetPosition();
-	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (pPos.x - HpHalfMomentPos.x) / NecesLeaveFirstFrame;
-	MoveSp.y = (TargetHpHalfPos.y - HpHalfMomentPos.y) / NecesLeaveFirstFrame;
-	MoveSp.z = (TargetHpHalfPos.z - HpHalfMomentPos.z) / NecesLeaveFirstFrame;
-	//その時の位置＝最初位置＋移動速度＊経過時間
-	NowPos.x = HpHalfMomentPos.x + MoveSp.x * Nowframe;
-	NowPos.y = HpHalfMomentPos.y + MoveSp.y * Nowframe;
-	NowPos.z = HpHalfMomentPos.z + MoveSp.z * Nowframe;
 
-	obj->SetPosition({ NowPos });
+	bossLerpMoveRaito = (float)Nowframe / NecesLeaveFirstFrame;
+	//場所移動
+	//x自機ちょい追う感じ
+	lerpMovePos.x = std::lerp(HpHalfMomentPos.x, pPos.x - TargetHpHalfPos.x, bossLerpMoveRaito);
+	lerpMovePos.y = std::lerp(HpHalfMomentPos.y, TargetHpHalfPos.y, bossLerpMoveRaito);
+	lerpMovePos.z = std::lerp(HpHalfMomentPos.z, TargetHpHalfPos.z, bossLerpMoveRaito);
+	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
 	AtkCount--;
@@ -446,26 +437,12 @@ void Boss::PlungeInto()
 
 		Nowframe++;
 
-		//移動速度＝（指定座標-最初位置）/かかる時間
-		PlungeSp.x = (pPosMem.x - boPosMom.x);
-		PlungeSp.y = (pPosMem.y - boPosMom.y);
-		PlungeSp.z = (pPosMem.z - boPosMom.z);
-
-		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecMoveSp = XMLoadFloat3(&PlungeSp);
-		//normalize
-		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
-		// 大きさを任意値に(速度)
-		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 50.f);
-		// FLOAT3に変換
-		XMStoreFloat3(&PlungeSp, xmvecMoveSp);
-
-		//その時の位置＝最初位置＋移動速度＊経過時間
-		PlungeNowPos.x = boPosMom.x + PlungeSp.x * Nowframe;
-		PlungeNowPos.y = boPosMom.y + PlungeSp.y * Nowframe;
-		PlungeNowPos.z = boPosMom.z + PlungeSp.z * Nowframe;
-
-		obj->SetPosition(PlungeNowPos);//その時の位置
+		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+		//場所移動
+		lerpMovePos.x = std::lerp(boPosMom.x, pPosMem.x, bossLerpMoveRaito);
+		lerpMovePos.y = std::lerp(boPosMom.y, pPosMem.y, bossLerpMoveRaito);
+		lerpMovePos.z = std::lerp(boPosMom.z, pPosMem.z, bossLerpMoveRaito);
+		obj->SetPosition(lerpMovePos);
 
 		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
 			boPosFlag = false;//一度きり読み込みリセ
@@ -489,26 +466,13 @@ void Boss::PlungeInto()
 			BeforeReversePosMemFlag = true;
 		}
 
-		//移動速度＝（指定座標-最初位置）/かかる時間
-		ReverseSp.x = (ReversePos.x - BeforeReversePosMem.x);
-		ReverseSp.y = (ReversePos.y - BeforeReversePosMem.y);
-		ReverseSp.z = (ReversePos.z - BeforeReversePosMem.z);
-
-		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecRevMoveSp = XMLoadFloat3(&ReverseSp);
-		//normalize
-		xmvecRevMoveSp = XMVector3Normalize(xmvecRevMoveSp);
-		// 大きさを任意値に(速度)
-		xmvecRevMoveSp = XMVectorScale(xmvecRevMoveSp, 10.f);
-		// FLOAT3に変換
-		XMStoreFloat3(&ReverseSp, xmvecRevMoveSp);
-
-		//その時の位置＝最初位置＋移動速度＊経過時間
-		ReverseNowPos.x = BeforeReversePosMem.x + ReverseSp.x * Nowframe;
-		ReverseNowPos.y = BeforeReversePosMem.y + ReverseSp.y * Nowframe;
-		ReverseNowPos.z = BeforeReversePosMem.z + ReverseSp.z * Nowframe;
-
-		obj->SetPosition(ReverseNowPos);//その時の位置
+		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+		//場所移動
+		XMFLOAT3 reversePos{};
+		reversePos.x = std::lerp(BeforeReversePosMem.x, ReversePos.x, bossLerpMoveRaito);
+		reversePos.y = std::lerp(BeforeReversePosMem.y, ReversePos.y, bossLerpMoveRaito);
+		reversePos.z = std::lerp(BeforeReversePosMem.z, ReversePos.z, bossLerpMoveRaito);
+		obj->SetPosition(reversePos);
 
 		//z座標が指定座標になったら
 		if (position.z >= ReversePos.z) {
@@ -577,6 +541,8 @@ void Boss::AfterPlungeInto()
 			LoopCount++;//何回やったか数えるんだよ
 			WaitTime = WaitTimeDef;
 			Nowframe = NowframeDef;
+			pPosMem = shotTag->GetPosition();//自機いた場所
+			boPosMem = obj->GetPosition();//ボスいた場所
 			afterPlungePattern_ = AfterPlungePattern::Attack;//攻撃へ
 		}
 
@@ -602,22 +568,13 @@ void Boss::AfterPlungeInto()
 
 		Nowframe++;
 
-		if (pPosMemFlag == false) {
-			pPosMem = shotTag->GetPosition();//自機いた場所
-			boPosMem = obj->GetPosition();//ボスいた場所
-			pPosMemFlag = true;
-		}
-		//移動速度＝（指定座標-最初位置）/かかる時間
-		AtkMoveSp.x = (pPosMem.x - boPosMem.x) / NecesAtkMoveTime;
-		AtkMoveSp.y = (pPosMem.y - boPosMem.y) / NecesAtkMoveTime;
-		AtkMoveSp.z = (pPosMem.z + 800 - boPosMem.z) / NecesAtkMoveTime;
-
-		//その時の位置＝最初位置＋移動速度＊経過時間
-		boNowPos.x = boPosMem.x + AtkMoveSp.x * Nowframe;
-		boNowPos.y = boPosMem.y + AtkMoveSp.y * Nowframe;
-		boNowPos.z = boPosMem.z + AtkMoveSp.z * Nowframe;
-
-		obj->SetPosition(boNowPos);//その時の位置
+		bossLerpMoveRaito = (float)Nowframe / NecesAtkMoveTime;
+		//場所移動
+		XMFLOAT3 pos{};
+		pos.x = std::lerp(boPosMem.x, pPosMem.x, bossLerpMoveRaito);
+		pos.y = std::lerp(boPosMem.y, pPosMem.y, bossLerpMoveRaito);
+		pos.z = std::lerp(boPosMem.z, boPosMem.z, bossLerpMoveRaito);
+		obj->SetPosition(pos);
 
 		AfterPlungePatAtkCount--;
 		//時が満ちたら
@@ -630,7 +587,6 @@ void Boss::AfterPlungeInto()
 
 		if (Nowframe == NecesAtkMoveTime) {
 			Nowframe = NowframeDef;
-			pPosMemFlag = false;
 			afterPlungePattern_ = AfterPlungePattern::Wait;
 		}
 
@@ -642,15 +598,14 @@ void Boss::AfterPlungeInto()
 			PlungeFinOnlyFlag = true;
 		}
 		else {
-			float raito = (float)Nowframe / PlungeFinFrameMax;
+			bossLerpMoveRaito = (float)Nowframe / PlungeFinFrameMax;
 			Nowframe++;
 
 			//円行動に合うようにその場所へ移動
-			XMFLOAT3 pos{};
-			pos.x = std::lerp(boPosMem.x, obj->GetPosition().x, raito);
-			pos.y = std::lerp(boPosMem.y, CircularY, raito);
-			pos.z = std::lerp(boPosMem.z, obj->GetPosition().z, raito);
-			obj->SetPosition(pos);
+			lerpMovePos.x = std::lerp(boPosMem.x, obj->GetPosition().x, bossLerpMoveRaito);
+			lerpMovePos.y = std::lerp(boPosMem.y, CircularY, bossLerpMoveRaito);
+			lerpMovePos.z = std::lerp(boPosMem.z, obj->GetPosition().z, bossLerpMoveRaito);
+			obj->SetPosition(lerpMovePos);
 			if (Nowframe == PlungeFinFrameMax) {
 				Nowframe = 0;
 				PlungeFinOnlyFlag = false;
@@ -717,10 +672,6 @@ void Boss::PAimBul()
 			aimBullet->GetPosOnlyFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
-		// //絶対当たる
-		////MoveSp.x = (shotTag->GetPosition().x - sePosMoment.x);
-		////MoveSp.y = (shotTag->GetPosition().y - sePosMoment.y);
-		////MoveSp.z = (shotTag->GetPosition().z - sePosMoment.z);
 		aimBullet->MoveSp.x = (aimBullet->ShotTagMoment.x - aimBullet->boPosMoment.x);
 		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
 		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
@@ -753,7 +704,7 @@ void Boss::DiffusionAttack()
 	std::unique_ptr<BossBullet> madeBullet_center = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_L = std::make_unique<BossBullet>();
 	std::unique_ptr<BossBullet> madeBullet_R = std::make_unique<BossBullet>();
-	
+
 	madeBullet_center->Initialize();
 	madeBullet_L->Initialize();
 	madeBullet_R->Initialize();
@@ -888,23 +839,17 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if (GetPosDeathOnlyFlag)
-	{
+	if (GetPosDeathOnlyFlag){
 		//最初の位置
 		boPosDeath = obj->GetPosition();
 		GetPosDeathOnlyFlag = false;
 	}
 
-	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (boPosDeath.x - boPosDeath.x) / NecesFrame;//指定座標Xは死んだ場所から真下に落ちるように死んだX座標
-	MoveSp.y = (TargetPos.y - boPosDeath.y) / NecesFrame;
-	MoveSp.z = (boPosDeath.z - boPosDeath.z) / NecesFrame;//〃
-	//その時の位置＝最初位置＋移動速度＊経過時間
-	NowPos.x = boPosDeath.x + MoveSp.x * Nowframe;
-	NowPos.y = boPosDeath.y + MoveSp.y * Nowframe;
-	NowPos.z = boPosDeath.z + MoveSp.z * Nowframe;
-
-	obj->SetPosition(NowPos);//その時の位置
+	bossLerpMoveRaito = (float)Nowframe / NecesFrame;
+	lerpMovePos.x = std::lerp(boPosDeath.x, boPosDeath.x, bossLerpMoveRaito);
+	lerpMovePos.y = std::lerp(boPosDeath.y, TargetPos.y, bossLerpMoveRaito);
+	lerpMovePos.z = std::lerp(boPosDeath.z, boPosDeath.z, bossLerpMoveRaito);
+	obj->SetPosition(lerpMovePos);
 
 	//一定時間ごとにパーティクル
 	if (PartTimeInterval == 1) {

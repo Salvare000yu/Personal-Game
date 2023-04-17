@@ -182,6 +182,11 @@ private:
 	//ボス回転
 	float bossRot = 1.f;
 
+	//ボスlerp動きレート
+	float bossLerpMoveRaito = 0;
+	//ボスlerp場所
+	XMFLOAT3 lerpMovePos{};
+
 	//攻撃用カウント
 	int AtkCount = 0;
 	int DiffusionAtkCount = 0;
@@ -309,9 +314,7 @@ private:
 	//離れる速度
 	const int LeaveVel = 20;
 	//Leaveの時どの程度下がるか
-	const int LeavePos = 5000;
-	//戻る速度
-	XMFLOAT3 ReverseSp;
+	const int LeavePos = 6000;
 	//戻る前の座標取得フラグ　false:してない
 	bool BeforeReversePosMemFlag = false;
 	//戻る前座標入れる
@@ -323,8 +326,6 @@ private:
 	//突っ込み待ち待機時間 でふぉ140
 	const int PlungeIntoWaitCountDef = 140;
 	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-	//突撃速度
-	const int PlungeVel = 50;
 	//最後定位置戻るのにかかる時間
 	const int PlungeFinFrameMax = 60;
 	//Finで最初いた一度位置取得 false:まだ
@@ -338,14 +339,12 @@ private:
 
 	//突っ込み終わったか  false:まだ突っ込んでない
 	bool PlungeCompletFlag = false;
-	//突っ込み
-	//float PlungerFame = 0;
 	//ボス最初の場所
 	bool boPosFlag = false;
 	//ボスいた場所
 	XMFLOAT3 boPosMom{};
 	//突っ込み速度
-	XMFLOAT3 PlungeSp{};
+	const uint32_t plungeNecesFrame = 40;
 	//その時のボスの位置
 	XMFLOAT3 PlungeNowPos;
 	//-------PlungeInto
@@ -355,8 +354,6 @@ private:
 	//待ち時間
 	const int WaitTimeDef = 60;
 	int WaitTime = WaitTimeDef;
-	//攻撃するための自機いた場所取得フラグ false:取得前
-	bool pPosMemFlag = false;
 	//攻撃時に自機のいた場所へ（XY）移動する速度
 	XMFLOAT3 AtkMoveSp;
 	//ボスいた場所
@@ -370,7 +367,6 @@ private:
 	int LoopCount = LoopCountDef;
 	//この回数でつぎへ
 	const int LoopCountMax = 7;
-
 	//
 	//-------AfterPlungeInto
 

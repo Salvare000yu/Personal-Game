@@ -108,7 +108,7 @@ private:
 
 	//自機通常弾威力
 	//const float pBulPowerMax = 95;
-	const float pBulPowerMax = 95;
+	const float pBulPowerMax = 195;
 	float pBulPower = pBulPowerMax;
 
 	//自機体力が0より少ないとき false:　０より多い
