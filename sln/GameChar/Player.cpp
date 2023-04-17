@@ -9,6 +9,14 @@
 
 #include <DirectXMath.h>
 
+#ifdef max
+#undef max
+#endif // max
+
+#ifdef min
+#undef min
+#endif // min
+
 using namespace DirectX;
 
 void Player::Attack()
@@ -289,6 +297,9 @@ void Player::Update()
 			Shake();
 		}
 	}
+
+	//自機弾威力最小値１
+	pBulPower = std::max(pBulPower, 1.f);
 
 	// パーティクル更新
 	particle->Update();

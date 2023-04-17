@@ -6,6 +6,8 @@
 #include "DebugText.h"
 #include <DirectXMath.h>
 
+#include <algorithm>
+
 #ifdef max
 #undef max
 #endif // max
@@ -115,10 +117,8 @@ void CharParameters::pHpUpdate()
 	//色変え
 	pHpColorPattern();
 
-	//自機HPが一定以上削られたら
-	if (NowPlayerHP <= PlayerMaxHP / 3.f) {
-
-	}
+	//自機Hpの最大最小値。HPが負になったりバーが反対に飛び出ないように
+	NowPlayerHP = std::clamp(NowPlayerHP, 0.f, PlayerMaxHP);
 
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
@@ -127,6 +127,10 @@ void CharParameters::pHpUpdate()
 void CharParameters::boHpUpdate()
 {
 	boHpSizeChange();
+
+	//ボスHpの最大最小値。HPが負になったりバーが反対に飛び出ないように
+	NowBossHP = std::clamp(NowBossHP, 0.f, BossMaxHP);
+
 	//更新
 	sp_enemyhpbar->Update();
 	sp_enemyhpbarwaku->Update();

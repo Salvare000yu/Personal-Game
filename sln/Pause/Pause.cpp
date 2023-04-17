@@ -1,4 +1,4 @@
-#include "Pause.h"
+ï»¿#include "Pause.h"
 #include "Object3d.h"
 #include "BaseScene.h"
 #include "SceneManager.h"
@@ -19,7 +19,7 @@ Pause* Pause::GetInstance()
 
 void Pause::Initialize()
 {
-	//windowc‰¡Žæ“¾‚µ‚½‚¢‚Æ‚«Žg‚¤
+	//windowç¸¦æ¨ªå–å¾—ã—ãŸã„ã¨ãä½¿ã†
 	WinApp* winApp = WinApp::GetInstance();
 
 	SpriteBase::GetInstance()->LoadTexture(7, L"Resources/OpenPause.png");
@@ -36,14 +36,14 @@ void Pause::Initialize()
 	sp_continuation.reset(Sprite::Create(11, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_gotitle.reset(Sprite::Create(12, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	//ƒXƒvƒ‰ƒCƒgƒ|ƒWƒVƒ‡ƒ“
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒã‚¸ã‚·ãƒ§ãƒ³
 	float gotitlePosY = winApp->window_width / 2;
-	sp_openpause->SetPosition({ 1050,600,0 });
-	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//ã
-	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//^‚ñ’†
-	sp_gotitle->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 150 ,0 });//‰º
+	sp_openpause->SetPosition({ 1070,600,0 });
+	sp_continuation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 450,0 });//ä¸Š
+	sp_operation->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 300,0 });//çœŸã‚“ä¸­
+	sp_gotitle->SetPosition({ winApp->window_width / 2 - 150,gotitlePosY - 150 ,0 });//ä¸‹
 
-	//ƒXƒvƒ‰ƒCƒgƒTƒCƒY
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚µã‚¤ã‚º
 	sp_openpause->SetSize({ 210.f,130.f });
 	sp_continuation->SetSize({ 300.f,100.f });
 	sp_gotitle->SetSize({ 300.f,100.f });
@@ -53,7 +53,7 @@ void Pause::Initialize()
 	sp_continuation->TransferVertexBuffer();
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
-	//–ˆ‰ñƒŠƒZƒbƒg
+	//æ¯Žå›žãƒªã‚»ãƒƒãƒˆ
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
 	PauseNowSelect = 0;
@@ -62,7 +62,7 @@ void Pause::Initialize()
 
 void Pause::EveryInit()
 {
-	//–ˆ‰ñƒŠƒZƒbƒg
+	//æ¯Žå›žãƒªã‚»ãƒƒãƒˆ
 	SceneChangeTitleFlag = false;
 	PauseFlag = false;
 	PauseNowSelect = 0;
@@ -75,28 +75,17 @@ void Pause::PauseNow()
 	Input* input = Input::GetInstance();
 	input->PadVibrationDef();
 
-	/*
-	////‘I‘ð’†•\Ž¦@ƒfƒoƒbƒO—p
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%2.f", PauseNowSelect);
-		DebugText::GetInstance()->Print(tmp, 430, 460, 5);
-	}*/
-
-	//ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^‘Î‰ž‚µ‚½‘I‘ð
+	//ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿å¯¾å¿œã—ãŸé¸æŠž
 	if (PauseNowSelect == 0) { pFunc = &Pause::PauseConti; }
 	if (PauseNowSelect == 1) { pFunc = &Pause::PauseOper; }
 	if (PauseNowSelect == 2) { pFunc = &Pause::PauseGoTitle; }
 
-	//ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^ŒÄ‚Ño‚µ
+	//ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿å‘¼ã³å‡ºã—
 	(this->*pFunc)();
 
-	//•Â‚¶‚é
-	WaitKeyP++;//“¯‚¶ƒ{ƒ^ƒ“‚Å‚Æ‚¶‚ê‚é‚æ‚¤‚É
-	////‘€ìà–¾‰æ–ÊŒ©‚Ä‚é‚Æ‚«‚Í‰Ÿ‚µ‚Ä‚à•Â‚¶‚È‚¢
-	//if ((cInput->PauseOpenClose() && WaitKey0 >= 2) && OperWindOpenFlag == false) {
-	//	PauseFlag = false;
-	//}
+	//é–‰ã˜ã‚‹
+	WaitKeyP++;//åŒã˜ãƒœã‚¿ãƒ³ã§ã¨ã˜ã‚Œã‚‹ã‚ˆã†ã«
+
 }
 void Pause::Update()
 {
@@ -114,22 +103,22 @@ void Pause::PauseConti()
 {
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	//‘I‘ð’†ƒTƒCƒY‚Å‚Á‚©‚­
+	//é¸æŠžä¸­ã‚µã‚¤ã‚ºã§ã£ã‹ã
 	sp_continuation->SetSize({ PauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
-	if (cInput->tDownArrow() || cInput->tDownMove()) {//1‚ðŽŸ‚Í‘I‘ð
+	if (cInput->tDownArrow() || cInput->tDownMove()) {//1ã‚’æ¬¡ã¯é¸æŠž
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 1;
 	}
-	if (cInput->tUpArrow() || cInput->tUpMove()) {//ã‚Å2
+	if (cInput->tUpArrow() || cInput->tUpMove()) {//ä¸Šã§2
 		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
 		PauseNowSelect = 2;
 	}
 
-	//Œp‘±
+	//ç¶™ç¶š
 	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -140,25 +129,25 @@ void Pause::PauseOper()
 {
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	//‘I‘ð’†ƒTƒCƒY‚Å‚Á‚©‚­
+	//é¸æŠžä¸­ã‚µã‚¤ã‚ºã§ã£ã‹ã
 	sp_operation->SetSize({ PauseSelectSize,100.f });
 	sp_operation->TransferVertexBuffer();
 
-	//‘€ìà–¾ŠJ‚¢‚Ä‚È‚¢‚Æ‚«‚Ì‚Ý
+	//æ“ä½œèª¬æ˜Žé–‹ã„ã¦ãªã„ã¨ãã®ã¿
 	if (OperWindOpenFlag == false != cInput->Decision())
 	{
-		if (cInput->tDownArrow() || cInput->tDownMove()) {//‰º‚Å2
+		if (cInput->tDownArrow() || cInput->tDownMove()) {//ä¸‹ã§2
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 2;
 		}
-		if (cInput->tUpArrow() || cInput->tUpMove()) {//ã‚Å0
+		if (cInput->tUpArrow() || cInput->tUpMove()) {//ä¸Šã§0
 			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
 			PauseNowSelect = 0;
 		}
 	}
-	//‘€ìà–¾‰æ–ÊŠJ‚­
+	//æ“ä½œèª¬æ˜Žç”»é¢é–‹ã
 	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -181,21 +170,21 @@ void Pause::PauseGoTitle()
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	//‘I‘ð’†ƒTƒCƒY‚Å‚Á‚©‚­
+	//é¸æŠžä¸­ã‚µã‚¤ã‚ºã§ã£ã‹ã
 	sp_gotitle->SetSize({ PauseSelectSize,100.f });
 	sp_gotitle->TransferVertexBuffer();
-	if (cInput->tDownArrow() || cInput->tDownMove()) {//‰º‚Å0
+	if (cInput->tDownArrow() || cInput->tDownMove()) {//ä¸‹ã§0
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 0;
 	}
-	if (cInput->tUpArrow() || cInput->tUpMove()) {//ã‚Å1
+	if (cInput->tUpArrow() || cInput->tUpMove()) {//ä¸Šã§1
 		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
 		PauseNowSelect = 1;
 	}
 
-	//ƒ^ƒCƒgƒ‹‚Ö–ß‚é
+	//ã‚¿ã‚¤ãƒˆãƒ«ã¸æˆ»ã‚‹
 	if ((cInput->Decision()))
 	{
 		SceneChangeTitleFlag = true;
