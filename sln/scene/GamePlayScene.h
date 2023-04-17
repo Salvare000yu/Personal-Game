@@ -77,8 +77,6 @@ public:
 	void SmallEnemyAppear();//雑魚敵出現
 	void SmallEnemyAimBul();//雑魚的狙い弾
 
-	//void BossConditionComp();//ボス戦条件たっせい
-
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
 	void CoolTime();

@@ -818,9 +818,7 @@ void Boss::DamageEffect()
 {
 	BossBodyRedTime--;//この時間赤くする
 
-	XMFLOAT4 col = obj->GetColor();
-
-	col = { 1,ReCol,ReCol,1 };//赤
+	XMFLOAT4 col = { 1,ReCol,ReCol,1 };//赤
 	ReCol += ReColVal;
 
 	if (BossBodyRedTime == 0) {//時間になったら
@@ -830,6 +828,12 @@ void Boss::DamageEffect()
 		BossDamageEffectFlag = false;//くらっていない状態に
 	}
 	obj->SetColor(col);
+	//obj_core->SetColor(col);
+	obj_AroundCore->SetColor(col);
+	obj_outside->SetColor(col);
+	obj_SideSquare->SetColor(col);
+	obj_UpDown->SetColor(col);
+	obj_VerticalCircle->SetColor(col);
 
 }
 
