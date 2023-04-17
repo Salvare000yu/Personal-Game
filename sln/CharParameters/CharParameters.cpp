@@ -49,6 +49,9 @@ void CharParameters::Initialize()
 	NowBossHP = BossMaxHP;//
 	NowPlayerHP = PlayerMaxHP;//
 	pNextPlaceGoFlag = true;
+
+	//HP色を設定 最初緑
+	pHpColorPattern = std::bind(&CharParameters::PlayerHpSafety, this);
 }
 
 void CharParameters::pHpSizeChange()
@@ -67,13 +70,29 @@ void CharParameters::Update()
 {
 }
 
-void CharParameters::PlayerHpBarColorChange() 
+void CharParameters::PlayerHpSafety()
 {
-	constexpr float ColorWDec = 0.012f;//透明にしていく速度
-	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+	//半分以下で
+	if (NowPlayerHP <= PlayerMaxHP / 2.f) {
+		///自機HPバー半分以下黄色
+		sp_playerhpbar->SetColor({ 1,1,0,1 });
+		pHpColorPattern = std::bind(&CharParameters::PlayerHpLessThanHalf, this);
+	}
+}
+void CharParameters::PlayerHpLessThanHalf()
+{
+	//HP指定した値まで減ったら
+	if (NowPlayerHP <= PlayerMaxHP / 4.f) {
+		sp_playerhpbar->SetColor({ 1,0,0,1 });//赤
+		pHpColorPattern = std::bind(&CharParameters::PlayerHpDanger, this);
+	}
+}
+void CharParameters::PlayerHpDanger()
+{
+	constexpr float ColorWDec = 0.015f;//透明にしていく速度
+	constexpr float Transparency = 0.4f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
 
 	XMFLOAT4 color = sp_playerhpbar->GetColor();
-	color.x = 1.f;
 
 	if (pHpBarFrame <= 0) {//指定時間たったら
 		color.w -= ColorWDec;
@@ -93,10 +112,12 @@ void CharParameters::PlayerHpBarColorChange()
 void CharParameters::pHpUpdate()
 {
 	pHpSizeChange();
+	//色変え
+	pHpColorPattern();
 
 	//自機HPが一定以上削られたら
 	if (NowPlayerHP <= PlayerMaxHP / 3.f) {
-		PlayerHpBarColorChange();
+
 	}
 
 	sp_playerhpbar->Update();

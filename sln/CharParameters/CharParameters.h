@@ -12,7 +12,11 @@ public:
 	void pHpSizeChange();
 	void boHpSizeChange();
 	void Update()override;
-	void PlayerHpBarColorChange();
+
+	void PlayerHpSafety();
+	void PlayerHpLessThanHalf();
+	void PlayerHpDanger();
+
 	void pHpUpdate();
 	void boHpUpdate();
 	void Draw()override;
@@ -43,6 +47,9 @@ public:
 	//次の場所へ向かう　true：向かっている false:完了
 	bool pNextPlaceGoFlag = true;
 
+	//自機HPバー色変えるパターン
+	std::function<void()> pHpColorPattern;
+
 private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
@@ -58,7 +65,7 @@ private:
 	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
 
 	//------自機HPスプライト点滅
-	const int pHpBarFrameDef = 40;//透明じゃない時間
+	const int pHpBarFrameDef = 20;//透明じゃない時間
 	int pHpBarFrame = pHpBarFrameDef;
 
 	//自機がダメージ喰らった false:喰らってない

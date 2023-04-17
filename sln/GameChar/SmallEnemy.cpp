@@ -1,4 +1,4 @@
-#include "SmallEnemy.h"
+ï»¿#include "SmallEnemy.h"
 #include "Object3d.h"
 #include "Input.h"
 
@@ -11,28 +11,28 @@ using namespace DirectX;
 
 void SmallEnemy::Attack()
 {
-	// ‰¹ºÄ¶ –Â‚ç‚µ‚½‚¢‚Æ‚«
+	// éŸ³å£°å†ç”Ÿ é³´ã‚‰ã—ãŸã„ã¨ã
 	GameSound::GetInstance()->PlayWave("enemy_beam.wav", 0.1f);
 
-	//’e”­Ë
+	//å¼¾ç™ºå°„
 	XMFLOAT3 sePos = obj->GetPosition();
-	//’e¶¬
+	//å¼¾ç”Ÿæˆ
 	std::unique_ptr<SmallEnemyBullet> madeBullet = std::make_unique<SmallEnemyBullet>();
 	madeBullet->Initialize();
 	madeBullet->SetModel(seBulModel);
 	madeBullet->SetPosition(sePos);
 
-	//’e“o˜^
+	//å¼¾ç™»éŒ²
 	bullets_.push_back(std::move(madeBullet));
 }
 
 void SmallEnemy::Initialize()
 {
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
-	obj->SetScale({ 6.0f, 6.0f, 6.0f });
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
+	obj->SetScale({ 8.0f, 8.0f, 8.0f });
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 
 	AtkCount = AtkInterval;
@@ -43,67 +43,69 @@ void SmallEnemy::Update()
 	Input* input = Input::GetInstance();
 
 	const bool input3 = input->PushKey(DIK_3);
+	constexpr float moveSp = 7.f;
 
-	//Á–Åƒtƒ‰ƒO—§‚Á‚½‚ç‚»‚Ì’e‚Í€‚µ‚Ä”q‚¹‚æ
+	//æ¶ˆæ»…ãƒ•ãƒ©ã‚°ç«‹ã£ãŸã‚‰ãã®å¼¾ã¯æ­»ã—ã¦æ‹ã›ã‚ˆ
 	bullets_.remove_if([](std::unique_ptr<SmallEnemyBullet>& bullet) {
 		return !bullet->GetAlive();
 		});
 
 	XMFLOAT3 sePos = obj->GetPosition();
-	//“oê‚Í‰œ‚©‚çŒü‚©‚Á‚Ä‚­‚é
+	//ç™»å ´ã¯å¥¥ã‹ã‚‰å‘ã‹ã£ã¦ãã‚‹
 	if (isSeApproach) {
 		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
-			sePos.z -= 6;
+			sePos.z -= moveSp;
 		}
 		else {
-			RetireFrame--;//‘ØİŠÔ
+			RetireFrame--;//æ»åœ¨æ™‚é–“
 			if (RetireFrame < 0) {
-				//J‚¯ŠJn
+				//æŒã‘é–‹å§‹
 				isRetire = true;
 				isSeApproach = false;
 			}
 		}
 	}
 
+	constexpr float retireSp = 3.f;
 	if (isRetire) {
-		//©‹@‚æ‚è‰E‚É‚¢‚é‚©¶‚É‚¢‚é‚©‚Å‚Ç‚¿‚ç‚ÉJ‚¯‚é‚©•Ï‚í‚é
+		//è‡ªæ©Ÿã‚ˆã‚Šå³ã«ã„ã‚‹ã‹å·¦ã«ã„ã‚‹ã‹ã§ã©ã¡ã‚‰ã«æŒã‘ã‚‹ã‹å¤‰ã‚ã‚‹
 		if (obj->GetPosition().x < shotTag->GetPosition().x) {
 			retirePat_ = RetirePat::Left;
-			//¶ƒpƒ^[ƒ“‚Ö
+			//å·¦ãƒ‘ã‚¿ãƒ¼ãƒ³ã¸
 			isRetire = false;
 		}
 		else {
 			retirePat_ = RetirePat::Right;
-			//‰Eƒpƒ^[ƒ“‚Ö
+			//å³ãƒ‘ã‚¿ãƒ¼ãƒ³ã¸
 			isRetire = false;
 		}
 	}
 	if (retirePat_ == RetirePat::Right) {
-		sePos.x += 3;
+		sePos.x += retireSp;
 	}
 	if (retirePat_ == RetirePat::Left) {
-		sePos.x -= 3;
+		sePos.x -= retireSp;
 	}
 
 	obj->SetPosition(sePos);
 
-	//ŠÔŒo‰ßÁ–Å
+	//æ™‚é–“çµŒéæ¶ˆæ»…
 	if (--vanishTimer_ <= 0) { alive = false; }
 
-	//‚ª–‚¿‚½‚ç
+	//æ™‚ãŒæº€ã¡ãŸã‚‰
 	if (--AtkCount == 0) {
-		//¶‘¶‚Ì‚İ”­Ë
+		//ç”Ÿå­˜æ™‚ã®ã¿ç™ºå°„
 		if (alive) {
 			Attack();
 		}
-		//Ä‚ÑƒJƒEƒ“ƒg‚Å‚«‚é‚æ‚¤‚É‰Šú‰»
+		//å†ã³ã‚«ã‚¦ãƒ³ãƒˆã§ãã‚‹ã‚ˆã†ã«åˆæœŸåŒ–
 		AtkCount = AtkInterval;
 	}
 
-	//’eXV
+	//å¼¾æ›´æ–°
 	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
-		//‚»‚Ì‚Ìƒ^[ƒQƒbƒgÀ•W
-		//ˆê“x‚«‚è
+		//ãã®æ™‚ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™
+		//ä¸€åº¦ãã‚Š
 		if (bullet->ShotTagMomOnlyFlag) {
 			bullet->ShotTagMoment = shotTag->GetPosition();
 			bullet->ShotTagMomOnlyFlag = false;
@@ -114,7 +116,7 @@ void SmallEnemy::Update()
 		bullet->Nowframe++;
 		if (bullet->GetPosOnlyFlag)
 		{
-			//Å‰‚ÌˆÊ’u
+			//æœ€åˆã®ä½ç½®
 			bullet->sePosMoment = obj->GetPosition();
 			bullet->GetPosOnlyFlag = false;
 		}
@@ -122,21 +124,21 @@ void SmallEnemy::Update()
 		bullet->MoveSp.y = (bullet->ShotTagMoment.y - bullet->sePosMoment.y);
 		bullet->MoveSp.z = (bullet->ShotTagMoment.z - bullet->sePosMoment.z);
 
-		//XMVECTOR‚É•ÏŠ·‚µ‚ÄxmvecMoveSp‚É‚¢‚ê‚é
+		//XMVECTORã«å¤‰æ›ã—ã¦xmvecMoveSpã«ã„ã‚Œã‚‹
 		XMVECTOR xmvecMoveSp = XMLoadFloat3(&bullet->MoveSp);
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
-		// ‘å‚«‚³‚ğ”CˆÓ’l‚É(‘¬“x)
+		// å¤§ãã•ã‚’ä»»æ„å€¤ã«(é€Ÿåº¦)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 10.f);
-		// FLOAT3‚É•ÏŠ·
+		// FLOAT3ã«å¤‰æ›
 		XMStoreFloat3(&bullet->MoveSp, xmvecMoveSp);
 
-		//‚»‚Ì‚ÌˆÊ’uÅ‰ˆÊ’u{ˆÚ“®‘¬“x–Œo‰ßŠÔ
+		//ãã®æ™‚ã®ä½ç½®ï¼æœ€åˆä½ç½®ï¼‹ç§»å‹•é€Ÿåº¦ï¼ŠçµŒéæ™‚é–“
 		bullet->NowPos.x = bullet->sePosMoment.x + bullet->MoveSp.x * bullet->Nowframe;
 		bullet->NowPos.y = bullet->sePosMoment.y + bullet->MoveSp.y * bullet->Nowframe;
 		bullet->NowPos.z = bullet->sePosMoment.z + bullet->MoveSp.z * bullet->Nowframe;
 
-		bullet->SetPosition(bullet->NowPos);//‚»‚Ì‚ÌˆÊ’u
+		bullet->SetPosition(bullet->NowPos);//ãã®æ™‚ã®ä½ç½®
 	}
 
 	obj->Update();
@@ -144,7 +146,7 @@ void SmallEnemy::Update()
 
 void SmallEnemy::Draw()
 {
-	//’e•`‰æ
+	//å¼¾æç”»
 	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
 		bullet->Draw();
 	}

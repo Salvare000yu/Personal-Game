@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -9,7 +9,7 @@
 
 class SmallEnemy :public BaseObject
 {
-	//J‚¯ƒpƒ^[ƒ“
+	//æŒã‘ãƒ‘ã‚¿ãƒ¼ãƒ³
 	enum class RetirePat {
 		Right,
 		Left,
@@ -17,9 +17,9 @@ class SmallEnemy :public BaseObject
 	};
 
 private:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -29,78 +29,78 @@ public:
 
 	void Attack();
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
-	//Á‚¦‚é‚Ü‚Å
-	static const int32_t BulVanishTime = 60 * 7;//õ–½
-	//Á–Å‚Ìé
+	//æ¶ˆãˆã‚‹ã¾ã§
+	static const int32_t BulVanishTime = 60 * 7;//å¯¿å‘½
+	//æ¶ˆæ»…ã®å®£å‘Š
 	int32_t vanishTimer_ = BulVanishTime;
 
-	//¶‰E‚ÉJ‚¯‚é
+	//å·¦å³ã«æŒã‘ã‚‹
 	static const int32_t RetireFrameDef = 120;
 	int32_t RetireFrame = RetireFrameDef;
 
-	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//ƒvƒŒƒCƒ„[‚Ì’e@ƒ†ƒj[ƒNƒ|ƒCƒ“ƒ^
+	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¼¾ã€€ãƒ¦ãƒ‹ãƒ¼ã‚¯ãƒã‚¤ãƒ³ã‚¿
 
-	//-----------------«‚°‚Á‚½[‚¹‚Á‚½[«------------------//
-	//’eƒŠƒXƒg‚ğæ“¾
+	//-----------------â†“ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†“------------------//
+	//å¼¾ãƒªã‚¹ãƒˆã‚’å–å¾—
 	const std::list<std::unique_ptr<SmallEnemyBullet>>& GetBullets() { return bullets_; }
 
 	inline void SetSEBulModel(Model* model) { seBulModel = model; }
 
-	//’Êí’eˆĞ—Í
+	//é€šå¸¸å¼¾å¨åŠ›
 	void SetBulPow(float seBulPower) { this->seBulPower = seBulPower; }
 	const float& GetBulPow() { return seBulPower; }
 
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
-	//-----------------ª‚°‚Á‚½[‚¹‚Á‚½[ª------------------//
+	//-----------------â†‘ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†‘------------------//
 
-	//ƒtƒŒ[ƒ€‚²‚Æ‚É”­Ë
+	//ãƒ•ãƒ¬ãƒ¼ãƒ ã”ã¨ã«ç™ºå°„
 	static const int AtkInterval = 90;
 
 	RetirePat retirePat_ = RetirePat::def;
 
 private:
 	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//è‡ªæ©Ÿ
 
 	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//è‡ªæ©Ÿ
 
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	//SEneX‚Ì—”“ü‚ê‚é•Ï”
+	//SEneXã®ä¹±æ•°å…¥ã‚Œã‚‹å¤‰æ•°
 	float SEneRandX = 0;
 
-	//UŒ‚—pƒJƒEƒ“ƒg
+	//æ”»æ’ƒç”¨ã‚«ã‚¦ãƒ³ãƒˆ
 	float AtkCount = 0;
 	Model* seBulModel = nullptr;
 
-	//’Êí’eˆĞ—Í
+	//é€šå¸¸å¼¾å¨åŠ›
 	const float seBulPowerMax = 100;
 	float seBulPower = seBulPowerMax;
 
-	BaseObject* shotTag;//’e‚¤‚Âƒ^[ƒQƒbƒg
+	BaseObject* shotTag;//å¼¾ã†ã¤ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 
-	//‚±‚±‚Ü‚Å—ˆ‚½‚ç~‚Ü‚Á‚ÄJ‚¯‚é
-	const int PosZMax = 270;
-	//J‚¯ŠJn
+	//ã“ã“ã¾ã§æ¥ãŸã‚‰æ­¢ã¾ã£ã¦æŒã‘ã‚‹
+	const int PosZMax = 420;
+	//æŒã‘é–‹å§‹
 	bool isRetire = false;
-	//Œü‚©‚Á‚Ä‚­‚éŠÔ‚¾‚¯
+	//å‘ã‹ã£ã¦ãã‚‹é–“ã ã‘
 	bool isSeApproach = true;
 };
