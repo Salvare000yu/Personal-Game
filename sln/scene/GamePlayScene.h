@@ -99,7 +99,6 @@ public:
 
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
-	//std::unique_ptr < PlayerFireLine> firingline_ = nullptr;
 
 	//揺れる時間
 	static const int32_t pShakeTime = 60 / 2;
@@ -218,10 +217,10 @@ private:
 	bool DoorOpenFlag = false;//扉開けてない
 
 	//次の場所へ行くスピード
-	const float pNextPlaceGoSpMax = 10.f;
+	const float pNextPlaceGoSpMax = 12.f;
 	float pNextPlaceGoSp = 2.f;
-	float AccelVal = 0.1f;//加速値
-	float DecelVal = 0.2f;//減速値
+	float AccelVal = 0.2f;//加速値
+	float DecelVal = 0.4f;//減速値
 
 	//与える威力
 	float Damage{};

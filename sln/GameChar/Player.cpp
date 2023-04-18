@@ -141,7 +141,6 @@ void Player::Shake() {
 	Input* input = Input::GetInstance();
 
 	if (--pShakeTimer_ >= 0) {// 0まで減らす
-		//DebugText::GetInstance()->Print("Damage Cool Timev NOW", 200, 500, 4);
 
 		input->PadVibration();
 

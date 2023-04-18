@@ -40,8 +40,8 @@ void CharParameters::Initialize()
 	//スプライトポジション
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
 	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
-	sp_playerhpbar->SetPosition({ 80,520,0 });
-	sp_playerhpbarwaku->SetPosition({ 30,520,0 });
+	sp_playerhpbar->SetPosition({ 70,520,0 });
+	sp_playerhpbarwaku->SetPosition({ 20,520,0 });
 	//ｰｰ色
 	///自機HPバー最初の色
 	sp_playerhpbar->SetColor({ 0,1,0,1 });

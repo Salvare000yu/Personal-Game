@@ -155,14 +155,14 @@ void GamePlayScene::Initialize()
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
-	//player_->SetPFiringLine(mod_firingline.get());
-	camera->SetTarget(player_->GetPosition());
-	camera->SetEye({ 0,100,-1000 });//ここにカメラをおいて、最初の演出で自機を追いかける
-
 	//最初の演出
-	ApEndPPos = player_->GetPosition();
+	ApEndPPos = { 0,70,-250 };
 	ApStartPPos = ApEndPPos;
 	ApStartPPos.z -= 1000;
+	//
+	player_->SetPosition(ApStartPPos);
+	camera->SetTarget(player_->GetPosition());
+	camera->SetEye({ 0,100,-1000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	boss_.emplace_front();
 	for (std::unique_ptr<Boss>& boss : boss_) {//ボス
@@ -318,11 +318,10 @@ void GamePlayScene::BeforeBossAppear()
 	//演出中時のみtrue
 	BeforeBossAppearNow = true;
 
-	const int BBPaternCountNum = 4;
+	const uint32_t BBPaternCountNum = 2;
 	const float WarningW = 0.03f;//透明度変化値
 
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
-	//SP_BossWarning.w -= 0.01;
 
 	switch (beforeBossPattern_)
 	{
@@ -1331,12 +1330,9 @@ void GamePlayScene::DrawUI()
 
 	//---------------お手前スプライト描画
 	Pause* pause = Pause::GetInstance();
-	if (pause->GetPauseFlag() == false)
-	{
-		//sp_guide->Draw();
+	if (pause->GetPauseFlag() == false){
 		charParameters->pHpDraw();
 		pause->SpOpenPauseDraw();
-		//sp_sight->Draw();
 	}
 	if (pause->GetPauseFlag()) {
 		pause->SpFlagTrueNowDraw();
@@ -1365,4 +1361,10 @@ void GamePlayScene::DrawUI()
 	}
 
 	charParameters->DrawUI();
+
+	{
+		char tmp[32]{};
+		sprintf_s(tmp, 32, "PlayerZ : %2.f", player_->GetPosition().z);
+		DebugText::GetInstance()->Print(tmp, 150, 220, 1);
+	}
 }

@@ -1,4 +1,4 @@
-#include "BossAimBul.h"
+ï»¿#include "BossAimBul.h"
 #include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -13,30 +13,29 @@ BossAimBul* BossAimBul::GetInstance()
 	return &instance;
 }
 
-//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 void BossAimBul::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
 
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
 	obj->SetScale({ 10.0f, 10.0f, 10.0f });
-	//êŠ
-	//obj->SetPosition({ position });
+	//å ´æ‰€
 
-	//-------«‘_‚¢’e«-------//
-	Nowframe = 0;//Œ»İƒtƒŒ
-	GetPosOnlyFlag = true;//ˆê“x‚«‚èÀ•W“Ç‚İæ‚èƒtƒ‰ƒO
-	NowPos = {};//‚»‚Ì‚Ì’eˆÊ’u
-	boPosMoment = {};//”­Ë‚ÌG‹›“GˆÊ’u
-	MoveSp = {};//’eˆÚ“®‘¬“x
+	//-------â†“ç‹™ã„å¼¾â†“-------//
+	Nowframe = 0;//ç¾åœ¨ãƒ•ãƒ¬
+	GetPosOnlyFlag = true;//ä¸€åº¦ãã‚Šåº§æ¨™èª­ã¿å–ã‚Šãƒ•ãƒ©ã‚°
+	NowPos = {};//ãã®æ™‚ã®å¼¾ä½ç½®
+	boPosMoment = {};//ç™ºå°„æ™‚ã®é›‘é­šæ•µä½ç½®
+	MoveSp = {};//å¼¾ç§»å‹•é€Ÿåº¦
 
 	ShotTagMomOnlyFlag = true;
 	ShotTagMoment = {};
 
-	//-------ª‘_‚¢’eª-------//
+	//-------â†‘ç‹™ã„å¼¾â†‘-------//
 }
 
 void BossAimBul::Update()
@@ -47,11 +46,7 @@ void BossAimBul::Update()
 	position.z -= velocity.z;
 	obj->SetPosition(position);
 
-	//if (TriggerR) {//ƒŠƒZƒbƒg
-	//	obj_playerbullet->SetPosition({ 0,40,-170 });
-	//}
-
-	//ŠÔŒo‰ßÁ–Å
+	//æ™‚é–“çµŒéæ¶ˆæ»…
 	if (--vanishTimer_ <= 0) { alive = false; }
 
 	obj->Update();

@@ -834,7 +834,6 @@ void Boss::DamageEffect()
 	obj_SideSquare->SetColor(col);
 	obj_UpDown->SetColor(col);
 	obj_VerticalCircle->SetColor(col);
-
 }
 
 //------攻撃系↑
