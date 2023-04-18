@@ -1362,9 +1362,9 @@ void GamePlayScene::DrawUI()
 
 	charParameters->DrawUI();
 
-	{
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "PlayerZ : %2.f", player_->GetPosition().z);
-		DebugText::GetInstance()->Print(tmp, 150, 220, 1);
-	}
+	//{
+	//	char tmp[32]{};
+	//	sprintf_s(tmp, 32, "PlayerZ : %2.f", player_->GetPosition().z);
+	//	DebugText::GetInstance()->Print(tmp, 150, 220, 1);
+	//}
 }
