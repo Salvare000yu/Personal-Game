@@ -39,12 +39,14 @@ void CharParameters::Initialize()
 
 	//スプライトポジション
 	sp_enemyhpbar->SetPosition({ 140,-80,0 });
-	sp_enemyhpbarwaku->SetPosition({ 140,-80,0 });
+	sp_enemyhpbarwaku->SetPosition({ 90,-80,0 });
 	sp_playerhpbar->SetPosition({ 70,520,0 });
 	sp_playerhpbarwaku->SetPosition({ 20,520,0 });
 	//ｰｰ色
 	///自機HPバー最初の色
-	sp_playerhpbar->SetColor({ 0,1,0,1 });
+	sp_playerhpbar->SetColor({ 0.4f,1,0.4f,1 });
+	//ボスHPバー最初の色
+	sp_enemyhpbar->SetColor({ 0.4f,1,0.4f,1 });
 
 	//パラメータ関連初期化
 	BossDefense = BossDefenseDef;
@@ -54,6 +56,7 @@ void CharParameters::Initialize()
 
 	//HP色を設定 最初緑
 	pHpColorPattern = std::bind(&CharParameters::PlayerHpSafety, this);
+	boHpColorPattern = std::bind(&CharParameters::BossHpSafety, this);
 }
 
 void CharParameters::pHpSizeChange()
@@ -110,7 +113,6 @@ void CharParameters::PlayerHpDanger()
 	sp_playerhpbar->SetColor(color);
 	sp_playerhpbar->TransferVertexBuffer();
 }
-
 void CharParameters::pHpUpdate()
 {
 	pHpSizeChange();
@@ -124,9 +126,52 @@ void CharParameters::pHpUpdate()
 	sp_playerhpbarwaku->Update();
 }
 
+
+void CharParameters::BossHpSafety()
+{
+	//半分以下で
+	if (NowBossHP <= BossMaxHP / 2.f) {
+		///自機HPバー半分以下黄色
+		sp_enemyhpbar->SetColor({ 1,1,0,1 });
+		boHpColorPattern = std::bind(&CharParameters::BossHpLessThanHalf, this);
+	}
+}
+void CharParameters::BossHpLessThanHalf()
+{
+	//HP指定した値まで減ったら
+	if (NowBossHP <= BossMaxHP / 4.f) {
+		sp_enemyhpbar->SetColor({ 1,0,0,1 });//赤
+		boHpColorPattern = std::bind(&CharParameters::BossHpDanger, this);
+	}
+}
+void CharParameters::BossHpDanger()
+{
+	constexpr float ColorWDec = 0.015f;//透明にしていく速度
+	constexpr float Transparency = 0.4f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+
+	XMFLOAT4 color = sp_enemyhpbar->GetColor();
+
+	//---自機と同じ動き
+	if (boHpBarFrame <= 0) {//指定時間たったら
+		color.w -= ColorWDec;
+	}
+
+	if (color.w <= Transparency) {
+		boHpBarFrame = pHpBarFrameDef;//またこの時間分まつ
+		color.w = 1.f;//一番明るい状態
+	}
+
+	boHpBarFrame = std::max(--boHpBarFrame, 0);//ToStartFrameの最小値は0
+
+	sp_enemyhpbar->SetColor(color);
+	sp_enemyhpbar->TransferVertexBuffer();
+}
+
 void CharParameters::boHpUpdate()
 {
 	boHpSizeChange();
+	//色変え
+	boHpColorPattern();
 
 	//ボスHpの最大最小値。HPが負になったりバーが反対に飛び出ないように
 	NowBossHP = std::clamp(NowBossHP, 0.f, BossMaxHP);

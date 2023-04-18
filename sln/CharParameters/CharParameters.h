@@ -18,6 +18,9 @@ public:
 	void PlayerHpDanger();
 
 	void pHpUpdate();
+	void BossHpSafety();
+	void BossHpLessThanHalf();
+	void BossHpDanger();
 	void boHpUpdate();
 	void Draw()override;
 	void pHpDraw();
@@ -49,6 +52,8 @@ public:
 
 	//自機HPバー色変えるパターン
 	std::function<void()> pHpColorPattern;
+	//bossHPバー色変えるパターン
+	std::function<void()> boHpColorPattern;
 
 private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
@@ -67,6 +72,9 @@ private:
 	//------自機HPスプライト点滅
 	const int pHpBarFrameDef = 20;//透明じゃない時間
 	int pHpBarFrame = pHpBarFrameDef;
+	//------ボスHPスプライト点滅
+	const int boHpBarFrameDef = 20;//透明じゃない時間
+	int boHpBarFrame = boHpBarFrameDef;
 
 	//自機がダメージ喰らった false:喰らってない
 	bool ispDam = false;
