@@ -11,6 +11,16 @@
 
 #include "GamePlayScene.h"
 
+namespace {
+	XMFLOAT3 lerp(XMFLOAT3 start, XMFLOAT3 end, float raito) {
+		XMFLOAT3 ret{};
+		ret.x = std::lerp(start.x, end.x, raito);
+		ret.y = std::lerp(start.y, end.y, raito);
+		ret.z = std::lerp(start.z, end.z, raito);
+		return ret;
+	}
+}
+
 void Boss::BossAppear()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
@@ -267,9 +277,7 @@ void Boss::HpHalfPatStart()
 
 	float raito = (float)Nowframe / NecesHpHalfFrame;
 	//場所移動
-	lerpMovePos.x = std::lerp(HpHalfMomentPos.x, TargetHpHalfPos.x, raito);
-	lerpMovePos.y = std::lerp(HpHalfMomentPos.y, TargetHpHalfPos.y, raito);
-	lerpMovePos.z = std::lerp(HpHalfMomentPos.z, TargetHpHalfPos.z, raito);
+	lerpMovePos = lerp(HpHalfMomentPos, TargetHpHalfPos, raito);
 	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
@@ -379,9 +387,9 @@ void Boss::LeaveFirstPos()
 	bossLerpMoveRaito = (float)Nowframe / NecesLeaveFirstFrame;
 	//場所移動
 	//x自機ちょい追う感じ
-	lerpMovePos.x = std::lerp(HpHalfMomentPos.x, pPos.x - TargetHpHalfPos.x, bossLerpMoveRaito);
-	lerpMovePos.y = std::lerp(HpHalfMomentPos.y, TargetHpHalfPos.y, bossLerpMoveRaito);
-	lerpMovePos.z = std::lerp(HpHalfMomentPos.z, TargetHpHalfPos.z, bossLerpMoveRaito);
+	XMFLOAT3 endPos = TargetHpHalfPos;
+	endPos.x = pPos.x - TargetHpHalfPos.x;
+	lerpMovePos = lerp(HpHalfMomentPos, endPos, bossLerpMoveRaito);
 	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
@@ -439,9 +447,7 @@ void Boss::PlungeInto()
 
 		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
 		//場所移動
-		lerpMovePos.x = std::lerp(boPosMom.x, pPosMem.x, bossLerpMoveRaito);
-		lerpMovePos.y = std::lerp(boPosMom.y, pPosMem.y, bossLerpMoveRaito);
-		lerpMovePos.z = std::lerp(boPosMom.z, pPosMem.z, bossLerpMoveRaito);
+		lerpMovePos = lerp(boPosMom, pPosMem, bossLerpMoveRaito);
 		obj->SetPosition(lerpMovePos);
 
 		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
@@ -469,9 +475,7 @@ void Boss::PlungeInto()
 		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
 		//場所移動
 		XMFLOAT3 reversePos{};
-		reversePos.x = std::lerp(BeforeReversePosMem.x, ReversePos.x, bossLerpMoveRaito);
-		reversePos.y = std::lerp(BeforeReversePosMem.y, ReversePos.y, bossLerpMoveRaito);
-		reversePos.z = std::lerp(BeforeReversePosMem.z, ReversePos.z, bossLerpMoveRaito);
+		reversePos = lerp(BeforeReversePosMem, ReversePos, bossLerpMoveRaito);
 		obj->SetPosition(reversePos);
 
 		//z座標が指定座標になったら
@@ -570,11 +574,7 @@ void Boss::AfterPlungeInto()
 
 		bossLerpMoveRaito = (float)Nowframe / NecesAtkMoveTime;
 		//場所移動
-		XMFLOAT3 pos{};
-		pos.x = std::lerp(boPosMem.x, pPosMem.x, bossLerpMoveRaito);
-		pos.y = std::lerp(boPosMem.y, pPosMem.y, bossLerpMoveRaito);
-		pos.z = std::lerp(boPosMem.z, boPosMem.z, bossLerpMoveRaito);
-		obj->SetPosition(pos);
+		obj->SetPosition(lerp(boPosMem, pPosMem, bossLerpMoveRaito));
 
 		AfterPlungePatAtkCount--;
 		//時が満ちたら
@@ -602,9 +602,9 @@ void Boss::AfterPlungeInto()
 			Nowframe++;
 
 			//円行動に合うようにその場所へ移動
-			lerpMovePos.x = std::lerp(boPosMem.x, obj->GetPosition().x, bossLerpMoveRaito);
-			lerpMovePos.y = std::lerp(boPosMem.y, CircularY, bossLerpMoveRaito);
-			lerpMovePos.z = std::lerp(boPosMem.z, obj->GetPosition().z, bossLerpMoveRaito);
+			XMFLOAT3 endPos = obj->GetPosition();
+			endPos.y = CircularY;
+			lerpMovePos = lerp(boPosMem, endPos, bossLerpMoveRaito);
 			obj->SetPosition(lerpMovePos);
 			if (Nowframe == PlungeFinFrameMax) {
 				Nowframe = 0;
@@ -842,16 +842,14 @@ void Boss::Death() {
 	ParticleFrame++;
 	PartTimeInterval = ParticleFrame / 40;
 
-	if (GetPosDeathOnlyFlag){
+	if (GetPosDeathOnlyFlag) {
 		//最初の位置
 		boPosDeath = obj->GetPosition();
 		GetPosDeathOnlyFlag = false;
 	}
 
 	bossLerpMoveRaito = (float)Nowframe / NecesFrame;
-	lerpMovePos.x = std::lerp(boPosDeath.x, boPosDeath.x, bossLerpMoveRaito);
 	lerpMovePos.y = std::lerp(boPosDeath.y, TargetPos.y, bossLerpMoveRaito);
-	lerpMovePos.z = std::lerp(boPosDeath.z, boPosDeath.z, bossLerpMoveRaito);
 	obj->SetPosition(lerpMovePos);
 
 	//一定時間ごとにパーティクル

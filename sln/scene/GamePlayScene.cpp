@@ -709,7 +709,6 @@ void GamePlayScene::UpdateCamera()
 
 		player_->SetRotation(rota);
 	}
-
 }
 
 void GamePlayScene::ChangeGameOverScene()
@@ -1004,48 +1003,59 @@ void GamePlayScene::CollisionAll()
 
 void GamePlayScene::Operation()
 {
+	constexpr XMFLOAT4 red = { 1,0.2f,0.2f,1 };	//押した時の色
+	constexpr XMFLOAT4 white = { 1,1,1,1 };		//デフォルトの色
+	constexpr XMFLOAT2 smallSize = { 40,40 };	//押した時の大きさ
+	constexpr XMFLOAT2 bigSize = { 50,50 };		//デフォルトの大きさ
+
+	XMFLOAT4 color = white;
+	XMFLOAT2 size = bigSize;
+
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	if (cInput->DownMove()) {//下移動
-		//"S"色変え
-		sp_oper.at("s")->SetColor({ 1,0.2f,0.2f,1 });
-		sp_oper.at("s")->SetSize({ 40,40 });
+		color = red;
+		size = smallSize;
 	}
-	else {
-		sp_oper.at("s")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
-		sp_oper.at("s")->SetSize({ 50,50 });
-	}
+	auto& operS = sp_oper.at("s");
+	operS->SetColor(color);
+	operS->SetSize(size);
 
 	if (cInput->UpMove()) {//上移動
-		//"W"色変え
-		sp_oper.at("w")->SetColor({ 1,0.2f,0.2f,1 });
-		sp_oper.at("w")->SetSize({ 40,40 });
+		color = red;
+		size = smallSize;
 	}
 	else {
-		sp_oper.at("w")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
-		sp_oper.at("w")->SetSize({ 50,50 });
+		color = white;
+		size = bigSize;
 	}
+	auto& operW = sp_oper.at("w");
+	operW->SetColor(color);
+	operW->SetSize(size);
 
 	if (cInput->LeftMove()) {//左移動
-		//"A"色変え
-		sp_oper.at("a")->SetColor({ 1,0.2f,0.2f,1 });
-		sp_oper.at("a")->SetSize({ 40,40 });
+		color = red;
+		size = smallSize;
 	}
 	else {
-		sp_oper.at("a")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
-		sp_oper.at("a")->SetSize({ 50,50 });
+		color = white;
+		size = bigSize;
 	}
+	auto& operA = sp_oper.at("a");
+	operA->SetColor(color);
+	operA->SetSize(size);
 
 	if (cInput->RightMove()) {//右移動
-		//"D"色変え
-		sp_oper.at("d")->SetColor({ 1,0.2f,0.2f,1 });
-		sp_oper.at("d")->SetSize({ 40,40 });
+		color = red;
+		size = smallSize;
 	}
 	else {
-		sp_oper.at("d")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
-		sp_oper.at("d")->SetSize({ 50,50 });
+		color = white;
+		size = bigSize;
 	}
-
+	auto& operD = sp_oper.at("d");
+	operD->SetColor(color);
+	operD->SetSize(size);
 
 	for (auto& i : sp_oper) {
 		i.second->TransferVertexBuffer();
@@ -1099,7 +1109,6 @@ void GamePlayScene::GameReadyUpdate()
 			camera->SetTarget(pos);
 		}
 		else {
-
 			sp_ready->isInvisible = true;
 
 			XMFLOAT4 GOCol = sp_ready_go->GetColor();
@@ -1334,12 +1343,10 @@ void GamePlayScene::Update()
 
 		// パーティクル更新
 		particle->Update();
-
 	}//ここまでポーズしてないとき
 
 	//くらったらクールタイム
 	CoolTime();
-
 }
 
 void GamePlayScene::Draw()
