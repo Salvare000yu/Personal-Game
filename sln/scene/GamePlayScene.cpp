@@ -203,20 +203,21 @@ void GamePlayScene::Initialize()
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_oper.emplace("w", Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_oper.emplace("a", Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_oper.emplace("s", Sprite::Create(19, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_oper.emplace("d", Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_oper.emplace("w", Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5f, 1 }, false, false));
+	sp_oper.emplace("a", Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 1, 0.5f }, false, false));
+	sp_oper.emplace("s", Sprite::Create(19, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5f, 0 }, false, false));
+	sp_oper.emplace("d", Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0.5f }, false, false));
 
 	for (auto& i : sp_oper) {
 		i.second->SetSize({ 50,50 });
 		i.second->TransferVertexBuffer();
 	}
-
-	sp_oper.at("w")->SetPosition({200,470,0});
-	sp_oper.at("a")->SetPosition({250,525,0});
-	sp_oper.at("s")->SetPosition({200,580,0});
-	sp_oper.at("d")->SetPosition({150,525,0});
+	constexpr XMFLOAT3 operCenter = { 200,525,0 };
+	constexpr float operR = 20.f;
+	sp_oper.at("w")->SetPosition({ operCenter.x,operCenter.y - operR,0 });
+	sp_oper.at("a")->SetPosition({ operCenter.x - operR,operCenter.y,0 });
+	sp_oper.at("s")->SetPosition({ operCenter.x,operCenter.y + operR,0 });
+	sp_oper.at("d")->SetPosition({ operCenter.x + operR,operCenter.y,0 });
 
 	sp_ready->isInvisible = false;
 	sp_ready_go->isInvisible = true;
@@ -450,6 +451,8 @@ void GamePlayScene::PlayerMove()
 	bool isLMove = false;
 	bool isRMove = false;
 
+	constexpr float rotSp = 1.f;//傾け速度
+
 	XMFLOAT3 PlayerPos = player_->GetPosition();
 
 	//------------------↓プレイヤー移動＆姿勢
@@ -468,54 +471,52 @@ void GamePlayScene::PlayerMove()
 
 		//------プレイヤーも同じ移動------//
 		constexpr float moveSpeed = 5.f;
+		constexpr float rotMax = 10.f;//どこまで傾けるか
 
-		if (cInput->DownMove()) {
+		if (cInput->DownMove()) {//下移動
 			PlayerPos.y -= moveSpeed;
 		}
 
-		if (cInput->UpMove()) {
+		if (cInput->UpMove()) {//上移動
 			PlayerPos.y += moveSpeed;
 		}
 
-		if (cInput->LeftMove()) {
+		if (cInput->LeftMove()) {//左移動
 			PlayerPos.x -= moveSpeed;
 
-			if (rotation.z <= 10) {
-				rotation.z += 1.f;
+			if (rotation.z <= rotMax) {
+				rotation.z += rotSp;
 			}
 			isLMove = true;//左移動中
 		}
 
-		if (cInput->RightMove()) {
+		if (cInput->RightMove()) {//右移動
 			PlayerPos.x += moveSpeed;
 
-			if (rotation.z >= -10) {
-				rotation.z -= 1.f;
+			if (rotation.z >= -rotMax) {
+				rotation.z -= rotSp;
 			}
 			isRMove = true;//右移動中
 		}
-		
+
 		player_->SetPosition(PlayerPos);
 
 		PlayerDash();
 	}
-	else {
+	else {//入力なしで
 		isLMove = false;
 		isRMove = false;
 	}
 
 	//入力ないとき戻す
 	if (rotation.z > 0 && isLMove == false) {
-		rotation.z -= 1.f;
+		rotation.z -= rotSp;
 	}
 	if (rotation.z < 0 && isRMove == false) {
-		rotation.z += 1.f;
+		rotation.z += rotSp;
 	}
 
-	//firingline_->SetPosition(PlayerPos);
-
 	player_->SetRotation(rotation);
-	//firingline_->SetRotation(rotation);
 }
 
 void GamePlayScene::PlayerDash()
@@ -1003,7 +1004,51 @@ void GamePlayScene::CollisionAll()
 
 void GamePlayScene::Operation()
 {
+	ComplexInput* cInput = ComplexInput::GetInstance();
+
+	if (cInput->DownMove()) {//下移動
+		//"S"色変え
+		sp_oper.at("s")->SetColor({ 1,0.2f,0.2f,1 });
+		sp_oper.at("s")->SetSize({ 40,40 });
+	}
+	else {
+		sp_oper.at("s")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
+		sp_oper.at("s")->SetSize({ 50,50 });
+	}
+
+	if (cInput->UpMove()) {//上移動
+		//"W"色変え
+		sp_oper.at("w")->SetColor({ 1,0.2f,0.2f,1 });
+		sp_oper.at("w")->SetSize({ 40,40 });
+	}
+	else {
+		sp_oper.at("w")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
+		sp_oper.at("w")->SetSize({ 50,50 });
+	}
+
+	if (cInput->LeftMove()) {//左移動
+		//"A"色変え
+		sp_oper.at("a")->SetColor({ 1,0.2f,0.2f,1 });
+		sp_oper.at("a")->SetSize({ 40,40 });
+	}
+	else {
+		sp_oper.at("a")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
+		sp_oper.at("a")->SetSize({ 50,50 });
+	}
+
+	if (cInput->RightMove()) {//右移動
+		//"D"色変え
+		sp_oper.at("d")->SetColor({ 1,0.2f,0.2f,1 });
+		sp_oper.at("d")->SetSize({ 40,40 });
+	}
+	else {
+		sp_oper.at("d")->SetColor({ 1,1,1,1 }); //移動してないとき通常色
+		sp_oper.at("d")->SetSize({ 50,50 });
+	}
+
+
 	for (auto& i : sp_oper) {
+		i.second->TransferVertexBuffer();
 		i.second->Update();
 	}
 }
@@ -1236,8 +1281,6 @@ void GamePlayScene::Update()
 			}
 		}
 
-		DxBase* dxBase = DxBase::GetInstance();
-
 		// 自機体力が0より多ければ
 		if (player_->GetPHpLessThan0() == false) {
 			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
@@ -1250,6 +1293,7 @@ void GamePlayScene::Update()
 		}
 
 		if (player_->pAtkPossibleFlag) {//攻撃可能状態なら
+			Operation();//操作説明
 			player_->SetFireLineDrawFlag(true);//射線表示
 		}
 		else {
@@ -1334,7 +1378,6 @@ void GamePlayScene::Draw()
 		}
 	}
 
-	Operation();//操作説明
 	//自キャラ描画
 	player_->Draw();
 
@@ -1357,7 +1400,7 @@ void GamePlayScene::DrawUI()
 
 	//---------------お手前スプライト描画
 	Pause* pause = Pause::GetInstance();
-	if (pause->GetPauseFlag() == false){
+	if (pause->GetPauseFlag() == false) {
 		charParameters->pHpDraw();
 		pause->SpOpenPauseDraw();
 	}
@@ -1376,12 +1419,15 @@ void GamePlayScene::DrawUI()
 		sp_beforeboss->Draw();
 	}
 
+	//攻撃可能かつポーズでない時のみWASDスプライト表示
+	if (player_->pAtkPossibleFlag && pause->GetPauseFlag() == false) {
+		for (auto& i : sp_oper) {
+			i.second->Draw();
+		}
+	}
+
 	sp_ready->Draw();
 	sp_ready_go->Draw();
-
-	for (auto& i : sp_oper) {
-		i.second->Draw();
-	}
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画
