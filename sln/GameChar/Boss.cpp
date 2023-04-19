@@ -243,7 +243,7 @@ void Boss::HpHalfPatStart()
 	//自機の場所
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//指定座標で自機のZからどれくらい間をあけるか
-	const int SpaceDistance = 500;
+	const int SpaceDistance = 700;
 
 	//コアの色を赤に
 	constexpr float coreColChangeVal = 0.01f;//マイフレ変える値
@@ -718,8 +718,8 @@ void Boss::DiffusionAttack()
 	madeBullet_R->SetPosition(position);
 
 	// velocityを算出
-	const float MoveZ = 1.7f;//移動量
-	const float MoveX = 2.f;
+	const float MoveZ = 2.7f;//移動量
+	const float MoveX = 3.f;
 	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(MoveX, 0, MoveZ, 0);

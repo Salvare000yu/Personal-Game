@@ -285,6 +285,7 @@ void Player::Update()
 	else {
 		//0以下なったら攻撃不可フラグたてて死亡演出
 		pAtkPossibleFlag = false;
+		//SetFireLineDrawFlag(false);//射線表示解除
 		PlayerDeath();
 	}
 

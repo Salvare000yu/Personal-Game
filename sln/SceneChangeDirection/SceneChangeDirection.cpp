@@ -1,4 +1,4 @@
-#include "SceneChangeDirection.h"
+ï»¿#include "SceneChangeDirection.h"
 #include "DebugText.h"
 
 SceneChangeDirection* SceneChangeDirection::GetInstance()
@@ -9,10 +9,10 @@ SceneChangeDirection* SceneChangeDirection::GetInstance()
 
 void SceneChangeDirection::Initialize()
 {
-	//sprite“Ç‚Ýž‚Ý
-	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/SceneChange.png");
-	// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
-	sp_scenechange.reset(Sprite::Create(18, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	//spriteèª­ã¿è¾¼ã¿
+	SpriteBase::GetInstance()->LoadTexture(13, L"Resources/SceneChange.png");
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
+	sp_scenechange.reset(Sprite::Create(13, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
 	sp_scenechange->SetPosition({ 1280,0,0 });
 
@@ -27,37 +27,37 @@ void SceneChangeDirection::HideTheScreen()
 {
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
-	HideVel = -HideSp;//‰E‚©‚ç¶‚É‰B‚µ‚Ä‚­
+	HideVel = -HideSp;//å³ã‹ã‚‰å·¦ã«éš ã—ã¦ã
 
 	pos.x += HideVel;
 	sp_scenechange->SetPosition({ pos });
 
 	if (pos.x == 0) {
-		HideTheScreenFlag = false;//‰B‚µ‚½‚©‚ç–ß‚·
-		SceneChangeCompFlag = true;//‰B‚µI‚í‚è
+		HideTheScreenFlag = false;//éš ã—ãŸã‹ã‚‰æˆ»ã™
+		SceneChangeCompFlag = true;//éš ã—çµ‚ã‚ã‚Š
 	}
 }
 void SceneChangeDirection::OpenTheScreen()
 {
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
-	HideVel = HideSp;//‰E‚©‚ç¶‚É‰B‚µ‚Ä‚­
+	HideVel = HideSp;//å³ã‹ã‚‰å·¦ã«éš ã—ã¦ã
 
 	pos.x += HideVel;
 	sp_scenechange->SetPosition({ pos });
 
 	if (pos.x == 1280) {
-		OpenTheScreenFlag = true;//Š®‘S‚ÉŠJ‚«Ø‚Á‚½
+		OpenTheScreenFlag = true;//å®Œå…¨ã«é–‹ãåˆ‡ã£ãŸ
 	}
 }
 
 void SceneChangeDirection::Update()
 {
 	if (HideTheScreenFlag) {
-		HideTheScreen();//‰æ–Ê‰B‚·ðŒ’B¬‚Å‰B‚µŠJŽn
+		HideTheScreen();//ç”»é¢éš ã™æ¡ä»¶é”æˆã§éš ã—é–‹å§‹
 	}
 	if (GameReadyStartFlag) {
-		OpenTheScreen();//ƒV[ƒ“‘JˆÚŠ®—¹Œã‰æ–Ê‚ðŠJ‚¯‚é
+		OpenTheScreen();//ã‚·ãƒ¼ãƒ³é·ç§»å®Œäº†å¾Œç”»é¢ã‚’é–‹ã‘ã‚‹
 	}
 
 	sp_scenechange->Update();

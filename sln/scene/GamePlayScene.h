@@ -61,6 +61,8 @@ public:
 
 	void CollisionAll();//判定
 
+	void Operation();//操作説明
+
 	//std::func
 	void GameReadyUpdate();//開始前
 	void SmallEnemyBattleUpdate();//雑魚戦
@@ -119,6 +121,7 @@ private:
 	std::unique_ptr < Sprite> sp_beforeboss = nullptr;
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
+	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_oper;//操作説明
 
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
@@ -179,7 +182,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数
-	float BossTermsEMurdersNum = 0;
+	float BossTermsEMurdersNum = 7;
 	//ボス出現条件達成！
 	bool BossEnemyAdvent = false;
 	//ボス出現前演出フラグ

@@ -105,7 +105,6 @@ void GamePlayScene::Initialize()
 	mod_straightbul.reset(Model::LoadFromOBJ("StraightBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_bossColli.reset(Model::LoadFromOBJ("boss_Colli"));
-	//mod_firingline.reset(Model::LoadFromOBJ("firing_line"));
 	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 
@@ -194,12 +193,30 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
+	SpriteBase::GetInstance()->LoadTexture(17, L"Resources/Operation_W.png");
+	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/Operation_A.png");
+	SpriteBase::GetInstance()->LoadTexture(19, L"Resources/Operation_S.png");
+	SpriteBase::GetInstance()->LoadTexture(20, L"Resources/Operation_D.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_oper.emplace("w", Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_oper.emplace("a", Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_oper.emplace("s", Sprite::Create(19, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_oper.emplace("d", Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+
+	for (auto& i : sp_oper) {
+		i.second->SetSize({ 50,50 });
+		i.second->TransferVertexBuffer();
+	}
+
+	sp_oper.at("w")->SetPosition({200,470,0});
+	sp_oper.at("a")->SetPosition({250,525,0});
+	sp_oper.at("s")->SetPosition({200,580,0});
+	sp_oper.at("d")->SetPosition({150,525,0});
 
 	sp_ready->isInvisible = false;
 	sp_ready_go->isInvisible = true;
@@ -614,7 +631,6 @@ void GamePlayScene::pHeadingToTheNextPlace()
 			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
 			player_->pAtkPossibleFlag = true;
-			player_->SetFireLineDrawFlag(true);//射線表示してから雑魚戦
 			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
 		}
 	}
@@ -985,6 +1001,13 @@ void GamePlayScene::CollisionAll()
 	}
 }
 
+void GamePlayScene::Operation()
+{
+	for (auto& i : sp_oper) {
+		i.second->Update();
+	}
+}
+
 //------------------------------↑当たり判定ZONE↑-----------------------------//
 
 void GamePlayScene::GameReadyUpdate()
@@ -1057,8 +1080,6 @@ void GamePlayScene::GameReadyUpdate()
 				//動いていいよ
 				PDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
-
-				player_->SetFireLineDrawFlag(true);//射線表示してから雑魚戦
 				//次は雑魚戦
 				updatePattern = std::bind(&GamePlayScene::SmallEnemyBattleUpdate, this);
 			}
@@ -1083,7 +1104,6 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 
 	//撃破数達成
 	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
-		player_->SetFireLineDrawFlag(false);//射線表示解除
 		//ボス戦前演出
 		updatePattern = std::bind(&GamePlayScene::BossBattleReadyUpdate, this);
 	}
@@ -1158,7 +1178,6 @@ void GamePlayScene::BossBattleUpdate()
 		boss->Update();//ボス更新
 
 		if (boss->GetisDeath()) {
-			player_->SetFireLineDrawFlag(false);
 			updatePattern = std::bind(&GamePlayScene::AfterBossBattleUpdate, this);//ボス撃破
 		}
 	}
@@ -1228,6 +1247,13 @@ void GamePlayScene::Update()
 		}
 		if (player_->GetpDeath()) {
 			PlayerErase();//自機死亡時消す
+		}
+
+		if (player_->pAtkPossibleFlag) {//攻撃可能状態なら
+			player_->SetFireLineDrawFlag(true);//射線表示
+		}
+		else {
+			player_->SetFireLineDrawFlag(false);//射線非表示
 		}
 
 		// カメラの更新
@@ -1308,6 +1334,7 @@ void GamePlayScene::Draw()
 		}
 	}
 
+	Operation();//操作説明
 	//自キャラ描画
 	player_->Draw();
 
@@ -1351,6 +1378,10 @@ void GamePlayScene::DrawUI()
 
 	sp_ready->Draw();
 	sp_ready_go->Draw();
+
+	for (auto& i : sp_oper) {
+		i.second->Draw();
+	}
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画
