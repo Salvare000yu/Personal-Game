@@ -1,4 +1,4 @@
-#include "SmallEnemyBullet.h"
+ï»¿#include "SmallEnemyBullet.h"
 #include "SmallEnemy.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -14,30 +14,29 @@ SmallEnemyBullet* SmallEnemyBullet::GetInstance()
 	return &instance;
 }
 
-//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚Ì‚ÌƒvƒŒƒCƒ„[pos‚É•\¦‚·‚é‚æ‚¤‚É‚·‚é
+//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 void SmallEnemyBullet::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
 
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
 	obj->SetScale({ 8.0f, 8.0f, 8.0f });
-	//êŠ
+	//å ´æ‰€
 	//obj->SetPosition({ position });
 
-	//-------«‘_‚¢’e«-------//
-	Nowframe = 0;//Œ»İƒtƒŒ
-	GetPosOnlyFlag = true;//ˆê“x‚«‚èÀ•W“Ç‚İæ‚èƒtƒ‰ƒO
-	NowPos = {};//‚»‚Ì‚Ì’eˆÊ’u
-	sePosMoment = {};//”­Ë‚ÌG‹›“GˆÊ’u
-	MoveSp = {};//’eˆÚ“®‘¬“x
+	//-------â†“ç‹™ã„å¼¾â†“-------//
+	Nowframe = 0;//ç¾åœ¨ãƒ•ãƒ¬
+	NowPos = {};//ãã®æ™‚ã®å¼¾ä½ç½®
+	sePosMoment = {};//ç™ºå°„æ™‚ã®é›‘é­šæ•µä½ç½®
+	MoveSp = {};//å¼¾ç§»å‹•é€Ÿåº¦
 
-	ShotTagMomOnlyFlag = true;
+	OnlyFlag = true;
 	ShotTagMoment = {};
 
-	//-------ª‘_‚¢’eª-------//
+	//-------â†‘ç‹™ã„å¼¾â†‘-------//
 }
 
 void SmallEnemyBullet::Update()
@@ -48,11 +47,11 @@ void SmallEnemyBullet::Update()
 	sePos.z -= velocity.z;
 	obj->SetPosition(sePos);
 
-	//if (TriggerR) {//ƒŠƒZƒbƒg
+	//if (TriggerR) {//ãƒªã‚»ãƒƒãƒˆ
 	//	obj_playerbullet->SetPosition({ 0,40,-170 });
 	//}
 
-	//ŠÔŒo‰ßÁ–Å
+	//æ™‚é–“çµŒéæ¶ˆæ»…
 	if (--vanishTimer_ <= 0) { alive = false; }
 
 	obj->Update();

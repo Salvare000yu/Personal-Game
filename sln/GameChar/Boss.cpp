@@ -12,7 +12,7 @@
 #include "GamePlayScene.h"
 
 namespace {
-	XMFLOAT3 lerp(XMFLOAT3 start, XMFLOAT3 end, float raito) {
+	XMFLOAT3 lerp(const XMFLOAT3& start, const XMFLOAT3& end, float raito) {
 		XMFLOAT3 ret{};
 		ret.x = std::lerp(start.x, end.x, raito);
 		ret.y = std::lerp(start.y, end.y, raito);

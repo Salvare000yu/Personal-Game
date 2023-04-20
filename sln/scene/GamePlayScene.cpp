@@ -212,7 +212,7 @@ void GamePlayScene::Initialize()
 		i.second->SetSize({ 50,50 });
 		i.second->TransferVertexBuffer();
 	}
-	constexpr XMFLOAT3 operCenter = { 200,525,0 };
+	constexpr XMFLOAT3 operCenter = { 400,600,0 };
 	constexpr float operR = 20.f;
 	sp_oper.at("w")->SetPosition({ operCenter.x,operCenter.y - operR,0 });
 	sp_oper.at("a")->SetPosition({ operCenter.x - operR,operCenter.y,0 });

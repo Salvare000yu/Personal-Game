@@ -38,35 +38,8 @@ void SmallEnemy::Initialize()
 	AtkCount = AtkInterval;
 }
 
-void SmallEnemy::Update()
+void SmallEnemy::Retire()
 {
-	Input* input = Input::GetInstance();
-
-	const bool input3 = input->PushKey(DIK_3);
-	constexpr float moveSp = 7.f;
-
-	//消滅フラグ立ったらその弾は死して拝せよ
-	bullets_.remove_if([](std::unique_ptr<SmallEnemyBullet>& bullet) {
-		return !bullet->GetAlive();
-		});
-
-	XMFLOAT3 sePos = obj->GetPosition();
-	//登場は奥から向かってくる
-	if (isSeApproach) {
-		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
-			sePos.z -= moveSp;
-		}
-		else {
-			RetireFrame--;//滞在時間
-			if (RetireFrame < 0) {
-				//捌け開始
-				isRetire = true;
-				isSeApproach = false;
-			}
-		}
-	}
-
-	constexpr float retireSp = 3.f;
 	if (isRetire) {
 		//自機より右にいるか左にいるかでどちらに捌けるか変わる
 		if (obj->GetPosition().x < shotTag->GetPosition().x) {
@@ -80,46 +53,40 @@ void SmallEnemy::Update()
 			isRetire = false;
 		}
 	}
+
+	XMFLOAT3 sePos = obj->GetPosition();
+	constexpr float retireSp = 3.f;
 	if (retirePat_ == RetirePat::Right) {
 		sePos.x += retireSp;
+		if (sePos.x >= 700) {
+			alive = false;;//消滅
+		}
 	}
 	if (retirePat_ == RetirePat::Left) {
 		sePos.x -= retireSp;
-	}
-
-	obj->SetPosition(sePos);
-
-	//時間経過消滅
-	if (--vanishTimer_ <= 0) { alive = false; }
-
-	//時が満ちたら
-	if (--AtkCount == 0) {
-		//生存時のみ発射
-		if (alive) {
-			Attack();
+		if (sePos.x <= -700) {
+			alive = false;//消滅
 		}
-		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
 	}
+	obj->SetPosition(sePos);
+}
 
+void SmallEnemy::BulletUpdate()
+{
 	//弾更新
 	for (std::unique_ptr<SmallEnemyBullet>& bullet : bullets_) {
 		//その時のターゲット座標
 		//一度きり
-		if (bullet->ShotTagMomOnlyFlag) {
+		if (bullet->OnlyFlag) {
 			bullet->ShotTagMoment = shotTag->GetPosition();
-			bullet->ShotTagMomOnlyFlag = false;
+			//最初の位置
+			bullet->sePosMoment = obj->GetPosition();
+			bullet->OnlyFlag = false;
 		}
 
 		bullet->Update();
 
 		bullet->Nowframe++;
-		if (bullet->GetPosOnlyFlag)
-		{
-			//最初の位置
-			bullet->sePosMoment = obj->GetPosition();
-			bullet->GetPosOnlyFlag = false;
-		}
 		bullet->MoveSp.x = (bullet->ShotTagMoment.x - bullet->sePosMoment.x);
 		bullet->MoveSp.y = (bullet->ShotTagMoment.y - bullet->sePosMoment.y);
 		bullet->MoveSp.z = (bullet->ShotTagMoment.z - bullet->sePosMoment.z);
@@ -140,6 +107,51 @@ void SmallEnemy::Update()
 
 		bullet->SetPosition(bullet->NowPos);//その時の位置
 	}
+}
+
+void SmallEnemy::Update()
+{
+	Input* input = Input::GetInstance();
+
+	const bool input3 = input->PushKey(DIK_3);
+	constexpr float moveSp = 7.f;
+
+	//消滅フラグ立ったらその弾は死して拝せよ
+	bullets_.remove_if([](std::unique_ptr<SmallEnemyBullet>& bullet) {
+		return !bullet->GetAlive();
+		});
+
+	XMFLOAT3 sePos = obj->GetPosition();
+	//登場は奥から向かってくる
+	if (isSeApproach) {
+		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
+			sePos.z -= moveSp;
+			obj->SetPosition(sePos);
+		}
+		else {
+			//滞在時間
+			if (--RetireFrame < 0) {
+				//捌け開始
+				isRetire = true;
+				isSeApproach = false;
+			}
+		}
+	}
+
+	Retire();
+
+	//時が満ちたら
+	if (--AtkCount == 0) {
+		//生存時のみ発射
+		if (alive) {
+			Attack();
+		}
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
+
+	//弾更新
+	BulletUpdate();
 
 	obj->Update();
 }
