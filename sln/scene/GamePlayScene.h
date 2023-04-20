@@ -62,6 +62,7 @@ public:
 	void CollisionAll();//判定
 
 	void Operation();//操作説明
+	void MouseOper();//マウス説明
 
 	//std::func
 	void GameReadyUpdate();//開始前
@@ -122,6 +123,7 @@ private:
 	std::unique_ptr < Sprite> sp_ready = nullptr;
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_oper;//操作説明
+	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_mouse;//マウス操作説明
 
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;

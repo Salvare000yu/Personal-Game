@@ -197,6 +197,9 @@ void GamePlayScene::Initialize()
 	SpriteBase::GetInstance()->LoadTexture(18, L"Resources/Operation_A.png");
 	SpriteBase::GetInstance()->LoadTexture(19, L"Resources/Operation_S.png");
 	SpriteBase::GetInstance()->LoadTexture(20, L"Resources/Operation_D.png");
+	SpriteBase::GetInstance()->LoadTexture(21, L"Resources/mouse.png");
+	SpriteBase::GetInstance()->LoadTexture(22, L"Resources/mouse_LEFT.png");
+	SpriteBase::GetInstance()->LoadTexture(23, L"Resources/mouse_RIGHT.png");
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
@@ -207,17 +210,29 @@ void GamePlayScene::Initialize()
 	sp_oper.emplace("a", Sprite::Create(18, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 1, 0.5f }, false, false));
 	sp_oper.emplace("s", Sprite::Create(19, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5f, 0 }, false, false));
 	sp_oper.emplace("d", Sprite::Create(20, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0.5f }, false, false));
+	sp_mouse.emplace("mouse_Body", Sprite::Create(21, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_mouse.emplace("mouse_L", Sprite::Create(22, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_mouse.emplace("mouse_R", Sprite::Create(23, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	for (auto& i : sp_oper) {
-		i.second->SetSize({ 50,50 });
+	for (auto& i : sp_oper) {//WASD
+		i.second->SetSize({ 90,90 });
 		i.second->TransferVertexBuffer();
 	}
-	constexpr XMFLOAT3 operCenter = { 400,600,0 };
-	constexpr float operR = 20.f;
+	constexpr XMFLOAT3 operCenter = { 100,550,0 };//wasd中心
+	constexpr float operR = 20.f;//wasd中心からずらす
 	sp_oper.at("w")->SetPosition({ operCenter.x,operCenter.y - operR,0 });
 	sp_oper.at("a")->SetPosition({ operCenter.x - operR,operCenter.y,0 });
 	sp_oper.at("s")->SetPosition({ operCenter.x,operCenter.y + operR,0 });
 	sp_oper.at("d")->SetPosition({ operCenter.x + operR,operCenter.y,0 });
+
+	//mouse Sprite
+	for (auto& i : sp_mouse) {
+		i.second->SetSize({ 100,100 });
+		i.second->TransferVertexBuffer();
+	}
+	sp_mouse.at("mouse_Body")->SetPosition({ 150,550,0 });
+	sp_mouse.at("mouse_L")->SetPosition({ 150,550,0 });
+	sp_mouse.at("mouse_R")->SetPosition({ 150,550,0 });
 
 	sp_ready->isInvisible = false;
 	sp_ready_go->isInvisible = true;
@@ -585,7 +600,6 @@ void GamePlayScene::PlayerDash()
 		pPos.x += DashVel.x;
 		pPos.y += DashVel.y;
 		player_->SetPosition(pPos);
-		//firingline_->SetPosition(pPos);
 
 		if (DashCount == 0) {
 			playerDashDirection_ = PlayerDashDirection::def;//決定する前に戻す
@@ -1006,7 +1020,7 @@ void GamePlayScene::Operation()
 	constexpr XMFLOAT4 red = { 1,0.2f,0.2f,1 };	//押した時の色
 	constexpr XMFLOAT4 white = { 1,1,1,1 };		//デフォルトの色
 	constexpr XMFLOAT2 smallSize = { 40,40 };	//押した時の大きさ
-	constexpr XMFLOAT2 bigSize = { 50,50 };		//デフォルトの大きさ
+	constexpr XMFLOAT2 bigSize = { 60,60 };		//デフォルトの大きさ
 
 	XMFLOAT4 color = white;
 	XMFLOAT2 size = bigSize;
@@ -1057,7 +1071,53 @@ void GamePlayScene::Operation()
 	operD->SetColor(color);
 	operD->SetSize(size);
 
+	if (!player_->pAtkPossibleFlag) {
+		for (auto& i : sp_oper) {//WASD
+			i.second->isInvisible = false;
+		}
+	}
+
 	for (auto& i : sp_oper) {
+		i.second->TransferVertexBuffer();
+		i.second->Update();
+	}
+}
+
+void GamePlayScene::MouseOper()
+{
+	Input* input = Input::GetInstance();
+	//Input
+	const bool InputSPACE = input->PushKey(DIK_SPACE);
+	const bool PadInputRB = input->PushButton(static_cast<int>(Button::RB));
+	const bool InputMouseLEFT = input->PushMouse(0);
+
+	constexpr XMFLOAT4 red = { 1,0.1f,0.1f,1 };	//押した時の色
+	constexpr XMFLOAT4 white = { 1,1,1,1 };		//デフォルトの色
+	XMFLOAT4 Lcolor = white;
+	XMFLOAT4 Rcolor = white;
+
+	//攻撃（左クリック時左赤く）
+	if (InputSPACE || PadInputRB || InputMouseLEFT) {
+		Lcolor = red;
+	}
+	auto& mouse_L = sp_mouse.at("mouse_L");
+	mouse_L->SetColor(Lcolor);
+
+	//ダッシュしている間（右クリック）
+	if (DashFlag) {
+		Rcolor = red;
+	}
+	auto& mouse_R = sp_mouse.at("mouse_R");
+	mouse_R->SetColor(Rcolor);
+
+	//攻撃不可能事非表示
+	if (!player_->pAtkPossibleFlag) {
+		for (auto& i : sp_mouse) {//WASD
+			i.second->isInvisible = false;
+		}
+	}
+
+	for (auto& i : sp_mouse) {
 		i.second->TransferVertexBuffer();
 		i.second->Update();
 	}
@@ -1301,8 +1361,9 @@ void GamePlayScene::Update()
 			PlayerErase();//自機死亡時消す
 		}
 
+		Operation();//操作説明
+		MouseOper();//マウス説明画像
 		if (player_->pAtkPossibleFlag) {//攻撃可能状態なら
-			Operation();//操作説明
 			player_->SetFireLineDrawFlag(true);//射線表示
 		}
 		else {
@@ -1426,9 +1487,12 @@ void GamePlayScene::DrawUI()
 		sp_beforeboss->Draw();
 	}
 
-	//攻撃可能かつポーズでない時のみWASDスプライト表示
+	//攻撃可能かつポーズでない時のみのスプライト表示
 	if (player_->pAtkPossibleFlag && pause->GetPauseFlag() == false) {
 		for (auto& i : sp_oper) {
+			i.second->Draw();
+		}
+		for (auto& i : sp_mouse) {
 			i.second->Draw();
 		}
 	}

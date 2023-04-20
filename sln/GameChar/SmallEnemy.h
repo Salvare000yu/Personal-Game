@@ -44,11 +44,6 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	//消えるまで
-	//static const int32_t BulVanishTime = 60 * 7;//寿命
-	//消滅の宣告
-	//int32_t vanishTimer_ = BulVanishTime;
-
 	//左右に捌ける
 	static const int32_t RetireFrameDef = 120;
 	int32_t RetireFrame = RetireFrameDef;
