@@ -80,6 +80,6 @@ private:
 	bool ispDam = false;
 
 	//防御力
-	const float BossDefenseDef = 60;
+	const float BossDefenseDef = 50;
 	float BossDefense = BossDefenseDef;
 };

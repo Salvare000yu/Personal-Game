@@ -227,12 +227,12 @@ void GamePlayScene::Initialize()
 
 	//mouse Sprite
 	for (auto& i : sp_mouse) {
-		i.second->SetSize({ 100,100 });
+		i.second->SetSize({ 110,110 });
 		i.second->TransferVertexBuffer();
 	}
-	sp_mouse.at("mouse_Body")->SetPosition({ 150,550,0 });
-	sp_mouse.at("mouse_L")->SetPosition({ 150,550,0 });
-	sp_mouse.at("mouse_R")->SetPosition({ 150,550,0 });
+	sp_mouse.at("mouse_Body")->SetPosition({ 160,520,0 });
+	sp_mouse.at("mouse_L")->SetPosition({ 160,520,0 });
+	sp_mouse.at("mouse_R")->SetPosition({ 160,520,0 });
 
 	sp_ready->isInvisible = false;
 	sp_ready_go->isInvisible = true;

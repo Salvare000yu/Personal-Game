@@ -1,14 +1,14 @@
-#include "WinApp.h"
+ï»¿#include "WinApp.h"
 #include <Windows.h>
 
 #pragma comment(lib,"winmm.lib")
 
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
-	//ƒƒbƒZ[ƒW‚Å•ªŠò
+	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã§åˆ†å²
 	switch (msg) {
-	case WM_DESTROY://ƒEƒBƒ“ƒhƒE‚ª”jŠü
-		PostQuitMessage(0);//OS‚É‘Î‚µ‚ÄƒAƒvƒŠI—¹‚ð“`‚¦‚é
+	case WM_DESTROY://ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒç ´æ£„
+		PostQuitMessage(0);//OSã«å¯¾ã—ã¦ã‚¢ãƒ—ãƒªçµ‚äº†ã‚’ä¼ãˆã‚‹
 		return 0;
 	}
 	return DefWindowProc(hwnd, msg, wparam, lparam);
@@ -22,41 +22,37 @@ WinApp* WinApp::GetInstance()
 
 void WinApp::Initialize()
 {
-#pragma region WindowsAPI‰Šú‰»
-	//// ƒEƒBƒ“ƒhƒEƒTƒCƒY
-	//const int window_width = 1280;  // ‰¡•
-	//const int window_height = 720;  // c•
-
-	//WNDCLASSEX w{}; // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ÌÝ’è
+#pragma region WindowsAPIåˆæœŸåŒ–
+	//WNDCLASSEX w{}; // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã®è¨­å®š
 	w.cbSize = sizeof(WNDCLASSEX);
-	w.lpfnWndProc = (WNDPROC)WindowProc; // ƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ‚ðÝ’è
-	w.lpszClassName = L"DirectXGame"; // ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX–¼
-	w.hInstance = GetModuleHandle(nullptr); // ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-	w.hCursor = LoadCursor(NULL, IDC_ARROW); // ƒJ[ƒ\ƒ‹Žw’è
+	w.lpfnWndProc = (WNDPROC)WindowProc; // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‚’è¨­å®š
+	w.lpszClassName = L"DirectXGame"; // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹å
+	w.hInstance = GetModuleHandle(nullptr); // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+	w.hCursor = LoadCursor(NULL, IDC_ARROW); // ã‚«ãƒ¼ã‚½ãƒ«æŒ‡å®š
 
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ðOS‚É“o˜^
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã‚’OSã«ç™»éŒ²
 	RegisterClassEx(&w);
-	// ƒEƒBƒ“ƒhƒEƒTƒCƒY{ XÀ•W YÀ•W ‰¡• c• }
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚º{ Xåº§æ¨™ Yåº§æ¨™ æ¨ªå¹… ç¸¦å¹… }
 	RECT wrc = { 0, 0, window_width, window_height };
-	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false); // Ž©“®‚ÅƒTƒCƒY•â³
+	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false); // è‡ªå‹•ã§ã‚µã‚¤ã‚ºè£œæ­£
 
-	// ƒEƒBƒ“ƒhƒEƒIƒuƒWƒFƒNƒg‚Ì¶¬
-	/*HWND*/ hwnd = CreateWindow(w.lpszClassName, // ƒNƒ‰ƒX–¼
-		L"STRIKER",         // ƒ^ƒCƒgƒ‹ƒo[‚Ì•¶Žš
-		WS_OVERLAPPEDWINDOW,        // •W€“I‚ÈƒEƒBƒ“ƒhƒEƒXƒ^ƒCƒ‹
-		CW_USEDEFAULT,              // •\Ž¦XÀ•WiOS‚É”C‚¹‚éj
-		CW_USEDEFAULT,              // •\Ž¦YÀ•WiOS‚É”C‚¹‚éj
-		wrc.right - wrc.left,       // ƒEƒBƒ“ƒhƒE‰¡•
-		wrc.bottom - wrc.top,   // ƒEƒBƒ“ƒhƒEc•
-		nullptr,                // eƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-		nullptr,                // ƒƒjƒ…[ƒnƒ“ƒhƒ‹
-		w.hInstance,            // ŒÄ‚Ño‚µƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹
-		nullptr);               // ƒIƒvƒVƒ‡ƒ“
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
+	/*HWND*/ hwnd = CreateWindow(w.lpszClassName, // ã‚¯ãƒ©ã‚¹å
+		L"STRIKER",         // ã‚¿ã‚¤ãƒˆãƒ«ãƒãƒ¼ã®æ–‡å­—
+		WS_OVERLAPPEDWINDOW,        // æ¨™æº–çš„ãªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¹ã‚¿ã‚¤ãƒ«
+		CW_USEDEFAULT,              // è¡¨ç¤ºXåº§æ¨™ï¼ˆOSã«ä»»ã›ã‚‹ï¼‰
+		CW_USEDEFAULT,              // è¡¨ç¤ºYåº§æ¨™ï¼ˆOSã«ä»»ã›ã‚‹ï¼‰
+		wrc.right - wrc.left,       // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æ¨ªå¹…
+		wrc.bottom - wrc.top,   // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç¸¦å¹…
+		nullptr,                // è¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+		nullptr,                // ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãƒãƒ³ãƒ‰ãƒ«
+		w.hInstance,            // å‘¼ã³å‡ºã—ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«
+		nullptr);               // ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 
-	// ƒEƒBƒ“ƒhƒE•\Ž¦
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦è¡¨ç¤º
 	ShowWindow(hwnd, SW_SHOW);
 
-	//FPSŒÅ’è‚Åƒ^ƒCƒ}[‚Ì§“xisleepj‚ª’á‚­‚½‚­‚³‚ñƒXƒŠ[ƒv‚µ‚Ä“®‚«‚ª‚à‚Á‚³‚è‚·‚é‚Ì‚Å§“xUP
+	//FPSå›ºå®šã§ã‚¿ã‚¤ãƒžãƒ¼ã®åˆ¶åº¦ï¼ˆsleepï¼‰ãŒä½ŽããŸãã•ã‚“ã‚¹ãƒªãƒ¼ãƒ—ã—ã¦å‹•ããŒã‚‚ã£ã•ã‚Šã™ã‚‹ã®ã§åˆ¶åº¦UP
 	timeBeginPeriod(1);
 }
 
@@ -66,10 +62,10 @@ void WinApp::Update()
 
 void WinApp::Finalize()
 {
-#pragma region WindowsAPIŒãŽn––
-	// ƒEƒBƒ“ƒhƒEƒNƒ‰ƒX‚ð“o˜^‰ðœ
+#pragma region WindowsAPIå¾Œå§‹æœ«
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¯ãƒ©ã‚¹ã‚’ç™»éŒ²è§£é™¤
 	UnregisterClass(w.lpszClassName, w.hInstance);
-#pragma endregion WindowsAPIŒãŽn––
+#pragma endregion WindowsAPIå¾Œå§‹æœ«
 }
 
 bool WinApp::ProcessMessage()

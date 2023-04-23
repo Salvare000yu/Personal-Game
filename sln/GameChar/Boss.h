@@ -74,6 +74,8 @@ public:
 
 	void Death();
 
+	void AlwaysmMotion();
+
 	//近づく処理初期化
 	void ApproachInit();
 
@@ -220,6 +222,7 @@ private:
 	XMFLOAT3 MoveSp = {};//移動速度
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
 	XMFLOAT3 NowPos = {};//その時の位置
+	float coreColChangeRaito = 0;//死亡時コアの色変え
 
 	float PartTimeInterval;
 	float ParticleFrame = 39;//パーティクル出すフレ
@@ -312,7 +315,7 @@ private:
 	//突っ込み行動へ移行する前に最後にいた場所を記憶する
 	XMFLOAT3 WasPosMem;
 	//離れる速度
-	const int LeaveVel = 20;
+	const int LeaveVel = 40;
 	//Leaveの時どの程度下がるか
 	const int LeavePos = 6000;
 	//戻る前の座標取得フラグ　false:してない

@@ -193,7 +193,7 @@ void Pause::PauseGoTitle()
 
 void Pause::SpUpdate()
 {
-	sp_openpause->Update();
+	//sp_openpause->Update();
 	sp_pause->Update();
 	sp_continuation->Update();
 	sp_gotitle->Update();
@@ -202,7 +202,7 @@ void Pause::SpUpdate()
 
 void Pause::SpOpenPauseDraw()
 {
-	sp_openpause->Draw();
+	//sp_openpause->Draw();
 }
 
 void Pause::SpFlagTrueNowDraw()
