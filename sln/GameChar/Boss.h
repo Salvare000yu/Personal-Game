@@ -221,7 +221,6 @@ private:
 	const float NecesFrame = 190.0f;//かかる時間
 	XMFLOAT3 MoveSp = {};//移動速度
 	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
-	XMFLOAT3 NowPos = {};//その時の位置
 	float coreColChangeRaito = 0;//死亡時コアの色変え
 
 	float PartTimeInterval;
@@ -385,8 +384,8 @@ private:
 	//>>>>>>シェイク
 
 	//<<<<<<ダメージ受けた時体赤くする演出
-	const int BossBodyRedTimeDef = 10;
-	int BossBodyRedTime = BossBodyRedTimeDef;
+	const uint8_t BossBodyRedTimeDef = 10;
+	uint8_t BossBodyRedTime = BossBodyRedTimeDef;
 	//赤から戻していく色
 	float ReCol = 0.f;//赤状態
 	float ReColVal = 0.05f;//戻す数値
