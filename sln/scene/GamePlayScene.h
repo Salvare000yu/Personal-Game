@@ -95,7 +95,7 @@ public:
 	std::function<void()> updatePattern;
 
 	//指定フレームごとに雑魚出現
-	static const int SEneAppInterval = 60;
+	static const int sEneAppInterval = 60;
 
 	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::list <std::unique_ptr<Boss>> boss_;
@@ -157,14 +157,14 @@ private:
 
 	//---地面
 	//地面二種類を上下に揺らす
-	const float SwingDist = 10.f;//揺らす距離
-	const float SwingSp = 4.f;//揺らす速度
+	const float swingDist = 10.f;//揺らす距離
+	const float swingSp = 4.f;//揺らす速度
 	float groundPosDef = -200;//地面を置く座標　ここ中心に上下
 
 	//<<<<<開始時演出
 	//bool gameReadyFlag = true;//開始演出中
 	//ゲーム開始時フレーム
-	int GameReadyFrame = 0;
+	uint16_t gameReadyFrame = 0;
 	//開始時自機座標
 	XMFLOAT3 ApStartPPos{};
 	//終了
@@ -179,31 +179,31 @@ private:
 	bool pTracking = false;//true:自機追従中
 
 	//雑魚敵出現用カウント
-	float SEneAppCount = 0;
+	float sEneAppCount = 0;
 
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 8
-	float BossTermsEMurdersNum = 1;
+	float bossTermsEMurdersNum = 8;
 	//ボス出現条件達成！
-	bool BossEnemyAdvent = false;
+	bool bossEnemyAdvent = false;
 	//ボス出現前演出フラグ
-	bool BeforeBossAppearFlag = false;
+	bool beforeBossAppearFlag = false;
 	//true:今やってる
-	bool BeforeBossAppearNow = false;
+	bool beforeBossAppearNow = false;
 
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
-	bool BodyDamFlag = false;
+	bool bodyDamFlag = false;
 	//↑のクールタイムカウント
-	const int BodyDamCountDef = 30;
-	uint32_t BodyDamCount = BodyDamCountDef;
+	const int bodyDamCountDef = 30;
+	uint32_t bodyDamCount = bodyDamCountDef;
 
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 
-	int BBPaternCount = 0;//1→0で++
+	int bBPaternCount = 0;//1→0で++
 
-	bool AlertSoundFlag = true;//警告音繰り返しに一回のみ
+	bool alertSoundFlag = true;//警告音繰り返しに一回のみ
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
@@ -214,21 +214,21 @@ private:
 	XMFLOAT3 pClearRot;//ボス撃破時自機回転
 
 	//ダメージ画面端赤く　false：まだやってない
-	bool DamEfRedFlag = false;
+	bool damEfRedFlag = false;
 
 	//自機動くなフラグ true:動 く な　false:動いてよい
-	bool PDontMoveFlag = true;
+	bool pDontMoveFlag = true;
 
-	bool DoorOpenFlag = false;//扉開けてない
+	bool doorOpenFlag = false;//扉開けてない
 
 	//次の場所へ行くスピード
 	const float pNextPlaceGoSpMax = 12.f;
 	float pNextPlaceGoSp = 2.f;
-	float AccelVal = 0.2f;//加速値
-	float DecelVal = 0.4f;//減速値
+	float accelVal = 0.2f;//加速値
+	float decelVal = 0.4f;//減速値
 
 	//与える威力
-	float Damage{};
+	float damage{};
 
 	std::vector<std::vector<std::string>> csvData;
 	//何行目まで出したか
@@ -236,24 +236,24 @@ private:
 
 	//----自機ダッシュ
 	//false:してない
-	bool DashFlag = false;
+	bool dashFlag = false;
 	//ダッシュ時間
-	const uint32_t DashCountDef = 30;
-	uint32_t DashCount = DashCountDef;
+	const uint32_t dashCountDef = 30;
+	uint32_t dashCount = dashCountDef;
 	//ダッシュカウントがこの分引いた値になったら減衰
-	const int DashAttenuation = 10;
-	bool DashAttenuationFlag = false;//減衰開始 fasle:まだしてない
+	const int dashAttenuation = 10;
+	bool dashAttenuationFlag = false;//減衰開始 fasle:まだしてない
 	//減衰数値
-	float Attenuation = -0.2f;
+	float attenuation = -0.2f;
 	//ダッシュクールインターバル
-	const int DashIntervalDef = 40;
-	int DashInterval = DashIntervalDef;
-	bool DashIntervalFlag = false;//false:計測前 true:ダッシュできない時
+	const int dashIntervalDef = 40;
+	int dashInterval = dashIntervalDef;
+	bool dashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
-	XMFLOAT3 DashVel = { 0,0,0 };
+	XMFLOAT3 dashVel = { 0,0,0 };
 	//実際に増やす値
-	const float DashVelIncDef = 6;
-	float DashVelInc = DashVelIncDef;
+	const float dashVelIncDef = 6;
+	float dashVelInc = dashVelIncDef;
 	
 	//----自機ダッシュ
 };

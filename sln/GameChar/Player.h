@@ -107,8 +107,7 @@ private:
 	std::unique_ptr< ParticleManager> particle;
 
 	//自機通常弾威力
-	//const float pBulPowerMax = 70;
-	const float pBulPowerMax = 270;
+	const float pBulPowerMax = 70;
 	float pBulPower = pBulPowerMax;
 
 	//自機体力が0より少ないとき false:　０より多い

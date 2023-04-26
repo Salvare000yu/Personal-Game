@@ -264,7 +264,7 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::GroundMove()
 {
-	float num = std::sin((float)time * SwingSp) * SwingDist;
+	float num = std::sinf((float)time * swingSp) * swingDist;
 	//地面の数だけ
 	for (auto& i : obj_ground) {
 		XMFLOAT3 pos = i.second->GetPosition();
@@ -293,10 +293,10 @@ void GamePlayScene::SmallEnemyCreate()
 }
 void GamePlayScene::SmallEnemyAppear()
 {
-	if (BossEnemyAdvent == false)
+	if (bossEnemyAdvent == false)
 	{
 		//時が満ちたら
-		if (SEneAppCount == 0) {
+		if (sEneAppCount == 0) {
 			//雑魚敵来る
 			//csvの最後まで行った場合最初に戻す
 			if (++seIndex >= csvData.size()) {
@@ -310,11 +310,11 @@ void GamePlayScene::SmallEnemyAppear()
 			smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
 
 			//再びカウントできるように初期化
-			SEneAppCount = SEneAppInterval;
+			sEneAppCount = sEneAppInterval;
 		}
 	}
 	//雑魚敵カウントをデクリメント
-	SEneAppCount--;
+	sEneAppCount--;
 }
 
 void GamePlayScene::SmallEnemyAimBul()
@@ -336,7 +336,7 @@ void GamePlayScene::DoorOpen()
 
 	//左の壁が一定行ったら終わり
 	if (LDoorPos.x < LDoorPosXRim) {
-		DoorOpenFlag = true;
+		doorOpenFlag = true;
 	}
 	else {
 		LDoorPos.x -= DoorMoveSp;
@@ -349,7 +349,7 @@ void GamePlayScene::DoorOpen()
 void GamePlayScene::BeforeBossAppear()
 {
 	//演出中時のみtrue
-	BeforeBossAppearNow = true;
+	beforeBossAppearNow = true;
 
 	const uint32_t BBPaternCountNum = 2;
 	const float WarningW = 0.03f;//透明度変化値
@@ -359,9 +359,9 @@ void GamePlayScene::BeforeBossAppear()
 	switch (beforeBossPattern_)
 	{
 	case BeforeBossPattern::def:
-		if (AlertSoundFlag) {
+		if (alertSoundFlag) {
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
-			AlertSoundFlag = false;
+			alertSoundFlag = false;
 		}
 		SP_BossWarning.w -= WarningW;
 		if (SP_BossWarning.w < 0.0f) {
@@ -372,15 +372,15 @@ void GamePlayScene::BeforeBossAppear()
 		SP_BossWarning.w += WarningW;
 		if (SP_BossWarning.w > 1.0f) {
 			beforeBossPattern_ = BeforeBossPattern::dec;
-			AlertSoundFlag = true;
-			BBPaternCount++;//繰り返す回数
+			alertSoundFlag = true;
+			bBPaternCount++;//繰り返す回数
 		}
 		break;
 
 	case BeforeBossPattern::dec:
-		if (AlertSoundFlag) {
+		if (alertSoundFlag) {
 			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
-			AlertSoundFlag = false;
+			alertSoundFlag = false;
 		}
 		SP_BossWarning.w -= WarningW;
 		if (SP_BossWarning.w < 0.0) {
@@ -390,10 +390,10 @@ void GamePlayScene::BeforeBossAppear()
 	}
 
 	//--繰り返す回数0~------消えてからボス戦へ
-	if (BBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
+	if (bBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
 	{
-		BeforeBossAppearFlag = true;
-		BeforeBossAppearNow = true;
+		beforeBossAppearFlag = true;
+		beforeBossAppearNow = true;
 	}
 
 	sp_beforeboss->SetColor(SP_BossWarning);
@@ -415,7 +415,7 @@ void GamePlayScene::BossDeathEffect()
 		}//回転戻し終わったらもう移動攻撃しない
 		else {
 			player_->pAtkPossibleFlag = false;
-			PDontMoveFlag = true;
+			pDontMoveFlag = true;
 			pTracking = false;
 			camera->SetTrackingTarget(nullptr);
 		}
@@ -449,11 +449,11 @@ void GamePlayScene::BossDeathEffect()
 }
 void GamePlayScene::BodyDamCoolTime()
 {
-	if (BodyDamFlag == false) { return; }
-	if (--BodyDamCount > 0) { return; }
+	if (bodyDamFlag == false) { return; }
+	if (--bodyDamCount > 0) { return; }
 
-	BodyDamCount = BodyDamCountDef;
-	BodyDamFlag = false;//もう一度喰らう
+	bodyDamCount = bodyDamCountDef;
+	bodyDamFlag = false;//もう一度喰らう
 }
 
 void GamePlayScene::PlayerMove()
@@ -542,19 +542,19 @@ void GamePlayScene::PlayerDash()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//キー押されたら
-	if (cInput->PlayerDash() && DashFlag == false && DashIntervalFlag == false) {
+	if (cInput->PlayerDash() && dashFlag == false && dashIntervalFlag == false) {
 		//移動中なら
 		if (cInput->DownMove() || cInput->UpMove() || cInput->RightMove() || cInput->LeftMove()) {
 			//ダッシュをするとき風切り音
 			GameSound::GetInstance()->PlayWave("dash.wav", 0.7f, 0);
-			DashFlag = true;
-			DashIntervalFlag = true;
+			dashFlag = true;
+			dashIntervalFlag = true;
 		}
 	}
 	//ダッシュスタート
-	if (DashFlag) {
+	if (dashFlag) {
 		//ダッシュする時間
-		DashCount--;
+		dashCount--;
 
 		//まだ方向決める前なら
 		//ダッシュ中に反対方向押してもそっち方向にダッシュできないようにする目的で一回決めた方向にしかダッシュできないように
@@ -579,49 +579,49 @@ void GamePlayScene::PlayerDash()
 
 		//------決めた方向にダッシュ
 		if (playerDashDirection_ == PlayerDashDirection::down) {
-			DashVel.y = -DashVelInc;
+			dashVel.y = -dashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::up) {
-			DashVel.y = DashVelInc;
+			dashVel.y = dashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::right) {
-			DashVel.x = DashVelInc;
+			dashVel.x = dashVelInc;
 		}
 		if (playerDashDirection_ == PlayerDashDirection::left) {
-			DashVel.x = -DashVelInc;
+			dashVel.x = -dashVelInc;
 		}
 		//現ダッシュ時間が減衰開始時間になったら
-		if (DashCount == (DashCountDef - DashAttenuation)) {
-			DashAttenuationFlag = true;//減衰開始
+		if (dashCount == (dashCountDef - dashAttenuation)) {
+			dashAttenuationFlag = true;//減衰開始
 		}
 
 		//移動
 		XMFLOAT3 pPos = player_->GetPosition();
-		pPos.x += DashVel.x;
-		pPos.y += DashVel.y;
+		pPos.x += dashVel.x;
+		pPos.y += dashVel.y;
 		player_->SetPosition(pPos);
 
-		if (DashCount == 0) {
+		if (dashCount == 0) {
 			playerDashDirection_ = PlayerDashDirection::def;//決定する前に戻す
-			DashVelInc = DashVelIncDef;
-			DashVel = { 0,0,0 };
-			DashCount = DashCountDef;
-			DashAttenuationFlag = false;
-			DashFlag = false;
+			dashVelInc = dashVelIncDef;
+			dashVel = { 0,0,0 };
+			dashCount = dashCountDef;
+			dashAttenuationFlag = false;
+			dashFlag = false;
 		}
 	}
 
 	//インターバル計測なう
-	if (DashIntervalFlag) {
-		if (--DashInterval == 0) {
+	if (dashIntervalFlag) {
+		if (--dashInterval == 0) {
 			//ダッシュしてよし
-			DashInterval = DashIntervalDef;
-			DashIntervalFlag = false;
+			dashInterval = dashIntervalDef;
+			dashIntervalFlag = false;
 		}
 	}
 
-	if (DashAttenuationFlag) {
-		DashVelInc += Attenuation;
+	if (dashAttenuationFlag) {
+		dashVelInc += attenuation;
 	}
 }
 
@@ -633,15 +633,15 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	player_->pAtkPossibleFlag = false;
 
 	pNextPlaceGoSp = std::min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
-	pNextPlaceGoSp += AccelVal;
+	pNextPlaceGoSp += accelVal;
 
 	XMFLOAT3 pPos = player_->GetPosition();
 
 	//指定した場所超えたら
 	if (pPos.z > charParams->StopPos) {
-		pNextPlaceGoSp -= DecelVal;
+		pNextPlaceGoSp -= decelVal;
 
-		if ((pNextPlaceGoSp - DecelVal) < 0) {
+		if ((pNextPlaceGoSp - decelVal) < 0) {
 			charParams->pNextPlaceGoFlag = false;//移動完了でボス行動開始
 			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
@@ -665,14 +665,14 @@ void GamePlayScene::CoolTime()
 		vignettePow -= DamEffectPow;
 		if (vignettePow < 0.f) {
 			//繰り返さないように
-			DamEfRedFlag = true;
+			damEfRedFlag = true;
 			vignettePow = 0.f;
 		}
 		PostEffect::GetInstance()->SetVignettePow(vignettePow);
 	}
 	else {
 		//ダメージ終わったら赤のダメージ画像色戻す
-		DamEfRedFlag = false;
+		damEfRedFlag = false;
 		vignettePow = 1.f;
 	}
 }
@@ -779,7 +779,7 @@ void GamePlayScene::CollisionAll()
 
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
 	//[自機の弾]と[ボス]の当たり判定                  移動終わったら					自機の体力あるとき
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
+	if (sEnemyMurdersNum >= bossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
 		{
 			Sphere pBulForm;//球
 
@@ -809,8 +809,8 @@ void GamePlayScene::CollisionAll()
 							particle->CreateParticle(boPos, 100, 50, 5);
 							bo->BossDamageEffectFlag = true;//くらい演出オン
 						}
-						Damage = pBulPow - BossDefense;
-						NowBoHp -= Damage;
+						damage = pBulPow - BossDefense;
+						NowBoHp -= damage;
 						charParams->SetNowBoHp(NowBoHp);//ボスHPセット
 
 						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
@@ -997,7 +997,7 @@ void GamePlayScene::CollisionAll()
 				if (bo->GetisDeath())continue;
 
 				//定期的にダメージ
-				if (BodyDamFlag == false) {
+				if (bodyDamFlag == false) {
 					if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
 						pDamFlag = true;
 						int bodyPow = bo->GetBodyPow();//ボス体威力
@@ -1006,7 +1006,7 @@ void GamePlayScene::CollisionAll()
 						charParams->SetNowpHp(NowpHp);
 
 						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						BodyDamFlag = true;//クールたいむ
+						bodyDamFlag = true;//クールたいむ
 						break;
 					}
 				}
@@ -1104,7 +1104,7 @@ void GamePlayScene::MouseOper()
 	mouse_L->SetColor(Lcolor);
 
 	//ダッシュしている間（右クリック）
-	if (DashFlag) {
+	if (dashFlag) {
 		Rcolor = red;
 	}
 	auto& mouse_R = sp_mouse.at("mouse_R");
@@ -1143,15 +1143,15 @@ void GamePlayScene::GameReadyUpdate()
 		sceneChangeDirection->Update();
 	}
 	else {//演出画像開き切ったら
-		if (GameReadyFrame < frameMax)
+		if (gameReadyFrame < frameMax)
 		{
 			sp_ready->isInvisible = false;
 
 			//最初演出中は動くな
-			PDontMoveFlag = true;
+			pDontMoveFlag = true;
 
-			float raito = (float)GameReadyFrame / frameMax;
-			++GameReadyFrame;
+			float raito = (float)gameReadyFrame / frameMax;
+			++gameReadyFrame;
 			ReadyCol.w = 1.f - raito;
 			sp_ready->SetColor({ ReadyCol });
 			sp_ready->Update();
@@ -1162,7 +1162,7 @@ void GamePlayScene::GameReadyUpdate()
 			pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
 			player_->SetPosition(pos);
 
-			if (GameReadyFrame == frameMax) {
+			if (gameReadyFrame == frameMax) {
 				pTracking = true;
 			}
 
@@ -1192,7 +1192,7 @@ void GamePlayScene::GameReadyUpdate()
 				//アタック開始してよき
 				player_->pAtkPossibleFlag = true;
 				//動いていいよ
-				PDontMoveFlag = false;
+				pDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
 				//次は雑魚戦
 				updatePattern = std::bind(&GamePlayScene::SmallEnemyBattleUpdate, this);
@@ -1210,14 +1210,14 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	PadStickCamera();
 
 	//雑魚敵更新
-	if (BossEnemyAdvent == false) {
+	if (bossEnemyAdvent == false) {
 		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 			smallEnemy->Update();
 		}
 	}
 
 	//撃破数達成
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= bossTermsEMurdersNum) {
 		//ボス戦前演出
 		updatePattern = std::bind(&GamePlayScene::BossBattleReadyUpdate, this);
 	}
@@ -1232,7 +1232,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//雑魚敵更新
-	if (BossEnemyAdvent == false) {
+	if (bossEnemyAdvent == false) {
 		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
 			smallEnemy->Update();
 		}
@@ -1243,9 +1243,9 @@ void GamePlayScene::BossBattleReadyUpdate()
 	}
 
 	//ボス戦前の演出
-	if (BeforeBossAppearFlag) {//演出終わったら
+	if (beforeBossAppearFlag) {//演出終わったら
 		//ボス戦突入のお知らせです
-		BossEnemyAdvent = true;
+		bossEnemyAdvent = true;
 	}
 	else {
 		BeforeBossAppear();
@@ -1259,7 +1259,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 		}
 	}
 	//扉を開ける
-	if (DoorOpenFlag == false) { DoorOpen(); }
+	if (doorOpenFlag == false) { DoorOpen(); }
 
 	if (charParams->pNextPlaceGoFlag) {
 		pHeadingToTheNextPlace();
@@ -1279,7 +1279,7 @@ void GamePlayScene::BossBattleUpdate()
 
 	//敵のHPバー
 	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
-	if (BossEnemyAdvent && NowBoHp > 0) {
+	if (bossEnemyAdvent && NowBoHp > 0) {
 		charParams->boHpUpdate();
 	}
 
@@ -1352,7 +1352,7 @@ void GamePlayScene::Update()
 
 		// 自機体力が0より多ければ
 		if (player_->GetPHpLessThan0() == false) {
-			if (PDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
+			if (pDontMoveFlag == false) {//自機動くなといわれてないときにplayermove
 				//プレイヤー移動-上に書くと移動かくつかない
 				PlayerMove();
 			}
@@ -1440,7 +1440,7 @@ void GamePlayScene::Draw()
 	obj_backwall->Draw();
 
 	//敵描画
-	if (sEnemyMurdersNum >= BossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= bossTermsEMurdersNum) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
@@ -1475,14 +1475,14 @@ void GamePlayScene::DrawUI()
 	if (pause->GetPauseFlag()) {
 		pause->SpFlagTrueNowDraw();
 	}
-	else if (BossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
+	else if (bossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
 		charParameters->boHpDraw();
 	}//ボス戦時のみ表示
 
 	if (pause->GetOpWindOpenFlag()) { pause->SpOperWindDraw(); }
 
 	//ボス戦前 ポーズ中は見せない
-	if (BeforeBossAppearNow && pause->GetPauseFlag() == false)
+	if (beforeBossAppearNow && pause->GetPauseFlag() == false)
 	{
 		sp_beforeboss->Draw();
 	}
