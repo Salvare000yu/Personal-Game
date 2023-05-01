@@ -13,15 +13,6 @@
 
 class Boss :public BaseObject
 {
-	enum class VerticalPattern {//縦の攻撃パターン
-		def,//デフォルトから始まる
-		Wait,//待ち
-		StartVertical,//最初に上へ
-		Down,//下移動
-		Up,//上移動
-		Reverse,//戻る
-		EndVertical,//縦行動終わり
-	};
 
 	enum class AfterPlungePattern {//突っ込み後行動
 		Wait,//時間空けてから行動
@@ -50,7 +41,15 @@ public:
 	void BossAppear();
 	void Approach();
 	void Leave();
+
 	void Vertical();
+	void StartVertical();
+	void VerticalWait();
+	void VerticalDown();
+	void VerticalUp();
+	void VerticalReverse();
+	void EndVertical();
+
 	void HpHalfPatStart();
 	void CircularMotionMove();
 	void LeaveFirstPos();
@@ -105,7 +104,7 @@ public:
 	static const int DiffusionAtkInterval = 20;
 
 	//縦攻撃
-	VerticalPattern verticalPattern_ = VerticalPattern::def;
+	std::function<void()> verticalPattern;
 	//一度離れてから突っ込む行動パターン　最初離れる
 	std::function<void()> plungeIntoPattern;
 	//突っ込み後の行動パターン 最初待ち
