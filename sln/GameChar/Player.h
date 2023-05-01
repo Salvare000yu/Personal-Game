@@ -29,7 +29,7 @@ private:
 	Model* pFiringLine = nullptr;
 
 	//攻撃のインターバルのためのフラグ 発射前
-	bool AttackIntervalFlag = false;
+	bool attackIntervalFlag = false;
 
 public:
 	inline void SetPBulModel(Model* model) { pBulModel = model; }
@@ -71,9 +71,9 @@ public:
 	inline DirectX::XMVECTOR GetPosVec() { return position; }
 
 	//攻撃インターバル
-	static const int32_t AtkInterval = 15;
+	static const int32_t atkInterval = 15;
 	//攻撃インターバルタイマー
-	int32_t AtkInterval_ = AtkInterval;
+	int32_t atkInterval_ = atkInterval;
 
 	//揺れる時間
 	static const int32_t pShakeTime = 60 / 2;
@@ -91,8 +91,8 @@ public:
 	//自機体力が0より少ないか
 	const bool& GetPHpLessThan0() { return isPHpLessThan0; }
 	//自機安否確認
-	void SetpDeath(bool PlayerDeathFlag) { this->PlayerDeathFlag = PlayerDeathFlag; }
-	const bool& GetpDeath() { return PlayerDeathFlag; }
+	void SetpDeath(bool PlayerDeathFlag) { this->playerDeathFlag = PlayerDeathFlag; }
+	const bool& GetpDeath() { return playerDeathFlag; }
 	//射線表示フラグ
 	void SetFireLineDrawFlag(bool flag) { firingline_->SetAlive(flag); }
 	//-------------------↑げったーせったー↑-------------------//
@@ -117,23 +117,23 @@ private:
 
 	//-----自機死亡演出
 	XMFLOAT3 pPosDeath = {};
-	float Nowframe = 0;//現在フレ
-	const float NecesFrame = 180.0f;//かかる時間
-	XMFLOAT3 MoveSp = {};//移動速度
-	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
-	XMFLOAT3 NowPos = {};//その時の位置
+	float nowframe = 0;//現在フレ
+	const float necesFrame = 180.0f;//かかる時間
+	XMFLOAT3 moveSp = {};//移動速度
+	XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
+	XMFLOAT3 nowPos = {};//その時の位置
 
-	float PartTimeInterval = 0;
-	float ParticleFrame = 39;//パーティクル出すフレ
+	float partTimeInterval = 0;
+	float particleFrame = 39;//パーティクル出すフレ
 
-	bool GetPosFlag = true;//一度きりの座標読み込み
+	bool getPosFlag = true;//一度きりの座標読み込み
 
-	bool PlayerDeathFlag = false;//自機死亡　false:ご存命
+	bool playerDeathFlag = false;//自機死亡　false:ご存命
 
 	//揺れ
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 
 	//自機死亡演出時　false:爆発してない
-	bool ExplosionFlag = false;
+	bool explosionFlag = false;
 };

@@ -42,7 +42,7 @@ void Player::Attack()
 	const int pBulVel = 60;
 
 	//長押し発射
-	if ((InputSPACE || PadInputRB || InputMouseLEFT) && AttackIntervalFlag == false)
+	if ((InputSPACE || PadInputRB || InputMouseLEFT) && attackIntervalFlag == false)
 	{
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//弾生成
@@ -67,16 +67,16 @@ void Player::Attack()
 
 		//input->PadVibrationDef();
 
-		AttackIntervalFlag = true;
+		attackIntervalFlag = true;
 	}
-	if (AttackIntervalFlag)
+	if (attackIntervalFlag)
 	{
-		if (--AtkInterval_ >= 0) {//クールタイム 0まで減らす
-			if (AtkInterval_ <= 0) {
-				AttackIntervalFlag = false;
+		if (--atkInterval_ >= 0) {//クールタイム 0まで減らす
+			if (atkInterval_ <= 0) {
+				attackIntervalFlag = false;
 			}//0なったらくらい状態解除
 		}
-		else { AtkInterval_ = AtkInterval; }
+		else { atkInterval_ = atkInterval; }
 	}
 }
 
@@ -162,44 +162,44 @@ void Player::Shake() {
 }
 void Player::PlayerDeath()
 {
-	Nowframe++;
-	ParticleFrame++;
-	PartTimeInterval = ParticleFrame / 40;
+	nowframe++;
+	particleFrame++;
+	partTimeInterval = particleFrame / 40;
 
 	XMFLOAT3 position = obj->GetPosition();
 
-	if (GetPosFlag)
+	if (getPosFlag)
 	{
 		//最初の位置
 		pPosDeath = obj->GetPosition();
-		GetPosFlag = false;
+		getPosFlag = false;
 	}
 
 	//移動速度＝（指定座標-最初位置）/かかる時間
-	MoveSp.x = (pPosDeath.x - pPosDeath.x) / NecesFrame;//ここの指定座標は自機最初のX座標にして真下に落ちるようにする
-	MoveSp.y = (TargetPos.y - pPosDeath.y) / NecesFrame;
-	MoveSp.z = (pPosDeath.z - pPosDeath.z) / NecesFrame;//奥行きついたらここもそうする
+	moveSp.x = (pPosDeath.x - pPosDeath.x) / necesFrame;//ここの指定座標は自機最初のX座標にして真下に落ちるようにする
+	moveSp.y = (targetPos.y - pPosDeath.y) / necesFrame;
+	moveSp.z = (pPosDeath.z - pPosDeath.z) / necesFrame;//奥行きついたらここもそうする
 	//その時の位置＝最初位置＋移動速度＊経過時間
-	NowPos.x = pPosDeath.x + MoveSp.x * Nowframe;
-	NowPos.y = pPosDeath.y + MoveSp.y * Nowframe;
-	NowPos.z = pPosDeath.z + MoveSp.z * Nowframe;
+	nowPos.x = pPosDeath.x + moveSp.x * nowframe;
+	nowPos.y = pPosDeath.y + moveSp.y * nowframe;
+	nowPos.z = pPosDeath.z + moveSp.z * nowframe;
 
-	obj->SetPosition(NowPos);//その時の位置
+	obj->SetPosition(nowPos);//その時の位置
 
 	//一定時間ごとにパーティクル
-	if (PartTimeInterval == 1) {
-		ExplosionFlag = true;
+	if (partTimeInterval == 1) {
+		explosionFlag = true;
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		particle->CreateParticle(NowPos, 50, 30, 10, { 1,0.1f,0.8f }, { 1,0,0 });
-		PartTimeInterval = 0;
-		ParticleFrame = 0;
+		particle->CreateParticle(nowPos, 50, 30, 10, { 1,0.1f,0.8f }, { 1,0,0 });
+		partTimeInterval = 0;
+		particleFrame = 0;
 	}
 
-	if (ExplosionFlag) {
+	if (explosionFlag) {
 		Shake();
 		if (pShakeTimer_ <= 0) {
-			ExplosionFlag = false;
+			explosionFlag = false;
 		}
 	}
 
@@ -208,10 +208,10 @@ void Player::PlayerDeath()
 	pRot.z += pDeathRot;
 	obj->SetRotation(pRot);
 
-	if (obj->GetPosition().y < TargetPos.y)
+	if (obj->GetPosition().y < targetPos.y)
 	{
 		//目標到達で死亡フラグオン
-		PlayerDeathFlag = true;
+		playerDeathFlag = true;
 	}
 }
 
