@@ -184,7 +184,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 8
-	float bossTermsEMurdersNum = 8;
+	float bossTermsEMurdersNum = 0;
 	//ボス出現条件達成！
 	bool bossEnemyAdvent = false;
 	//ボス出現前演出フラグ
@@ -216,7 +216,7 @@ private:
 	//ダメージ画面端赤く　false：まだやってない
 	bool damEfRedFlag = false;
 
-	//自機動くなフラグ true:動 く な　false:動いてよい
+	//自機動くなフラグ true:動くな　false:動いてよい
 	bool pDontMoveFlag = true;
 
 	bool doorOpenFlag = false;//扉開けてない

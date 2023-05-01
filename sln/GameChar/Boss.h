@@ -23,13 +23,6 @@ class Boss :public BaseObject
 		EndVertical,//縦行動終わり
 	};
 
-	enum class PlungeIntoPattern {//突っ込み
-		Leave,//前準備で離れる
-		PlungeInto,//突っ込む
-		Reverse,//戻ってくる
-		Wait,//時間空けてから行動
-	};
-
 	enum class AfterPlungePattern {//突っ込み後行動
 		Wait,//時間空けてから行動
 		Attack,//攻撃
@@ -62,6 +55,10 @@ public:
 	void CircularMotionMove();
 	void LeaveFirstPos();
 	void PlungeInto();
+	void PlungeIntoLeave();
+	void PlungeIntoWait();
+	void Plunge();
+	void PlungeIntoReverse();
 	void AfterPlungeInto();
 	//拡散攻撃
 	void DiffusionAttack();
@@ -110,7 +107,7 @@ public:
 	//縦攻撃
 	VerticalPattern verticalPattern_ = VerticalPattern::def;
 	//一度離れてから突っ込む行動パターン　最初離れる
-	PlungeIntoPattern plungeIntoPattern_ = PlungeIntoPattern::Leave;
+	std::function<void()> plungeIntoPattern;
 	//突っ込み後の行動パターン 最初待ち
 	AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
 

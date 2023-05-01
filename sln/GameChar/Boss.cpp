@@ -422,113 +422,108 @@ void Boss::LeaveFirstPos()
 }
 void Boss::PlungeInto()
 {
-	CharParameters* charParameters = CharParameters::GetInstance();
+	//突っ込み行動パターン
+	plungeIntoPattern();
+}
+void Boss::PlungeIntoLeave()
+{
+	XMFLOAT3 position = obj->GetPosition();
+	//一度離れて
+	position.z += LeaveVel;
+
+	if (position.z >= LeavePos) {
+		plungeIntoPattern = std::bind(&Boss::PlungeIntoWait, this);
+	}
+
+	obj->SetPosition(position);
+}
+void Boss::PlungeIntoWait()
+{
+	//待機してから行動
+	//---------------------予兆はここで シェイク
+	//待機時間デクリメント
+	PlungeIntoWaitCount--;
+
+	//突撃後なら突っ込んだ場所でまつ
+	if (PlungeCompletFlag) {
+		obj->SetPosition(pPosMem);
+	}
+	else {
+		Shake();//揺らす
+	}
+
+	if (PlungeIntoWaitCount == 0) {
+		if (PlungeCompletFlag == false) {//突っ込み完了前なら
+			//その時のターゲット座標
+			//一度きり　突っ込みに使う座標
+			if (pMemFlag == false) {
+				pPosMem = shotTag->GetPosition();
+				pMemFlag = true;
+			}
+
+			if (boPosFlag == false)
+			{
+				//最初の位置
+				boPosMom = obj->GetPosition();
+				boPosFlag = true;
+			}
+			PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+			plungeIntoPattern = std::bind(&Boss::Plunge, this);
+		}
+		else {//突っ込み後
+			PlungeCompletFlag = false;//リセット
+			PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+			ShakePosMemFlag = false;//シェイク終わり
+			Nowframe = NowframeDef;//戻さないと次の行動にカクツキが出る
+			plungeIntoPattern = std::bind(&Boss::PlungeIntoReverse, this);//元の場所へ向かう
+		}
+	}
+}
+void Boss::Plunge()
+{
+	//突っ込んでくる
+	Nowframe++;
+
+	bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+	//場所移動
+	lerpMovePos = lerp(boPosMom, pPosMem, bossLerpMoveRaito);
+	obj->SetPosition(lerpMovePos);
 
 	XMFLOAT3 position = obj->GetPosition();
+	if (position.z < shotTag->GetPosition().z) {//突撃終わったら
+		boPosFlag = false;//一度きり読み込みリセ
+		pMemFlag = false;//一度きりセット
 
-	switch (plungeIntoPattern_)
-	{
-	case PlungeIntoPattern::Leave://一度離れて
-		position.z += LeaveVel;
+		Nowframe = NowframeDef;
+		//もう突っ込んだ
+		PlungeCompletFlag = true;
+		plungeIntoPattern = std::bind(&Boss::PlungeIntoWait, this);
+	}
+}
+void Boss::PlungeIntoReverse()
+{
+	ReversePos = { 0,100,shotTag->GetPosition().z + 1000 };
 
-		if (position.z >= LeavePos) {
-			plungeIntoPattern_ = PlungeIntoPattern::Wait;
-		}
+	Nowframe++;
+	XMFLOAT3 position = obj->GetPosition();
+	if (BeforeReversePosMemFlag == false) {
+		BeforeReversePosMem = position;
+		BeforeReversePosMemFlag = true;
+	}
 
-		obj->SetPosition(position);
+	bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+	//場所移動
+	XMFLOAT3 reversePos{};
+	reversePos = lerp(BeforeReversePosMem, ReversePos, bossLerpMoveRaito);
+	obj->SetPosition(reversePos);
 
-		break;
-
-	case PlungeIntoPattern::PlungeInto://突っ込んでくる
-
-		Nowframe++;
-
-		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
-		//場所移動
-		lerpMovePos = lerp(boPosMom, pPosMem, bossLerpMoveRaito);
-		obj->SetPosition(lerpMovePos);
-
-		if (position.z < shotTag->GetPosition().z) {//突撃終わったら
-			boPosFlag = false;//一度きり読み込みリセ
-			pMemFlag = false;//一度きりセット
-
-			Nowframe = NowframeDef;
-			//もう突っ込んだ
-			PlungeCompletFlag = true;
-			plungeIntoPattern_ = PlungeIntoPattern::Wait;//待ってから
-		}
-		break;
-
-	case PlungeIntoPattern::Reverse://突っ込み終わったから戻れ
-
-		ReversePos = { 0,100,shotTag->GetPosition().z + 1000 };
-
-		Nowframe++;
-
-		if (BeforeReversePosMemFlag == false) {
-			BeforeReversePosMem = position;
-			BeforeReversePosMemFlag = true;
-		}
-
-		bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
-		//場所移動
-		XMFLOAT3 reversePos{};
-		reversePos = lerp(BeforeReversePosMem, ReversePos, bossLerpMoveRaito);
-		obj->SetPosition(reversePos);
-
-		//z座標が指定座標になったら
-		if (position.z >= ReversePos.z) {
-			PlungeCount = PlungeCountDef;
-			BeforeReversePosMemFlag = false;
-			plungeIntoPattern_ = PlungeIntoPattern::Leave;
-			//突っ込み一連終わった後の行動へ
-			actionPattern = std::bind(&Boss::AfterPlungeInto, this);
-		}
-
-		break;
-
-	case PlungeIntoPattern::Wait://待機してから行動
-		//---------------------予兆はここで シェイク
-		//待機時間デクリメント
-		PlungeIntoWaitCount--;
-
-		//突撃後なら突っ込んだ場所でまつ
-		if (PlungeCompletFlag) {
-			obj->SetPosition(pPosMem);
-		}
-		else {
-			XMFLOAT3 rot = obj->GetRotation();
-			rot.z++;
-			obj->SetRotation(rot);
-		}
-
-		if (PlungeIntoWaitCount == 0) {
-			if (PlungeCompletFlag == false) {//突っ込み完了前なら
-				//その時のターゲット座標
-				//一度きり　突っ込みに使う座標
-				if (pMemFlag == false) {
-					pPosMem = shotTag->GetPosition();
-					pMemFlag = true;
-				}
-
-				if (boPosFlag == false)
-				{
-					//最初の位置
-					boPosMom = obj->GetPosition();
-					boPosFlag = true;
-				}
-				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-				plungeIntoPattern_ = PlungeIntoPattern::PlungeInto;
-			}
-			else {//突っ込み後
-				PlungeCompletFlag = false;//リセット
-				PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-				ShakePosMemFlag = false;//シェイク終わり
-				Nowframe = NowframeDef;//戻さないと次の行動にカクツキが出る
-				plungeIntoPattern_ = PlungeIntoPattern::Reverse;//元の場所へ向かう
-			}
-		}
-		break;
+	//z座標が指定座標になったら
+	if (position.z >= ReversePos.z) {
+		PlungeCount = PlungeCountDef;
+		BeforeReversePosMemFlag = false;
+		plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
+		//突っ込み一連終わった後の行動へ
+		actionPattern = std::bind(&Boss::AfterPlungeInto, this);
 	}
 }
 
@@ -972,6 +967,8 @@ void Boss::Initialize()
 
 	//デフォルトの行動を設定
 	actionPattern = std::bind(&Boss::BossAppear, this);
+
+	plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
 }
 
 void Boss::Update()
@@ -1006,10 +1003,6 @@ void Boss::Update()
 		if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
 			actionPattern = std::bind(&Boss::HpHalfPatStart, this);
 		}
-	}
-
-	if (plungeIntoPattern_ == PlungeIntoPattern::Wait) {
-		Shake();
 	}
 
 	//メンバ関数ポインタ呼び出し
