@@ -14,11 +14,11 @@
 class Boss :public BaseObject
 {
 
-	enum class AfterPlungePattern {//突っ込み後行動
-		Wait,//時間空けてから行動
-		Attack,//攻撃
-		Fin,//最後指定の場所へ
-	};
+	//enum class AfterPlungePattern {//突っ込み後行動
+	//	Wait,//時間空けてから行動
+	//	Attack,//攻撃
+	//	Fin,//最後指定の場所へ
+	//};
 
 public:
 
@@ -59,6 +59,9 @@ public:
 	void Plunge();
 	void PlungeIntoReverse();
 	void AfterPlungeInto();
+	void AfterPlungeWait();
+	void AfterPlungeAttack();
+	void AfterPlungeFin();
 	//拡散攻撃
 	void DiffusionAttack();
 	//拡散偶数弾
@@ -108,7 +111,8 @@ public:
 	//一度離れてから突っ込む行動パターン　最初離れる
 	std::function<void()> plungeIntoPattern;
 	//突っ込み後の行動パターン 最初待ち
-	AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
+	//AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
+	std::function<void()> afterPlungePattern;
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得

@@ -21,6 +21,79 @@ namespace {
 	}
 }
 
+
+void Boss::Initialize()
+{
+	particle.reset(new ParticleManager());
+	particle->SetCamera(this->obj->GetCamera());
+
+	mod_core.reset(Model::LoadFromOBJ("boss_core"));
+	mod_AroundCore.reset(Model::LoadFromOBJ("boss_AroundCore"));
+	mod_outside.reset(Model::LoadFromOBJ("boss_outside"));
+	mod_SideSquare.reset(Model::LoadFromOBJ("boss_SideSquare"));
+	mod_UpDown.reset(Model::LoadFromOBJ("boss_UpDown"));
+	mod_VerticalCircle.reset(Model::LoadFromOBJ("boss_VerticalCircle"));
+	//作る
+	obj.reset(Object3d::Create());
+	obj_core.reset(Object3d::Create());
+	obj_AroundCore.reset(Object3d::Create());
+	obj_outside.reset(Object3d::Create());
+	obj_SideSquare.reset(Object3d::Create());
+	obj_UpDown.reset(Object3d::Create());
+	obj_VerticalCircle.reset(Object3d::Create());
+
+	obj_core->SetModel(mod_core.get());
+	obj_AroundCore->SetModel(mod_AroundCore.get());
+	obj_outside->SetModel(mod_outside.get());
+	obj_SideSquare->SetModel(mod_SideSquare.get());
+	obj_UpDown->SetModel(mod_UpDown.get());
+	obj_VerticalCircle->SetModel(mod_VerticalCircle.get());
+
+	//-----↓任意↓-----//
+		//大きさ
+	obj->SetScale({ 130.0f, 130.0f, 130.0f });
+	obj_core->SetScale({ 40.f, 40.f, 40.f });
+	obj_AroundCore->SetScale({ 40.f, 40.f, 40.f });
+	obj_outside->SetScale({ 40.f, 40.f, 40.f });
+	obj_SideSquare->SetScale({ 40.f, 40.f, 40.f });
+	obj_UpDown->SetScale({ 40.f, 40.f, 40.f });
+	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
+	//場所
+	obj->SetPosition({ 0,0,3300 });
+	obj_core->SetPosition({ 0,30,2500 });
+	obj_AroundCore->SetPosition({ 0,30,2500 });
+	obj_outside->SetPosition({ 0,30,2500 });
+	obj_SideSquare->SetPosition({ 0,30,2500 });
+	obj_UpDown->SetPosition({ 0,30,2500 });
+	obj_VerticalCircle->SetPosition({ 0,30,2500 });
+	//回転
+	obj_core->SetRotation({ 0, 180, 0 });
+	obj_AroundCore->SetRotation({ 0, 180, 0 });
+	obj_outside->SetRotation({ 0, 180, 0 });
+	obj_SideSquare->SetRotation({ 0, 180, 0 });
+	obj_UpDown->SetRotation({ 0, 180, 0 });
+	obj_VerticalCircle->SetRotation({ 0, 180, 0 });
+
+	obj->SetColor({ 1, 1, 1, 0.0f });
+	obj_core->SetColor({ coreCol });
+
+	// 音声読み込み
+	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
+	GameSound::GetInstance()->LoadWave("destruction1.wav");
+
+	//近づくパターン初期化
+	ApproachInit();
+
+	//デフォルトの行動を設定
+	actionPattern = std::bind(&Boss::BossAppear, this);
+
+	plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
+
+	verticalPattern = std::bind(&Boss::StartVertical, this);
+
+	afterPlungePattern = std::bind(&Boss::AfterPlungeWait, this);
+}
+
 void Boss::BossAppear()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
@@ -530,85 +603,80 @@ void Boss::PlungeIntoReverse()
 
 void Boss::AfterPlungeInto()
 {
-	switch (afterPlungePattern_)
-	{
-	case AfterPlungePattern::Wait://待機してから行動
+	afterPlungePattern();
+}
+void Boss::AfterPlungeWait()
+{
+	WaitTime--;//待ち時間
+	if (WaitTime == 0) {//指定時間待ったら
+		LoopCount++;//何回やったか数えるんだよ
+		WaitTime = WaitTimeDef;
+		Nowframe = NowframeDef;
+		pPosMem = shotTag->GetPosition();//自機いた場所
+		boPosMem = obj->GetPosition();//ボスいた場所
+		afterPlungePattern = std::bind(&Boss::AfterPlungeAttack, this);//攻撃へ
+	}
 
-		WaitTime--;//待ち時間
-		if (WaitTime == 0) {//指定時間待ったら
-			LoopCount++;//何回やったか数えるんだよ
-			WaitTime = WaitTimeDef;
-			Nowframe = NowframeDef;
-			pPosMem = shotTag->GetPosition();//自機いた場所
-			boPosMem = obj->GetPosition();//ボスいた場所
-			afterPlungePattern_ = AfterPlungePattern::Attack;//攻撃へ
-		}
+	AtkCount--;
+	//時が満ちたら
+	if (AtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { StraightAttack(); }
+		//再びカウントできるように初期化
+		AtkCount = AtkInterval;
+	}
 
-		AtkCount--;
-		//時が満ちたら
-		if (AtkCount == 0) {
-			//突撃時、生存時のみ発射
-			if (alive) { StraightAttack(); }
-			//再びカウントできるように初期化
-			AtkCount = AtkInterval;
-		}
+	//行動を一定数繰り返したら行動変える
+	if (LoopCount == LoopCountMax) {
+		Nowframe = 0;
+		afterPlungePattern = std::bind(&Boss::AfterPlungeFin, this);//行動戻る前に最後に元の場所へ
+		LoopCount = LoopCountDef;
+	}
+}
+void Boss::AfterPlungeAttack()
+{
+	Nowframe++;
 
-		//行動を一定数繰り返したら行動変える
-		if (LoopCount == LoopCountMax) {
-			Nowframe = 0;
-			afterPlungePattern_ = AfterPlungePattern::Fin;//行動戻る前に最後に元の場所へ
-			LoopCount = LoopCountDef;
-		}
+	bossLerpMoveRaito = (float)Nowframe / NecesAtkMoveTime;
+	//場所移動
+	obj->SetPosition(lerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRaito));
 
-		break;
+	AfterPlungePatAtkCount--;
+	//時が満ちたら
+	if (AfterPlungePatAtkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (alive) { Attack(); }
+		//再びカウントできるように初期化
+		AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
+	}
 
-	case AfterPlungePattern::Attack:
-
+	if (Nowframe == NecesAtkMoveTime) {
+		Nowframe = NowframeDef;
+		afterPlungePattern = std::bind(&Boss::AfterPlungeWait, this);
+	}
+}
+void Boss::AfterPlungeFin()
+{
+	if (PlungeFinOnlyFlag == false) {//最初の座標
+		boPosMem = obj->GetPosition();
+		PlungeFinOnlyFlag = true;
+	}
+	else {
+		bossLerpMoveRaito = (float)Nowframe / PlungeFinFrameMax;
 		Nowframe++;
 
-		bossLerpMoveRaito = (float)Nowframe / NecesAtkMoveTime;
-		//場所移動
-		obj->SetPosition(lerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRaito));
-
-		AfterPlungePatAtkCount--;
-		//時が満ちたら
-		if (AfterPlungePatAtkCount == 0) {
-			//突撃時、生存時のみ発射
-			if (alive) { Attack(); }
-			//再びカウントできるように初期化
-			AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
+		//円行動に合うようにその場所へ移動
+		XMFLOAT3 endPos = obj->GetPosition();
+		endPos.y = CircularY;
+		lerpMovePos = lerp(boPosMem, endPos, bossLerpMoveRaito);
+		obj->SetPosition(lerpMovePos);
+		if (Nowframe == PlungeFinFrameMax) {
+			Nowframe = 0;
+			PlungeFinOnlyFlag = false;
+			afterPlungePattern = std::bind(&Boss::AfterPlungeWait, this);//ここの行動戻す
+			//次の行動
+			actionPattern = std::bind(&Boss::CircularMotionMove, this);
 		}
-
-		if (Nowframe == NecesAtkMoveTime) {
-			Nowframe = NowframeDef;
-			afterPlungePattern_ = AfterPlungePattern::Wait;
-		}
-
-		break;
-
-	case AfterPlungePattern::Fin:
-		if (PlungeFinOnlyFlag == false) {//最初の座標
-			boPosMem = obj->GetPosition();
-			PlungeFinOnlyFlag = true;
-		}
-		else {
-			bossLerpMoveRaito = (float)Nowframe / PlungeFinFrameMax;
-			Nowframe++;
-
-			//円行動に合うようにその場所へ移動
-			XMFLOAT3 endPos = obj->GetPosition();
-			endPos.y = CircularY;
-			lerpMovePos = lerp(boPosMem, endPos, bossLerpMoveRaito);
-			obj->SetPosition(lerpMovePos);
-			if (Nowframe == PlungeFinFrameMax) {
-				Nowframe = 0;
-				PlungeFinOnlyFlag = false;
-				afterPlungePattern_ = AfterPlungePattern::Wait;//ここの行動戻す
-				//次の行動
-				actionPattern = std::bind(&Boss::CircularMotionMove, this);
-			}
-		}
-		break;
 	}
 }
 
@@ -902,76 +970,6 @@ void Boss::AlwaysmMotion()
 	auto sideSquareRot = obj_SideSquare->GetRotation();
 	sideSquareRot.x--;
 	obj_SideSquare->SetRotation(sideSquareRot);
-}
-
-void Boss::Initialize()
-{
-	particle.reset(new ParticleManager());
-	particle->SetCamera(this->obj->GetCamera());
-
-	mod_core.reset(Model::LoadFromOBJ("boss_core"));
-	mod_AroundCore.reset(Model::LoadFromOBJ("boss_AroundCore"));
-	mod_outside.reset(Model::LoadFromOBJ("boss_outside"));
-	mod_SideSquare.reset(Model::LoadFromOBJ("boss_SideSquare"));
-	mod_UpDown.reset(Model::LoadFromOBJ("boss_UpDown"));
-	mod_VerticalCircle.reset(Model::LoadFromOBJ("boss_VerticalCircle"));
-	//作る
-	obj.reset(Object3d::Create());
-	obj_core.reset(Object3d::Create());
-	obj_AroundCore.reset(Object3d::Create());
-	obj_outside.reset(Object3d::Create());
-	obj_SideSquare.reset(Object3d::Create());
-	obj_UpDown.reset(Object3d::Create());
-	obj_VerticalCircle.reset(Object3d::Create());
-
-	obj_core->SetModel(mod_core.get());
-	obj_AroundCore->SetModel(mod_AroundCore.get());
-	obj_outside->SetModel(mod_outside.get());
-	obj_SideSquare->SetModel(mod_SideSquare.get());
-	obj_UpDown->SetModel(mod_UpDown.get());
-	obj_VerticalCircle->SetModel(mod_VerticalCircle.get());
-
-	//-----↓任意↓-----//
-		//大きさ
-	obj->SetScale({ 130.0f, 130.0f, 130.0f });
-	obj_core->SetScale({ 40.f, 40.f, 40.f });
-	obj_AroundCore->SetScale({ 40.f, 40.f, 40.f });
-	obj_outside->SetScale({ 40.f, 40.f, 40.f });
-	obj_SideSquare->SetScale({ 40.f, 40.f, 40.f });
-	obj_UpDown->SetScale({ 40.f, 40.f, 40.f });
-	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
-	//場所
-	obj->SetPosition({ 0,0,3300 });
-	obj_core->SetPosition({ 0,30,2500 });
-	obj_AroundCore->SetPosition({ 0,30,2500 });
-	obj_outside->SetPosition({ 0,30,2500 });
-	obj_SideSquare->SetPosition({ 0,30,2500 });
-	obj_UpDown->SetPosition({ 0,30,2500 });
-	obj_VerticalCircle->SetPosition({ 0,30,2500 });
-	//回転
-	obj_core->SetRotation({ 0, 180, 0 });
-	obj_AroundCore->SetRotation({ 0, 180, 0 });
-	obj_outside->SetRotation({ 0, 180, 0 });
-	obj_SideSquare->SetRotation({ 0, 180, 0 });
-	obj_UpDown->SetRotation({ 0, 180, 0 });
-	obj_VerticalCircle->SetRotation({ 0, 180, 0 });
-
-	obj->SetColor({ 1, 1, 1, 0.0f });
-	obj_core->SetColor({ coreCol });
-
-	// 音声読み込み
-	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
-	GameSound::GetInstance()->LoadWave("destruction1.wav");
-
-	//近づくパターン初期化
-	ApproachInit();
-
-	//デフォルトの行動を設定
-	actionPattern = std::bind(&Boss::BossAppear, this);
-
-	plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
-
-	verticalPattern = std::bind(&Boss::StartVertical, this);
 }
 
 void Boss::Update()
