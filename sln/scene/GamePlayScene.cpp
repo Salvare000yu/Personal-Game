@@ -1123,6 +1123,21 @@ void GamePlayScene::MouseOper()
 	}
 }
 
+void GamePlayScene::PauseOpen()
+{
+	Pause* pause = Pause::GetInstance();
+	pause->PauseNow();
+
+	if (pause->GetSceneChangeTitleFlag()) {
+		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+		Input::GetInstance()->PadVibration();//振動
+		GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");// 音声停止
+		//シーン切り替え
+		BaseScene* scene = new TitleScene();
+		sceneManager_->SetNextScene(scene);
+	}
+}
+
 //------------------------------↑当たり判定ZONE↑-----------------------------//
 
 void GamePlayScene::GameReadyUpdate()
@@ -1316,16 +1331,7 @@ void GamePlayScene::Update()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->GetPauseFlag()) {
-		pause->PauseNow();
-
-		if (pause->GetSceneChangeTitleFlag()) {
-			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			Input::GetInstance()->PadVibration();//振動
-			GameSound::GetInstance()->SoundStop("E_rhythmaze_128.wav");// 音声停止
-			//シーン切り替え
-			BaseScene* scene = new TitleScene();
-			sceneManager_->SetNextScene(scene);
-		}
+		PauseOpen();
 	}
 
 	UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
@@ -1471,6 +1477,8 @@ void GamePlayScene::DrawUI()
 	if (pause->GetPauseFlag() == false) {
 		charParameters->pHpDraw();
 		pause->SpOpenPauseDraw();
+		sp_ready->Draw();
+		sp_ready_go->Draw();
 	}
 	if (pause->GetPauseFlag()) {
 		pause->SpFlagTrueNowDraw();
@@ -1496,9 +1504,6 @@ void GamePlayScene::DrawUI()
 			i.second->Draw();
 		}
 	}
-
-	sp_ready->Draw();
-	sp_ready_go->Draw();
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画

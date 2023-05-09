@@ -64,6 +64,8 @@ public:
 	void Operation();//操作説明
 	void MouseOper();//マウス説明
 
+	void PauseOpen();//ポーズ画面開く
+
 	//std::func
 	void GameReadyUpdate();//開始前
 	void SmallEnemyBattleUpdate();//雑魚戦
@@ -184,7 +186,7 @@ private:
 	//敵撃破数
 	float sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 8
-	float bossTermsEMurdersNum = 0;
+	float bossTermsEMurdersNum = 1;
 	//ボス出現条件達成！
 	bool bossEnemyAdvent = false;
 	//ボス出現前演出フラグ
