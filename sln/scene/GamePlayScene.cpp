@@ -94,6 +94,8 @@ void GamePlayScene::Initialize()
 	//最初は開始演出
 	updatePattern = std::bind(&GamePlayScene::GameReadyUpdate, this);
 
+	beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDef, this);
+
 	//------objからモデルデータ読み込み---
 	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
@@ -352,50 +354,56 @@ void GamePlayScene::BeforeBossAppear()
 	beforeBossAppearNow = true;
 
 	const uint32_t BBPaternCountNum = 2;
-	const float WarningW = 0.03f;//透明度変化値
 
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 
-	switch (beforeBossPattern_)
-	{
-	case BeforeBossPattern::def:
-		if (alertSoundFlag) {
-			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
-			alertSoundFlag = false;
-		}
-		SP_BossWarning.w -= WarningW;
-		if (SP_BossWarning.w < 0.0f) {
-			beforeBossPattern_ = BeforeBossPattern::inc;
-		}
-		break;
-	case BeforeBossPattern::inc:
-		SP_BossWarning.w += WarningW;
-		if (SP_BossWarning.w > 1.0f) {
-			beforeBossPattern_ = BeforeBossPattern::dec;
-			alertSoundFlag = true;
-			bBPaternCount++;//繰り返す回数
-		}
-		break;
-
-	case BeforeBossPattern::dec:
-		if (alertSoundFlag) {
-			GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
-			alertSoundFlag = false;
-		}
-		SP_BossWarning.w -= WarningW;
-		if (SP_BossWarning.w < 0.0) {
-			beforeBossPattern_ = BeforeBossPattern::inc;
-		}
-		break;
-	}
-
 	//--繰り返す回数0~------消えてからボス戦へ
-	if (bBPaternCount == BBPaternCountNum && beforeBossPattern_ == BeforeBossPattern::inc)
+	if (bBPaternCount == BBPaternCountNum&& SP_BossWarning.w < 0.0)
 	{
 		beforeBossAppearFlag = true;
 		beforeBossAppearNow = true;
 	}
 
+	beforeBossPattern();
+}
+void GamePlayScene::BeforeBossAppearDef()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	if (alertSoundFlag) {
+		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
+		alertSoundFlag = false;
+	}
+	SP_BossWarning.w -= WarningW;
+	if (SP_BossWarning.w < 0.0f) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
+	}
+	sp_beforeboss->SetColor(SP_BossWarning);
+}
+void GamePlayScene::BeforeBossAppearInc()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	SP_BossWarning.w += WarningW;
+	if (SP_BossWarning.w > 1.0f) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDec, this);
+		alertSoundFlag = true;
+		bBPaternCount++;//繰り返す回数
+	}
+	sp_beforeboss->SetColor(SP_BossWarning);
+}
+void GamePlayScene::BeforeBossAppearDec()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	if (alertSoundFlag) {
+		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
+		alertSoundFlag = false;
+	}
+	SP_BossWarning.w -= WarningW;
+	if (SP_BossWarning.w < 0.0) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
+	}
 	sp_beforeboss->SetColor(SP_BossWarning);
 }
 

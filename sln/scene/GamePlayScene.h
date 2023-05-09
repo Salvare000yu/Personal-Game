@@ -23,11 +23,11 @@ class GamePlayScene :public BaseScene, public BaseObject
 {
 	DirectX::XMFLOAT2 cameraMoveVel{};
 
-	enum class BeforeBossPattern {
-		def,
-		inc,
-		dec,
-	};
+	//enum class BeforeBossPattern {
+	//	def,
+	//	inc,
+	//	dec,
+	//};
 
 	enum class PlayerDashDirection {
 		def,
@@ -85,7 +85,12 @@ public:
 	void DoorOpen();//扉が開く
 	void pHeadingToTheNextPlace();//次の場所へ行く
 	void CoolTime();
+
 	void BeforeBossAppear();
+	void BeforeBossAppearDef();
+	void BeforeBossAppearInc();
+	void BeforeBossAppearDec();
+
 	void BossDeathEffect();
 	void BodyDamCoolTime();//体ダメージクールタイム
 
@@ -113,7 +118,9 @@ public:
 	//自機ダメージフラグ 喰らってない
 	bool pDamFlag = false;
 
-	BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
+	//ボス戦前演出
+	//BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
+	std::function<void()> beforeBossPattern;
 
 	//ダッシュする方向
 	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
@@ -206,6 +213,8 @@ private:
 	int bBPaternCount = 0;//1→0で++
 
 	bool alertSoundFlag = true;//警告音繰り返しに一回のみ
+
+	const float WarningW = 0.03f;//透明度変化値
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
