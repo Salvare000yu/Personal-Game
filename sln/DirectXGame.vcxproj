@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;$(ProjectDir)SceneChangeDirection;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Pause;$(ProjectDir)CharParameters;$(ProjectDir)Particle;$(ProjectDir)Collision;$(ProjectDir)PostEffect;$(ProjectDir)scene;$(ProjectDir)input;$(ProjectDir)GameSound;$(ProjectDir)GameChar;$(ProjectDir)fbx;$(ProjectDir)camera;$(ProjectDir)base;$(ProjectDir)3d;$(ProjectDir)Timer;$(ProjectDir)2d;$(SolutionDir)DirectXTex;$(ProjectDir)SceneChangeDirection;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -157,48 +157,48 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="3d\BaseObject.cpp" />
-    <ClCompile Include="GameChar\BossAimBul.cpp" />
-    <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="camera\CameraTracking.cpp" />
-    <ClCompile Include="Collision\Collision.cpp" />
-    <ClCompile Include="Collision\CollisionPrimitive.cpp" />
-    <ClCompile Include="GameChar\BossStraightBul.cpp" />
-    <ClCompile Include="input\ComplexInput.cpp" />
-    <ClCompile Include="GameChar\PlayerFireLine.cpp" />
-    <ClCompile Include="CharParameters\CharParameters.cpp" />
-    <ClCompile Include="Particle\ParticleManager.cpp" />
-    <ClCompile Include="Pause\Pause.cpp" />
-    <ClCompile Include="SceneChangeDirection\SceneChangeDirection.cpp" />
-    <ClCompile Include="scene\ClearScene.cpp" />
-    <ClCompile Include="GameChar\BossBullet.cpp" />
-    <ClCompile Include="fbx\FbxObject3d.cpp" />
-    <ClCompile Include="scene\GameOver.cpp" />
-    <ClCompile Include="GameSound\GameSound.cpp" />
-    <ClCompile Include="2d\DebugText.cpp" />
-    <ClCompile Include="base\DxBase.cpp" />
-    <ClCompile Include="fbx\FbxLoader.cpp" />
-    <ClCompile Include="fbx\FbxModel.cpp" />
-    <ClCompile Include="base\GameBase.cpp" />
-    <ClCompile Include="scene\GamePlayScene.cpp" />
-    <ClCompile Include="input\Input.cpp" />
-    <ClCompile Include="scene\BaseScene.cpp" />
+    <ClCompile Include="Engine\3d\BaseObject.cpp" />
+    <ClCompile Include="App\GameChar\BossAimBul.cpp" />
+    <ClCompile Include="Engine\camera\Camera.cpp" />
+    <ClCompile Include="Engine\camera\CameraTracking.cpp" />
+    <ClCompile Include="Engine\Collision\Collision.cpp" />
+    <ClCompile Include="Engine\Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="App\GameChar\BossStraightBul.cpp" />
+    <ClCompile Include="Engine\input\ComplexInput.cpp" />
+    <ClCompile Include="App\GameChar\PlayerFireLine.cpp" />
+    <ClCompile Include="App\CharParameters\CharParameters.cpp" />
+    <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
+    <ClCompile Include="App\Pause\Pause.cpp" />
+    <ClCompile Include="App\SceneChangeDirection\SceneChangeDirection.cpp" />
+    <ClCompile Include="App\scene\ClearScene.cpp" />
+    <ClCompile Include="App\GameChar\BossBullet.cpp" />
+    <ClCompile Include="Engine\fbx\FbxObject3d.cpp" />
+    <ClCompile Include="App\scene\GameOver.cpp" />
+    <ClCompile Include="Engine\GameSound\GameSound.cpp" />
+    <ClCompile Include="Engine\2d\DebugText.cpp" />
+    <ClCompile Include="Engine\base\DxBase.cpp" />
+    <ClCompile Include="Engine\fbx\FbxLoader.cpp" />
+    <ClCompile Include="Engine\fbx\FbxModel.cpp" />
+    <ClCompile Include="Engine\base\GameBase.cpp" />
+    <ClCompile Include="App\scene\GamePlayScene.cpp" />
+    <ClCompile Include="Engine\input\Input.cpp" />
+    <ClCompile Include="App\scene\BaseScene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="3d\Model.cpp" />
-    <ClCompile Include="base\MyDirectXGame.cpp" />
-    <ClCompile Include="3d\Object3d.cpp" />
-    <ClCompile Include="GameChar\Boss.cpp" />
-    <ClCompile Include="GameChar\Player.cpp" />
-    <ClCompile Include="GameChar\PlayerBullet.cpp" />
-    <ClCompile Include="PostEffect\PostEffect.cpp" />
-    <ClCompile Include="scene\SceneManager.cpp" />
-    <ClCompile Include="GameChar\SmallEnemy.cpp" />
-    <ClCompile Include="GameChar\SmallEnemyBullet.cpp" />
-    <ClCompile Include="2d\Sprite.cpp" />
-    <ClCompile Include="2d\SpriteBase.cpp" />
-    <ClCompile Include="scene\TitleScene.cpp" />
-    <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="Timer\Timer.cpp" />
+    <ClCompile Include="Engine\3d\Model.cpp" />
+    <ClCompile Include="Engine\base\MyDirectXGame.cpp" />
+    <ClCompile Include="Engine\3d\Object3d.cpp" />
+    <ClCompile Include="App\GameChar\Boss.cpp" />
+    <ClCompile Include="App\GameChar\Player.cpp" />
+    <ClCompile Include="App\GameChar\PlayerBullet.cpp" />
+    <ClCompile Include="Engine\PostEffect\PostEffect.cpp" />
+    <ClCompile Include="App\scene\SceneManager.cpp" />
+    <ClCompile Include="App\GameChar\SmallEnemy.cpp" />
+    <ClCompile Include="App\GameChar\SmallEnemyBullet.cpp" />
+    <ClCompile Include="Engine\2d\Sprite.cpp" />
+    <ClCompile Include="Engine\2d\SpriteBase.cpp" />
+    <ClCompile Include="App\scene\TitleScene.cpp" />
+    <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="App\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\FBXPS.hlsl">
@@ -287,49 +287,49 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3d\BaseObject.h" />
-    <ClInclude Include="GameChar\BossStraightBul.h" />
-    <ClInclude Include="GameChar\BossAimBul.h" />
-    <ClInclude Include="camera\Camera.h" />
-    <ClInclude Include="camera\CameraTracking.h" />
-    <ClInclude Include="Collision\Collision.h" />
-    <ClInclude Include="Collision\CollisionPrimitive.h" />
-    <ClInclude Include="input\ComplexInput.h" />
-    <ClInclude Include="GameChar\PlayerFireLine.h" />
-    <ClInclude Include="CharParameters\CharParameters.h" />
-    <ClInclude Include="Particle\ParticleManager.h" />
-    <ClInclude Include="Pause\Pause.h" />
-    <ClInclude Include="SceneChangeDirection\SceneChangeDirection.h" />
-    <ClInclude Include="scene\ClearScene.h" />
-    <ClInclude Include="GameChar\BossBullet.h" />
-    <ClInclude Include="fbx\FbxObject3d.h" />
-    <ClInclude Include="scene\GameOver.h" />
-    <ClInclude Include="GameSound\GameSound.h" />
-    <ClInclude Include="2d\DebugText.h" />
-    <ClInclude Include="base\DxBase.h" />
-    <ClInclude Include="fbx\FbxLoader.h" />
-    <ClInclude Include="fbx\FbxModel.h" />
-    <ClInclude Include="base\GameBase.h" />
-    <ClInclude Include="scene\GamePlayScene.h" />
-    <ClInclude Include="input\Input.h" />
-    <ClInclude Include="scene\BaseScene.h" />
-    <ClInclude Include="3d\Model.h" />
-    <ClInclude Include="base\MyDirectXGame.h" />
-    <ClInclude Include="3d\Object3d.h" />
+    <ClInclude Include="Engine\3d\BaseObject.h" />
+    <ClInclude Include="App\GameChar\BossStraightBul.h" />
+    <ClInclude Include="App\GameChar\BossAimBul.h" />
+    <ClInclude Include="Engine\camera\Camera.h" />
+    <ClInclude Include="Engine\camera\CameraTracking.h" />
+    <ClInclude Include="Engine\Collision\Collision.h" />
+    <ClInclude Include="Engine\Collision\CollisionPrimitive.h" />
+    <ClInclude Include="Engine\input\ComplexInput.h" />
+    <ClInclude Include="App\GameChar\PlayerFireLine.h" />
+    <ClInclude Include="App\CharParameters\CharParameters.h" />
+    <ClInclude Include="Engine\Particle\ParticleManager.h" />
+    <ClInclude Include="App\Pause\Pause.h" />
+    <ClInclude Include="App\SceneChangeDirection\SceneChangeDirection.h" />
+    <ClInclude Include="App\scene\ClearScene.h" />
+    <ClInclude Include="App\GameChar\BossBullet.h" />
+    <ClInclude Include="Engine\fbx\FbxObject3d.h" />
+    <ClInclude Include="App\scene\GameOver.h" />
+    <ClInclude Include="Engine\GameSound\GameSound.h" />
+    <ClInclude Include="Engine\2d\DebugText.h" />
+    <ClInclude Include="Engine\base\DxBase.h" />
+    <ClInclude Include="Engine\fbx\FbxLoader.h" />
+    <ClInclude Include="Engine\fbx\FbxModel.h" />
+    <ClInclude Include="Engine\base\GameBase.h" />
+    <ClInclude Include="App\scene\GamePlayScene.h" />
+    <ClInclude Include="Engine\input\Input.h" />
+    <ClInclude Include="App\scene\BaseScene.h" />
+    <ClInclude Include="Engine\3d\Model.h" />
+    <ClInclude Include="Engine\base\MyDirectXGame.h" />
+    <ClInclude Include="Engine\3d\Object3d.h" />
     <ClInclude Include="PipelineSet.h" />
-    <ClInclude Include="GameChar\Boss.h" />
-    <ClInclude Include="GameChar\Player.h" />
-    <ClInclude Include="GameChar\PlayerBullet.h" />
-    <ClInclude Include="PostEffect\PostEffect.h" />
+    <ClInclude Include="App\GameChar\Boss.h" />
+    <ClInclude Include="App\GameChar\Player.h" />
+    <ClInclude Include="App\GameChar\PlayerBullet.h" />
+    <ClInclude Include="Engine\PostEffect\PostEffect.h" />
     <ClInclude Include="safe_delete.h" />
-    <ClInclude Include="scene\SceneManager.h" />
-    <ClInclude Include="GameChar\SmallEnemy.h" />
-    <ClInclude Include="GameChar\SmallEnemyBullet.h" />
-    <ClInclude Include="2d\Sprite.h" />
-    <ClInclude Include="2d\SpriteBase.h" />
-    <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="Timer\Timer.h" />
+    <ClInclude Include="App\scene\SceneManager.h" />
+    <ClInclude Include="App\GameChar\SmallEnemy.h" />
+    <ClInclude Include="App\GameChar\SmallEnemyBullet.h" />
+    <ClInclude Include="Engine\2d\Sprite.h" />
+    <ClInclude Include="Engine\2d\SpriteBase.h" />
+    <ClInclude Include="App\scene\TitleScene.h" />
+    <ClInclude Include="Engine\base\WinApp.h" />
+    <ClInclude Include="App\Timer\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

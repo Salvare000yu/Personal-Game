@@ -21,7 +21,6 @@ namespace {
 	}
 }
 
-
 void Boss::Initialize()
 {
 	particle.reset(new ParticleManager());
