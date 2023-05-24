@@ -19,8 +19,6 @@
 #include "Collision.h"
 #include "WinApp.h"
 
-#include "../safe_delete.h"
-
 #include "PostEffect.h"
 
 #include <fstream>

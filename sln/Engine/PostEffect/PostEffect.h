@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 #include "Sprite.h"
 #include "SpriteBase.h"
-#include "../PipelineSet.h"
+#include "PipelineSet.h"
 
 class PostEffect
 {
 public:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -16,27 +16,27 @@ public:
 	static PostEffect* GetInstance();
 
 	/// <summary>
-	/// •`‰æƒRƒ}ƒ“ƒh‚Ì”­s
+	/// æç”»ã‚³ãƒãƒ³ãƒ‰ã®ç™ºè¡Œ
 	/// </summary>
-	/// <param name="cmdList">ƒRƒ}ƒ“ƒhƒŠƒXƒg</param>
+	/// <param name="cmdList">ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
 	void Draw();
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// åˆæœŸåŒ–
 	/// </summary>
 	void Initialize();
 
-	// ’¸“_ƒf[ƒ^
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	struct VertexPosUv
 	{
-		DirectX::XMFLOAT3 pos; // xyzÀ•W
-		DirectX::XMFLOAT2 uv;  // uvÀ•W
+		DirectX::XMFLOAT3 pos; // xyzåº§æ¨™
+		DirectX::XMFLOAT2 uv;  // uvåº§æ¨™
 	};
 
-	// ’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct ConstBufferData {
 		float time;
-		DirectX::XMFLOAT2 windowSize;  // ‰æ–ÊƒTƒCƒY
+		DirectX::XMFLOAT2 windowSize;  // ç”»é¢ã‚µã‚¤ã‚º
 		float vignettePow;
 	};
 
@@ -44,78 +44,78 @@ public:
 
 	void TransfarConstBuffer();
 
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒZƒbƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚»ãƒƒãƒˆ
 	PipelineSet pipelineSet;
 
 private:
 
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	/// </summary>
 	PostEffect();
 
 public:
 	//ID3D12GraphicsCommandList* GetCommandList() { return commandList_; }
 
-	//ƒV[ƒ“•`‰æ‘Oˆ—
+	//ã‚·ãƒ¼ãƒ³æç”»å‰å‡¦ç†
 	void PreDrawScene(ID3D12GraphicsCommandList* commandList);
-	//ƒV[ƒ“•`‰æŒãˆ—
+	//ã‚·ãƒ¼ãƒ³æç”»å¾Œå‡¦ç†
 	void PostDrawScene(ID3D12GraphicsCommandList* commandList);
 
 	static void SetDevice(ID3D12Device* device);
 
-	//‰æ–ÊƒNƒŠƒAƒJƒ‰[
+	//ç”»é¢ã‚¯ãƒªã‚¢ã‚«ãƒ©ãƒ¼
 	static const float clearColor[4];
 
 	static const UINT texBuffNum = 2;
 
-	// ƒ”ƒBƒlƒbƒg‚Ì‹­‚³
+	// ãƒ´ã‚£ãƒãƒƒãƒˆã®å¼·ã•
 	inline void SetVignettePow(float vignettePow) { this->vignettePow = vignettePow; }
 
 private:
 
 	static ID3D12Device* device_;
 
-	//’¸“_ƒoƒbƒtƒ@;
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡;
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
 
-	//’¸“_ƒoƒbƒtƒ@ƒrƒ…[;
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼;
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-	//’è”ƒoƒbƒtƒ@;
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡;
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
 
-	// ƒeƒNƒXƒ`ƒƒ”Ô†
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·
 	UINT texNumber_ = 0;
-	// ‘å‚«‚³
+	// å¤§ãã•
 	DirectX::XMFLOAT2 size_ = { 100, 100 };
 
-	// ƒeƒNƒXƒ`ƒƒØ‚èo‚µƒTƒCƒY
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£åˆ‡ã‚Šå‡ºã—ã‚µã‚¤ã‚º
 	DirectX::XMFLOAT2 texSize_ = { 100, 100 };
 
-	//ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
 
 	ComPtr<ID3D12Resource> texBuff_[texBuffNum];
-	//SRV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	//SRVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 
-	//[“xƒoƒbƒtƒ@
+	//æ·±åº¦ãƒãƒƒãƒ•ã‚¡
 	ComPtr<ID3D12Resource>depthBuff;
-	//RTV—pƒfƒXƒNƒŠƒvƒ^ƒe[ƒuƒ‹
+	//RTVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«
 	ComPtr<ID3D12DescriptorHeap>descHeapRTV;
-	//DSV—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	//DSVç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	ComPtr<ID3D12DescriptorHeap>descHeapDSV;
-	//ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“
+	//ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³
 	ComPtr<ID3D12PipelineState>piplineState;
-	//ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ
+	//ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
 	ComPtr<ID3D12RootSignature>rootSignature;
 
-	//Ø‚è‚éƒRƒ}ƒ“ƒhƒŠƒXƒg
+	//å€Ÿã‚Šã‚‹ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	//ID3D12GraphicsCommandList* commandList_ = nullptr;
 
-	// ƒeƒNƒXƒ`ƒƒ—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì¶¬
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ç”Ÿæˆ
 	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeap;
 
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒZƒbƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚»ãƒƒãƒˆ
 	//PipelineSet pipelineSet;
 
 	float frame = 0;

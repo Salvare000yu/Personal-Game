@@ -1,53 +1,53 @@
-#pragma once
+ï»¿#pragma once
 
-#include "../PipelineSet.h"
+#include "PipelineSet.h"
 
 #include <DirectXTex.h>
 
 /// <summary>
-/// ƒXƒvƒ‰ƒCƒg‹¤’Ê•”•ª
+/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨åˆ†
 /// </summary>
 class SpriteBase
 {
 public:
 
 	static SpriteBase* GetInstance();
-	// ƒeƒNƒXƒ`ƒƒ‚ÌÅ‘å–‡”
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æœ€å¤§æšæ•°
 	static const int spriteSRVCount = 512;
 
 	/// <summary>
-	/// ‰Šú‰»FƒfƒoƒCƒX@ƒRƒ}ƒ“ƒhƒŠƒXƒg@ƒEƒBƒ“ƒhƒE‰¡•c•
+	/// åˆæœŸåŒ–ï¼šãƒ‡ãƒã‚¤ã‚¹ã€€ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã€€ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦æ¨ªå¹…ç¸¦å¹…
 	/// </summary>
 	void Initialize(ID3D12Device* device, ID3D12GraphicsCommandList* commandList, int window_width, int window_height);
 
 	/// <summary>
-	/// •`‰æ‘Oˆ—
+	/// æç”»å‰å‡¦ç†
 	/// </summary>
 	void PreDraw();
 
 	/// <summary>
-	/// •`‰æ‘Oˆ—
+	/// æç”»å‰å‡¦ç†
 	/// </summary>
 	void PosteffectPreDraw();
 
 	/// <summary>
-	/// ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	/// </summary>
 	/// <param name="texnumber"></param>
 	/// <param name="filename"></param>
 	void LoadTexture(UINT texnumber, const wchar_t* filename);
 
 	/// <summary>
-	/// ƒ‹[ƒgƒfƒXƒNƒŠƒvƒ^ƒe[ƒuƒ‹‚Ìİ’è
+	/// ãƒ«ãƒ¼ãƒˆãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«ã®è¨­å®š
 	/// </summary>
-	/// <param name="rootparameterIndex">ƒ‹[ƒgƒpƒ‰ƒ[ƒ^”Ô†</param>
-	/// <param name="texNumber">ƒeƒNƒXƒ`ƒƒ”Ô†</param>
+	/// <param name="rootparameterIndex">ãƒ«ãƒ¼ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ç•ªå·</param>
+	/// <param name="texNumber">ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·</param>
 	void SetGraphicsRootDescriptorTable(UINT rootparameterIndex, UINT texNumber);
 
 	const DirectX::XMMATRIX& GetMatProjection() { return matProjection_; }
 
 	/// <summary>
-	/// ƒeƒNƒXƒ`ƒƒæ“¾
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£å–å¾—
 	/// </summary>
 	/// <param name="texnumber"></param>
 	/// <returns></returns>
@@ -60,24 +60,24 @@ public:
 
 	//private:
 protected:
-	// ƒpƒCƒvƒ‰ƒCƒ“ƒZƒbƒg
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚»ãƒƒãƒˆ
 	PipelineSet pipelineSet;
-	// Ë‰es—ñ
+	// å°„å½±è¡Œåˆ—
 	DirectX::XMMATRIX matProjection_{};
-	// ƒeƒNƒXƒ`ƒƒ—pƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì¶¬
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®ç”Ÿæˆ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeap;
-	// ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒXiƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@j‚Ì”z—ñ
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹ï¼ˆãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡ï¼‰ã®é…åˆ—
 	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff_[spriteSRVCount];
 
-	//---‰ğ•ú‚µ‚È‚¢‚©‚çcomptrg‚í‚È‚¢
-	//Ø‚è‚éƒfƒoƒCƒX
+	//---è§£æ”¾ã—ãªã„ã‹ã‚‰compträ½¿ã‚ãªã„
+	//å€Ÿã‚Šã‚‹ãƒ‡ãƒã‚¤ã‚¹
 	ID3D12Device* dev = nullptr;
-	//Ø‚è‚éƒRƒ}ƒ“ƒhƒŠƒXƒg
+	//å€Ÿã‚Šã‚‹ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	ID3D12GraphicsCommandList* commandList_ = nullptr;
 	//---
 
 //private:
 protected:
-	//ƒXƒvƒ‰ƒCƒg—pƒpƒCƒvƒ‰ƒCƒ“¶¬
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”¨ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ç”Ÿæˆ
 	void CreateGraphicsPipeline();
 };
