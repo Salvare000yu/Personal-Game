@@ -17,6 +17,7 @@
 
 #include "FbxObject3d.h"
 #include "Collision.h"
+#include "CollisionManager.h"
 #include "WinApp.h"
 
 #include "PostEffect.h"
@@ -356,7 +357,7 @@ void GamePlayScene::BeforeBossAppear()
 	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
 
 	//--繰り返す回数0~------消えてからボス戦へ
-	if (bBPaternCount == BBPaternCountNum&& SP_BossWarning.w < 0.0)
+	if (bBPaternCount == BBPaternCountNum && SP_BossWarning.w < 0.0)
 	{
 		beforeBossAppearFlag = true;
 		beforeBossAppearNow = true;
@@ -783,238 +784,257 @@ void GamePlayScene::CollisionAll()
 	float NowpHp = charParams->GetNowpHp();//自機体力取得
 	float pBulPow = player_->GetpBulPow();//自機弾威力
 
+	std::forward_list<CollisionManager::Collider> pbColliders;
+	for (auto& pb : player_->GetBullets()) {
+		if (!pb->GetAlive())continue;//死んでたらスキップ
+
+		auto& c = pbColliders.emplace_front();
+		c.baseObject = pb.get();
+		c.radius = pb->GetScale().z;
+	}
+	std::function<void(BaseObject*)> pbHitFunc = [](BaseObject* pb) {pb->SetAlive(false); };
+
 	//------------------------------↓当たり判定ZONE↓-----------------------------//
-	//[自機の弾]と[ボス]の当たり判定                  移動終わったら					自機の体力あるとき
-	if (sEnemyMurdersNum >= bossTermsEMurdersNum && charParams->pNextPlaceGoFlag == false && (NowpHp > 0)) {
-		{
-			Sphere pBulForm;//球
+	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
+	if (NowpHp > 0) {
 
-			for (auto& pb : player_->GetBullets()) {
-				if (!pb->GetAlive())continue;//死んでたらスキップ
-				pBulForm.center = XMLoadFloat3(&pb->GetPosition());
-				pBulForm.radius = pb->GetScale().x;
+		std::forward_list<CollisionManager::Collider> boColliders;
+		for (auto& bo : boss_) {
+			if (!bo->GetAlive())continue;
+			if (!bo->GetDoCollision())continue;//ボス側で判定取らないでって言われてたらスキップ
+			if (bo->GetisDeath())continue;
 
-				// 衝突判定をする
-				for (auto& bo : boss_) {
-					if (!bo->GetAlive())continue;
-					if (!bo->GetDoCollision())continue;//ボス側で判定取らないでって言われてたらスキップ
-					Sphere enemyForm;
-					enemyForm.center = XMLoadFloat3(&bo->GetPosition());
-					enemyForm.radius = bo->GetScale().x;
-
-					if (bo->GetisDeath())continue;
-
-					// 当たったら消える
-					if (Collision::CheckSphere2Sphere(pBulForm, enemyForm)) {
-						XMFLOAT3 boPos = bo->GetPosition();
-
-						pb->SetAlive(false);
-
-						//喰らってまだ生きてたら
-						if ((NowBoHp - (pBulPow - BossDefense)) > 0) {
-							particle->CreateParticle(boPos, 100, 50, 5);
-							bo->BossDamageEffectFlag = true;//くらい演出オン
-						}
-						damage = pBulPow - BossDefense;
-						NowBoHp -= damage;
-						charParams->SetNowBoHp(NowBoHp);//ボスHPセット
-
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
-
-						if (NowBoHp <= 0) {
-							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
-							bo->SetisDeath(true);
-							XMFLOAT3 pRot = player_->GetRotation();
-							pClearRot = pRot;//ボス撃破時自機どれくらい回転してたか
-							//残っている雑魚敵はもういらない
-							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
-								bob->SetAlive(false);//消す
-							}
-						}
-
-						break;
-					}
-				}
-			}
+			auto& c = boColliders.emplace_front();
+			c.baseObject = bo.get();
+			c.radius = bo->GetScale().z;
 		}
+
+		CollisionManager::CheckHitFromColliderList(
+			pbColliders,
+			pbHitFunc,
+			boColliders,
+			[&](BaseObject* boss) {
+				Boss* bo = (Boss*)boss;
+				//喰らってまだ生きてたら
+				const float damage = pBulPow - BossDefense;
+				if (NowBoHp > damage) {
+					bo->BossDamageEffectFlag = true;//くらい演出オン
+					NowBoHp -= damage;
+					charParams->SetNowBoHp(NowBoHp);//ボスHPセット
+					particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
+				}
+				else {
+					charParams->SetNowBoHp(0);//ボスHPセット
+					bo->SetisDeath(true);
+					pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
+					//残っている雑魚敵はもういらない
+					for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
+						bob->SetAlive(false);//消す
+					}
+					GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
+				}
+				GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
+			});
 	}
 
 	//[自機の弾]と[雑魚敵]当たり判定
 	{
-		Sphere pBulForm;
+		std::forward_list<CollisionManager::Collider> seColliders;
 
-		for (auto& pb : player_->GetBullets()) {
-			if (!pb->GetAlive())continue;
-			pBulForm.center = XMLoadFloat3(&pb->GetPosition());
-			pBulForm.radius = pb->GetScale().x;
+		for (auto& se : smallEnemys_)
+		{
+			if (!se->GetAlive())continue;
 
-			// 衝突判定をする
-			for (auto& se : smallEnemys_) {
-				if (!se->GetAlive())continue;
-				Sphere smallenemyForm;
-				smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
-				smallenemyForm.radius = se->GetScale().x + 20;//余裕を持たせる分＋
+			auto& c = seColliders.emplace_front();
+			c.baseObject = se.get();
+			c.radius = se->GetScale().z;
+		}
 
-				// 当たったら消える
-				if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
-					GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
-					sEnemyMurdersNum++;//撃破数
-					// パーティクルの発生
-					XMFLOAT3 sePos = se->GetPosition();
-					particle->CreateParticle(sePos, 300, 80, 5, { 1,0.1f,0.8f }, { 1,0,0 });
-					se->SetAlive(false);
-					pb->SetAlive(false);
+		CollisionManager::CheckHitFromColliderList(
+			pbColliders,
+			pbHitFunc,
+			seColliders,
+			[&](BaseObject* se) {
+				sEnemyMurdersNum++;//撃破数
+				se->SetAlive(false);
+				// パーティクルの発生
+				particle->CreateParticle(se->GetPosition(), 300, 80, 5, { 1,0.1f,0.8f }, { 1,0,0 });
+				GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
+			}
+		);
+
+		//for (auto& pb : player_->GetBullets()) {
+		//	if (!pb->GetAlive())continue;
+		//	Sphere pBulForm;
+		//	pBulForm.center = XMLoadFloat3(&pb->GetPosition());
+		//	pBulForm.radius = pb->GetScale().x;
+
+		//	// 衝突判定をする
+		//	for (auto& se : smallEnemys_) {
+		//		if (!se->GetAlive())continue;
+		//		Sphere smallenemyForm;
+		//		smallenemyForm.center = XMLoadFloat3(&se->GetPosition());
+		//		smallenemyForm.radius = se->GetScale().x + 20;//余裕を持たせる分＋
+
+		//		// 当たったら消える
+		//		if (Collision::CheckSphere2Sphere(pBulForm, smallenemyForm)) {
+		//			GameSound::GetInstance()->PlayWave("se_baaan1.wav", 0.1f, 0);
+		//			sEnemyMurdersNum++;//撃破数
+		//			// パーティクルの発生
+		//			XMFLOAT3 sePos = se->GetPosition();
+		//			particle->CreateParticle(sePos, 300, 80, 5, { 1,0.1f,0.8f }, { 1,0,0 });
+		//			se->SetAlive(false);
+		//			pb->SetAlive(false);
+		//			break;
+		//		}
+		//	}
+		//}
+	}
+
+	//[自機]と[ボス弾]の当たり判定
+	//ボスHPがあるとき
+	if (player_->GetAlive() && (NowBoHp > 0)) {
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z;
+
+		for (auto& bo : boss_) {
+			if (!bo->GetAlive())continue;
+
+			for (auto& bob : bo->GetBullets()) {
+				Sphere eBulForm;
+				eBulForm.center = XMLoadFloat3(&bob->GetPosition());
+				eBulForm.radius = bob->GetScale().z;
+
+				if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
+					pDamFlag = true;
+					NowpHp -= bo->GetBulPow();//自機ダメージ
+					charParams->SetispDam(true);
+					charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+
+					GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+					bob->SetAlive(false);
+					break;
+				}
+			}
+		}
+	}
+	//[自機]と[ボス狙い弾]の当たり判定
+	//ボスのHPあるとき
+	if (player_->GetAlive() && (NowBoHp > 0)) {
+		Sphere playerForm;
+		playerForm.center = XMLoadFloat3(&player_->GetPosition());
+		playerForm.radius = player_->GetScale().z;
+
+		for (auto& bo : boss_) {
+			if (!bo->GetAlive())continue;
+
+			for (auto& boaimbul : bo->GetAimBullets()) {
+				Sphere aimBulForm;
+				aimBulForm.center = XMLoadFloat3(&boaimbul->GetPosition());
+				aimBulForm.radius = boaimbul->GetScale().z;
+
+				if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
+					pDamFlag = true;
+					NowpHp -= bo->GetAimBulPow();//自機ダメージ
+					charParams->SetispDam(true);
+					charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+
+					GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+					boaimbul->SetAlive(false);
 					break;
 				}
 			}
 		}
 	}
 
-	//[自機]と[ボス弾]の当たり判定
-	{
-		Sphere playerForm;
-		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z;
-		//ボスHPがあるとき
-		if (player_->GetAlive() && (NowBoHp > 0)) {
-			for (auto& bo : boss_) {
-				if (!bo->GetAlive())continue;
-				for (auto& bob : bo->GetBullets()) {
-					Sphere eBulForm;
-					eBulForm.center = XMLoadFloat3(&bob->GetPosition());
-					eBulForm.radius = bob->GetScale().z;
-
-					if (Collision::CheckSphere2Sphere(playerForm, eBulForm)) {
-						pDamFlag = true;
-						NowpHp -= bo->GetBulPow();//自機ダメージ
-						charParams->SetispDam(true);
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						bob->SetAlive(false);
-						break;
-					}
-				}
-			}
-		}
-	}
-	//[自機]と[ボス狙い弾]の当たり判定
-	{
-		Sphere playerForm;
-		playerForm.center = XMLoadFloat3(&player_->GetPosition());
-		playerForm.radius = player_->GetScale().z;
-		//ボスのHPあるとき
-		if (player_->GetAlive() && (NowBoHp > 0)) {
-			for (auto& bo : boss_) {
-				if (!bo->GetAlive())continue;
-				for (auto& boaimbul : bo->GetAimBullets()) {
-					Sphere aimBulForm;
-					aimBulForm.center = XMLoadFloat3(&boaimbul->GetPosition());
-					aimBulForm.radius = boaimbul->GetScale().z;
-
-					if (Collision::CheckSphere2Sphere(playerForm, aimBulForm)) {
-						pDamFlag = true;
-						NowpHp -= bo->GetAimBulPow();//自機ダメージ
-						charParams->SetispDam(true);
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						boaimbul->SetAlive(false);
-						break;
-					}
-				}
-			}
-		}
-	}
-
 	//[自機]と[ボス直線弾]の当たり判定
-	{
+
+		//ボスのHPあるとき
+	if (player_->GetAlive() && (NowBoHp > 0)) {
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z;
-		//ボスのHPあるとき
-		if (player_->GetAlive() && (NowBoHp > 0)) {
-			for (auto& bo : boss_) {
-				if (!bo->GetAlive())continue;
-				for (auto& boStraightBul : bo->GetStraightBullets()) {
-					Sphere straightBulForm;
-					straightBulForm.center = XMLoadFloat3(&boStraightBul->GetPosition());
-					straightBulForm.radius = boStraightBul->GetScale().z;
 
-					if (Collision::CheckSphere2Sphere(playerForm, straightBulForm)) {
-						pDamFlag = true;
-						NowpHp -= bo->GetStraightBulPow();//自機ダメージ
-						charParams->SetispDam(true);
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+		for (auto& bo : boss_) {
+			if (!bo->GetAlive())continue;
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						boStraightBul->SetAlive(false);
-						break;
-					}
+			for (auto& boStraightBul : bo->GetStraightBullets()) {
+				Sphere straightBulForm;
+				straightBulForm.center = XMLoadFloat3(&boStraightBul->GetPosition());
+				straightBulForm.radius = boStraightBul->GetScale().z;
+
+				if (Collision::CheckSphere2Sphere(playerForm, straightBulForm)) {
+					pDamFlag = true;
+					NowpHp -= bo->GetStraightBulPow();//自機ダメージ
+					charParams->SetispDam(true);
+					charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+
+					GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+					boStraightBul->SetAlive(false);
+					break;
 				}
 			}
 		}
 	}
 
 	//[雑魚敵弾]と[自機]の当たり判定
-	{
+	if (player_->GetAlive()) {
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z;
 
-		if (player_->GetAlive()) {
-			for (auto& se : smallEnemys_) {
-				if (!se->GetAlive())continue;
-				for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
-					Sphere seBulForm;
-					seBulForm.center = XMLoadFloat3(&seb->GetPosition());
-					seBulForm.radius = seb->GetScale().z;
+		for (auto& se : smallEnemys_) {
+			if (!se->GetAlive())continue;
 
-					if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
-						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
-						pDamFlag = true;
-						NowpHp -= seBulPow;//自機ダメージ
-						charParams->SetispDam(true);//自機くらい
-						charParams->SetNowpHp(NowpHp);//ボスHPセット
+			for (auto& seb : se->GetBullets()) {//seb 雑魚敵弾
+				Sphere seBulForm;
+				seBulForm.center = XMLoadFloat3(&seb->GetPosition());
+				seBulForm.radius = seb->GetScale().z;
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						seb->SetAlive(false);
-						break;
-					}
+				if (Collision::CheckSphere2Sphere(playerForm, seBulForm)) {
+					float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
+					pDamFlag = true;
+					NowpHp -= seBulPow;//自機ダメージ
+					charParams->SetispDam(true);//自機くらい
+					charParams->SetNowpHp(NowpHp);//ボスHPセット
+
+					GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+					seb->SetAlive(false);
+					break;
 				}
 			}
 		}
 	}
 
 	//[ボス]と[自機]の当たり判定
-	{
+	if (player_->GetAlive()) {
 		Sphere playerForm;
 		playerForm.center = XMLoadFloat3(&player_->GetPosition());
 		playerForm.radius = player_->GetScale().z;
 
-		if (player_->GetAlive()) {
-			// 衝突判定をする
-			for (auto& bo : boss_) {
-				if (!bo->GetAlive())continue;
-				Sphere bossForm;
-				bossForm.center = XMLoadFloat3(&bo->GetPosition());
-				bossForm.radius = bo->GetScale().x;
+		// 衝突判定をする
+		for (auto& bo : boss_) {
+			if (!bo->GetAlive())continue;
 
-				if (bo->GetisDeath())continue;
+			Sphere bossForm;
+			bossForm.center = XMLoadFloat3(&bo->GetPosition());
+			bossForm.radius = bo->GetScale().x;
 
-				//定期的にダメージ
-				if (bodyDamFlag == false) {
-					if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
-						pDamFlag = true;
-						int bodyPow = bo->GetBodyPow();//ボス体威力
-						NowpHp -= bodyPow;//自機にダメージ
-						charParams->SetispDam(true);//自機くらい
-						charParams->SetNowpHp(NowpHp);
+			if (bo->GetisDeath())continue;
 
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
-						bodyDamFlag = true;//クールたいむ
-						break;
-					}
+			//定期的にダメージ
+			if (bodyDamFlag == false) {
+				if (Collision::CheckSphere2Sphere(playerForm, bossForm)) {
+					pDamFlag = true;
+					int bodyPow = bo->GetBodyPow();//ボス体威力
+					NowpHp -= bodyPow;//自機にダメージ
+					charParams->SetispDam(true);//自機くらい
+					charParams->SetNowpHp(NowpHp);
+
+					GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+					bodyDamFlag = true;//クールたいむ
+					break;
 				}
 			}
 		}

@@ -238,9 +238,6 @@ private:
 	float accelVal = 0.2f;//加速値
 	float decelVal = 0.4f;//減速値
 
-	//与える威力
-	float damage{};
-
 	std::vector<std::vector<std::string>> csvData;
 	//何行目まで出したか
 	int seIndex = -1;

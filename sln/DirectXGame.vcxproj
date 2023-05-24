@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\BaseObject.cpp" />
     <ClCompile Include="App\GameChar\BossAimBul.cpp" />
     <ClCompile Include="Engine\camera\Camera.cpp" />
@@ -287,6 +288,7 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\BaseObject.h" />
     <ClInclude Include="App\GameChar\BossStraightBul.h" />
     <ClInclude Include="App\GameChar\BossAimBul.h" />
