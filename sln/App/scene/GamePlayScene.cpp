@@ -775,6 +775,17 @@ void GamePlayScene::PlayerErase()
 	player_->SetAlive(false);
 }
 
+void GamePlayScene::PlayerDamage()
+{
+	CharParameters* charParams = CharParameters::GetInstance();
+
+	pDamFlag = true;
+	
+	charParams->SetispDam(true);
+	float NowpHp = charParams->GetNowpHp();//自機体力取得
+
+	GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+}
 void GamePlayScene::CollisionAll()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
@@ -894,13 +905,10 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						pDamFlag = true;
 						NowpHp -= bo->GetBulPow();//自機ダメージ
-						charParams->SetispDam(true);
 						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-
+						PlayerDamage();
 						bob->SetAlive(false);//弾消す
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 					}
 				);
 			}
@@ -925,12 +933,9 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						pDamFlag = true;
 						NowpHp -= bo->GetAimBulPow();//自機ダメージ
-						charParams->SetispDam(true);
 						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						PlayerDamage();
 						boaimbul->SetAlive(false);
 					}
 			);
@@ -954,12 +959,9 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						pDamFlag = true;
 						NowpHp -= bo->GetStraightBulPow();//自機ダメージ
-						charParams->SetispDam(true);
 						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						PlayerDamage();
 						boStraightBul->SetAlive(false);
 					}
 			);
@@ -983,12 +985,9 @@ void GamePlayScene::CollisionAll()
 
 					[&](BaseObject* p) {
 						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
-						pDamFlag = true;
 						NowpHp -= seBulPow;//自機ダメージ
-						charParams->SetispDam(true);//自機くらい
-						charParams->SetNowpHp(NowpHp);//ボスHPセット
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						PlayerDamage();
 						seb->SetAlive(false);
 					}
 			);
@@ -1006,13 +1005,10 @@ void GamePlayScene::CollisionAll()
 					Boss* bo = (Boss*)boss;
 					//定期的にダメージ
 					if (bodyDamFlag == false) {
-						pDamFlag = true;
 						int bodyPow = bo->GetBodyPow();//ボス体威力
 						NowpHp -= bodyPow;//自機にダメージ
-						charParams->SetispDam(true);//自機くらい
-						charParams->SetNowpHp(NowpHp);
-
-						GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
+						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						PlayerDamage();
 						bodyDamFlag = true;//クールたいむ
 					}
 			});

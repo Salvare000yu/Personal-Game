@@ -59,6 +59,7 @@ public:
 
 	void PlayerErase();//自機死亡時消す
 
+	void PlayerDamage();//自機ダメージ
 	void CollisionAll();//判定
 
 	void Operation();//操作説明
