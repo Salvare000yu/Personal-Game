@@ -101,7 +101,7 @@ void Boss::BossAppear()
 
 	//移動完了確認しだい
 	if (charParams->pNextPlaceGoFlag == false) {
-		ActionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
+		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
 	pos.y += 2.f * std::sin(time * 3.14159265358f);
@@ -112,37 +112,37 @@ void Boss::BossAppear()
 void Boss::ApproachInit()
 {
 	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
-	AtkCount = AtkInterval;
-	DiffusionAtkCount = DiffusionAtkInterval;
-	Circular_AtkCount = Circular_AtkInterval;
+	atkCount = atkInterval;
+	diffusionAtkCount = diffusionAtkInterval;
+	circular_AtkCount = circular_AtkInterval;
 }
 
 void Boss::Approach()
 {
 	//---突撃---//
 	//発射カウントをデクリメント
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
+		atkCount = atkInterval;
 	}
 
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
-	position.z -= ApproachSpZ;
-	position.y += ApproachSpY;
+	position.z -= approachSpZ;
+	position.y += approachSpY;
 	position.x += 7.f * sinf(time * 3.14159265358f);
 	obj->SetPosition(position);
 
-	ApproachCount--;
+	approachCount--;
 
 	//ある程度近づいたら離れる
-	if (ApproachCount == 0) {
-		ApproachCount = ApproachCountDef;
-		ChangeVerticalCount++;//縦攻撃するためのカウント進める
+	if (approachCount == 0) {
+		approachCount = approachCountDef;
+		changeVerticalCount++;//縦攻撃するためのカウント進める
 		actionPattern = std::bind(&Boss::Leave, this);
 	}
 }
@@ -152,9 +152,9 @@ void Boss::Leave()
 	//---後退---//
 
 	//発射カウントをデクリメント
-	DiffusionAtkCount--;
+	diffusionAtkCount--;
 	//時が満ちたら
-	if (DiffusionAtkCount == 0) {
+	if (diffusionAtkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
 			if (even_odd_NumFlag)//奇数弾
@@ -164,25 +164,25 @@ void Boss::Leave()
 			else { DiffusionAttackEavenNumber(); }
 		}
 		//再びカウントできるように初期化
-		DiffusionAtkCount = DiffusionAtkInterval;
+		diffusionAtkCount = diffusionAtkInterval;
 	}
 
 	//---後退---//
 	XMFLOAT3 positionBack = obj->GetPosition();
-	positionBack.z += LeaveSpZ;
-	positionBack.y -= LeaveSpY;
+	positionBack.z += leaveSpZ;
+	positionBack.y -= leaveSpY;
 	obj->SetPosition(positionBack);
 
 	//離れる制限は自機の場所に自機と離したい距離分間を開ける
 	const int SpaceDistance = 400;
-	LeaveLim = shotTag->GetPosition().z + SpaceDistance;
+	leaveLim = shotTag->GetPosition().z + SpaceDistance;
 
 	//ある程度離れたら近づいてくる
-	if (positionBack.z > ActionStartPos.z && positionBack.y < ActionStartPos.y) {
+	if (positionBack.z > actionStartPos.z && positionBack.y < actionStartPos.y) {
 		if (even_odd_NumFlag) { even_odd_NumFlag = false; }
 		else { even_odd_NumFlag = true; }
 
-		if (ChangeVerticalCount == ChangeVerticalNeces) {//縦攻撃カウントが一定に達したら
+		if (changeVerticalCount == changeVerticalNeces) {//縦攻撃カウントが一定に達したら
 			actionPattern = std::bind(&Boss::Vertical, this);
 		}
 		else {
@@ -199,11 +199,11 @@ void Boss::StartVertical()
 {
 	XMFLOAT3 position = obj->GetPosition();
 	//まずは上昇
-	position.y += StartVerticalVal;
-	StartVerticalVal++;
+	position.y += startVerticalVal;
+	startVerticalVal++;
 
-	if (position.y > DownStartPosY) {//一定超えたら判定切ってから待ち
-		StartVerticalVal = StartVerticalValDef;//最初の上昇値戻す
+	if (position.y > downStartPosY) {//一定超えたら判定切ってから待ち
+		startVerticalVal = startVerticalValDef;//最初の上昇値戻す
 		verticalPattern = std::bind(&Boss::VerticalWait, this);
 	}
 	obj->SetPosition(position);
@@ -211,27 +211,27 @@ void Boss::StartVertical()
 void Boss::VerticalWait()
 {
 	doCollision = false;//Wait時は画面外なので当たり判定取らない
-	VerticalWaitCount--;//待ちカウント減らす
+	verticalWaitCount--;//待ちカウント減らす
 
-	if (VerticalWaitCount == 0) {
-		VerticalWaitCount = VerticalWaitCountDef / 2;//初回以降はデフォ/2にカウント戻す
+	if (verticalWaitCount == 0) {
+		verticalWaitCount = verticalWaitCountDef / 2;//初回以降はデフォ/2にカウント戻す
 		doCollision = true;//当たり判定オンにしてから次行動
 
-		if (VerticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
-			if (NextDown) {//次下降なら
-				NextDown = false;//戻してから
+		if (verticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
+			if (nextDown) {//次下降なら
+				nextDown = false;//戻してから
 				verticalPattern = std::bind(&Boss::VerticalDown, this);//下移動
 			}
-			if (NextUp) {//次上昇なら
-				NextUp = false;//戻してから
+			if (nextUp) {//次上昇なら
+				nextUp = false;//戻してから
 				verticalPattern = std::bind(&Boss::VerticalUp, this);//上移動
 			}
 		}
 		else {//るーぷが指定数おわったら（カウント0で）
 			//次の動き戻す
-			NextUp = false;
-			NextDown = true;//最初は下降
-			VerticalLoopCount = VerticalLoopCountDef;
+			nextUp = false;
+			nextDown = true;//最初は下降
+			verticalLoopCount = verticalLoopCountDef;
 			verticalPattern = std::bind(&Boss::VerticalReverse, this);//戻るパターンへ
 		}
 	}
@@ -239,78 +239,78 @@ void Boss::VerticalWait()
 void Boss::VerticalDown()
 {
 	XMFLOAT3 position = obj->GetPosition();
-	if (VerticalStartPosFlag == false) {//最初に開始位置決める
-		UpDownPos = { UpDownPos.x, DownStartPosY,position.z };//Yは開始位置　Zは元いた位置
-		position = UpDownPos;//今の位置を下に下がる開始位置にする
-		VerticalStartPosFlag = true;//最初の開始位置を決め終わった
+	if (verticalStartPosFlag == false) {//最初に開始位置決める
+		upDownPos = { upDownPos.x, downStartPosY,position.z };//Yは開始位置　Zは元いた位置
+		position = upDownPos;//今の位置を下に下がる開始位置にする
+		verticalStartPosFlag = true;//最初の開始位置を決め終わった
 	}
-	position.y -= VerticalSp;//移動
-	if (position.y <= UpStartPosY) {//上昇開始位置のYまできたら
-		UpDownPos.x += NextMoveX;//次の移動時のためにX足しとく
+	position.y -= verticalSp;//移動
+	if (position.y <= upStartPosY) {//上昇開始位置のYまできたら
+		upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
 		//↓待ち時間挟んでね　Wait時は判定切る
-		VerticalStartPosFlag = false;//開始位置決定フラグ戻す
-		NextUp = true;//次上昇
-		VerticalLoopCount--;//Down抜けるときにデクリメント
+		verticalStartPosFlag = false;//開始位置決定フラグ戻す
+		nextUp = true;//次上昇
+		verticalLoopCount--;//Down抜けるときにデクリメント
 		verticalPattern = std::bind(&Boss::VerticalWait, this);//まってか
 	}
 	obj->SetPosition(position);
 
 	//発射カウントをデクリメント
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }//追尾弾
 		//再びカウントできるように初期化
-		AtkCount = Vertical_AtkInterval;
+		atkCount = vertical_AtkInterval;
 	}
 }
 void Boss::VerticalUp()
 {
 	XMFLOAT3 position = obj->GetPosition();
-	if (VerticalStartPosFlag == false) {//最初に開始位置決める
-		UpDownPos = { UpDownPos.x, UpStartPosY,position.z };//Yは開始位置　Zは元いた位置
-		position = UpDownPos;//今の位置を下に下がる開始位置にする
-		VerticalStartPosFlag = true;//最初の開始位置を決め終わった
+	if (verticalStartPosFlag == false) {//最初に開始位置決める
+		upDownPos = { upDownPos.x, upStartPosY,position.z };//Yは開始位置　Zは元いた位置
+		position = upDownPos;//今の位置を下に下がる開始位置にする
+		verticalStartPosFlag = true;//最初の開始位置を決め終わった
 	}
-	position.y += VerticalSp;//移動
-	if (position.y >= DownStartPosY) {//上昇開始位置のYまできたら
-		UpDownPos.x += NextMoveX;//次の移動時のためにX足しとく
+	position.y += verticalSp;//移動
+	if (position.y >= downStartPosY) {//上昇開始位置のYまできたら
+		upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
 		//↓待ち時間挟んでね　Wait時は判定切る
-		VerticalStartPosFlag = false;//開始位置決定フラグ戻す
-		NextDown = true;//次上昇
+		verticalStartPosFlag = false;//開始位置決定フラグ戻す
+		nextDown = true;//次上昇
 		verticalPattern = std::bind(&Boss::VerticalWait, this);
 	}
 	obj->SetPosition(position);
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { StraightAttack(); }
 		//再びカウントできるように初期化
-		AtkCount = Vertical_AtkInterval;
+		atkCount = vertical_AtkInterval;
 	}
 }
 void Boss::VerticalReverse()
 {
 	XMFLOAT3 position = obj->GetPosition();
-	if (ReverseStartPosFlag == false) {//ここから戻り始める
-		position = { ReverseStartPos.x,position.y,position.z };//X、Yは最後の高さのまま、Z
-		ReverseStartPosFlag = true;
+	if (reverseStartPosFlag == false) {//ここから戻り始める
+		position = { reverseStartPos.x,position.y,position.z };//X、Yは最後の高さのまま、Z
+		reverseStartPosFlag = true;
 	}
-	position.y += VerticalSp;
+	position.y += verticalSp;
 	obj->SetPosition(position);
 
-	if (position.y >= ReverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
-		ReverseStartPosFlag = false;
+	if (position.y >= reverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
+		reverseStartPosFlag = false;
 		verticalPattern = std::bind(&Boss::EndVertical, this);//縦パターンの行動終了する前にやること
 	}
 }
 void Boss::EndVertical()
 {
-	UpDownPos = UpDownPosDef;//上と下用の座標も元に戻す
-	VerticalWaitCount = VerticalWaitCountDef;//待ちカウントデフォルトに戻す
-	ChangeVerticalCount = ChangeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
+	upDownPos = upDownPosDef;//上と下用の座標も元に戻す
+	verticalWaitCount = verticalWaitCountDef;//待ちカウントデフォルトに戻す
+	changeVerticalCount = changeVerticalCountDef;//縦攻撃するために必要なカウントをデフォに戻す
 	verticalPattern = std::bind(&Boss::StartVertical, this);
 	//大本の行動パターンをApproachに戻す
 	actionPattern = std::bind(&Boss::Approach, this);
@@ -320,7 +320,7 @@ void Boss::HpHalfPatStart()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	Nowframe++;
+	nowframe++;
 
 	//自機の場所
 	XMFLOAT3 pPos = shotTag->GetPosition();
@@ -333,13 +333,13 @@ void Boss::HpHalfPatStart()
 	coreCol.z -= coreColChangeVal;
 	obj_core->SetColor(coreCol);
 
-	if (GetPosOnlyFlag) {
+	if (getPosOnlyFlag) {
 		//最初の位置
-		HpHalfMomentPos = obj->GetPosition();
-		GetPosOnlyFlag = false;
+		hpHalfMomentPos = obj->GetPosition();
+		getPosOnlyFlag = false;
 
 		//指定座標どこか
-		TargetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
+		targetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
 		//防御力上がる
 		float Defence = charParams->GetBossDefense();
@@ -347,14 +347,14 @@ void Boss::HpHalfPatStart()
 		charParams->SetBossDefense(Defence);
 	}
 
-	float raito = (float)Nowframe / NecesHpHalfFrame;
+	float raito = (float)nowframe / necesHpHalfFrame;
 	//場所移動
-	lerpMovePos = lerp(HpHalfMomentPos, TargetHpHalfPos, raito);
+	lerpMovePos = lerp(hpHalfMomentPos, targetHpHalfPos, raito);
 	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
-	DiffusionAtkCount--;
-	if (DiffusionAtkCount == 0) {
+	diffusionAtkCount--;
+	if (diffusionAtkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
 			if (even_odd_NumFlag)//奇数弾
@@ -364,22 +364,22 @@ void Boss::HpHalfPatStart()
 			else { DiffusionAttackEavenNumber(); }
 		}
 		//再びカウントできるように初期化
-		DiffusionAtkCount = DiffusionAtkInterval;
+		diffusionAtkCount = diffusionAtkInterval;
 	}
 	//発射カウントをデクリメント
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }//追尾弾
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
+		atkCount = atkInterval;
 	}
 
-	if (Nowframe == NecesHpHalfFrame) {
-		Nowframe = NowframeDef;
-		GetPosOnlyFlag = true;
-		HpHalfMomentPos = {};
+	if (nowframe == necesHpHalfFrame) {
+		nowframe = nowframeDef;
+		getPosOnlyFlag = true;
+		hpHalfMomentPos = {};
 		isHpHalfPattern = true;//この処理全部終了したからもうやんない
 		actionPattern = std::bind(&Boss::CircularMotionMove, this);
 	}
@@ -391,101 +391,101 @@ void Boss::CircularMotionMove()
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
 	//弧度法
-	HpHalf_rad = HpHalf_Angle * 3.1415926535f / 180.0f;
+	hpHalf_rad = hpHalf_Angle * 3.1415926535f / 180.0f;
 
 	//円の位置を三角関数でだす
-	addX = cosf(HpHalf_rad) * HpHalf_Length;
-	addY = sinf(HpHalf_rad) * HpHalf_Length;
+	addX = cosf(hpHalf_rad) * hpHalf_Length;
+	addY = sinf(hpHalf_rad) * hpHalf_Length;
 
-	if (GetPosOnlyFlag)
+	if (getPosOnlyFlag)
 	{
 		//最初の位置
-		CirclePosMem = obj->GetPosition();
-		GetPosOnlyFlag = false;
+		circlePosMem = obj->GetPosition();
+		getPosOnlyFlag = false;
 	}
 
 	XMFLOAT3 pPos = shotTag->GetPosition();
 	//中心座標に移動量を足した値を座標に
-	position.x = CirclePosMem.x + addX;
-	position.y = CircularY + addY;
+	position.x = circlePosMem.x + addX;
+	position.y = circularY + addY;
 	position.z -= ApproachZ;//地味に迫ってくる
 
 	obj->SetPosition(position);
 
-	HpHalf_Angle += 5.0f;//角度　増やすと移動速くなる
-	HpHalf_Length += 0.3f;//渦を巻くように広げたい
+	hpHalf_Angle += 5.0f;//角度　増やすと移動速くなる
+	hpHalf_Length += 0.3f;//渦を巻くように広げたい
 
 	//半径が一定以上で行動変える
-	if (HpHalf_Length >= 150) {
+	if (hpHalf_Length >= 150) {
 		//---円運動類
-		HpHalf_Angle = HpHalf_AngleDef;
-		HpHalf_rad = HpHalf_radDef;
-		HpHalf_Length = HpHalf_LengthDef;
+		hpHalf_Angle = hpHalf_AngleDef;
+		hpHalf_rad = hpHalf_radDef;
+		hpHalf_Length = hpHalf_LengthDef;
 		addX = addXDef;
 		addY = addYDef;
-		GetPosOnlyFlag = true;
+		getPosOnlyFlag = true;
 		actionPattern = std::bind(&Boss::LeaveFirstPos, this);
 	}
 
 	//発射カウントをデクリメント
-	Circular_AtkCount--;
+	circular_AtkCount--;
 	//時が満ちたら
-	if (Circular_AtkCount == 0) {
+	if (circular_AtkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }//追尾弾
 
 		//だんだん弾の発射間隔速く
-		Circular_AtkInterval -= 2;
+		circular_AtkInterval -= 2;
 
 		//再びカウントできるように初期化
-		Circular_AtkCount = Circular_AtkInterval;
+		circular_AtkCount = circular_AtkInterval;
 	}
 }
 void Boss::LeaveFirstPos()
 {
-	Nowframe++;
+	nowframe++;
 
-	if (GetPosOnlyFlag)
+	if (getPosOnlyFlag)
 	{
 		//最初の位置
-		HpHalfMomentPos = obj->GetPosition();
-		GetPosOnlyFlag = false;
+		hpHalfMomentPos = obj->GetPosition();
+		getPosOnlyFlag = false;
 
 		//LeaveFirstPos2回で突っ込む
-		PlungeCount--;
+		plungeCount--;
 	}
 	XMFLOAT3 pPos = shotTag->GetPosition();
 
-	bossLerpMoveRaito = (float)Nowframe / NecesLeaveFirstFrame;
+	bossLerpMoveRaito = (float)nowframe / necesLeaveFirstFrame;
 	//場所移動
 	//x自機ちょい追う感じ
-	XMFLOAT3 endPos = TargetHpHalfPos;
-	endPos.x = pPos.x - TargetHpHalfPos.x;
-	lerpMovePos = lerp(HpHalfMomentPos, endPos, bossLerpMoveRaito);
+	XMFLOAT3 endPos = targetHpHalfPos;
+	endPos.x = pPos.x - targetHpHalfPos.x;
+	lerpMovePos = lerp(hpHalfMomentPos, endPos, bossLerpMoveRaito);
 	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }//追尾弾
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval_LeaveFirst;
+		atkCount = atkInterval_LeaveFirst;
 	}
 
-	if (Nowframe == NecesLeaveFirstFrame) {
-		Nowframe = NowframeDef;
-		GetPosOnlyFlag = true;
-		HpHalfMomentPos = {};
-		MoveSp = {};
+	if (nowframe == necesLeaveFirstFrame) {
+		nowframe = nowframeDef;
+		getPosOnlyFlag = true;
+		hpHalfMomentPos = {};
+		moveSp = {};
 
 		//弾の発射間隔を元に戻す
-		Circular_AtkInterval = Circular_AtkIntervalDef;
+		circular_AtkInterval = circular_AtkIntervalDef;
 
-		if (PlungeCount == 0) {//LeaveFirstPosを指定回数したら突撃
+		if (plungeCount == 0) {//LeaveFirstPosを指定回数したら突撃
 			XMFLOAT3 boPos = obj->GetPosition();
-			WasPosMem = boPos;//突っ込み行動へ移行する前に最後にいた場所を記憶する
+			wasPosMem = boPos;//突っ込み行動へ移行する前に最後にいた場所を記憶する
 			actionPattern = std::bind(&Boss::PlungeInto, this);
 		}
 		else {
@@ -502,9 +502,9 @@ void Boss::PlungeIntoLeave()
 {
 	XMFLOAT3 position = obj->GetPosition();
 	//一度離れて
-	position.z += LeaveVel;
+	position.z += leaveVel;
 
-	if (position.z >= LeavePos) {
+	if (position.z >= leavePos) {
 		plungeIntoPattern = std::bind(&Boss::PlungeIntoWait, this);
 	}
 
@@ -515,18 +515,18 @@ void Boss::PlungeIntoWait()
 	//待機してから行動
 	//---------------------予兆はここで シェイク
 	//待機時間デクリメント
-	PlungeIntoWaitCount--;
+	plungeIntoWaitCount--;
 
 	//突撃後なら突っ込んだ場所でまつ
-	if (PlungeCompletFlag) {
+	if (plungeCompletFlag) {
 		obj->SetPosition(pPosMem);
 	}
 	else {
 		Shake();//揺らす
 	}
 
-	if (PlungeIntoWaitCount == 0) {
-		if (PlungeCompletFlag == false) {//突っ込み完了前なら
+	if (plungeIntoWaitCount == 0) {
+		if (plungeCompletFlag == false) {//突っ込み完了前なら
 			//その時のターゲット座標
 			//一度きり　突っ込みに使う座標
 			if (pMemFlag == false) {
@@ -540,14 +540,14 @@ void Boss::PlungeIntoWait()
 				boPosMom = obj->GetPosition();
 				boPosFlag = true;
 			}
-			PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+			plungeIntoWaitCount = plungeIntoWaitCountDef;
 			plungeIntoPattern = std::bind(&Boss::Plunge, this);
 		}
 		else {//突っ込み後
-			PlungeCompletFlag = false;//リセット
-			PlungeIntoWaitCount = PlungeIntoWaitCountDef;
-			ShakePosMemFlag = false;//シェイク終わり
-			Nowframe = NowframeDef;//戻さないと次の行動にカクツキが出る
+			plungeCompletFlag = false;//リセット
+			plungeIntoWaitCount = plungeIntoWaitCountDef;
+			shakePosMemFlag = false;//シェイク終わり
+			nowframe = nowframeDef;//戻さないと次の行動にカクツキが出る
 			plungeIntoPattern = std::bind(&Boss::PlungeIntoReverse, this);//元の場所へ向かう
 		}
 	}
@@ -555,9 +555,9 @@ void Boss::PlungeIntoWait()
 void Boss::Plunge()
 {
 	//突っ込んでくる
-	Nowframe++;
+	nowframe++;
 
-	bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+	bossLerpMoveRaito = (float)nowframe / plungeNecesFrame;
 	//場所移動
 	lerpMovePos = lerp(boPosMom, pPosMem, bossLerpMoveRaito);
 	obj->SetPosition(lerpMovePos);
@@ -567,33 +567,33 @@ void Boss::Plunge()
 		boPosFlag = false;//一度きり読み込みリセ
 		pMemFlag = false;//一度きりセット
 
-		Nowframe = NowframeDef;
+		nowframe = nowframeDef;
 		//もう突っ込んだ
-		PlungeCompletFlag = true;
+		plungeCompletFlag = true;
 		plungeIntoPattern = std::bind(&Boss::PlungeIntoWait, this);
 	}
 }
 void Boss::PlungeIntoReverse()
 {
-	ReversePos = { 0,100,shotTag->GetPosition().z + 1000 };
+	reverseTargetPos = { 0,100,shotTag->GetPosition().z + 1000 };
 
-	Nowframe++;
+	nowframe++;
 	XMFLOAT3 position = obj->GetPosition();
-	if (BeforeReversePosMemFlag == false) {
-		BeforeReversePosMem = position;
-		BeforeReversePosMemFlag = true;
+	if (beforeReversePosMemFlag == false) {
+		beforeReversePosMem = position;
+		beforeReversePosMemFlag = true;
 	}
 
-	bossLerpMoveRaito = (float)Nowframe / plungeNecesFrame;
+	bossLerpMoveRaito = (float)nowframe / plungeNecesFrame;
 	//場所移動
 	XMFLOAT3 reversePos{};
-	reversePos = lerp(BeforeReversePosMem, ReversePos, bossLerpMoveRaito);
+	reversePos = lerp(beforeReversePosMem, reverseTargetPos, bossLerpMoveRaito);
 	obj->SetPosition(reversePos);
 
 	//z座標が指定座標になったら
-	if (position.z >= ReversePos.z) {
-		PlungeCount = PlungeCountDef;
-		BeforeReversePosMemFlag = false;
+	if (position.z >= reverseTargetPos.z) {
+		plungeCount = plungeCountDef;
+		beforeReversePosMemFlag = false;
 		plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
 		//突っ込み一連終わった後の行動へ
 		actionPattern = std::bind(&Boss::AfterPlungeInto, this);
@@ -606,72 +606,72 @@ void Boss::AfterPlungeInto()
 }
 void Boss::AfterPlungeWait()
 {
-	WaitTime--;//待ち時間
-	if (WaitTime == 0) {//指定時間待ったら
-		LoopCount++;//何回やったか数えるんだよ
-		WaitTime = WaitTimeDef;
-		Nowframe = NowframeDef;
+	waitTime--;//待ち時間
+	if (waitTime == 0) {//指定時間待ったら
+		loopCount++;//何回やったか数えるんだよ
+		waitTime = waitTimeDef;
+		nowframe = nowframeDef;
 		pPosMem = shotTag->GetPosition();//自機いた場所
 		boPosMem = obj->GetPosition();//ボスいた場所
 		afterPlungePattern = std::bind(&Boss::AfterPlungeAttack, this);//攻撃へ
 	}
 
-	AtkCount--;
+	atkCount--;
 	//時が満ちたら
-	if (AtkCount == 0) {
+	if (atkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { StraightAttack(); }
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
+		atkCount = atkInterval;
 	}
 
 	//行動を一定数繰り返したら行動変える
-	if (LoopCount == LoopCountMax) {
-		Nowframe = 0;
+	if (loopCount == loopCountMax) {
+		nowframe = 0;
 		afterPlungePattern = std::bind(&Boss::AfterPlungeFin, this);//行動戻る前に最後に元の場所へ
-		LoopCount = LoopCountDef;
+		loopCount = loopCountDef;
 	}
 }
 void Boss::AfterPlungeAttack()
 {
-	Nowframe++;
+	nowframe++;
 
-	bossLerpMoveRaito = (float)Nowframe / NecesAtkMoveTime;
+	bossLerpMoveRaito = (float)nowframe / necesAtkMoveTime;
 	//場所移動
 	obj->SetPosition(lerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRaito));
 
-	AfterPlungePatAtkCount--;
+	afterPlungePatAtkCount--;
 	//時が満ちたら
-	if (AfterPlungePatAtkCount == 0) {
+	if (afterPlungePatAtkCount == 0) {
 		//突撃時、生存時のみ発射
 		if (alive) { Attack(); }
 		//再びカウントできるように初期化
-		AfterPlungePatAtkCount = AfterPlungePatAtkInterval;
+		afterPlungePatAtkCount = afterPlungePatAtkInterval;
 	}
 
-	if (Nowframe == NecesAtkMoveTime) {
-		Nowframe = NowframeDef;
+	if (nowframe == necesAtkMoveTime) {
+		nowframe = nowframeDef;
 		afterPlungePattern = std::bind(&Boss::AfterPlungeWait, this);
 	}
 }
 void Boss::AfterPlungeFin()
 {
-	if (PlungeFinOnlyFlag == false) {//最初の座標
+	if (plungeFinOnlyFlag == false) {//最初の座標
 		boPosMem = obj->GetPosition();
-		PlungeFinOnlyFlag = true;
+		plungeFinOnlyFlag = true;
 	}
 	else {
-		bossLerpMoveRaito = (float)Nowframe / PlungeFinFrameMax;
-		Nowframe++;
+		bossLerpMoveRaito = (float)nowframe / plungeFinFrameMax;
+		nowframe++;
 
 		//円行動に合うようにその場所へ移動
 		XMFLOAT3 endPos = obj->GetPosition();
-		endPos.y = CircularY;
+		endPos.y = circularY;
 		lerpMovePos = lerp(boPosMem, endPos, bossLerpMoveRaito);
 		obj->SetPosition(lerpMovePos);
-		if (Nowframe == PlungeFinFrameMax) {
-			Nowframe = 0;
-			PlungeFinOnlyFlag = false;
+		if (nowframe == plungeFinFrameMax) {
+			nowframe = 0;
+			plungeFinOnlyFlag = false;
 			afterPlungePattern = std::bind(&Boss::AfterPlungeWait, this);//ここの行動戻す
 			//次の行動
 			actionPattern = std::bind(&Boss::CircularMotionMove, this);
@@ -686,11 +686,11 @@ void Boss::Shake() {
 
 	randShakeNow = 7 + 1;//a~b
 
-	if (ShakePosMemFlag == false) {
+	if (shakePosMemFlag == false) {
 		posMem = pos;
-		ShakePosMemFlag = true;
+		shakePosMemFlag = true;
 	}
-	if (ShakePosMemFlag) {
+	if (shakePosMemFlag) {
 		pos.x = posMem.x + rand() % randShakeNow - 4.f;
 		pos.y = posMem.y + rand() % randShakeNow - 4.f;
 	}
@@ -708,7 +708,7 @@ void Boss::Attack()
 	//弾生成
 	std::unique_ptr<BossAimBul> madeAimBullet = std::make_unique<BossAimBul>();
 	madeAimBullet->Initialize();
-	madeAimBullet->SetModel(AimBulModel);
+	madeAimBullet->SetModel(aimBulModel);
 	madeAimBullet->SetPosition(position);
 
 	//弾登録
@@ -720,38 +720,38 @@ void Boss::PAimBul()
 	for (std::unique_ptr<BossAimBul>& aimBullet : aimBullets_) {
 		//その時のターゲット座標
 	//一度きり
-		if (aimBullet->ShotTagMomOnlyFlag) {
-			aimBullet->ShotTagMoment = shotTag->GetPosition();
-			aimBullet->ShotTagMomOnlyFlag = false;
+		if (aimBullet->shotTagMomOnlyFlag) {
+			aimBullet->shotTagMoment = shotTag->GetPosition();
+			aimBullet->shotTagMomOnlyFlag = false;
 		}
 
-		aimBullet->Nowframe++;
-		if (aimBullet->GetPosOnlyFlag)
+		aimBullet->nowframe++;
+		if (aimBullet->getPosOnlyFlag)
 		{
 			//最初の位置
 			aimBullet->boPosMoment = obj->GetPosition();
-			aimBullet->GetPosOnlyFlag = false;
+			aimBullet->getPosOnlyFlag = false;
 		}
 		//移動速度＝（指定座標-最初位置）/かかる時間
-		aimBullet->MoveSp.x = (aimBullet->ShotTagMoment.x - aimBullet->boPosMoment.x);
-		aimBullet->MoveSp.y = (aimBullet->ShotTagMoment.y - aimBullet->boPosMoment.y);
-		aimBullet->MoveSp.z = (aimBullet->ShotTagMoment.z - aimBullet->boPosMoment.z);
+		aimBullet->moveSp.x = (aimBullet->shotTagMoment.x - aimBullet->boPosMoment.x);
+		aimBullet->moveSp.y = (aimBullet->shotTagMoment.y - aimBullet->boPosMoment.y);
+		aimBullet->moveSp.z = (aimBullet->shotTagMoment.z - aimBullet->boPosMoment.z);
 
 		//XMVECTORに変換してxmvecMoveSpにいれる
-		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->MoveSp);
+		XMVECTOR xmvecMoveSp = XMLoadFloat3(&aimBullet->moveSp);
 		//normalize
 		xmvecMoveSp = XMVector3Normalize(xmvecMoveSp);
 		// 大きさを任意値に(速度)
 		xmvecMoveSp = XMVectorScale(xmvecMoveSp, 9.f);
 		// FLOAT3に変換
-		XMStoreFloat3(&aimBullet->MoveSp, xmvecMoveSp);
+		XMStoreFloat3(&aimBullet->moveSp, xmvecMoveSp);
 
 		//その時の位置＝最初位置＋移動速度＊経過時間
-		aimBullet->NowPos.x = aimBullet->boPosMoment.x + aimBullet->MoveSp.x * aimBullet->Nowframe;
-		aimBullet->NowPos.y = aimBullet->boPosMoment.y + aimBullet->MoveSp.y * aimBullet->Nowframe;
-		aimBullet->NowPos.z = aimBullet->boPosMoment.z + aimBullet->MoveSp.z * aimBullet->Nowframe;
+		aimBullet->nowPos.x = aimBullet->boPosMoment.x + aimBullet->moveSp.x * aimBullet->nowframe;
+		aimBullet->nowPos.y = aimBullet->boPosMoment.y + aimBullet->moveSp.y * aimBullet->nowframe;
+		aimBullet->nowPos.z = aimBullet->boPosMoment.z + aimBullet->moveSp.z * aimBullet->nowframe;
 
-		aimBullet->SetPosition(aimBullet->NowPos);//その時の位置
+		aimBullet->SetPosition(aimBullet->nowPos);//その時の位置
 	}
 }
 void Boss::DiffusionAttack()
@@ -770,9 +770,9 @@ void Boss::DiffusionAttack()
 	madeBullet_L->Initialize();
 	madeBullet_R->Initialize();
 
-	madeBullet_center->SetModel(BulModel);
-	madeBullet_L->SetModel(BulModel);
-	madeBullet_R->SetModel(BulModel);
+	madeBullet_center->SetModel(bulModel);
+	madeBullet_L->SetModel(bulModel);
+	madeBullet_R->SetModel(bulModel);
 
 	madeBullet_center->SetPosition(position);
 	madeBullet_L->SetPosition(position);
@@ -818,10 +818,10 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R1->Initialize();
 	madeBullet_R2->Initialize();
 
-	madeBullet_L1->SetModel(BulModel);
-	madeBullet_L2->SetModel(BulModel);
-	madeBullet_R1->SetModel(BulModel);
-	madeBullet_R2->SetModel(BulModel);
+	madeBullet_L1->SetModel(bulModel);
+	madeBullet_L2->SetModel(bulModel);
+	madeBullet_R1->SetModel(bulModel);
+	madeBullet_R2->SetModel(bulModel);
 
 	madeBullet_L1->SetPosition(position);
 	madeBullet_L2->SetPosition(position);
@@ -867,7 +867,7 @@ void Boss::StraightAttack()
 	std::unique_ptr<BossStraightBul> madeBullet = std::make_unique<BossStraightBul>();
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeBullet->Initialize();
-	madeBullet->SetModel(StraightBulModel);
+	madeBullet->SetModel(straightBulModel);
 	madeBullet->SetPosition(position);
 	madeBullet->SetScale({ 30.f, 30.f, 30.f });
 
@@ -877,14 +877,14 @@ void Boss::StraightAttack()
 
 void Boss::DamageEffect()
 {
-	XMFLOAT4 col = { 1,ReCol,ReCol,1 };//赤
-	ReCol += ReColVal;
+	XMFLOAT4 col = { 1,reCol,reCol,1 };//赤
+	reCol += reColVal;
 
-	if (--BossBodyRedTime <= 0) {//時間になったら
-		ReCol = 0.f;//戻す
+	if (--bossBodyRedTime <= 0) {//時間になったら
+		reCol = 0.f;//戻す
 		col = { 1,1,1,1 };//本来の色
-		BossBodyRedTime = BossBodyRedTimeDef;//カウント戻す
-		BossDamageEffectFlag = false;//くらっていない状態に
+		bossBodyRedTime = bossBodyRedTimeDef;//カウント戻す
+		bossDamageEffectFlag = false;//くらっていない状態に
 	}
 	obj->SetColor(col);
 	//obj_core->SetColor(col);
@@ -897,33 +897,33 @@ void Boss::DamageEffect()
 
 //------攻撃系↑
 void Boss::Death() {
-	Nowframe++;
-	ParticleFrame++;
-	PartTimeInterval = ParticleFrame / 40;
+	nowframe++;
+	particleFrame++;
+	partTimeInterval = particleFrame / 40;
 
-	if (GetPosDeathOnlyFlag) {
+	if (getPosDeathOnlyFlag) {
 		//最初の位置
 		boPosDeath = obj->GetPosition();
-		GetPosDeathOnlyFlag = false;
+		getPosDeathOnlyFlag = false;
 	}
 
-	bossLerpMoveRaito = (float)Nowframe / NecesFrame;
-	lerpMovePos = lerp(boPosDeath, { boPosDeath.x,TargetPos.y,boPosDeath.z }, bossLerpMoveRaito);
+	bossLerpMoveRaito = (float)nowframe / necesFrame;
+	lerpMovePos = lerp(boPosDeath, { boPosDeath.x,targetPos.y,boPosDeath.z }, bossLerpMoveRaito);
 	obj->SetPosition(lerpMovePos);
 
 	//一定時間ごとにパーティクル
-	if (PartTimeInterval == 1) {
+	if (partTimeInterval == 1) {
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
 		particle->CreateParticle(obj->GetPosition(), 100, 80, 10, { 1,0.1f,0.8f }, { 1,0,0 });
-		PartTimeInterval = 0;
-		ParticleFrame = 0;
+		partTimeInterval = 0;
+		particleFrame = 0;
 	}
 
 	//コアの色変え 黒
 	constexpr float coreColChangeNecesFrame = 60;//この時間かけて色変え
 	XMFLOAT4 coreCol = obj_core->GetColor();
-	coreColChangeRaito = (float)Nowframe / coreColChangeNecesFrame;
+	coreColChangeRaito = (float)nowframe / coreColChangeNecesFrame;
 	coreCol.x = std::lerp(1.f, 0.f, coreColChangeRaito);
 	obj_core->SetColor(coreCol);
 
@@ -994,9 +994,9 @@ void Boss::Update()
 
 	if (isDeath) {
 		actionPattern = std::bind(&Boss::Death, this);
-		if (IsFirst_Death == false) {
-			Nowframe = NowframeDef;
-			IsFirst_Death = true;
+		if (isFirst_Death == false) {
+			nowframe = nowframeDef;
+			isFirst_Death = true;
 		}
 	}
 	if (isHpHalfPattern == false) {
@@ -1022,7 +1022,7 @@ void Boss::Update()
 	//狙い弾
 	PAimBul();
 
-	if (BossDamageEffectFlag) {//ダメージ演出フラグたったら
+	if (bossDamageEffectFlag) {//ダメージ演出フラグたったら
 		DamageEffect();//体赤くする
 	}
 

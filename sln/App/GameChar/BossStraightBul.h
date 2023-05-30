@@ -1,4 +1,4 @@
-//’¼ü’e
+ï»¿//ç›´ç·šå¼¾
 #pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
@@ -11,14 +11,14 @@ class BossStraightBul :public BaseObject
 {
 private:
 	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//è‡ªæ©Ÿ
 
 	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//è‡ªæ©Ÿ
 
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -29,35 +29,35 @@ private:
 	XMFLOAT3 velocity{ 0,0,0 };
 
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
 	static BossStraightBul* GetInstance();
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
 	float time;
 
-	//Á‚¦‚é‚Ü‚Å
-	static const int32_t BulVanishTime = 60 * 7;//õ–½
+	//æ¶ˆãˆã‚‹ã¾ã§
+	static const int32_t bulVanishTime = 60 * 7;//å¯¿å‘½
 
-	//Á–Å‚Ìé
-	int32_t vanishTimer_ = BulVanishTime;
+	//æ¶ˆæ»…ã®å®£å‘Š
+	int32_t vanishTimer_ = bulVanishTime;
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
-	//’¼ü’eƒXƒs[ƒh
-	float StraightBulSp = 0.07f;
-	//’¼ü’e‰Á‘¬
-	float StraightBulAccel = 0.1f;
-	//‘¬“x§ŒÀ
-	const int StraightBulSpLim = 30;
+	//ç›´ç·šå¼¾ã‚¹ãƒ”ãƒ¼ãƒ‰
+	float straightBulSp = 0.07f;
+	//ç›´ç·šå¼¾åŠ é€Ÿ
+	float straightBulAccel = 0.1f;
+	//é€Ÿåº¦åˆ¶é™
+	const int straightBulSpLim = 30;
 };

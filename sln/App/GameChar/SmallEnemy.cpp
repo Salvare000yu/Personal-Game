@@ -35,7 +35,7 @@ void SmallEnemy::Initialize()
 	obj->SetScale({ 8.0f, 8.0f, 8.0f });
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 
-	AtkCount = AtkInterval;
+	AtkCount = atkInterval;
 }
 
 void SmallEnemy::Retire()
@@ -147,7 +147,7 @@ void SmallEnemy::Update()
 			Attack();
 		}
 		//再びカウントできるように初期化
-		AtkCount = AtkInterval;
+		AtkCount = atkInterval;
 	}
 
 	//弾更新

@@ -52,7 +52,7 @@ void TitleScene::Initialize()
 		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
 		model->second->SetTiling({ 100,100 });
 		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale({ 10000.0f, 10000.0f, 10000.0f });
+		i.second->SetScale({ 10000.0f, 1.0f, 10000.0f });
 	}
 	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 

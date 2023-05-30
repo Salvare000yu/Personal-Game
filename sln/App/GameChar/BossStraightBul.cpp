@@ -1,4 +1,4 @@
-#include "BossStraightBul.h"
+ï»¿#include "BossStraightBul.h"
 #include "Boss.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -13,17 +13,17 @@ BossStraightBul* BossStraightBul::GetInstance()
 	return &instance;
 }
 
-//bullet‚Ìinitialize‚Épos“ü‚ê‚Ä‚»‚ÌŽž‚ÌƒvƒŒƒCƒ„[pos‚É•\Ž¦‚·‚é‚æ‚¤‚É‚·‚é
+//bulletã®initializeã«poså…¥ã‚Œã¦ãã®æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼posã«è¡¨ç¤ºã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
 void BossStraightBul::Initialize()
 {
-	//’è‹`‚Æ‚©‰¼‚¨‚¢‚Ä‚¨‚±‚¤
+	//å®šç¾©ã¨ã‹ä»®ãŠã„ã¦ãŠã“ã†
 
-	//ì‚é
+	//ä½œã‚‹
 	obj.reset(Object3d::Create());
-	//-----«”CˆÓ«-----//
-	//‘å‚«‚³
+	//-----â†“ä»»æ„â†“-----//
+	//å¤§ãã•
 	//obj->SetScale({ 70.0f, 70.0f, 70.0f });
-	//êŠ
+	//å ´æ‰€
 	//obj->SetPosition({ position });
 }
 
@@ -35,12 +35,12 @@ void BossStraightBul::Update()
 	position.z -= velocity.z;
 	obj->SetPosition(position);
 
-	if (StraightBulSp < StraightBulSpLim) {//‘¬“x§ŒÀ“à‚È‚ç‰Á‘¬
-		StraightBulSp += StraightBulSp * StraightBulAccel;
+	if (straightBulSp < straightBulSpLim) {//é€Ÿåº¦åˆ¶é™å†…ãªã‚‰åŠ é€Ÿ
+		straightBulSp += straightBulSp * straightBulAccel;
 	}
-	velocity.z = StraightBulSp;
+	velocity.z = straightBulSp;
 
-	//ŽžŠÔŒo‰ßÁ–Å
+	//æ™‚é–“çµŒéŽæ¶ˆæ»…
 	if (--vanishTimer_ <= 0) { alive = false; }
 
 	obj->Update();

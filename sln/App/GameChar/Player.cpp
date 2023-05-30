@@ -3,7 +3,6 @@
 #include "Input.h"
 #include "GameSound.h"
 #include "CharParameters.h"
-#include "ParticleManager.h"
 #include "DebugText.h"
 #include "DxBase.h"
 

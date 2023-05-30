@@ -83,17 +83,17 @@ public:
 	float time;
 
 	//近づく速さ
-	const float ApproachSpZ = 3.f;
-	const float ApproachSpY = 2.f;
+	const float approachSpZ = 3.f;
+	const float approachSpY = 2.f;
 	//離れる速さ
-	const float LeaveSpZ = 3.f;
-	const float LeaveSpY = 2.f;
+	const float leaveSpZ = 3.f;
+	const float leaveSpY = 2.f;
 	////近づける距離
 	//float ApproachLim;
 	//離れられる距離
-	float LeaveLim = 90;
+	float leaveLim = 90;
 
-	bool BossDamageEffectFlag = false;//ダメージ演出　false:やってない
+	bool bossDamageEffectFlag = false;//ダメージ演出　false:やってない
 
 	std::function<void()> actionPattern;
 
@@ -102,9 +102,9 @@ public:
 	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
 
 	//フレームごとに発射
-	static const int AtkInterval = 10;
-	static const int AtkInterval_LeaveFirst = 20;
-	static const int DiffusionAtkInterval = 20;
+	static const int atkInterval = 10;
+	static const int atkInterval_LeaveFirst = 20;
+	static const int diffusionAtkInterval = 20;
 
 	//縦攻撃
 	std::function<void()> verticalPattern;
@@ -120,18 +120,18 @@ public:
 	const std::list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
 	const std::list<std::unique_ptr<BossStraightBul>>& GetStraightBullets() { return straightBullets_; }
 
-	inline void SetBulModel(Model* model) { BulModel = model; }
-	inline void SetAimBulModel(Model* model) { AimBulModel = model; }
-	inline void SetStraightBulModel(Model* model) { StraightBulModel = model; }
+	inline void SetBulModel(Model* model) { bulModel = model; }
+	inline void SetAimBulModel(Model* model) { aimBulModel = model; }
+	inline void SetStraightBulModel(Model* model) { straightBulModel = model; }
 
 	//通常弾威力
-	const float& GetBulPow() { return BulPow; }
+	const float& GetBulPow() { return bulPow; }
 	//狙い弾威力
-	const float& GetAimBulPow() { return AimBulPow; }
+	const float& GetAimBulPow() { return aimBulPow; }
 	//直線威力
-	const float& GetStraightBulPow() { return StraightBulPow; }
+	const float& GetStraightBulPow() { return straightBulPow; }
 	//ボス本体にぶつかった時の威力
-	const int& GetBodyPow() { return BodyPow; }
+	const int& GetBodyPow() { return bodyPow; }
 
 	//ボス生死
 	void SetisDeath(bool isDeath) { this->isDeath = isDeath; }
@@ -175,8 +175,8 @@ private:
 	float frame = 0;
 
 	//フレーム計測
-	const int NowframeDef = 0;
-	int Nowframe = NowframeDef;
+	const int nowframeDef = 0;
+	int nowframe = nowframeDef;
 
 	//当たり判定取るか true:取る
 	bool doCollision = true;
@@ -190,105 +190,105 @@ private:
 	XMFLOAT3 lerpMovePos{};
 
 	//攻撃用カウント
-	int AtkCount = 0;
-	int DiffusionAtkCount = 0;
-	int Circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
-	int AfterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
+	int atkCount = 0;
+	int diffusionAtkCount = 0;
+	int circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
+	int afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
-	Model* BulModel = nullptr;
-	Model* AimBulModel = nullptr;
-	Model* StraightBulModel = nullptr;
+	Model* bulModel = nullptr;
+	Model* aimBulModel = nullptr;
+	Model* straightBulModel = nullptr;
 
 	//弾威力
-	const float BulPow = 200;
-	const float AimBulPow = 150;
-	const float StraightBulPow = 170;
+	const float bulPow = 200;
+	const float aimBulPow = 150;
+	const float straightBulPow = 170;
 
 	//ボス本体の威力
-	const int BodyPow = 250;
+	const int bodyPow = 250;
 
 	//false：まだ死んでない
 	bool isDeath = false;
 
 	//死んだとき一度
-	bool IsFirst_Death = false;
+	bool isFirst_Death = false;
 
 	XMFLOAT3 boPosDeath = {};
-	bool GetPosOnlyFlag = true;//一度きりの座標読み込み
-	bool GetPosDeathOnlyFlag = true;//一度きりの座標読み込み
-	const float NecesFrame = 190.0f;//かかる時間
-	XMFLOAT3 MoveSp = {};//移動速度
-	XMFLOAT3 TargetPos = { 0,-150,0 };//目標座標
+	bool getPosOnlyFlag = true;//一度きりの座標読み込み
+	bool getPosDeathOnlyFlag = true;//一度きりの座標読み込み
+	const float necesFrame = 190.0f;//かかる時間
+	XMFLOAT3 moveSp = {};//移動速度
+	XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
 	float coreColChangeRaito = 0;//死亡時コアの色変え
 
-	float PartTimeInterval;
-	float ParticleFrame = 39;//パーティクル出すフレ
+	float partTimeInterval;
+	float particleFrame = 39;//パーティクル出すフレ
 
 	//この時間だけこの行動をする
-	const int ApproachCountDef = 150;
-	int ApproachCount = ApproachCountDef;
+	const int approachCountDef = 150;
+	int approachCount = approachCountDef;
 
 	//------縦に揺れる攻撃F
-	const int ChangeVerticalCountDef = 0;//デフォ0　終わったら消してん
-	int ChangeVerticalCount = ChangeVerticalCountDef;
-	const int ChangeVerticalNeces = 3;//縦攻撃に移る為に必要カウント
+	const int changeVerticalCountDef = 0;//デフォ0　終わったら消してん
+	int changeVerticalCount = changeVerticalCountDef;
+	const int changeVerticalNeces = 3;//縦攻撃に移る為に必要カウント
 	//最初の上昇値
-	const int StartVerticalValDef = -5;
-	int StartVerticalVal = StartVerticalValDef;
+	const int startVerticalValDef = -5;
+	int startVerticalVal = startVerticalValDef;
 	//上昇下降速度
-	float VerticalSp = 15;
+	float verticalSp = 15;
 	//待ち時間
-	const int VerticalWaitCountDef = 50;
-	int VerticalWaitCount = VerticalWaitCountDef;
-	const XMFLOAT3 UpDownPosDef = { -600,900,0 };	//上昇下降開始座標
-	XMFLOAT3 UpDownPos = UpDownPosDef;
-	float UpStartPosY = -350;//上昇開始Y座標
-	float DownStartPosY = 1000;//下降開始Y座標
-	const float NextMoveX = 200;//UpDownの最後にXをずらす値
+	const int verticalWaitCountDef = 50;
+	int verticalWaitCount = verticalWaitCountDef;
+	const XMFLOAT3 upDownPosDef = { -600,900,0 };	//上昇下降開始座標
+	XMFLOAT3 upDownPos = upDownPosDef;
+	float upStartPosY = -350;//上昇開始Y座標
+	float downStartPosY = 1000;//下降開始Y座標
+	const float nextMoveX = 200;//UpDownの最後にXをずらす値
 	//UpDown時の最初に開始位置決めるフラグ false:決める前
-	bool VerticalStartPosFlag = false;
+	bool verticalStartPosFlag = false;
 	//次の動き false:これじゃない
-	bool NextUp = false;
-	bool NextDown = true;//最初は下降
+	bool nextUp = false;
+	bool nextDown = true;//最初は下降
 	//UpDown何回ループさせるか
-	const int VerticalLoopCountDef = 4;
-	int VerticalLoopCount = VerticalLoopCountDef;
+	const int verticalLoopCountDef = 4;
+	int verticalLoopCount = verticalLoopCountDef;
 	//戻る行動開始座標に移動
-	XMFLOAT3 ReverseStartPos;
+	XMFLOAT3 reverseStartPos;
 	//戻る行動開始座標を最初に一回やる　false:まだ
-	bool ReverseStartPosFlag = false;
+	bool reverseStartPosFlag = false;
 	//縦攻撃用インターバル
-	static const int Vertical_AtkInterval = 7;
+	static const int vertical_AtkInterval = 7;
 
 	//------
 
 	//-------↓HPHALF↓------//
 	bool isHpHalfPattern = false;//hp半分以下行動してない
 
-	XMFLOAT3 HpHalfMomentPos = {};
+	XMFLOAT3 hpHalfMomentPos = {};
 	//まずこの位置に行く
-	XMFLOAT3 TargetHpHalfPos;
-	const float NecesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
+	XMFLOAT3 targetHpHalfPos;
+	const float necesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
 
-	const float NecesLeaveFirstFrame = 180.f;
+	const float necesLeaveFirstFrame = 180.f;
 
 	XMFLOAT4 coreCol{0,0,1,1};//コアの色　最初青
 	//-------↑HPHALF↑------//
 	
 	//------HP半分以下円運動↓
-	const float HpHalf_AngleDef = 20.f;
-	float HpHalf_Angle = HpHalf_AngleDef;
-	const float HpHalf_radDef = 100.f;
-	float HpHalf_rad = HpHalf_radDef;
+	const float hpHalf_AngleDef = 20.f;
+	float hpHalf_Angle = hpHalf_AngleDef;
+	const float hpHalf_radDef = 100.f;
+	float hpHalf_rad = hpHalf_radDef;
 
-	const float HpHalf_LengthDef = 10.f;//円運動の半径の長さ
-	float HpHalf_Length = HpHalf_LengthDef;
+	const float hpHalf_LengthDef = 10.f;//円運動の半径の長さ
+	float hpHalf_Length = hpHalf_LengthDef;
 
-	const float CircularY = 40;//どの高さで回るか
+	const float circularY = 40;//どの高さで回るか
 
-	XMFLOAT3 CirclePosMem;//その時の座標取得
+	XMFLOAT3 circlePosMem;//その時の座標取得
 	//移動値
 	const float addXDef = 0.f;
 	float addX = addXDef;
@@ -296,42 +296,42 @@ private:
 	float addY = addYDef;
 	//------HP半分以下円運動↑
 
-	static const int Circular_AtkIntervalDef = 45;
-	int Circular_AtkInterval = Circular_AtkIntervalDef;
+	static const int circular_AtkIntervalDef = 45;
+	int circular_AtkInterval = circular_AtkIntervalDef;
 
 	//突っ込み後行動のAimBulインターバル
-	static const int AfterPlungePatAtkInterval = 15;
+	static const int afterPlungePatAtkInterval = 15;
 
 	BaseObject* shotTag;//弾うつターゲット
 
 	//登場から行動を開始に移った時の座標
-	XMFLOAT3 ActionStartPos;
+	XMFLOAT3 actionStartPos;
 
 	//-------PlungeInto
 	//2回Leaveをしたら突っ込む行動　　デフォ2
-	const int PlungeCountDef = 1;
-	int PlungeCount = PlungeCountDef;
+	const int plungeCountDef = 1;
+	int plungeCount = plungeCountDef;
 	//突っ込み行動へ移行する前に最後にいた場所を記憶する
-	XMFLOAT3 WasPosMem;
+	XMFLOAT3 wasPosMem;
 	//離れる速度
-	const int LeaveVel = 40;
+	const int leaveVel = 40;
 	//Leaveの時どの程度下がるか
-	const int LeavePos = 6000;
+	const int leavePos = 6000;
 	//戻る前の座標取得フラグ　false:してない
-	bool BeforeReversePosMemFlag = false;
+	bool beforeReversePosMemFlag = false;
 	//戻る前座標入れる
-	XMFLOAT3 BeforeReversePosMem;
+	XMFLOAT3 beforeReversePosMem;
 	//今の場所
-	XMFLOAT3 ReverseNowPos;
+	XMFLOAT3 reverseNowPos;
 	//どこに戻るかの場所
-	XMFLOAT3 ReversePos;
+	XMFLOAT3 reverseTargetPos;
 	//突っ込み待ち待機時間 でふぉ140
-	const int PlungeIntoWaitCountDef = 140;
-	int PlungeIntoWaitCount = PlungeIntoWaitCountDef;
+	const int plungeIntoWaitCountDef = 140;
+	int plungeIntoWaitCount = plungeIntoWaitCountDef;
 	//最後定位置戻るのにかかる時間
-	const int PlungeFinFrameMax = 60;
+	const int plungeFinFrameMax = 60;
 	//Finで最初いた一度位置取得 false:まだ
-	bool PlungeFinOnlyFlag = false;
+	bool plungeFinOnlyFlag = false;
 
 	//----plungeとafter両立しないのでafterでも使う
 	//自機いた場所取得フラグ false:未取得
@@ -340,7 +340,7 @@ private:
 	XMFLOAT3 pPosMem{};
 
 	//突っ込み終わったか  false:まだ突っ込んでない
-	bool PlungeCompletFlag = false;
+	bool plungeCompletFlag = false;
 	//ボス最初の場所
 	bool boPosFlag = false;
 	//ボスいた場所
@@ -348,27 +348,27 @@ private:
 	//突っ込み速度
 	const uint32_t plungeNecesFrame = 40;
 	//その時のボスの位置
-	XMFLOAT3 PlungeNowPos;
+	XMFLOAT3 plungeNowPos;
 	//-------PlungeInto
 
 	//-------AfterPlungeInto
 	//
 	//待ち時間
-	const int WaitTimeDef = 60;
-	int WaitTime = WaitTimeDef;
+	const int waitTimeDef = 60;
+	int waitTime = waitTimeDef;
 	//攻撃時に自機のいた場所へ（XY）移動する速度
-	XMFLOAT3 AtkMoveSp;
+	XMFLOAT3 atkMoveSp;
 	//ボスいた場所
 	XMFLOAT3 boPosMem;
 	//ボスの現在地
 	XMFLOAT3 boNowPos;
 	//攻撃に移動にかかる絶対時間
-	const int NecesAtkMoveTime = 60;
+	const int necesAtkMoveTime = 60;
 	//WaitとAttack繰り返した回数
-	const int LoopCountDef = 0;
-	int LoopCount = LoopCountDef;
+	const int loopCountDef = 0;
+	int loopCount = loopCountDef;
 	//この回数でつぎへ
-	const int LoopCountMax = 7;
+	const int loopCountMax = 7;
 	//
 	//-------AfterPlungeInto
 
@@ -376,7 +376,7 @@ private:
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
 	//いた場所保存 false:保存前
-	bool ShakePosMemFlag = false;
+	bool shakePosMemFlag = false;
 	//揺らし終えたか false:まだ
 	bool isShakeFinished = false;
 	//いた場所
@@ -384,10 +384,10 @@ private:
 	//>>>>>>シェイク
 
 	//<<<<<<ダメージ受けた時体赤くする演出
-	const uint8_t BossBodyRedTimeDef = 10;
-	uint8_t BossBodyRedTime = BossBodyRedTimeDef;
+	const uint8_t bossBodyRedTimeDef = 10;
+	uint8_t bossBodyRedTime = bossBodyRedTimeDef;
 	//赤から戻していく色
-	float ReCol = 0.f;//赤状態
-	float ReColVal = 0.05f;//戻す数値
+	float reCol = 0.f;//赤状態
+	float reColVal = 0.05f;//戻す数値
 	//>>>>>>ダメージ受けた時体赤くする演出
 };

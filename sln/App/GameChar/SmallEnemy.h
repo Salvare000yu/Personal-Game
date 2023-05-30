@@ -64,7 +64,7 @@ public:
 	//-----------------↑げったーせったー↑------------------//
 
 	//フレームごとに発射
-	static const int AtkInterval = 90;
+	static const int atkInterval = 90;
 
 	RetirePat retirePat_ = RetirePat::def;
 

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -10,14 +10,14 @@ class BossAimBul :public BaseObject
 {
 private:
 	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Model> mod_classplayer = nullptr;//è‡ªæ©Ÿ
 
 	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//©‹@
+	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//è‡ªæ©Ÿ
 
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -28,36 +28,36 @@ private:
 	XMFLOAT3 velocity{ 0,0,0 };
 
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
 	static BossAimBul* GetInstance();
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
 	float time;
 
-	//Á‚¦‚é‚Ü‚Å
-	static const int32_t BulVanishTime = 60 * 10;//õ–½
+	//æ¶ˆãˆã‚‹ã¾ã§
+	static const int32_t bulVanishTime = 60 * 10;//å¯¿å‘½
 
-	//Á–Å‚Ìé
-	int32_t vanishTimer_ = BulVanishTime;
+	//æ¶ˆæ»…ã®å®£å‘Š
+	int32_t vanishTimer_ = bulVanishTime;
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
-	bool ShotTagMomOnlyFlag = true;//ˆê“x‚«‚è‚Ìƒ^[ƒQƒbƒgÀ•W“Ç‚İ‚İ
-	XMFLOAT3 ShotTagMoment{};
-	float Nowframe = 0;//Œ»İƒtƒŒ
-	bool GetPosOnlyFlag = true;//ˆê“x‚«‚è‚ÌÀ•W“Ç‚İ‚İ
-	XMFLOAT3 boPosMoment;//”­Ë‚ÌG‹›“GˆÊ’u
-	XMFLOAT3 MoveSp;//’eˆÚ“®‘¬“x
-	XMFLOAT3 NowPos;//‚»‚Ì‚Ì’eˆÊ’u
+	bool shotTagMomOnlyFlag = true;//ä¸€åº¦ãã‚Šã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆåº§æ¨™èª­ã¿è¾¼ã¿
+	XMFLOAT3 shotTagMoment{};
+	float nowframe = 0;//ç¾åœ¨ãƒ•ãƒ¬
+	bool getPosOnlyFlag = true;//ä¸€åº¦ãã‚Šã®åº§æ¨™èª­ã¿è¾¼ã¿
+	XMFLOAT3 boPosMoment;//ç™ºå°„æ™‚ã®é›‘é­šæ•µä½ç½®
+	XMFLOAT3 moveSp;//å¼¾ç§»å‹•é€Ÿåº¦
+	XMFLOAT3 nowPos;//ãã®æ™‚ã®å¼¾ä½ç½®
 };

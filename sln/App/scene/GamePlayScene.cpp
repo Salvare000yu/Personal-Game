@@ -780,7 +780,7 @@ void GamePlayScene::PlayerDamage()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	pDamFlag = true;
-	
+
 	charParams->SetispDam(true);
 	float NowpHp = charParams->GetNowpHp();//自機体力取得
 
@@ -809,7 +809,6 @@ void GamePlayScene::CollisionAll()
 	//自機
 	std::forward_list<CollisionManager::Collider> pColliders;
 	if (player_->GetAlive()) {
-
 		auto& c = pColliders.emplace_front();
 		c.baseObject = player_.get();
 		c.radius = player_->GetScale().z;
@@ -829,7 +828,6 @@ void GamePlayScene::CollisionAll()
 
 	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
 	if (NowpHp > 0 && bossEnemyAdvent) {
-
 		CollisionManager::CheckHitFromColliderList(
 			pbColliders,
 			pbHitFunc,
@@ -839,7 +837,7 @@ void GamePlayScene::CollisionAll()
 				//喰らってまだ生きてたら
 				const float damage = pBulPow - BossDefense;
 				if (NowBoHp > damage) {
-					bo->BossDamageEffectFlag = true;//くらい演出オン
+					bo->bossDamageEffectFlag = true;//くらい演出オン
 					NowBoHp -= damage;
 					charParams->SetNowBoHp(NowBoHp);//ボスHPセット
 					particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
@@ -868,7 +866,7 @@ void GamePlayScene::CollisionAll()
 
 			auto& c = seColliders.emplace_front();
 			c.baseObject = se.get();
-			c.radius = se->GetScale().z;
+			c.radius = se->GetScale().z+3.f;
 		}
 
 		CollisionManager::CheckHitFromColliderList(
@@ -1002,15 +1000,15 @@ void GamePlayScene::CollisionAll()
 			pHitFunc,
 			boColliders,
 			[&](BaseObject* boss) {
-					Boss* bo = (Boss*)boss;
-					//定期的にダメージ
-					if (bodyDamFlag == false) {
-						int bodyPow = bo->GetBodyPow();//ボス体威力
-						NowpHp -= bodyPow;//自機にダメージ
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
-						PlayerDamage();
-						bodyDamFlag = true;//クールたいむ
-					}
+				Boss* bo = (Boss*)boss;
+				//定期的にダメージ
+				if (bodyDamFlag == false) {
+					int bodyPow = bo->GetBodyPow();//ボス体威力
+					NowpHp -= bodyPow;//自機にダメージ
+					charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+					PlayerDamage();
+					bodyDamFlag = true;//クールたいむ
+				}
 			});
 	}
 }
