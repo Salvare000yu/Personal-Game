@@ -1000,7 +1000,7 @@ void Boss::Update()
 		}
 	}
 	if (isHpHalfPattern == false) {
-		if (charParameters->GetNowBoHp() <= charParameters->GetboMaxHp() / 2) {
+		if (charParameters->GetNowBoHp() <= charParameters->GetBoMaxHp() / 2) {
 			actionPattern = std::bind(&Boss::HpHalfPatStart, this);
 		}
 	}

@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 /// <summary>
-/// ƒ^ƒCƒgƒ‹‰æ–Ê
+/// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
 /// </summary>
 #include "BaseScene.h"
 #include "Sprite.h"
@@ -18,15 +18,15 @@ using namespace DirectX;
 
 class TitleScene :public BaseScene, public BaseObject
 {
-	//ƒƒS‚Ì“®‚«
+	//ãƒ­ã‚´ã®å‹•ã
 	enum class LogoPattern {
 		def,
 		rightRot,
 		leftRot,
-		beforeNextScene,//ƒV[ƒ“‘JˆÚ‘O
+		beforeNextScene,//ã‚·ãƒ¼ãƒ³é·ç§»å‰
 	};
 
-	//‘Ò‹@’†‰ñ“]
+	//å¾…æ©Ÿä¸­å›è»¢
 	enum class StandbyRotPattern {
 		def,
 		accel,
@@ -40,34 +40,26 @@ public:
 
 	void Finalize() override;
 
-	void PlayerStandby();//‘Ò‹@’†
+	void PlayerStandby();//å¾…æ©Ÿä¸­
 
-	void PlayerAppear();//©‹@‚Ì“oê
+	void PlayerAppear();//è‡ªæ©Ÿã®ç™»å ´
 
 	void NextScene();
-	void ToStartSprite();//ƒGƒ“ƒ^[‚ğ‰Ÿ‚µ‚Ä‚Ë!“I‚ÈUI•\¦
+	void ToStartSprite();//ã‚¨ãƒ³ã‚¿ãƒ¼ã‚’æŠ¼ã—ã¦ã­!çš„ãªUIè¡¨ç¤º
 	void LogoMove();
 
-	void DoorOpen();//”à‚ªŠJ‚­
+	void DoorOpen();//æ‰‰ãŒé–‹ã
 
 	void Update() override;
 
 	void Draw() override;
 	void DrawUI() override;
 
-	bool PAppearFlag = true;//©‹@“oêƒtƒ‰ƒO@trueF“oê’†
+	bool pAppearFlag = true;//è‡ªæ©Ÿç™»å ´ãƒ•ãƒ©ã‚°ã€€trueï¼šç™»å ´ä¸­
 	float sp = 1.5;
-	float StartSp = 1.5;
+	float startSp = 1.5;
 
-	bool SceneChangeFlag = false;//ƒV[ƒ“ƒ`ƒFƒ“ƒWŠJn‘O
-
-	////---ƒ^ƒCƒgƒ‹í“®‚­
-	//enum class UpDownPattern {
-	//	def,
-	//	Up,
-	//	Down,
-	//};
-	//UpDownPattern upDownPattern_ = UpDownPattern::def;
+	bool sceneChangeFlag = false;//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸é–‹å§‹å‰
 
 	std::unique_ptr < Player> player_ = nullptr;
 
@@ -79,72 +71,65 @@ private:
 	std::unique_ptr < Sprite> sp_titleoper = nullptr;
 
 	//----------3dobj
-	std::unique_ptr < Model> mod_tunnel = nullptr;//ƒgƒ“ƒlƒ‹
+	std::unique_ptr < Model> mod_tunnel = nullptr;//ãƒˆãƒ³ãƒãƒ«
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 
-	std::unique_ptr < Model> mod_groundBottom = nullptr;//‚µ‚½’n–Ê
+	std::unique_ptr < Model> mod_groundBottom = nullptr;//ã—ãŸåœ°é¢
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
 
-	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//’n–Ê
+	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//åœ°é¢
 	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 
-	std::unique_ptr < Model> mod_kaberight = nullptr;//•Ç
+	std::unique_ptr < Model> mod_kaberight = nullptr;//å£
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 
-	std::unique_ptr < Model> mod_kabeleft = nullptr;//•Ç
+	std::unique_ptr < Model> mod_kabeleft = nullptr;//å£
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
 
-	std::unique_ptr < Model> mod_logo = nullptr;//ƒ^ƒCƒgƒ‹ƒƒS
-	std::unique_ptr < Object3d> obj_logo = nullptr;//ƒ^ƒCƒgƒ‹ƒƒS
+	std::unique_ptr < Model> mod_logo = nullptr;//ã‚¿ã‚¤ãƒˆãƒ«ãƒ­ã‚´
+	std::unique_ptr < Object3d> obj_logo = nullptr;//ã‚¿ã‚¤ãƒˆãƒ«ãƒ­ã‚´
 
-	std::unique_ptr < Model> mod_player = nullptr;// ©‹@
-	//---’n–Ê
-	//’n–Ê“ñí—Ş‚ğã‰º‚É—h‚ç‚·
-	const float SwingDist = 10.f;//—h‚ç‚·‹——£
-	const float SwingSp = 2.f;//—h‚ç‚·‘¬“x
-	float PosDef = -150;//’n–Ê‚ğ’u‚­À•W@‚±‚±’†S‚Éã‰º
+	std::unique_ptr < Model> mod_player = nullptr;// è‡ªæ©Ÿ
+	//---åœ°é¢
+	//åœ°é¢äºŒç¨®é¡ã‚’ä¸Šä¸‹ã«æºã‚‰ã™
+	const float swingDist = 10.f;//æºã‚‰ã™è·é›¢
+	const float swingSp = 2.f;//æºã‚‰ã™é€Ÿåº¦
+	float posDef = -150;//åœ°é¢ã‚’ç½®ãåº§æ¨™ã€€ã“ã“ä¸­å¿ƒã«ä¸Šä¸‹
 
-	//----------“oê‘Şê‹¤’Ê----------//
-	const float PApMoveFrameMax = 60.f;//Œo‰ßŠÔÅ‘åƒtƒŒ[ƒ€(“oê)
-	const float PExitMoveFrameMax = 100.f;//Œo‰ßŠÔÅ‘åƒtƒŒ[ƒ€(‘Şê)
-	const int PMoveFrameDef = 0;//Œo‰ßŠÔ‚Å‚Ó‚§
-	int PMoveFrame = PMoveFrameDef;//Œo‰ßŠÔ
-	//-----©‹@“oê
-	XMFLOAT3 PlayerInitPos{ 0,150,-1950 };
-	XMFLOAT3 ApStartPPos{};//ŠJn©‹@À•W
-	XMFLOAT3 ApEndPPos{};//I—¹
-	const float CamEyeMoveSpX = 1.5f;//ƒJƒƒ‰‰¡‚¸‚ç‚·’l
-	//------©‹@“oê
-	//------©‹@‘Şê(ƒV[ƒ“ƒ`ƒFƒ“ƒW)
-	XMFLOAT3 ExitStartPPos{};//ŠJn©‹@À•W
-	XMFLOAT3 ExitEndPPos{};//I—¹
-	const float ExitPosZ = 1300;//‚±‚±‚Å‚¨‚í‚é
-	const float SceneChangeDirecPosZ = -100;//ƒV[ƒ“‘JˆÚ‰‰oŠJnˆÊ’u
-	bool HideTheScreenOnly = false;//ˆê“x‚«‚è‰æ–Ê‰B‚µƒtƒ‰ƒO@falseF‚Ü‚¾‚µ‚Ä‚È‚¢
-	//------©‹@‘Şê(ƒV[ƒ“ƒ`ƒFƒ“ƒW)
+	//----------ç™»å ´é€€å ´å…±é€š----------//
+	const float pApMoveFrameMax = 60.f;//çµŒéæ™‚é–“æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ (ç™»å ´)
+	const float pExitMoveFrameMax = 100.f;//çµŒéæ™‚é–“æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ (é€€å ´)
+	const int pMoveFrameDef = 0;//çµŒéæ™‚é–“ã§ãµã‰
+	int pMoveFrame = pMoveFrameDef;//çµŒéæ™‚é–“
+	//-----è‡ªæ©Ÿç™»å ´
+	XMFLOAT3 playerInitPos{ 0,150,-1950 };
+	XMFLOAT3 apStartPPos{};//é–‹å§‹æ™‚è‡ªæ©Ÿåº§æ¨™
+	XMFLOAT3 apEndPPos{};//çµ‚äº†
+	const float camEyeMoveSpX = 1.5f;//ã‚«ãƒ¡ãƒ©æ¨ªãšã‚‰ã™å€¤
+	//------è‡ªæ©Ÿç™»å ´
+	//------è‡ªæ©Ÿé€€å ´(ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸)
+	XMFLOAT3 exitStartPPos{};//é–‹å§‹æ™‚è‡ªæ©Ÿåº§æ¨™
+	XMFLOAT3 exitEndPPos{};//çµ‚äº†
+	const float exitPosZ = 1300;//ã“ã“ã§ãŠã‚ã‚‹
+	const float sceneChangeDirecPosZ = -100;//ã‚·ãƒ¼ãƒ³é·ç§»æ¼”å‡ºé–‹å§‹ä½ç½®
+	bool hideTheScreenOnly = false;//ä¸€åº¦ãã‚Šç”»é¢éš ã—ãƒ•ãƒ©ã‚°ã€€falseï¼šã¾ã ã—ã¦ãªã„
+	//------è‡ªæ©Ÿé€€å ´(ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸)
 
-	//------ENTERƒXƒvƒ‰ƒCƒg“_–Å
-	const int ToStartFrameDef = 40;//“§–¾‚¶‚á‚È‚¢ŠÔ
-	int ToStartFrame = ToStartFrameDef;
+	//------ENTERã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç‚¹æ»…
+	const int toStartFrameDef = 40;//é€æ˜ã˜ã‚ƒãªã„æ™‚é–“
+	int toStartFrame = toStartFrameDef;
 	//-------
 
-	//ƒƒS‚Ì“®‚«@ƒfƒtƒHƒ‹ƒg
+	//ãƒ­ã‚´ã®å‹•ãã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
 	LogoPattern logoPattern_ = LogoPattern::def;
 
-	float LogoRotVel = 0;//í‚ÉƒƒS‚ÌRot‚É‰ÁZ‚³‚ê‚é’l
+	float logoRotVel = 0;//å¸¸ã«ãƒ­ã‚´ã®Rotã«åŠ ç®—ã•ã‚Œã‚‹å€¤
 
-	int VibCount = 15;//ƒ^ƒCƒgƒ‹‚©‚ç‰½ƒtƒŒ[ƒ€U“®‚³‚¹‚é‚©
-	int SceneChangeVibCount = 15;//ƒV[ƒ“ƒ`ƒFƒ“ƒW’†‰½ƒtƒŒ[ƒ€U“®‚³‚¹‚é‚©
+	int vibCount = 15;//ã‚¿ã‚¤ãƒˆãƒ«ã‹ã‚‰ä½•ãƒ•ãƒ¬ãƒ¼ãƒ æŒ¯å‹•ã•ã›ã‚‹ã‹
+	int sceneChangeVibCount = 15;//ã‚·ãƒ¼ãƒ³ãƒã‚§ãƒ³ã‚¸ä¸­ä½•ãƒ•ãƒ¬ãƒ¼ãƒ æŒ¯å‹•ã•ã›ã‚‹ã‹
 
-	bool DoorOpenFlag = false;//”àŠJ‚¯‚Ä‚È‚¢
+	bool doorOpenFlag = false;//æ‰‰é–‹ã‘ã¦ãªã„
 
-	// ƒJƒƒ‰
+	// ã‚«ãƒ¡ãƒ©
 	std::unique_ptr<CameraTracking> camera;
-
-	////‚±‚ê’´‚¦‚½‚çƒpƒ^[ƒ“•Ï‚¦‚é@Å‘åÅ¬
-	//const float NamePosMoveMax = 7;
-	//const float NamePosMoveMin = -7;
-	////ã‚°‰º‚°‚·‚é’l
-	//const float NamePosYUpDownDef = 0.2;//ƒfƒtƒH
-	//float NamePosYUpDown = NamePosYUpDownDef;
 };

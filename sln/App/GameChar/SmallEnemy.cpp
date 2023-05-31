@@ -35,7 +35,7 @@ void SmallEnemy::Initialize()
 	obj->SetScale({ 8.0f, 8.0f, 8.0f });
 	obj->SetRotation({ 1.0f, 270.0f, 1.0f });
 
-	AtkCount = atkInterval;
+	atkCount = atkInterval;
 }
 
 void SmallEnemy::Retire()
@@ -124,13 +124,13 @@ void SmallEnemy::Update()
 	XMFLOAT3 sePos = obj->GetPosition();
 	//登場は奥から向かってくる
 	if (isSeApproach) {
-		if (obj->GetPosition().z > shotTag->GetPosition().z + PosZMax) {
+		if (obj->GetPosition().z > shotTag->GetPosition().z + posZMax) {
 			sePos.z -= moveSp;
 			obj->SetPosition(sePos);
 		}
 		else {
 			//滞在時間
-			if (--RetireFrame < 0) {
+			if (--retireFrame < 0) {
 				//捌け開始
 				isRetire = true;
 				isSeApproach = false;
@@ -141,13 +141,13 @@ void SmallEnemy::Update()
 	Retire();
 
 	//時が満ちたら
-	if (--AtkCount == 0) {
+	if (--atkCount == 0) {
 		//生存時のみ発射
 		if (alive) {
 			Attack();
 		}
 		//再びカウントできるように初期化
-		AtkCount = atkInterval;
+		atkCount = atkInterval;
 	}
 
 	//弾更新

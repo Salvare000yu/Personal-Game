@@ -89,19 +89,19 @@ void TitleScene::Initialize()
 	player_.reset(new Player());
 	//いろいろキャラ初期化
 	player_->Initialize();
-	player_->SetPosition({ PlayerInitPos });
+	player_->SetPosition({ playerInitPos });
 	player_->SetModel(mod_player.get());
 
 	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
 
 	//自機登場演出
-	ApEndPPos = player_->GetPosition();
-	ApStartPPos = ApEndPPos;
-	ApStartPPos.z -= 1200;//ここから自機の初期位置まで指定フレーム掛けて動く
+	apEndPPos = player_->GetPosition();
+	apStartPPos = apEndPPos;
+	apStartPPos.z -= 1200;//ここから自機の初期位置まで指定フレーム掛けて動く
 
 	camera->SetTarget(player_->GetPosition());
 	const float EyeXDef = 10;//最終位置
-	const float EyeX = EyeXDef - (CamEyeMoveSpX * PApMoveFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
+	const float EyeX = EyeXDef - (camEyeMoveSpX * pApMoveFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
 	camera->SetEye({ EyeX,160,-2000 });//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
@@ -136,7 +136,7 @@ void TitleScene::PlayerStandby()
 {
 	XMFLOAT3 pos = player_->GetPosition();
 	//登場後の自機座標(=初期値)にカメラを固定して自機だけ動かす
-	camera->SetTarget(PlayerInitPos);
+	camera->SetTarget(playerInitPos);
 	pos.y += 0.005f * sinf(time * 5.f);//振れ幅＊sin(時＊揺れ速度
 
 	player_->SetPosition(pos);
@@ -146,27 +146,27 @@ void TitleScene::PlayerAppear()
 {
 	XMFLOAT3 pos = player_->GetPosition();
 
-	if (PMoveFrame < PApMoveFrameMax) {//最大フレーム到達までやる
-		float raito = (float)PMoveFrame / PApMoveFrameMax;
-		PMoveFrame++;
+	if (pMoveFrame < pApMoveFrameMax) {//最大フレーム到達までやる
+		float raito = (float)pMoveFrame / pApMoveFrameMax;
+		pMoveFrame++;
 
 		XMFLOAT3 pos{};
-		pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
-		pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
-		pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
+		pos.x = std::lerp(apStartPPos.x, apEndPPos.x, raito);
+		pos.y = std::lerp(apStartPPos.y, apEndPPos.y, raito);
+		pos.z = std::lerp(apStartPPos.z, apEndPPos.z, raito);
 		player_->SetPosition(pos);
 
 		XMFLOAT3 eyePos = camera->GetEye();
-		eyePos.x += CamEyeMoveSpX;
+		eyePos.x +=camEyeMoveSpX;
 		camera->SetEye(eyePos);
 
 		camera->SetTarget(pos);
 	}
 	else {//最大フレーム後
-		PMoveFrame = PMoveFrameDef;//シーン切り替えないでも使うのでデフォルトに戻す
-		ExitEndPPos = { pos.x,pos.y,ExitPosZ };//退場は指定Zまで行っておわる
-		ExitStartPPos = pos;//現在自機座標から退場始める
-		PAppearFlag = false;//登場完了
+		pMoveFrame = pMoveFrameDef;//シーン切り替えないでも使うのでデフォルトに戻す
+		exitEndPPos = { pos.x,pos.y,exitPosZ };//退場は指定Zまで行っておわる
+		exitStartPPos = pos;//現在自機座標から退場始める
+		pAppearFlag = false;//登場完了
 	}
 }
 void TitleScene::DoorOpen()
@@ -183,7 +183,7 @@ void TitleScene::DoorOpen()
 		RDoorPos.x += DoorMoveSp;
 	}
 	else {
-		DoorOpenFlag = true;
+		doorOpenFlag = true;
 	}
 	obj_kabeleft->SetPosition(LDoorPos);
 	obj_kaberight->SetPosition(RDoorPos);
@@ -196,26 +196,26 @@ void TitleScene::NextScene()
 	DoorOpen();//扉を開ける
 
 	//指定時間だけ振動する
-	if (--SceneChangeVibCount == 0) {
+	if (--sceneChangeVibCount == 0) {
 		input->PadVibrationDef();
 	}
 
 	{//指定時間で移動
-		float raito = (float)PMoveFrame / PExitMoveFrameMax;
-		PMoveFrame++;
+		float raito = (float)pMoveFrame / pExitMoveFrameMax;
+		pMoveFrame++;
 
 		XMFLOAT3 pos{};
-		pos.x = std::lerp(ExitStartPPos.x, ExitEndPPos.x, raito);
-		pos.y = std::lerp(ExitStartPPos.y, ExitEndPPos.y, raito);
-		pos.z = std::lerp(ExitStartPPos.z, ExitEndPPos.z, raito);
+		pos.x = std::lerp(exitStartPPos.x, exitEndPPos.x, raito);
+		pos.y = std::lerp(exitStartPPos.y, exitEndPPos.y, raito);
+		pos.z = std::lerp(exitStartPPos.z, exitEndPPos.z, raito);
 		player_->SetPosition(pos);
 
 		camera->SetTarget(pos);
 	}
 	//自機がシーン遷移演出開始位置に到達したら
-	if (player_->GetPosition().z >= SceneChangeDirecPosZ && HideTheScreenOnly == false) {
+	if (player_->GetPosition().z >= sceneChangeDirecPosZ && hideTheScreenOnly == false) {
 		sceneChangeDirection->HideTheScreenFlag = true;//画面隠す開始
-		HideTheScreenOnly = true;
+		hideTheScreenOnly = true;
 	}
 
 	if (sceneChangeDirection->SceneChangeCompFlag)//シーン遷移完了したら
@@ -237,14 +237,14 @@ void TitleScene::ToStartSprite()
 	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
 	XMFLOAT4 color = sp_titleoper->GetColor();
 
-	ToStartFrame = std::max(--ToStartFrame, 0);//ToStartFrameの最小値は0
+	toStartFrame = std::max(--toStartFrame, 0);//toStartFrameの最小値は0
 
-	if (ToStartFrame <= 0) {//指定時間たったら
+	if (toStartFrame <= 0) {//指定時間たったら
 		color.w -= ColorWDec;
 	}
 
 	if (color.w <= Transparency) {
-		ToStartFrame = ToStartFrameDef;//またこの時間分まつ
+		toStartFrame = toStartFrameDef;//またこの時間分まつ
 		color.w = 1.f;//一番明るい状態
 	}
 
@@ -265,34 +265,34 @@ void TitleScene::LogoMove()
 
 	switch (logoPattern_) {
 	case LogoPattern::def:
-		if (PAppearFlag == false) {//登場が終わったら
+		if (pAppearFlag == false) {//登場が終わったら
 			logoPattern_ = LogoPattern::rightRot;
 		}
 		break;
 
 	case LogoPattern::rightRot:
-		LogoRotVel = -RotSp;
+		logoRotVel = -RotSp;
 		if (rot.y <= -RotMax) {//最大値まで回転したら
 			logoPattern_ = LogoPattern::leftRot;//次左回転
 		}
 		break;
 
 	case LogoPattern::leftRot:
-		LogoRotVel = RotSp;
+		logoRotVel = RotSp;
 		if (rot.y >= RotMax) {//最大値まで回転したら
 			logoPattern_ = LogoPattern::rightRot;//次右回転
 		}
 		break;
 
 	case LogoPattern::beforeNextScene:
-		LogoRotVel = 0;
+		logoRotVel = 0;
 		pos.y = std::min(pos.y, (float)PosYMax);//Y座標はPosYMaxまでしかいけないように
 		pos.y += PosYSp;
 		break;
 	}
 
 	//シーンチェンジフラグ経ってなかったら上下移動
-	if (!SceneChangeFlag) {
+	if (!sceneChangeFlag) {
 		pos.y += 0.2f * std::sin(time * 3.14159265358f);
 	}
 	else {
@@ -300,7 +300,7 @@ void TitleScene::LogoMove()
 		logoPattern_ = LogoPattern::beforeNextScene;
 	}
 
-	rot.y += LogoRotVel;
+	rot.y += logoRotVel;
 	obj_logo->SetRotation(rot);
 	obj_logo->SetPosition(pos);
 
@@ -314,21 +314,21 @@ void TitleScene::Update()
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	//セレクトから振動少し続ける
-	if (--VibCount == 0) {
+	if (--vibCount == 0) {
 		input->PadVibrationDef();
 	}
 
-	if (PAppearFlag) {
+	if (pAppearFlag) {
 		PlayerAppear();//自機登場
 	}
 
 	//登場完了して退場前
-	if (PAppearFlag == false && SceneChangeFlag == false)
+	if (pAppearFlag == false && sceneChangeFlag == false)
 	{
 		if ((cInput->Decision()))     // スペースキーorEnterが押されていたら
 		{
 			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			SceneChangeFlag = true;//チェンジ移動フラグ立てる
+			sceneChangeFlag = true;//チェンジ移動フラグ立てる
 			input->PadVibration();
 		}
 
@@ -337,7 +337,7 @@ void TitleScene::Update()
 		//postEffect->Update();
 	}
 
-	if (SceneChangeFlag) {
+	if (sceneChangeFlag) {
 		sceneChangeDirection->SceneChangeDirectionFlag = true;
 		NextScene();//チェンジ移動開始
 	}
@@ -351,11 +351,11 @@ void TitleScene::Update()
 	obj_logo->Update();
 	obj_groundBottom->Update();
 	{
-		float num = std::sin((float)time * SwingSp) * SwingDist;
+		float num = std::sin((float)time * swingSp) * swingDist;
 		//地面の数だけ
 		for (auto& i : obj_ground) {
 			XMFLOAT3 pos = i.second->GetPosition();
-			pos.y = PosDef + num;//初期位置＋揺らす値
+			pos.y = posDef + num;//初期位置＋揺らす値
 			i.second->SetPosition(pos);
 			num = -num;//二枚目は逆に揺らす
 
@@ -396,7 +396,7 @@ void TitleScene::DrawUI()
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
 
-	if (PAppearFlag == false && SceneChangeFlag == false)//自機登場終わってるかつENTER押される前なら
+	if (pAppearFlag == false && sceneChangeFlag == false)//自機登場終わってるかつENTER押される前なら
 	{
 		sp_titleoper->Draw();//ENTERで開始するよ！画像
 	}

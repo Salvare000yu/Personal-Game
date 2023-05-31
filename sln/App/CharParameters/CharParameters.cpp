@@ -49,9 +49,9 @@ void CharParameters::Initialize()
 	sp_enemyhpbar->SetColor({ 0.4f,1,0.4f,1 });
 
 	//パラメータ関連初期化
-	BossDefense = BossDefenseDef;
-	NowBossHP = BossMaxHP;//
-	NowPlayerHP = PlayerMaxHP;//
+	bossDefense = bossDefenseDef;
+	nowBossHP = bossMaxHP;//
+	nowPlayerHP = playerMaxHP;//
 	pNextPlaceGoFlag = true;
 
 	//HP色を設定 最初緑
@@ -61,13 +61,13 @@ void CharParameters::Initialize()
 
 void CharParameters::pHpSizeChange()
 {
-	sp_playerhpbar->size_.x = sp_playerhpbar->texSize_.x * (float)NowPlayerHP / PlayerMaxHP;
+	sp_playerhpbar->size_.x = sp_playerhpbar->texSize_.x * (float)nowPlayerHP / playerMaxHP;
 	sp_playerhpbar->TransferVertexBuffer();
 }
 void CharParameters::boHpSizeChange()
 {
 	//サイズ変更
-	sp_enemyhpbar->size_.x = sp_enemyhpbar->texSize_.x * (float)NowBossHP / BossMaxHP;
+	sp_enemyhpbar->size_.x = sp_enemyhpbar->texSize_.x * (float)nowBossHP / bossMaxHP;
 	sp_enemyhpbar->TransferVertexBuffer();
 }
 
@@ -78,7 +78,7 @@ void CharParameters::Update()
 void CharParameters::PlayerHpSafety()
 {
 	//半分以下で
-	if (NowPlayerHP <= PlayerMaxHP / 2.f) {
+	if (nowPlayerHP <= playerMaxHP / 2.f) {
 		///自機HPバー半分以下黄色
 		sp_playerhpbar->SetColor({ 1,1,0,1 });
 		pHpColorPattern = std::bind(&CharParameters::PlayerHpLessThanHalf, this);
@@ -87,7 +87,7 @@ void CharParameters::PlayerHpSafety()
 void CharParameters::PlayerHpLessThanHalf()
 {
 	//HP指定した値まで減ったら
-	if (NowPlayerHP <= PlayerMaxHP / 4.f) {
+	if (nowPlayerHP <=playerMaxHP / 4.f) {
 		sp_playerhpbar->SetColor({ 1,0,0,1 });//赤
 		pHpColorPattern = std::bind(&CharParameters::PlayerHpDanger, this);
 	}
@@ -120,7 +120,7 @@ void CharParameters::pHpUpdate()
 	pHpColorPattern();
 
 	//自機Hpの最大最小値。HPが負になったりバーが反対に飛び出ないように
-	NowPlayerHP = std::clamp(NowPlayerHP, 0.f, PlayerMaxHP);
+	nowPlayerHP = std::clamp(nowPlayerHP, 0.f, playerMaxHP);
 
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
@@ -130,7 +130,7 @@ void CharParameters::pHpUpdate()
 void CharParameters::BossHpSafety()
 {
 	//半分以下で
-	if (NowBossHP <= BossMaxHP / 2.f) {
+	if (nowBossHP <= bossMaxHP / 2.f) {
 		///自機HPバー半分以下黄色
 		sp_enemyhpbar->SetColor({ 1,1,0,1 });
 		boHpColorPattern = std::bind(&CharParameters::BossHpLessThanHalf, this);
@@ -139,7 +139,7 @@ void CharParameters::BossHpSafety()
 void CharParameters::BossHpLessThanHalf()
 {
 	//HP指定した値まで減ったら
-	if (NowBossHP <= BossMaxHP / 4.f) {
+	if (nowBossHP <= bossMaxHP / 4.f) {
 		sp_enemyhpbar->SetColor({ 1,0,0,1 });//赤
 		boHpColorPattern = std::bind(&CharParameters::BossHpDanger, this);
 	}
@@ -174,7 +174,7 @@ void CharParameters::boHpUpdate()
 	boHpColorPattern();
 
 	//ボスHpの最大最小値。HPが負になったりバーが反対に飛び出ないように
-	NowBossHP = std::clamp(NowBossHP, 0.f, BossMaxHP);
+	nowBossHP = std::clamp(nowBossHP, 0.f, bossMaxHP);
 
 	//更新
 	sp_enemyhpbar->Update();

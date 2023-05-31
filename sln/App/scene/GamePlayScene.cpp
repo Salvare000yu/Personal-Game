@@ -645,7 +645,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	XMFLOAT3 pPos = player_->GetPosition();
 
 	//指定した場所超えたら
-	if (pPos.z > charParams->StopPos) {
+	if (pPos.z > charParams->stopPos) {
 		pNextPlaceGoSp -= decelVal;
 
 		if ((pNextPlaceGoSp - decelVal) < 0) {

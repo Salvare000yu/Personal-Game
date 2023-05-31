@@ -29,24 +29,24 @@ public:
 
 	//-----------------------↓げったーせったー↓-----------------------//
 	//現在ボスHP
-	void SetNowBoHp(float NowBossHP) { this->NowBossHP = NowBossHP; }
-	const float& GetNowBoHp() { return NowBossHP; }
+	void SetNowBoHp(float nowBossHP) { this->nowBossHP = nowBossHP; }
+	const float& GetNowBoHp() { return nowBossHP; }
 	//自機現在HP
-	void SetNowpHp(float NowPlayerHP) { this->NowPlayerHP = NowPlayerHP; }
-	const float& GetNowpHp() { return NowPlayerHP; }
+	void SetNowpHp(float nowPlayerHP) { this->nowPlayerHP = nowPlayerHP; }
+	const float& GetNowpHp() { return nowPlayerHP; }
 	//自機喰らった
 	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
 	const bool& GetispDam() { return ispDam; }
 	//自機HPMax
-	const float& GetpMaxHp() { return PlayerMaxHP; }
+	const float& GetpMaxHp() { return playerMaxHP; }
 	//ボスHPMax
-	const float& GetboMaxHp() { return BossMaxHP; }
+	const float& GetBoMaxHp() { return bossMaxHP; }
 	//ボス防御力
-	void SetBossDefense(float BossDefense) { this->BossDefense = BossDefense; }
-	const float& GetBossDefense() { return BossDefense; }
+	void SetBossDefense(float bossDefense) { this->bossDefense = bossDefense; }
+	const float& GetBossDefense() { return bossDefense; }
 	//-----------------------↑げったーせったー↑-----------------------//
 
-	const int StopPos = 1800;//自機次座標への移動の停止場所
+	const int stopPos = 1800;//自機次座標への移動の停止場所
 	//次の場所へ向かう　true：向かっている false:完了
 	bool pNextPlaceGoFlag = true;
 
@@ -62,12 +62,12 @@ private:
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 
 	//敵HP
-	const float BossMaxHP = 1000;//てきさいだいHP
-	float NowBossHP = BossMaxHP;//現在の敵HP
+	const float bossMaxHP = 1000;//てきさいだいHP
+	float nowBossHP = bossMaxHP;//現在の敵HP
 
 	//自機HP
-	const float PlayerMaxHP = 1000;//じきさいだいHP
-	float NowPlayerHP = PlayerMaxHP;//現在の自機HP
+	const float playerMaxHP = 1000;//じきさいだいHP
+	float nowPlayerHP = playerMaxHP;//現在の自機HP
 
 	//------自機HPスプライト点滅
 	const int pHpBarFrameDef = 20;//透明じゃない時間
@@ -80,6 +80,6 @@ private:
 	bool ispDam = false;
 
 	//防御力
-	const float BossDefenseDef = 50;
-	float BossDefense = BossDefenseDef;
+	const float bossDefenseDef = 50;
+	float bossDefense = bossDefenseDef;
 };
