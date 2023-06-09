@@ -54,18 +54,18 @@ void Pause::Initialize()
 	sp_gotitle->TransferVertexBuffer();
 	sp_operation->TransferVertexBuffer();
 	//毎回リセット
-	SceneChangeTitleFlag = false;
-	PauseFlag = false;
-	PauseNowSelect = 0;
+	sceneChangeTitleFlag = false;
+	pauseFlag = false;
+	pauseNowSelect = 0;
 	WaitKeyP = 0;
 }
 
 void Pause::EveryInit()
 {
 	//毎回リセット
-	SceneChangeTitleFlag = false;
-	PauseFlag = false;
-	PauseNowSelect = 0;
+	sceneChangeTitleFlag = false;
+	pauseFlag = false;
+	pauseNowSelect = 0;
 	WaitKeyP = 0;
 }
 
@@ -76,9 +76,9 @@ void Pause::PauseNow()
 	input->PadVibrationDef();
 
 	//メンバ関数ポインタ対応した選択
-	if (PauseNowSelect == 0) { pFunc = &Pause::PauseConti; }
-	if (PauseNowSelect == 1) { pFunc = &Pause::PauseOper; }
-	if (PauseNowSelect == 2) { pFunc = &Pause::PauseGoTitle; }
+	if (pauseNowSelect == 0) { pFunc = &Pause::PauseConti; }
+	if (pauseNowSelect == 1) { pFunc = &Pause::PauseOper; }
+	if (pauseNowSelect == 2) { pFunc = &Pause::PauseGoTitle; }
 
 	//メンバ関数ポインタ呼び出し
 	(this->*pFunc)();
@@ -104,25 +104,25 @@ void Pause::PauseConti()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//選択中サイズでっかく
-	sp_continuation->SetSize({ PauseSelectSize,100.f });
+	sp_continuation->SetSize({ pauseSelectSize,100.f });
 	sp_continuation->TransferVertexBuffer();
 
 	if (cInput->tDownArrow() || cInput->tDownMove()) {//1を次は選択
-		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_continuation->SetSize({ pauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
-		PauseNowSelect = 1;
+		pauseNowSelect = 1;
 	}
 	if (cInput->tUpArrow() || cInput->tUpMove()) {//上で2
-		sp_continuation->SetSize({ PauseSelectSizeDef,100.f });
+		sp_continuation->SetSize({ pauseSelectSizeDef,100.f });
 		sp_continuation->TransferVertexBuffer();
-		PauseNowSelect = 2;
+		pauseNowSelect = 2;
 	}
 
 	//継続
 	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		PauseFlag = false;
+		pauseFlag = false;
 	}
 }
 void Pause::PauseOper()
@@ -130,34 +130,34 @@ void Pause::PauseOper()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//選択中サイズでっかく
-	sp_operation->SetSize({ PauseSelectSize,100.f });
+	sp_operation->SetSize({ pauseSelectSize,100.f });
 	sp_operation->TransferVertexBuffer();
 
 	//操作説明開いてないときのみ
-	if (OperWindOpenFlag == false != cInput->Decision())
+	if (operWindOpenFlag == false != cInput->Decision())
 	{
 		if (cInput->tDownArrow() || cInput->tDownMove()) {//下で2
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->SetSize({ pauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 2;
+			pauseNowSelect = 2;
 		}
 		if (cInput->tUpArrow() || cInput->tUpMove()) {//上で0
-			sp_operation->SetSize({ PauseSelectSizeDef,100.f });
+			sp_operation->SetSize({ pauseSelectSizeDef,100.f });
 			sp_operation->TransferVertexBuffer();
-			PauseNowSelect = 0;
+			pauseNowSelect = 0;
 		}
 	}
 	//操作説明画面開く
 	if (cInput->Decision())
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		OperWindOpenFlag = true;
+		operWindOpenFlag = true;
 		OperationWind();
 
-		WaitKeyEnter++;
-		if ((cInput->Decision()) && WaitKeyEnter >= 2) {
-			OperWindOpenFlag = false;
-			WaitKeyEnter = 0;
+		waitKeyEnter++;
+		if ((cInput->Decision()) && waitKeyEnter >= 2) {
+			operWindOpenFlag = false;
+			waitKeyEnter = 0;
 		}
 	}
 }
@@ -171,23 +171,23 @@ void Pause::PauseGoTitle()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	//選択中サイズでっかく
-	sp_gotitle->SetSize({ PauseSelectSize,100.f });
+	sp_gotitle->SetSize({ pauseSelectSize,100.f });
 	sp_gotitle->TransferVertexBuffer();
 	if (cInput->tDownArrow() || cInput->tDownMove()) {//下で0
-		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+		sp_gotitle->SetSize({ pauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
-		PauseNowSelect = 0;
+		pauseNowSelect = 0;
 	}
 	if (cInput->tUpArrow() || cInput->tUpMove()) {//上で1
-		sp_gotitle->SetSize({ PauseSelectSizeDef,100.f });
+		sp_gotitle->SetSize({ pauseSelectSizeDef,100.f });
 		sp_gotitle->TransferVertexBuffer();
-		PauseNowSelect = 1;
+		pauseNowSelect = 1;
 	}
 
 	//タイトルへ戻る
 	if ((cInput->Decision()))
 	{
-		SceneChangeTitleFlag = true;
+		sceneChangeTitleFlag = true;
 	}
 }
 

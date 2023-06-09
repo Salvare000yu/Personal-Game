@@ -54,13 +54,13 @@ public:
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
 
-	float Nowframe = 0;//現在フレ
-	bool OnlyFlag = true;//一度
-	XMFLOAT3 NowPos;//その時の弾位置
+	float nowFrame = 0;//現在フレ
+	bool onlyFlag = true;//一度
+	XMFLOAT3 nowPos;//その時の弾位置
 	XMFLOAT3 sePosMoment;//発射時の雑魚敵位置
-	XMFLOAT3 MoveSp;//弾移動速度
+	XMFLOAT3 moveSp;//弾移動速度
 
-	XMFLOAT3 ShotTagMoment{};
+	XMFLOAT3 shotTagMoment{};
 
 private:
 

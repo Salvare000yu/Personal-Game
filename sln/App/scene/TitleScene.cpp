@@ -293,7 +293,7 @@ void TitleScene::LogoMove()
 
 	//シーンチェンジフラグ経ってなかったら上下移動
 	if (!sceneChangeFlag) {
-		pos.y += 0.2f * std::sin(time * 3.14159265358f);
+		pos.y += 0.2f * std::sin(time * XM_PI);
 	}
 	else {
 		//シーンチェンジ開始したら

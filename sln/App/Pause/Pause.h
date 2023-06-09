@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseObject.h"
 #include "Object3d.h"
 #include "Sprite.h"
@@ -11,9 +11,9 @@ public:
 
 	void Initialize()override;
 	void EveryInit();
-	//ƒ|[ƒY‚µ‚Ä‚¢‚é‚Æ‚«
+	//ãƒãƒ¼ã‚ºã—ã¦ã„ã‚‹ã¨ã
 	void PauseNow();
-	//ƒ^ƒCƒgƒ‹‚Ö
+	//ã‚¿ã‚¤ãƒˆãƒ«ã¸
 	void Update()override;
 	void Draw()override;
 	void DrawUI()override;
@@ -23,26 +23,26 @@ public:
 	void SpOpenPauseDraw();
 	void SpFlagTrueNowDraw();
 	void SpOperWindDraw();
-	//‘€ìà–¾‰æ–Ê‚ğŠJ‚¢‚Ä‚¢‚é
+	//æ“ä½œèª¬æ˜ç”»é¢ã‚’é–‹ã„ã¦ã„ã‚‹
 	void OperationWind();
-	//ƒvƒŒƒC‘±s
+	//ãƒ—ãƒ¬ã‚¤ç¶šè¡Œ
 	void PauseConti();
-	//‘€ìà–¾‰æ–Ê‚ğŠJ‚­
+	//æ“ä½œèª¬æ˜ç”»é¢ã‚’é–‹ã
 	void PauseOper();
 
-	//-------------«‚°‚Á‚½[‚¹‚Á‚½[«--------------//
-	//ƒ|[ƒY‚µ‚Ä‚é‚©‚Ç‚¤‚©
-	void SetPauseFlag(bool PauseFlag) { this->PauseFlag = PauseFlag; }
-	const bool& GetPauseFlag() { return PauseFlag; }
-	//‘€ìà–¾‰æ–ÊŠJ‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©
-	void SetOpWindOpenFlag(bool OperWindOpenFlag) { this->OperWindOpenFlag = OperWindOpenFlag; }
-	const bool& GetOpWindOpenFlag() { return OperWindOpenFlag; }
-	//ƒ^ƒCƒgƒ‹–ß‚éƒtƒ‰ƒO
-	void SetSceneChangeTitleFlag(bool SceneChangeTitleFlag) { this->SceneChangeTitleFlag = SceneChangeTitleFlag; }
-	const bool& GetSceneChangeTitleFlag() { return SceneChangeTitleFlag; }
-	//-------------ª‚°‚Á‚½[‚¹‚Á‚½[ª--------------//
+	//-------------â†“ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†“--------------//
+	//ãƒãƒ¼ã‚ºã—ã¦ã‚‹ã‹ã©ã†ã‹
+	void SetPauseFlag(bool pauseFlag) { this->pauseFlag = pauseFlag; }
+	const bool& GetPauseFlag() { return pauseFlag; }
+	//æ“ä½œèª¬æ˜ç”»é¢é–‹ã„ã¦ã„ã‚‹ã‹ã©ã†ã‹
+	void SetOpWindOpenFlag(bool operWindOpenFlag) { this->operWindOpenFlag = operWindOpenFlag; }
+	const bool& GetOpWindOpenFlag() { return operWindOpenFlag; }
+	//ã‚¿ã‚¤ãƒˆãƒ«æˆ»ã‚‹ãƒ•ãƒ©ã‚°
+	void SetSceneChangeTitleFlag(bool sceneChangeTitleFlag) { this->sceneChangeTitleFlag = sceneChangeTitleFlag; }
+	const bool& GetSceneChangeTitleFlag() { return sceneChangeTitleFlag; }
+	//-------------â†‘ã’ã£ãŸãƒ¼ã›ã£ãŸãƒ¼â†‘--------------//
 
-	int WaitKeyP = 0;//‚O‚¾‚¯‚Åƒ|[ƒYŠJ•Â‚Å‚«‚é‚æ‚¤‚É
+	int WaitKeyP = 0;//ï¼ã ã‘ã§ãƒãƒ¼ã‚ºé–‹é–‰ã§ãã‚‹ã‚ˆã†ã«
 private:
 	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;
@@ -51,14 +51,14 @@ private:
 	std::unique_ptr < Sprite> sp_continuation = nullptr;
 	std::unique_ptr < Sprite> sp_gotitle = nullptr;
 
-	bool PauseFlag = false;//ƒ|[ƒY‚µ‚Ä‚¢‚È‚¢
-	const float PauseSelectSizeDef = 300.0f;
-	const float PauseSelectSize = 350.0f;
-	float PauseNowSelect = 0;//0:‘±‚¯‚é 1:‘€ìà–¾@2:ƒ^ƒCƒgƒ‹
+	bool pauseFlag = false;//ãƒãƒ¼ã‚ºã—ã¦ã„ãªã„
+	const float pauseSelectSizeDef = 300.0f;
+	const float pauseSelectSize = 350.0f;
+	float pauseNowSelect = 0;//0:ç¶šã‘ã‚‹ 1:æ“ä½œèª¬æ˜ã€€2:ã‚¿ã‚¤ãƒˆãƒ«
 	void  (Pause::* pFunc)();
 
-	int WaitKeyEnter = 0;//Enter‚Å‘€ìà–¾‚ª‚ß‚ñ..
-	bool OperWindOpenFlag = false;//ŠJ‚¢‚Ä‚¢‚È‚¢
+	int waitKeyEnter = 0;//Enterã§æ“ä½œèª¬æ˜ãŒã‚ã‚“..
+	bool operWindOpenFlag = false;//é–‹ã„ã¦ã„ãªã„
 
-	bool SceneChangeTitleFlag = false;//ƒ^ƒCƒgƒ‹‚Ö
+	bool sceneChangeTitleFlag = false;//ã‚¿ã‚¤ãƒˆãƒ«ã¸
 };

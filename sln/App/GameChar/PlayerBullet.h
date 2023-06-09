@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object3d.h"
 #include "BaseObject.h"
 
@@ -7,9 +7,9 @@
 class PlayerBullet :public BaseObject
 {
 private:
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -18,22 +18,22 @@ private:
 	XMFLOAT3 velocity{ 0,0,6 };
 
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
-	//Á‚¦‚é‚Ü‚Å
-	static const int32_t BulVanishTime = 60 * 5;//õ–½
+	//æ¶ˆãˆã‚‹ã¾ã§
+	static const int32_t bulVanishTime = 60 * 5;//å¯¿å‘½
 
-	//Á–Å‚Ìé
-	int32_t vanishTimer_ = BulVanishTime;
+	//æ¶ˆæ»…ã®å®£å‘Š
+	int32_t vanishTimer_ = bulVanishTime;
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 

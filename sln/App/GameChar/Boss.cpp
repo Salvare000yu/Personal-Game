@@ -104,7 +104,7 @@ void Boss::BossAppear()
 		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
-	pos.y += 2.f * std::sin(time * 3.14159265358f);
+	pos.y += 2.f * std::sin(time * XM_PI);
 
 	obj->SetPosition(pos);
 }
@@ -134,7 +134,7 @@ void Boss::Approach()
 	XMFLOAT3 position = obj->GetPosition();
 	position.z -= approachSpZ;
 	position.y += approachSpY;
-	position.x += 7.f * sinf(time * 3.14159265358f);
+	position.x += 7.f * sinf(time * XM_PI);
 	obj->SetPosition(position);
 
 	approachCount--;
@@ -391,7 +391,7 @@ void Boss::CircularMotionMove()
 	//敵の移動
 	XMFLOAT3 position = obj->GetPosition();
 	//弧度法
-	hpHalf_rad = hpHalf_Angle * 3.1415926535f / 180.0f;
+	hpHalf_rad = hpHalf_Angle * XM_PI / 180.0f;
 
 	//円の位置を三角関数でだす
 	addX = cosf(hpHalf_rad) * hpHalf_Length;
@@ -1064,7 +1064,6 @@ void Boss::Draw()
 	}
 
 	if (alive) {
-		//obj->Draw();
 		obj_core->Draw();
 		obj_AroundCore->Draw();
 		obj_outside->Draw();
