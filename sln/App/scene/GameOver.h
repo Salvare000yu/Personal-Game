@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 /// <summary>
-/// ƒ^ƒCƒgƒ‹‰æ–Ê
+/// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
 /// </summary>
 #include "BaseScene.h"
 #include "Sprite.h"
@@ -39,24 +39,18 @@ private:
 	std::unique_ptr < Sprite> sp_retry = nullptr;
 	std::unique_ptr < Sprite> sp_Now = nullptr;
 
-	float NowSelect = 0;//0:‘€ìà–¾iƒfƒtƒHj
+	float nowSelect = 0;//0:æ“ä½œèª¬æ˜ï¼ˆãƒ‡ãƒ•ã‚©ï¼‰
 	void  (GameOver::* pFunc)();
 
-	float WaitKeyEase = 0;//ƒC[ƒY‚ÌƒL[‘Ò‹@ŠÔ
+	float waitKeyEase = 0;//ã‚¤ãƒ¼ã‚ºã®ã‚­ãƒ¼å¾…æ©Ÿæ™‚é–“
 
-	bool CursorMoveNowFlag = false;//ˆÚ“®’†‚Í‰½‚à‚·‚é‚È false:“®‚¢‚Ä‚È‚¢
+	bool cursorMoveNowFlag = false;//ç§»å‹•ä¸­ã¯ä½•ã‚‚ã™ã‚‹ãª false:å‹•ã„ã¦ãªã„
 
-	const float EaseValDef = 25;
-	float EaseVal = EaseValDef;//ƒC[ƒY’l
-	float DecEaseVal = 0.5;//ƒC[ƒY’lŒ¸‚ç‚·’l
+	const float easeValDef = 25;
+	float easeVal = easeValDef;//ã‚¤ãƒ¼ã‚ºå€¤
+	float decEaseVal = 0.5;//ã‚¤ãƒ¼ã‚ºå€¤æ¸›ã‚‰ã™å€¤
 
-	bool SSOp0_1Flag = false;//1‚ÉˆÚ“®ŠJnƒtƒ‰ƒO
-	bool SSStart1_0Flag = false;//1‚©‚ç0‚É
+	bool sSOp0_1Flag = false;//1ã«ç§»å‹•é–‹å§‹ãƒ•ãƒ©ã‚°
+	bool sSStart1_0Flag = false;//1ã‹ã‚‰0ã«
 
-	//Model* model_1 = nullptr;
-	//Model* model_2 = nullptr;
-
-	//Object3d* object3d_1 = nullptr;
-	//Object3d* object3d_2 = nullptr;
-	//Object3d* object3d_3 = nullptr;
 };

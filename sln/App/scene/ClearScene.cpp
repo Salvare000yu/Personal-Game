@@ -1,4 +1,4 @@
-#include "ClearScene.h"
+ï»¿#include "ClearScene.h"
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
@@ -12,50 +12,26 @@ using namespace DirectX;
 
 void ClearScene::Initialize()
 {
-#pragma region •`‰æ‰Šú‰»ˆ—
+#pragma region æç”»åˆæœŸåŒ–å‡¦ç†
 
-	// ƒ}ƒEƒXƒJ[ƒ\ƒ‹”ñ•\Ž¦
+	// ãƒžã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«éžè¡¨ç¤º
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
 
-	////---obj‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^“Ç‚Ýž‚Ý---
-	//model_1 = Model::LoadFromOBJ("ground");
-	//model_2 = Model::LoadFromOBJ("triangle_mat");
-	////Model* model_3 = Model::LoadFromOBJ("chr_sword");
-	////---3dƒIƒuƒWƒFƒNƒg¶¬---
-	//object3d_1 = Object3d::Create();
-	//object3d_2 = Object3d::Create();
-	//object3d_3 = Object3d::Create();
-	////---3dƒIƒuƒWƒFƒNƒg‚É3dƒ‚ƒfƒ‹‚ð•R‚Ã‚¯‚é---
-	//object3d_1->SetModel(model_1);
-	//object3d_2->SetModel(model_2);
-	//object3d_3->SetModel(model_2);
-
-	//object3d_2->SetScale({ 20.0f, 20.0f, 20.0f });
-	//object3d_3->SetScale({ 30.0f, 30.0f, 30.0f });
-
-	//object3d_2->SetPosition({ 5,-1,5 });
-	//object3d_3->SetPosition({ -5,-1,5 });
-
-	// ‰¹º“Ç‚Ýž‚Ý
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("verROOP_tukawanakutemoiiYO.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
-	// ‰¹ºÄ¶
+	// éŸ³å£°å†ç”Ÿ
 	GameSound::GetInstance()->PlayWave("verROOP_tukawanakutemoiiYO.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 
-	// 3DƒIƒuƒWƒFƒNƒg‚Ì”
-	//const int OBJECT_NUM = 2;
-
-	//Object3d object3ds[OBJECT_NUM];
-
-	// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒeƒNƒXƒ`ƒƒ“Ç‚Ýž‚Ý
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/GameClear.png");
 
-	// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
 	sprite.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 
-#pragma endregion •`‰æ‰Šú‰»ˆ—
+#pragma endregion æç”»åˆæœŸåŒ–å‡¦ç†
 }
 
 void ClearScene::Finalize()
@@ -67,21 +43,21 @@ void ClearScene::Update()
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	if ((cInput->Decision()))     // ƒGƒ“ƒ^[ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚ç
+	if ((cInput->Decision()))     // ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ãŸã‚‰
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-		//U“®
+		//æŒ¯å‹•
 		input->PadVibration();
-		// ‰¹º’âŽ~
+		// éŸ³å£°åœæ­¢
 		GameSound::GetInstance()->SoundStop("verROOP_tukawanakutemoiiYO.wav");
-		//ƒV[ƒ“Ø‚è‘Ö‚¦
+		//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 		BaseScene* scene = new TitleScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
 	DrawUI();
 
-	//ƒXƒvƒ‰ƒCƒgXV
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæ›´æ–°
 	sprite->Update();
 }
 
@@ -91,9 +67,8 @@ void ClearScene::Draw()
 
 void ClearScene::DrawUI()
 {
-	//// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒRƒ}ƒ“ƒh
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šã‚³ãƒžãƒ³ãƒ‰
 	SpriteBase::GetInstance()->PreDraw();
-	//SpriteCommonBeginDraw(spriteBase, dxBase->GetCmdList());
-	//// ƒXƒvƒ‰ƒCƒg•`‰æ
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	sprite->Draw();
 }

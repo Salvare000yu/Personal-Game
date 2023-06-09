@@ -16,47 +16,47 @@ void SceneChangeDirection::Initialize()
 
 	sp_scenechange->SetPosition({ 1280,0,0 });
 
-	SceneChangeDirectionFlag = false;
-	SceneChangeCompFlag = false;
-	HideTheScreenFlag = false;
-	GameReadyStartFlag = false;
-	OpenTheScreenFlag = false;
+	sceneChangeDirectionFlag = false;
+	sceneChangeCompFlag = false;
+	hideTheScreenFlag = false;
+	gameReadyStartFlag = false;
+	openTheScreenFlag = false;
 }
 
 void SceneChangeDirection::HideTheScreen()
 {
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
-	HideVel = -HideSp;//右から左に隠してく
+	hideVel = -hideSp;//右から左に隠してく
 
-	pos.x += HideVel;
+	pos.x += hideVel;
 	sp_scenechange->SetPosition({ pos });
 
 	if (pos.x == 0) {
-		HideTheScreenFlag = false;//隠したから戻す
-		SceneChangeCompFlag = true;//隠し終わり
+		hideTheScreenFlag = false;//隠したから戻す
+		sceneChangeCompFlag = true;//隠し終わり
 	}
 }
 void SceneChangeDirection::OpenTheScreen()
 {
 	XMFLOAT3 pos = sp_scenechange->GetPosition();
 
-	HideVel = HideSp;//右から左に隠してく
+	hideVel = hideSp;//右から左に隠してく
 
-	pos.x += HideVel;
+	pos.x += hideVel;
 	sp_scenechange->SetPosition({ pos });
 
 	if (pos.x == 1280) {
-		OpenTheScreenFlag = true;//完全に開き切った
+		openTheScreenFlag = true;//完全に開き切った
 	}
 }
 
 void SceneChangeDirection::Update()
 {
-	if (HideTheScreenFlag) {
+	if (hideTheScreenFlag) {
 		HideTheScreen();//画面隠す条件達成で隠し開始
 	}
-	if (GameReadyStartFlag) {
+	if (gameReadyStartFlag) {
 		OpenTheScreen();//シーン遷移完了後画面を開ける
 	}
 

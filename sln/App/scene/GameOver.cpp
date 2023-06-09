@@ -1,4 +1,4 @@
-#include "GameOver.h"
+ï»¿#include "GameOver.h"
 #include "SceneManager.h"
 #include "GameSound.h"
 #include "Input.h"
@@ -11,80 +11,42 @@ using namespace DirectX;
 
 void GameOver::Initialize()
 {
-#pragma region •`‰æ‰Šú‰»ˆ—
+#pragma region æç”»åˆæœŸåŒ–å‡¦ç†
 
-	// ƒ}ƒEƒXƒJ[ƒ\ƒ‹”ñ•\¦
+	// ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«éè¡¨ç¤º
 	Input* input = Input::GetInstance();
 	input->MouseCursorHiddenFlag(false);
 
-	////---obj‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^“Ç‚İ‚İ---
-	//model_1 = Model::LoadFromOBJ("ground");
-	//model_2 = Model::LoadFromOBJ("triangle_mat");
-	////Model* model_3 = Model::LoadFromOBJ("chr_sword");
-	////---3dƒIƒuƒWƒFƒNƒg¶¬---
-	//object3d_1 = Object3d::Create();
-	//object3d_2 = Object3d::Create();
-	//object3d_3 = Object3d::Create();
-	////---3dƒIƒuƒWƒFƒNƒg‚É3dƒ‚ƒfƒ‹‚ğ•R‚Ã‚¯‚é---
-	//object3d_1->SetModel(model_1);
-	//object3d_2->SetModel(model_2);
-	//object3d_3->SetModel(model_2);
-
-	//object3d_2->SetScale({ 20.0f, 20.0f, 20.0f });
-	//object3d_3->SetScale({ 30.0f, 30.0f, 30.0f });
-
-	//object3d_2->SetPosition({ 5,-1,5 });
-	//object3d_3->SetPosition({ -5,-1,5 });
-
-	// ‰¹º“Ç‚İ‚İ
+	// éŸ³å£°èª­ã¿è¾¼ã¿
 	GameSound::GetInstance()->LoadWave("D_rhythmaze_119.wav");
 	GameSound::GetInstance()->LoadWave("personalgame_decision.wav");
 
-	// ‰¹ºÄ¶
+	// éŸ³å£°å†ç”Ÿ
 	GameSound::GetInstance()->PlayWave("D_rhythmaze_119.wav", 0.2f, XAUDIO2_LOOP_INFINITE);
 
-	// 3DƒIƒuƒWƒFƒNƒg‚Ì”
-	//const int OBJECT_NUM = 2;
-
-	//Object3d object3ds[OBJECT_NUM];
-
-	// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/GameOver.png");
 	SpriteBase::GetInstance()->LoadTexture(2, L"Resources/GameOver_Retry.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/GameOver_GoTitle.png");
 	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/StageSelect_Now.png");
 
-	// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
 	gameover.reset(Sprite::Create(1, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 	sp_retry.reset(Sprite::Create(2, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 	sp_gotitle.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 	sp_Now.reset(Sprite::Create(4, XMFLOAT3(0, 0, 0), { 0,0 }, { 1, 1, 1, 1 }, { 0, 0 }, false, false));
 
-	//ƒXƒvƒ‰ƒCƒgƒ|ƒWƒVƒ‡ƒ“
-	//windowc‰¡æ“¾‚µ‚½‚¢‚Æ‚«g‚¤
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆãƒã‚¸ã‚·ãƒ§ãƒ³
+	//windowç¸¦æ¨ªå–å¾—ã—ãŸã„ã¨ãä½¿ã†
 	WinApp* winApp = WinApp::GetInstance();
 	float WindowWidthHalf_spPos = (winApp->window_width / 2) - 100;
-	float WindowHeightHalf_spPos = (winApp->window_height / 2) - 100;//-100‚ÍƒXƒvƒ‰ƒCƒgÀ•WC³—p@‰æ‘œƒTƒCƒY200”¼•ª‚Ì100
+	float WindowHeightHalf_spPos = (winApp->window_height / 2) - 100;//-100ã¯ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆåº§æ¨™ä¿®æ­£ç”¨ã€€ç”»åƒã‚µã‚¤ã‚º200åŠåˆ†ã®100
 
 	sp_retry->SetPosition({ WindowWidthHalf_spPos - 300,WindowHeightHalf_spPos / 2 + 300,0 });
 	sp_gotitle->SetPosition({ WindowWidthHalf_spPos + 300,WindowHeightHalf_spPos / 2 + 300,0 });
 	sp_Now->SetPosition({ sp_retry->GetPosition().x - 50,sp_retry->GetPosition().y - 50,0 });
-	//for (int i = 0; i < 1; i++)
-	//{
-	//    int texNumber = 1;
-	//    Sprite* sprite = Sprite::Create(spriteBase, texNumber, { 0,0 }, false, false);
 
-	//    // ƒXƒvƒ‰ƒCƒg‚ÌÀ•W•ÏX
-	//    sprite->SetPosition({ (float)(80),(float)(20),0 });
-	//    //sprite->SetRotation((float)(rand() % 360));
-	//    sprite->SetSize({ (float)(200), (float)(200) });
-
-	//    sprite->TransferVertexBuffer();
-
-	//    sprites.push_back(sprite);ClearScene
-	//}
-
-#pragma endregion •`‰æ‰Šú‰»ˆ—
+#pragma endregion æç”»åˆæœŸåŒ–å‡¦ç†
 }
 
 void GameOver::Finalize()
@@ -97,56 +59,56 @@ void GameOver::Retry()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	XMFLOAT3 SSOp0_1pos = sp_Now->GetPosition();
-	if (WaitKeyEase < 20) { WaitKeyEase++; }//–ˆƒtƒŒ‘«‚·
+	if (waitKeyEase < 20) { waitKeyEase++; }//æ¯ãƒ•ãƒ¬è¶³ã™
 
-	if (WaitKeyEase >= 2)//‚Ü‚Á‚Ä‚©‚ç“ü—Íó•t
+	if (waitKeyEase >= 2)//ã¾ã£ã¦ã‹ã‚‰å…¥åŠ›å—ä»˜
 	{
-		if (cInput->tRightArrow() || cInput->tRightMove()) {//1‚ğŸ‚Í‘I‘ğ
-			CursorMoveNowFlag = true;//“®‚¢‚Ä‚é‚©‚ç“ü—Íƒ_ƒ‚æ
-			selectPattern_ = SelectPattern::goTitle;//[ƒŠƒgƒ‰ƒC‚©‚çƒ^ƒCƒgƒ‹‚Ö]‚É•ÏX
+		if (cInput->tRightArrow() || cInput->tRightMove()) {//1ã‚’æ¬¡ã¯é¸æŠ
+			cursorMoveNowFlag = true;//å‹•ã„ã¦ã‚‹ã‹ã‚‰å…¥åŠ›ãƒ€ãƒ¡ã‚ˆ
+			selectPattern_ = SelectPattern::goTitle;//[ãƒªãƒˆãƒ©ã‚¤ã‹ã‚‰ã‚¿ã‚¤ãƒˆãƒ«ã¸]ã«å¤‰æ›´
 		}
 	}
 
-	if ((cInput->Decision()) && CursorMoveNowFlag == false)
+	if ((cInput->Decision()) && cursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
-		// ‰¹º’â~
+		// éŸ³å£°åœæ­¢
 		GameSound::GetInstance()->SoundStop("D_rhythmaze_119.wav");
-		//ƒV[ƒ“Ø‚è‘Ö‚¦
+		//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 		BaseScene* scene = new GamePlayScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
-	{//ŸŠÖ”‚Ö
-	//ƒC[ƒY’l“ü‚ê‚Ä–Ú•WÀ•W’´‚¦‚é—\’è‚È‚ç
-		if ((SSOp0_1pos.x + (EaseVal - DecEaseVal)) > (sp_gotitle->GetPosition().x - 50))
+	{//æ¬¡é–¢æ•°ã¸
+	//ã‚¤ãƒ¼ã‚ºå€¤å…¥ã‚Œã¦ç›®æ¨™åº§æ¨™è¶…ãˆã‚‹äºˆå®šãªã‚‰
+		if ((SSOp0_1pos.x + (easeVal - decEaseVal)) > (sp_gotitle->GetPosition().x - 50))
 		{
-			CursorMoveNowFlag = false;//©—R‚É‚µ‚Ä‚æ‚¢
-			EaseVal = EaseValDef;//ƒC[ƒY’l‰Šú‰»
-			WaitKeyEase = 0;//ó•t‘Ò‚¿Œ³‚É–ß‚·
-			NowSelect = 1;
-			SSOp0_1Flag = false;
+			cursorMoveNowFlag = false;//è‡ªç”±ã«ã—ã¦ã‚ˆã„
+			easeVal = easeValDef;//ã‚¤ãƒ¼ã‚ºå€¤åˆæœŸåŒ–
+			waitKeyEase = 0;//å—ä»˜å¾…ã¡å…ƒã«æˆ»ã™
+			nowSelect = 1;
+			sSOp0_1Flag = false;
 		}
 	}
 
-	{//ˆÚ“®ˆ—
-		//0‚©‚ç1‚ÖˆÚ“®
-		if (SSOp0_1Flag)
+	{//ç§»å‹•å‡¦ç†
+		//0ã‹ã‚‰1ã¸ç§»å‹•
+		if (sSOp0_1Flag)
 		{
-			SSOp0_1pos.x += EaseVal;
-			EaseVal -= DecEaseVal;
+			SSOp0_1pos.x += easeVal;
+			easeVal -= decEaseVal;
 			sp_Now->SetPosition({ SSOp0_1pos.x,sp_gotitle->GetPosition().y - 50,0 });
 		}
 	}
 
-	//--------«ƒZƒŒƒNƒgƒpƒ^[ƒ“enum
-	//‘€ìà–¾‚©‚çƒXƒ^[ƒg‚Ö
+	//--------â†“ã‚»ãƒ¬ã‚¯ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³enum
+	//æ“ä½œèª¬æ˜ã‹ã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆã¸
 	if (selectPattern_ == SelectPattern::goTitle) {
 		selectPattern_ = SelectPattern::def;
-		SSOp0_1Flag = true;
+		sSOp0_1Flag = true;
 	}
-	//--------ªƒZƒŒƒNƒgƒpƒ^[ƒ“enum
+	//--------â†‘ã‚»ãƒ¬ã‚¯ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³enum
 }
 void GameOver::GoTitle()
 {
@@ -154,56 +116,56 @@ void GameOver::GoTitle()
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
 	XMFLOAT3 SSOp1_0pos = sp_Now->GetPosition();
-	if (WaitKeyEase < 20) { WaitKeyEase++; }//–ˆƒtƒŒ‘«‚·
+	if (waitKeyEase < 20) { waitKeyEase++; }//æ¯ãƒ•ãƒ¬è¶³ã™
 
-	if (WaitKeyEase >= 2)//‚Ü‚Á‚Ä‚©‚ç“ü—Íó•t
+	if (waitKeyEase >= 2)//ã¾ã£ã¦ã‹ã‚‰å…¥åŠ›å—ä»˜
 	{
-		if (cInput->tLeftArrow() || cInput->tLeftMove()) {//1‚ğŸ‚Í‘I‘ğ
-			CursorMoveNowFlag = true;//“®‚¢‚Ä‚é‚©‚ç“ü—Íƒ_ƒ‚æ
-			selectPattern_ = SelectPattern::retry;//[ƒ^ƒCƒgƒ‹‚Ö‚©‚çƒŠƒgƒ‰ƒC]‚É•ÏX
+		if (cInput->tLeftArrow() || cInput->tLeftMove()) {//1ã‚’æ¬¡ã¯é¸æŠ
+			cursorMoveNowFlag = true;//å‹•ã„ã¦ã‚‹ã‹ã‚‰å…¥åŠ›ãƒ€ãƒ¡ã‚ˆ
+			selectPattern_ = SelectPattern::retry;//[ã‚¿ã‚¤ãƒˆãƒ«ã¸ã‹ã‚‰ãƒªãƒˆãƒ©ã‚¤]ã«å¤‰æ›´
 		}
 	}
 
-	if ((cInput->Decision()) && CursorMoveNowFlag == false)
+	if ((cInput->Decision()) && cursorMoveNowFlag == false)
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		input->PadVibration();
-		// ‰¹º’â~
+		// éŸ³å£°åœæ­¢
 		GameSound::GetInstance()->SoundStop("D_rhythmaze_119.wav");
-		//ƒV[ƒ“Ø‚è‘Ö‚¦
+		//ã‚·ãƒ¼ãƒ³åˆ‡ã‚Šæ›¿ãˆ
 		BaseScene* scene = new TitleScene();
 		sceneManager_->SetNextScene(scene);
 	}
 
-	{//ŸŠÖ”‚Ö
-	//ƒC[ƒY’l“ü‚ê‚Ä–Ú•WÀ•W’´‚¦‚é—\’è‚È‚ç
-		if ((SSOp1_0pos.x - (EaseVal - DecEaseVal)) < (sp_retry->GetPosition().x - 50))
+	{//æ¬¡é–¢æ•°ã¸
+	//ã‚¤ãƒ¼ã‚ºå€¤å…¥ã‚Œã¦ç›®æ¨™åº§æ¨™è¶…ãˆã‚‹äºˆå®šãªã‚‰
+		if ((SSOp1_0pos.x - (easeVal - decEaseVal)) < (sp_retry->GetPosition().x - 50))
 		{
-			CursorMoveNowFlag = false;//©—R‚É‚µ‚Ä‚æ‚¢
-			EaseVal = EaseValDef;//ƒC[ƒY’l‰Šú‰»
-			WaitKeyEase = 0;//ó•t‘Ò‚¿Œ³‚É–ß‚·
-			NowSelect = 0;
-			SSOp0_1Flag = false;
+			cursorMoveNowFlag = false;//è‡ªç”±ã«ã—ã¦ã‚ˆã„
+			easeVal = easeValDef;//ã‚¤ãƒ¼ã‚ºå€¤åˆæœŸåŒ–
+			waitKeyEase = 0;//å—ä»˜å¾…ã¡å…ƒã«æˆ»ã™
+			nowSelect = 0;
+			sSOp0_1Flag = false;
 		}
 	}
 
-	{//ˆÚ“®ˆ—
-		//0‚©‚ç1‚ÖˆÚ“®
-		if (SSOp0_1Flag)
+	{//ç§»å‹•å‡¦ç†
+		//0ã‹ã‚‰1ã¸ç§»å‹•
+		if (sSOp0_1Flag)
 		{
-			SSOp1_0pos.x -= EaseVal;
-			EaseVal -= DecEaseVal;
+			SSOp1_0pos.x -= easeVal;
+			easeVal -= decEaseVal;
 			sp_Now->SetPosition({ SSOp1_0pos.x,sp_gotitle->GetPosition().y - 50,0 });
 		}
 	}
 
-	//--------«ƒZƒŒƒNƒgƒpƒ^[ƒ“enum
-	//‘€ìà–¾‚©‚çƒXƒ^[ƒg‚Ö
+	//--------â†“ã‚»ãƒ¬ã‚¯ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³enum
+	//æ“ä½œèª¬æ˜ã‹ã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆã¸
 	if (selectPattern_ == SelectPattern::retry) {
 		selectPattern_ = SelectPattern::def;
-		SSOp0_1Flag = true;
+		sSOp0_1Flag = true;
 	}
-	//--------ªƒZƒŒƒNƒgƒpƒ^[ƒ“enum
+	//--------â†‘ã‚»ãƒ¬ã‚¯ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³enum
 }
 
 void GameOver::Update()
@@ -211,16 +173,16 @@ void GameOver::Update()
 	Input* input = Input::GetInstance();
 	input->PadVibrationDef();
 
-	//ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^‘Î‰‚µ‚½‘I‘ğ
-	if (NowSelect == 0) { pFunc = &GameOver::Retry; }
-	if (NowSelect == 1) { pFunc = &GameOver::GoTitle; }
+	//ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿å¯¾å¿œã—ãŸé¸æŠ
+	if (nowSelect == 0) { pFunc = &GameOver::Retry; }
+	if (nowSelect == 1) { pFunc = &GameOver::GoTitle; }
 
-	//ƒƒ“ƒoŠÖ”ƒ|ƒCƒ“ƒ^ŒÄ‚Ño‚µ
+	//ãƒ¡ãƒ³ãƒé–¢æ•°ãƒã‚¤ãƒ³ã‚¿å‘¼ã³å‡ºã—
 	(this->*pFunc)();
 
 	DrawUI();
 
-	//ƒXƒvƒ‰ƒCƒgXV
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæ›´æ–°
 	gameover->Update();
 	sp_retry->Update();
 	sp_gotitle->Update();
@@ -233,9 +195,9 @@ void GameOver::Draw()
 
 void GameOver::DrawUI()
 {
-	//// ƒXƒvƒ‰ƒCƒg‹¤’ÊƒRƒ}ƒ“ƒh
+	//// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šã‚³ãƒãƒ³ãƒ‰
 	SpriteBase::GetInstance()->PreDraw();
-	// ƒXƒvƒ‰ƒCƒg•`‰æ
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 	gameover->Draw();
 	sp_retry->Draw();
 	sp_gotitle->Draw();

@@ -1150,8 +1150,8 @@ void GamePlayScene::GameReadyUpdate()
 
 	constexpr int frameMax = 60;
 
-	if (sceneChangeDirection->OpenTheScreenFlag == false) {//シーン遷移画像残ってるなら
-		sceneChangeDirection->GameReadyStartFlag = true;//PlaySceneスタート前になった
+	if (sceneChangeDirection->openTheScreenFlag == false) {//シーン遷移画像残ってるなら
+		sceneChangeDirection->gameReadyStartFlag = true;//PlaySceneスタート前になった
 		//シーン遷移演出更新
 		sceneChangeDirection->Update();
 	}

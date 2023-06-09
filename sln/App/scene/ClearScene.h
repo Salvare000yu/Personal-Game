@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 /// <summary>
-/// ƒ^ƒCƒgƒ‹‰æ–Ê
+/// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
 /// </summary>
 #include "BaseScene.h"
 #include "Sprite.h"
@@ -24,10 +24,4 @@ private:
 
 	std::unique_ptr < Sprite> sprite = nullptr;
 
-	//Model* model_1 = nullptr;
-	//Model* model_2 = nullptr;
-
-	//Object3d* object3d_1 = nullptr;
-	//Object3d* object3d_2 = nullptr;
-	//Object3d* object3d_3 = nullptr;
 };

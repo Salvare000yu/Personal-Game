@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Sprite.h"
 #include "BaseObject.h"
 #include "Object3d.h"
@@ -7,7 +7,7 @@
 using namespace DirectX;
 
 /// <summary>
-/// ƒV[ƒ“‘JˆÚ‚Ì‰‰o
+/// ã‚·ãƒ¼ãƒ³é·ç§»æ™‚ã®æ¼”å‡º
 /// </summary>
 
 class SceneChangeDirection
@@ -24,22 +24,22 @@ public:
 
 	void Draw();
 
-	//ƒV[ƒ“‘JˆÚƒtƒ‰ƒO@false:‚µ‚Ä‚È‚¢
-	bool SceneChangeDirectionFlag;
-	//ƒV[ƒ“‘JˆÚŠ®—¹@false:Š®—¹‘O
-	bool SceneChangeCompFlag;
-	//‰æ–Ê‰B‚·@false:‰B‚µn‚ß‚é‘O
-	bool HideTheScreenFlag;
-	//playscene‚ªn‚Ü‚è‰‰on‚ß‚é@false:‚Ü‚¾
-	bool GameReadyStartFlag;
-	//ŠJ‚«Ø‚Á‚½@false:ŠJ‚­‘O
-	bool OpenTheScreenFlag;
+	//ã‚·ãƒ¼ãƒ³é·ç§»ãƒ•ãƒ©ã‚°ã€€false:ã—ã¦ãªã„
+	bool sceneChangeDirectionFlag;
+	//ã‚·ãƒ¼ãƒ³é·ç§»å®Œäº†ã€€false:å®Œäº†å‰
+	bool sceneChangeCompFlag;
+	//ç”»é¢éš ã™ã€€false:éš ã—å§‹ã‚ã‚‹å‰
+	bool hideTheScreenFlag;
+	//playsceneãŒå§‹ã¾ã‚Šæ¼”å‡ºå§‹ã‚ã‚‹ã€€false:ã¾ã 
+	bool gameReadyStartFlag;
+	//é–‹ãåˆ‡ã£ãŸã€€false:é–‹ãå‰
+	bool openTheScreenFlag;
 
 private:
 
 	std::unique_ptr < Sprite> sp_scenechange = nullptr;
 
-	const float HideSp = 80;//‰æ–Ê‰B‚·‘¬“x ‰æ‘œƒTƒCƒY‚ÅŠ„‚ê‚é‘å‚«‚³
+	const float hideSp = 80;//ç”»é¢éš ã™é€Ÿåº¦ ç”»åƒã‚µã‚¤ã‚ºã§å‰²ã‚Œã‚‹å¤§ãã•
 
-	float HideVel = 0;//ÀÛ‚ÉÀ•W‚É‘«‚·’l
+	float hideVel = 0;//å®Ÿéš›ã«åº§æ¨™ã«è¶³ã™å€¤
 };

@@ -214,11 +214,11 @@ void TitleScene::NextScene()
 	}
 	//自機がシーン遷移演出開始位置に到達したら
 	if (player_->GetPosition().z >= sceneChangeDirecPosZ && hideTheScreenOnly == false) {
-		sceneChangeDirection->HideTheScreenFlag = true;//画面隠す開始
+		sceneChangeDirection->hideTheScreenFlag = true;//画面隠す開始
 		hideTheScreenOnly = true;
 	}
 
-	if (sceneChangeDirection->SceneChangeCompFlag)//シーン遷移完了したら
+	if (sceneChangeDirection->sceneChangeCompFlag)//シーン遷移完了したら
 	{
 		// 音声停止
 		GameSound::GetInstance()->SoundStop("A_rhythmaze_125.wav");
@@ -338,7 +338,7 @@ void TitleScene::Update()
 	}
 
 	if (sceneChangeFlag) {
-		sceneChangeDirection->SceneChangeDirectionFlag = true;
+		sceneChangeDirection->sceneChangeDirectionFlag = true;
 		NextScene();//チェンジ移動開始
 	}
 
@@ -402,7 +402,7 @@ void TitleScene::DrawUI()
 	}
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
-	if (sceneChangeDirection->SceneChangeDirectionFlag) {//シーン遷移演出中なら
+	if (sceneChangeDirection->sceneChangeDirectionFlag) {//シーン遷移演出中なら
 		sceneChangeDirection->Draw();//シーン遷移演出描画
 	}
 }
