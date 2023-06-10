@@ -64,7 +64,7 @@ public:
 	//-----------------↑げったーせったー↑------------------//
 
 	//フレームごとに発射
-	static const int atkInterval = 90;
+	static const uint8_t atkInterval = 90;
 
 	RetirePat retirePat_ = RetirePat::def;
 
@@ -82,7 +82,7 @@ private:
 	float sEneRandX = 0;
 
 	//攻撃用カウント
-	float atkCount = 0;
+	uint8_t atkCount = 0;
 	Model* seBulModel = nullptr;
 
 	//通常弾威力

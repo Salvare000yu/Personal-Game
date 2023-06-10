@@ -866,7 +866,7 @@ void GamePlayScene::CollisionAll()
 
 			auto& c = seColliders.emplace_front();
 			c.baseObject = se.get();
-			c.radius = se->GetScale().z+3.f;
+			c.radius = se->GetScale().z+5.f;
 		}
 
 		CollisionManager::CheckHitFromColliderList(

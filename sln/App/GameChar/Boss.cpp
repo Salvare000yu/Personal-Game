@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "CharParameters.h"
 #include "DxBase.h"
+#include "GameUtility.h"
 
 #include <DirectXMath.h>
 
@@ -104,7 +105,7 @@ void Boss::BossAppear()
 		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
-	pos.y += 2.f * std::sin(time * XM_PI);
+	pos.y += 2.f * std::sinf(time * XM_PI);
 
 	obj->SetPosition(pos);
 }
@@ -134,7 +135,7 @@ void Boss::Approach()
 	XMFLOAT3 position = obj->GetPosition();
 	position.z -= approachSpZ;
 	position.y += approachSpY;
-	position.x += 7.f * sinf(time * XM_PI);
+	position.x += 7.f * std::sinf(time * XM_PI);
 	obj->SetPosition(position);
 
 	approachCount--;
@@ -349,7 +350,7 @@ void Boss::HpHalfPatStart()
 
 	float raito = (float)nowframe / necesHpHalfFrame;
 	//場所移動
-	lerpMovePos = lerp(hpHalfMomentPos, targetHpHalfPos, raito);
+	lerpMovePos= GameUtility::UtilLerp(hpHalfMomentPos, targetHpHalfPos, raito);
 	obj->SetPosition(lerpMovePos);
 
 	//発射カウントをデクリメント
@@ -394,8 +395,8 @@ void Boss::CircularMotionMove()
 	hpHalf_rad = hpHalf_Angle * XM_PI / 180.0f;
 
 	//円の位置を三角関数でだす
-	addX = cosf(hpHalf_rad) * hpHalf_Length;
-	addY = sinf(hpHalf_rad) * hpHalf_Length;
+	addX = std::cosf(hpHalf_rad) * hpHalf_Length;
+	addY = std::sinf(hpHalf_rad) * hpHalf_Length;
 
 	if (getPosOnlyFlag)
 	{

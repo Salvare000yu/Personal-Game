@@ -1,4 +1,8 @@
-﻿#pragma once
+﻿/// <<<<<<<<
+/// @brief 自機のクラス
+/// >>>>>>>>
+
+#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -91,10 +95,10 @@ public:
 	//自機体力が0より少ないか
 	const bool& GetPHpLessThan0() { return isPHpLessThan0; }
 	//自機安否確認
-	void SetpDeath(bool PlayerDeathFlag) { this->playerDeathFlag = PlayerDeathFlag; }
+	const void SetpDeath(bool PlayerDeathFlag) { this->playerDeathFlag = PlayerDeathFlag; }
 	const bool& GetpDeath() { return playerDeathFlag; }
 	//射線表示フラグ
-	void SetFireLineDrawFlag(bool flag) { firingline_->SetAlive(flag); }
+	const void SetFireLineDrawFlag(bool flag) { firingline_->SetAlive(flag); }
 	//-------------------↑げったーせったー↑-------------------//
 
 	//自機が攻撃できるようにするか true:攻撃できる

@@ -1,14 +1,14 @@
-﻿#pragma once
+﻿/// <<<<<<<<
+/// @brief シーン遷移時演出のクラス
+/// >>>>>>>>
+
+#pragma once
 #include "Sprite.h"
 #include "BaseObject.h"
 #include "Object3d.h"
 #include "SpriteBase.h"
 #include "DxBase.h"
 using namespace DirectX;
-
-/// <summary>
-/// シーン遷移時の演出
-/// </summary>
 
 class SceneChangeDirection
 {

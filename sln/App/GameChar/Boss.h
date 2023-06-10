@@ -1,4 +1,8 @@
-﻿#pragma once
+﻿/// <<<<<<<<
+/// @brief ボスのクラス
+/// >>>>>>>>
+
+#pragma once
 #include "BaseScene.h"
 #include "Object3d.h"
 #include "Camera.h"
@@ -102,9 +106,9 @@ public:
 	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
 
 	//フレームごとに発射
-	static const int atkInterval = 10;
-	static const int atkInterval_LeaveFirst = 20;
-	static const int diffusionAtkInterval = 20;
+	static const uint8_t atkInterval = 10;
+	static const uint8_t atkInterval_LeaveFirst = 20;
+	static const uint8_t diffusionAtkInterval = 20;
 
 	//縦攻撃
 	std::function<void()> verticalPattern;
@@ -190,10 +194,10 @@ private:
 	XMFLOAT3 lerpMovePos{};
 
 	//攻撃用カウント
-	int atkCount = 0;
-	int diffusionAtkCount = 0;
-	int circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
-	int afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
+	uint8_t atkCount = 0;
+	uint8_t diffusionAtkCount = 0;
+	uint8_t circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
+	uint8_t afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -223,12 +227,12 @@ private:
 	XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
 	float coreColChangeRaito = 0;//死亡時コアの色変え
 
-	float partTimeInterval;
-	float particleFrame = 39;//パーティクル出すフレ
+	uint8_t partTimeInterval;
+	uint8_t particleFrame = 39;//パーティクル出すフレ
 
 	//この時間だけこの行動をする
-	const int approachCountDef = 150;
-	int approachCount = approachCountDef;
+	const uint16_t approachCountDef = 150;
+	uint16_t approachCount = approachCountDef;
 
 	//------縦に揺れる攻撃F
 	const int changeVerticalCountDef = 0;//デフォ0　終わったら消してん
@@ -354,8 +358,8 @@ private:
 	//-------AfterPlungeInto
 	//
 	//待ち時間
-	const int waitTimeDef = 60;
-	int waitTime = waitTimeDef;
+	const uint8_t waitTimeDef = 60;
+	uint8_t waitTime = waitTimeDef;
 	//攻撃時に自機のいた場所へ（XY）移動する速度
 	XMFLOAT3 atkMoveSp;
 	//ボスいた場所
