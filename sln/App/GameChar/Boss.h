@@ -191,7 +191,7 @@ private:
 	//ボスlerp動きレート
 	float bossLerpMoveRaito = 0;
 	//ボスlerp場所
-	XMFLOAT3 lerpMovePos{};
+	//XMFLOAT3 lerpMovePos{};
 
 	//攻撃用カウント
 	uint8_t atkCount = 0;
