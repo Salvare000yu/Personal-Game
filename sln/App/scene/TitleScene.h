@@ -16,7 +16,7 @@
 
 using namespace DirectX;
 
-class TitleScene :public BaseScene, public BaseObject
+class TitleScene :public BaseScene
 {
 	//ロゴの動き
 	enum class LogoPattern {

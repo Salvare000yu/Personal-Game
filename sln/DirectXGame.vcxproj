@@ -200,7 +200,6 @@
     <ClCompile Include="Engine\2d\SpriteBase.cpp" />
     <ClCompile Include="App\scene\TitleScene.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
-    <ClCompile Include="App\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\FBXPS.hlsl">
@@ -331,7 +330,6 @@
     <ClInclude Include="Engine\2d\SpriteBase.h" />
     <ClInclude Include="App\scene\TitleScene.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
-    <ClInclude Include="App\Timer\Timer.h" />
     <ClInclude Include="Engine\GameUtility\GameUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

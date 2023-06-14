@@ -4,9 +4,7 @@
 #include "Input.h"
 #include "ComplexInput.h"
 #include "DebugText.h"
-//#include "GamePlayScene.h"
 #include "TitleScene.h"
-#include "Timer.h"
 
 using namespace DirectX;
 

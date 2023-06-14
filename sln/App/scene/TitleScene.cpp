@@ -7,8 +7,6 @@
 #include "GamePlayScene.h"
 #include "CharParameters.h"
 
-#include "Timer.h"
-
 #include "PostEffect.h"
 
 #ifdef max

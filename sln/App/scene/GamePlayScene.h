@@ -19,15 +19,9 @@
 
 using namespace DirectX;
 
-class GamePlayScene :public BaseScene, public BaseObject
+class GamePlayScene :public BaseScene
 {
 	DirectX::XMFLOAT2 cameraMoveVel{};
-
-	//enum class BeforeBossPattern {
-	//	def,
-	//	inc,
-	//	dec,
-	//};
 
 	enum class PlayerDashDirection {
 		def,

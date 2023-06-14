@@ -82,22 +82,10 @@ void Player::Attack()
 void Player::Move()
 {
 	Input* input = Input::GetInstance();
-	const bool inputW = input->PushKey(DIK_W);
-	const bool inputS = input->PushKey(DIK_S);
-	const bool inputA = input->PushKey(DIK_A);
-	const bool inputD = input->PushKey(DIK_D);
-	//const bool inputE = input->PushKey(DIK_E);
-	const bool inputQ = input->PushKey(DIK_Q);
-	const bool inputZ = input->PushKey(DIK_Z);
-	//const bool inputC = input->PushKey(DIK_C);
 	const bool inputI = input->PushKey(DIK_I);
 	const bool inputJ = input->PushKey(DIK_J);
 	const bool inputK = input->PushKey(DIK_K);
 	const bool inputL = input->PushKey(DIK_L);
-	const bool inputUp = input->PushKey(DIK_UP);
-	const bool inputDown = input->PushKey(DIK_DOWN);
-	const bool inputRight = input->PushKey(DIK_RIGHT);
-	const bool inputLeft = input->PushKey(DIK_LEFT);
 	//パッド押している間
 	const bool PadInputUP = input->PushButton(static_cast<int>(Button::UP));
 	const bool PadInputDOWN = input->PushButton(static_cast<int>(Button::DOWN));

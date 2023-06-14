@@ -5,7 +5,6 @@
 #include "ComplexInput.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
-#include "Timer.h"
 #include "DxBase.h"
 #include "CharParameters.h"
 #include "Pause.h"
@@ -249,10 +248,6 @@ void GamePlayScene::Initialize()
 	particle->SetCamera(camera.get());
 
 	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
-
-	//時間リセット。タイトルに戻る度。
-	Timer* timer = Timer::GetInstance();
-	timer->TimerPlay(false);
 
 	//今あるパーティクルを削除する
 	particle->DeleteParticles();
