@@ -446,13 +446,12 @@ void Boss::LeaveFirstPos()
 		//LeaveFirstPos2回で突っ込む
 		plungeCount--;
 	}
-	XMFLOAT3 pPos = shotTag->GetPosition();
 
 	bossLerpMoveRaito = (float)nowframe / necesLeaveFirstFrame;
 	//場所移動
 	//x自機ちょい追う感じ
 	XMFLOAT3 endPos = targetHpHalfPos;
-	endPos.x = pPos.x - targetHpHalfPos.x;
+	endPos.x = shotTag->GetPosition().x - targetHpHalfPos.x;
 	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, endPos, bossLerpMoveRaito));
 
 	//発射カウントをデクリメント

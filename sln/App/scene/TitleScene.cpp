@@ -48,7 +48,8 @@ void TitleScene::Initialize()
 
 	for (auto& i : obj_ground) {
 		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		model->second->SetTiling({ 100,100 });
+		constexpr float tilingNum = 16.f;
+		model->second->SetTiling({ tilingNum, tilingNum });
 		i.second->SetModel(mod_ground.at(i.first).get());
 		i.second->SetScale({ 10000.0f, 1.0f, 10000.0f });
 	}
