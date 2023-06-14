@@ -17,8 +17,6 @@
 #include <memory>
 #include <unordered_map>
 
-using namespace DirectX;
-
 class GamePlayScene :public BaseScene
 {
 	DirectX::XMFLOAT2 cameraMoveVel{};
@@ -170,9 +168,9 @@ private:
 	//ゲーム開始時フレーム
 	uint16_t gameReadyFrame = 0;
 	//開始時自機座標
-	XMFLOAT3 ApStartPPos{};
+	DirectX::XMFLOAT3 ApStartPPos{};
 	//終了
-	XMFLOAT3 ApEndPPos{};
+	DirectX::XMFLOAT3 ApEndPPos{};
 
 	//GOをだすフラグ
 	bool ready_GOFlag = false;//false非表示
@@ -215,9 +213,9 @@ private:
 
 	uint32_t pClearMoveCount = 120;//ボス撃破から自機移動開始まで
 	uint32_t clearPMoveFrame = 0;//クリア演出自機移動ふれ
-	XMFLOAT3 pBossBattlePos;
+	DirectX::XMFLOAT3 pBossBattlePos;
 	uint32_t pRotReturnFrame = 0;
-	XMFLOAT3 pClearRot;//ボス撃破時自機回転
+	DirectX::XMFLOAT3 pClearRot;//ボス撃破時自機回転
 
 	//ダメージ画面端赤く　false：まだやってない
 	bool damEfRedFlag = false;
@@ -253,7 +251,7 @@ private:
 	int dashInterval = dashIntervalDef;
 	bool dashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
-	XMFLOAT3 dashVel = { 0,0,0 };
+	DirectX::XMFLOAT3 dashVel = { 0,0,0 };
 	//実際に増やす値
 	const float dashVelIncDef = 6;
 	float dashVelInc = dashVelIncDef;

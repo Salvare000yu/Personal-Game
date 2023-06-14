@@ -41,7 +41,7 @@ void ClearScene::Update()
 	Input* input = Input::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	if ((cInput->Decision()))     // エンターキーが押されていたら
+	if ((cInput->Decision()))
 	{
 		GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
 		//振動

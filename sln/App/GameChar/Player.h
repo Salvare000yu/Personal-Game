@@ -23,11 +23,6 @@ private:
 
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
 
 	Model* pBulModel = nullptr;
 	Model* pFiringLine = nullptr;
@@ -120,12 +115,12 @@ private:
 	const float pDeathRot = 0.4f;
 
 	//-----自機死亡演出
-	XMFLOAT3 pPosDeath = {};
+	DirectX::XMFLOAT3 pPosDeath = {};
 	float nowframe = 0;//現在フレ
 	const float necesFrame = 180.0f;//かかる時間
-	XMFLOAT3 moveSp = {};//移動速度
-	XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
-	XMFLOAT3 nowPos = {};//その時の位置
+	DirectX::XMFLOAT3 moveSp = {};//移動速度
+	DirectX::XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
+	DirectX::XMFLOAT3 nowPos = {};//その時の位置
 
 	float partTimeInterval = 0;
 	float particleFrame = 39;//パーティクル出すフレ

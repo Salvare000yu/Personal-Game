@@ -31,6 +31,8 @@
 #undef min
 #endif // min
 
+using namespace DirectX;
+
 std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
 	bool commentFlag,
 	char divChar,
@@ -562,19 +564,19 @@ void GamePlayScene::PlayerDash()
 		//ダッシュ中に反対方向押してもそっち方向にダッシュできないようにする目的で一回決めた方向にしかダッシュできないように
 		if (playerDashDirection_ == PlayerDashDirection::def) {
 			if (cInput->DownMove()) {
-				//下に加速に決めた！
+				//下に加速
 				playerDashDirection_ = PlayerDashDirection::down;
 			}
 			if (cInput->UpMove()) {
-				//上に加速に決めた！
+				//上に加速
 				playerDashDirection_ = PlayerDashDirection::up;
 			}
 			if (cInput->RightMove()) {
-				//右に加速に決めた！
+				//右に加速
 				playerDashDirection_ = PlayerDashDirection::right;
 			}
 			if (cInput->LeftMove()) {
-				//左に加速に決めた！
+				//左に加速
 				playerDashDirection_ = PlayerDashDirection::left;
 			}
 		}

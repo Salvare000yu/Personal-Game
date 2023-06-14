@@ -12,6 +12,8 @@
 
 #include "GamePlayScene.h"
 
+using namespace DirectX;
+
 void Boss::Initialize()
 {
 	particle.reset(new ParticleManager());

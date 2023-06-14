@@ -8,7 +8,6 @@
 #include "Object3d.h"
 #include "SpriteBase.h"
 #include "DxBase.h"
-using namespace DirectX;
 
 class SceneChangeDirection
 {

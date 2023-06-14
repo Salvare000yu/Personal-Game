@@ -1,6 +1,8 @@
 ﻿#include "SceneChangeDirection.h"
 #include "DebugText.h"
 
+using namespace DirectX;
+
 SceneChangeDirection* SceneChangeDirection::GetInstance()
 {
 	static SceneChangeDirection instance;

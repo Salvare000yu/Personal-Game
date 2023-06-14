@@ -14,8 +14,6 @@
 #include "Camera.h"
 #include "SceneChangeDirection.h"
 
-using namespace DirectX;
-
 class TitleScene :public BaseScene
 {
 	//ロゴの動き
@@ -102,14 +100,14 @@ private:
 	const int pMoveFrameDef = 0;//経過時間でふぉ
 	int pMoveFrame = pMoveFrameDef;//経過時間
 	//-----自機登場
-	XMFLOAT3 playerInitPos{ 0,150,-1950 };
-	XMFLOAT3 apStartPPos{};//開始時自機座標
-	XMFLOAT3 apEndPPos{};//終了
+	DirectX::XMFLOAT3 playerInitPos{ 0, 150, -1950 };
+	DirectX::XMFLOAT3 apStartPPos{};//開始時自機座標
+	DirectX::XMFLOAT3 apEndPPos{};//終了
 	const float camEyeMoveSpX = 1.5f;//カメラ横ずらす値
 	//------自機登場
 	//------自機退場(シーンチェンジ)
-	XMFLOAT3 exitStartPPos{};//開始時自機座標
-	XMFLOAT3 exitEndPPos{};//終了
+	DirectX::XMFLOAT3 exitStartPPos{};//開始時自機座標
+	DirectX::XMFLOAT3 exitEndPPos{};//終了
 	const float exitPosZ = 1300;//ここでおわる
 	const float sceneChangeDirecPosZ = -100;//シーン遷移演出開始位置
 	bool hideTheScreenOnly = false;//一度きり画面隠しフラグ　false：まだしてない
