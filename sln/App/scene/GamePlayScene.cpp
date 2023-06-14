@@ -9,6 +9,7 @@
 #include "CharParameters.h"
 #include "Pause.h"
 #include "SceneChangeDirection.h"
+#include "GameUtility.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -411,11 +412,9 @@ void GamePlayScene::BossDeathEffect()
 			//カメラ回転と自機の回転同時戻す
 			pRotReturnFrame++;
 			float raito = (float)pRotReturnFrame / frameMax;
-			XMFLOAT3 rot{};
-			rot.x = std::lerp(pClearRot.x, 0.f, raito);
-			rot.y = std::lerp(pClearRot.y, 0.f, raito);
-			rot.z = std::lerp(pClearRot.z, 0.f, raito);
-			player_->SetRotation(rot);
+			//自機を正面に
+			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, raito));
+			
 		}//回転戻し終わったらもう移動攻撃しない
 		else {
 			player_->pAtkPossibleFlag = false;
@@ -430,9 +429,11 @@ void GamePlayScene::BossDeathEffect()
 		const float pClearMoveEndPos = pBossBattlePos.z + 2000;//ここまで移動
 		float raito = (float)clearPMoveFrame / frameMax;
 		++clearPMoveFrame;
-		XMFLOAT3 pos = player_->GetPosition();
-		pos.z = std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito);
-		player_->SetPosition(pos);
+		//クリア時前へ進む
+		player_->SetPosition({ 
+			player_->GetPosition().x, 
+			player_->GetPosition().y,
+			std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito) });
 	}
 	else {
 		pClearMoveCount--;
@@ -1165,18 +1166,14 @@ void GamePlayScene::GameReadyUpdate()
 			ReadyCol.w = 1.f - raito;
 			sp_ready->SetColor({ ReadyCol });
 			sp_ready->Update();
-
-			XMFLOAT3 pos{};
-			pos.x = std::lerp(ApStartPPos.x, ApEndPPos.x, raito);
-			pos.y = std::lerp(ApStartPPos.y, ApEndPPos.y, raito);
-			pos.z = std::lerp(ApStartPPos.z, ApEndPPos.z, raito);
-			player_->SetPosition(pos);
+			//開始時演出で前に進む
+			player_->SetPosition(GameUtility::UtilLerp(ApStartPPos, ApEndPPos, raito));
 
 			if (gameReadyFrame == frameMax) {
 				pTracking = true;
 			}
 
-			camera->SetTarget(pos);
+			camera->SetTarget(player_->GetPosition());
 		}
 		else {
 			sp_ready->isInvisible = true;

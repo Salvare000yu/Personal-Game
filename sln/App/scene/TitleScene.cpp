@@ -6,7 +6,7 @@
 #include "DebugText.h"
 #include "GamePlayScene.h"
 #include "CharParameters.h"
-
+#include "GameUtility.h"
 #include "PostEffect.h"
 
 #ifdef max
@@ -147,16 +147,12 @@ void TitleScene::PlayerAppear()
 	if (pMoveFrame < pApMoveFrameMax) {//最大フレーム到達までやる
 		float raito = (float)pMoveFrame / pApMoveFrameMax;
 		pMoveFrame++;
+		//タイトルの最初に自機が移動しながら登場
+		player_->SetPosition(GameUtility::UtilLerp(apStartPPos, apEndPPos, raito));
 
-		XMFLOAT3 pos{};
-		pos.x = std::lerp(apStartPPos.x, apEndPPos.x, raito);
-		pos.y = std::lerp(apStartPPos.y, apEndPPos.y, raito);
-		pos.z = std::lerp(apStartPPos.z, apEndPPos.z, raito);
-		player_->SetPosition(pos);
-
+		//カメラずらしながら
 		XMFLOAT3 eyePos = camera->GetEye();
-		eyePos.x +=camEyeMoveSpX;
-		camera->SetEye(eyePos);
+		camera->SetEye({ eyePos.x += camEyeMoveSpX, eyePos.y,eyePos.z });
 
 		camera->SetTarget(pos);
 	}
@@ -201,14 +197,9 @@ void TitleScene::NextScene()
 	{//指定時間で移動
 		float raito = (float)pMoveFrame / pExitMoveFrameMax;
 		pMoveFrame++;
-
-		XMFLOAT3 pos{};
-		pos.x = std::lerp(exitStartPPos.x, exitEndPPos.x, raito);
-		pos.y = std::lerp(exitStartPPos.y, exitEndPPos.y, raito);
-		pos.z = std::lerp(exitStartPPos.z, exitEndPPos.z, raito);
-		player_->SetPosition(pos);
-
-		camera->SetTarget(pos);
+		player_->SetPosition(GameUtility::UtilLerp(exitStartPPos, exitEndPPos, raito));
+		//カメラが自機をみる
+		camera->SetTarget(player_->GetPosition());
 	}
 	//自機がシーン遷移演出開始位置に到達したら
 	if (player_->GetPosition().z >= sceneChangeDirecPosZ && hideTheScreenOnly == false) {

@@ -380,8 +380,6 @@ void Boss::CircularMotionMove()
 {
 	const float ApproachZ = 0.15f;//近づく値
 
-	//敵の移動
-	XMFLOAT3 position = obj->GetPosition();
 	//弧度法
 	hpHalf_rad = hpHalf_Angle * XM_PI / 180.0f;
 
@@ -389,20 +387,22 @@ void Boss::CircularMotionMove()
 	addX = std::cosf(hpHalf_rad) * hpHalf_Length;
 	addY = std::sinf(hpHalf_rad) * hpHalf_Length;
 
+
+	XMFLOAT3 position = obj->GetPosition();
 	if (getPosOnlyFlag)
 	{
 		//最初の位置
-		circlePosMem = obj->GetPosition();
+		circlePosMem = position;
 		getPosOnlyFlag = false;
 	}
 
-	XMFLOAT3 pPos = shotTag->GetPosition();
+	//敵の移動
 	//中心座標に移動量を足した値を座標に
-	position.x = circlePosMem.x + addX;
-	position.y = circularY + addY;
-	position.z -= ApproachZ;//地味に迫ってくる
-
-	obj->SetPosition(position);
+	obj->SetPosition({
+		circlePosMem.x + addX ,
+		circularY + addY,
+		position.z-ApproachZ//地味に迫ってくる
+		});
 
 	hpHalf_Angle += 5.0f;//角度　増やすと移動速くなる
 	hpHalf_Length += 0.3f;//渦を巻くように広げたい
@@ -910,29 +910,25 @@ void Boss::Death() {
 
 	//コアの色変え 黒
 	constexpr float coreColChangeNecesFrame = 60;//この時間かけて色変え
+
 	XMFLOAT4 coreCol = obj_core->GetColor();
 	coreColChangeRaito = (float)nowframe / coreColChangeNecesFrame;
 	obj_core->SetColor({ std::lerp(1.f, 0.f, coreColChangeRaito),coreCol.y,coreCol.z,coreCol.w });
 
 	XMFLOAT3 upDownRot = obj_UpDown->GetRotation();
-	upDownRot.x += 0.2f;
-	obj_UpDown->SetRotation(upDownRot);
+	obj_UpDown->SetRotation({ upDownRot.x += 0.2f ,upDownRot.y,upDownRot.z });
 
 	XMFLOAT3 verticalCircleDownRot = obj_VerticalCircle->GetRotation();
-	verticalCircleDownRot.x += 0.2f;
-	obj_VerticalCircle->SetRotation(verticalCircleDownRot);
+	obj_VerticalCircle->SetRotation({ verticalCircleDownRot.x += 0.2f ,verticalCircleDownRot.y,verticalCircleDownRot.z });
 
 	XMFLOAT3 outSideRot = obj_outside->GetRotation();
-	outSideRot.z += 0.2f;
-	obj_outside->SetRotation(outSideRot);
+	obj_outside->SetRotation({ outSideRot.x,outSideRot.y,outSideRot.z += 0.2f });
 
 	XMFLOAT3 sideSquareRot = obj_SideSquare->GetRotation();
-	sideSquareRot.z -= 0.2f;
-	obj_SideSquare->SetRotation(sideSquareRot);
+	obj_SideSquare->SetRotation({ sideSquareRot.x,sideSquareRot.y,sideSquareRot.z -= 0.2f });
 
 	XMFLOAT3 aroundCoreRot = obj_AroundCore->GetRotation();
-	aroundCoreRot.x -= 0.2f;
-	obj_AroundCore->SetRotation(aroundCoreRot);
+	obj_AroundCore->SetRotation({ aroundCoreRot.x -= 0.2f,aroundCoreRot.y,aroundCoreRot.z});
 }
 
 void Boss::AlwaysmMotion()
