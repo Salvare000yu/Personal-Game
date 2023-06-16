@@ -1,10 +1,10 @@
-# STRIKER
+# 個人製作 STRIKER
 
 画像がプレイ動画リンクになっています。
 
 [![プレイ動画](https://img.youtube.com/vi/XgiTfmUDh_M/0.jpg)](https://youtu.be/XgiTfmUDh_M)
 
-## 個人製作　作品情報
+## 作品情報
 
 - ジャンル
   - 3Dシューティングゲーム
