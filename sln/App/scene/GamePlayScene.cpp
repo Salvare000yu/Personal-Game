@@ -22,9 +22,6 @@
 
 #include "PostEffect.h"
 
-#include <fstream>
-#include <sstream>
-
 #include <DirectXMath.h>
 #include <algorithm>
 
@@ -33,44 +30,6 @@
 #endif // min
 
 using namespace DirectX;
-
-std::vector<std::vector<std::string>> loadCsv(const std::string& csvFilePath,
-	bool commentFlag,
-	char divChar,
-	const std::string& commentStartStr)
-{
-	std::vector<std::vector<std::string>> csvData{};	// csvの中身を格納
-
-	std::ifstream ifs(csvFilePath);
-	if (!ifs)
-	{
-		return csvData;
-	}
-
-	std::string line{};
-	// 開いたファイルを一行読み込む(カーソルも動く)
-	while (std::getline(ifs, line))
-	{
-		// コメントが有効かつ行頭が//なら、その行は無視する
-		if (commentFlag && line.find(commentStartStr) == 0U)
-		{
-			continue;
-		}
-
-		// 行数を増やす
-		csvData.emplace_back();
-
-		std::istringstream stream(line);
-		std::string field;
-		// 読み込んだ行を','区切りで分割
-		while (std::getline(stream, field, divChar))
-		{
-			csvData.back().emplace_back(field);
-		}
-	}
-
-	return csvData;
-}
 
 void GamePlayScene::Initialize()
 {
@@ -251,7 +210,7 @@ void GamePlayScene::Initialize()
 	// パーティクル初期化
 	particle->SetCamera(camera.get());
 
-	csvData = loadCsv("Resources/SmallEnemy.csv", true, ',', "//");
+	csvData = GameUtility::LoadCsv("Resources/SmallEnemy.csv", true, ',', "#");
 
 	//今あるパーティクルを削除する
 	particle->DeleteParticles();

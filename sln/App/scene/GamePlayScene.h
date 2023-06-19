@@ -112,7 +112,6 @@ public:
 	bool pDamFlag = false;
 
 	//ボス戦前演出
-	//BeforeBossPattern beforeBossPattern_ = BeforeBossPattern::dec;
 	std::function<void()> beforeBossPattern;
 
 	//ダッシュする方向
@@ -164,7 +163,6 @@ private:
 	float groundPosDef = -200;//地面を置く座標　ここ中心に上下
 
 	//<<<<<開始時演出
-	//bool gameReadyFlag = true;//開始演出中
 	//ゲーム開始時フレーム
 	uint16_t gameReadyFrame = 0;
 	//開始時自機座標
