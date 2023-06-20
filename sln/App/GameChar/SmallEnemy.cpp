@@ -81,23 +81,35 @@ void SmallEnemy::StartAppear()
 	Shot();//弾をうつ
 }
 
-void SmallEnemy::RetireRight()
+void SmallEnemy::Exit()
 {
-	XMFLOAT3 sePos = obj->GetPosition();
+	XMFLOAT4 seColor = obj->GetColor();
+	constexpr float seColDecVal = 0.05f;//透明にする速度
+	seColor.w -= seColDecVal;
+	obj->SetColor(seColor);
 
-	sePos.x += retireSp;
-	if (sePos.x >= 700) {
-		alive = false;;//消滅
+	if(seColor.w<=0){
+		alive = false;//消滅
 	}
+}
+
+void SmallEnemy::RetireRight()
+{//右に捌ける
+	XMFLOAT3 sePos = obj->GetPosition();
+	sePos.x += retireSp;
 	obj->SetPosition(sePos);
+
+	if (sePos.x >= 700) {
+		Exit();//消える
+	}
 }
 void SmallEnemy::RetireLeft()
-{
+{//左に捌ける
 	XMFLOAT3 sePos = obj->GetPosition();
 
 	sePos.x -= retireSp;
 	if (sePos.x <= -700) {
-		alive = false;//消滅
+		Exit();//消える
 	}
 	obj->SetPosition(sePos);
 }
@@ -142,10 +154,6 @@ void SmallEnemy::BulletUpdate()
 
 void SmallEnemy::Update()
 {
-	Input* input = Input::GetInstance();
-
-	const bool input3 = input->PushKey(DIK_3);
-
 	//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<SmallEnemyBullet>& bullet) {
 		return !bullet->GetAlive();

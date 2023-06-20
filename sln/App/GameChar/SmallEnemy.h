@@ -29,7 +29,10 @@ public:
 
 	void Shot();//弾発射
 
-	void StartAppear();//登場開始
+	//登場開始
+	void StartAppear();
+
+	void Exit();//消える
 
 	void RetireRight();//右
 	void RetireLeft();//左
