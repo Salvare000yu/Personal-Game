@@ -5,17 +5,12 @@
 #include "BaseObject.h"
 #include "SmallEnemyBullet.h"
 
+#include <functional>
+
 #include <memory>
 
 class SmallEnemy :public BaseObject
 {
-	//捌けパターン
-	enum class RetirePat {
-		Right,
-		Left,
-		def,
-	};
-
 private:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -32,7 +27,12 @@ public:
 	//初期化
 	void Initialize()override;
 
-	void Retire();
+	void Shot();//弾発射
+
+	void StartAppear();//登場開始
+
+	void RetireRight();//右
+	void RetireLeft();//左
 
 	void BulletUpdate();
 
@@ -47,6 +47,9 @@ public:
 	//左右に捌ける
 	static const int32_t retireFrameDef = 120;
 	int32_t retireFrame = retireFrameDef;
+
+	//雑魚敵行動パターン
+	std::function<void()>smallEnemyActionPattern;
 
 	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
@@ -65,8 +68,6 @@ public:
 
 	//フレームごとに発射
 	static const uint8_t atkInterval = 90;
-
-	RetirePat retirePat_ = RetirePat::def;
 
 private:
 
@@ -93,8 +94,7 @@ private:
 
 	//ここまで来たら止まって捌ける
 	const int posZMax = 420;
-	//捌け開始
-	bool isRetire = false;
-	//向かってくる間だけ
-	bool isSeApproach = true;
+
+	//はける速度
+	const float retireSp = 3.f;
 };
