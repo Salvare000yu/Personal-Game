@@ -8,14 +8,6 @@
 
 #include <algorithm>
 
-#ifdef max
-#undef max
-#endif // max
-
-#ifdef min
-#undef min
-#endif // min
-
 using namespace DirectX;
 
 CharParameters* CharParameters::GetInstance()
@@ -87,7 +79,7 @@ void CharParameters::PlayerHpSafety()
 void CharParameters::PlayerHpLessThanHalf()
 {
 	//HP指定した値まで減ったら
-	if (nowPlayerHP <=playerMaxHP / 4.f) {
+	if (nowPlayerHP <= playerMaxHP / 4.f) {
 		sp_playerhpbar->SetColor({ 1,0,0,1 });//赤
 		pHpColorPattern = std::bind(&CharParameters::PlayerHpDanger, this);
 	}
@@ -125,7 +117,6 @@ void CharParameters::pHpUpdate()
 	sp_playerhpbar->Update();
 	sp_playerhpbarwaku->Update();
 }
-
 
 void CharParameters::BossHpSafety()
 {
@@ -197,5 +188,4 @@ void CharParameters::boHpDraw()
 
 void CharParameters::DrawUI()
 {
-
 }

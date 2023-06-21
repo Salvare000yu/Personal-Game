@@ -85,7 +85,6 @@ void Pause::PauseNow()
 
 	//閉じる
 	WaitKeyP++;//同じボタンでとじれるように
-
 }
 void Pause::Update()
 {

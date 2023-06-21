@@ -238,7 +238,8 @@ void GamePlayScene::GroundMove()
 void GamePlayScene::SmallEnemyCreate()
 {
 	//雑魚敵生成
-	std::unique_ptr<SmallEnemy> madeSmallEnemy = std::make_unique<SmallEnemy>();
+	std::unique_ptr<SmallEnemy>& madeSmallEnemy =
+		smallEnemys_.emplace_front(std::make_unique<SmallEnemy>());
 
 	madeSmallEnemy->Initialize();
 
@@ -247,8 +248,6 @@ void GamePlayScene::SmallEnemyCreate()
 	{
 		se->SetSEBulModel(mod_enemybullet.get());
 	}
-	//雑魚敵登録
-	smallEnemys_.push_back(std::move(madeSmallEnemy));
 }
 void GamePlayScene::SmallEnemyAppear()
 {
@@ -266,7 +265,7 @@ void GamePlayScene::SmallEnemyAppear()
 			float posy = std::stof(csvData[seIndex][1]);
 			float posz = std::stof(csvData[seIndex][2]);
 			//雑魚敵をcsv通りの場所に出す
-			smallEnemys_.back()->SetPosition(XMFLOAT3{ posx,posy,posz });
+			smallEnemys_.front()->SetPosition(XMFLOAT3{ posx,posy,posz });
 
 			//再びカウントできるように初期化
 			sEneAppCount = sEneAppInterval;
@@ -374,7 +373,6 @@ void GamePlayScene::BossDeathEffect()
 			float raito = (float)pRotReturnFrame / frameMax;
 			//自機を正面に
 			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, raito));
-			
 		}//回転戻し終わったらもう移動攻撃しない
 		else {
 			player_->pAtkPossibleFlag = false;
@@ -390,8 +388,8 @@ void GamePlayScene::BossDeathEffect()
 		float raito = (float)clearPMoveFrame / frameMax;
 		++clearPMoveFrame;
 		//クリア時前へ進む
-		player_->SetPosition({ 
-			player_->GetPosition().x, 
+		player_->SetPosition({
+			player_->GetPosition().x,
 			player_->GetPosition().y,
 			std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito) });
 	}
@@ -824,7 +822,7 @@ void GamePlayScene::CollisionAll()
 
 			auto& c = seColliders.emplace_front();
 			c.baseObject = se.get();
-			c.radius = se->GetScale().z+5.f;
+			c.radius = se->GetScale().z + 5.f;
 		}
 
 		CollisionManager::CheckHitFromColliderList(

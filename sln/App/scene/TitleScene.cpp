@@ -9,15 +9,12 @@
 #include "GameUtility.h"
 #include "PostEffect.h"
 
-#ifdef max
-#undef max
-#endif // max
-
-#ifdef min
-#undef min
-#endif // min
-
 using namespace DirectX;
+
+namespace {
+	constexpr auto eyeStartPos = XMFLOAT3(10 - 90, 160, -2000);
+	constexpr auto eyeEndPos = XMFLOAT3(10, 160, -2000);
+}
 
 void TitleScene::Initialize()
 {
@@ -99,9 +96,7 @@ void TitleScene::Initialize()
 	apStartPPos.z -= 1200;//ここから自機の初期位置まで指定フレーム掛けて動く
 
 	camera->SetTarget(player_->GetPosition());
-	const float EyeXDef = 10;//最終位置
-	const float EyeX = EyeXDef - (camEyeMoveSpX * pApMoveFrameMax);//最終位置ー（自機登場時間＊ずらす値）　登場時間分ずらすから
-	camera->SetEye({ EyeX,160,-2000 });//ここにカメラをおいて、最初の演出で自機を追いかける
+	camera->SetEye(eyeStartPos);//ここにカメラをおいて、最初の演出で自機を追いかける
 
 	charParameters->Initialize();
 	//シーン遷移演出初期化
@@ -143,8 +138,6 @@ void TitleScene::PlayerStandby()
 
 void TitleScene::PlayerAppear()
 {
-	XMFLOAT3 pos = player_->GetPosition();
-
 	if (pMoveFrame < pApMoveFrameMax) {//最大フレーム到達までやる
 		float raito = (float)pMoveFrame / pApMoveFrameMax;
 		pMoveFrame++;
@@ -152,12 +145,12 @@ void TitleScene::PlayerAppear()
 		player_->SetPosition(GameUtility::UtilLerp(apStartPPos, apEndPPos, raito));
 
 		//カメラずらしながら
-		XMFLOAT3 eyePos = camera->GetEye();
-		camera->SetEye({ eyePos.x += camEyeMoveSpX, eyePos.y,eyePos.z });
+		camera->SetEye(GameUtility::UtilLerp(eyeStartPos, eyeEndPos, raito));
 
-		camera->SetTarget(pos);
+		camera->SetTarget(player_->GetPosition());
 	}
 	else {//最大フレーム後
+		XMFLOAT3 pos = player_->GetPosition();
 		pMoveFrame = pMoveFrameDef;//シーン切り替えないでも使うのでデフォルトに戻す
 		exitEndPPos = { pos.x,pos.y,exitPosZ };//退場は指定Zまで行っておわる
 		exitStartPPos = pos;//現在自機座標から退場始める
@@ -223,24 +216,25 @@ void TitleScene::NextScene()
 
 void TitleScene::ToStartSprite()
 {
-	constexpr float ColorWDec = 0.012f;//透明にしていく速度
-	constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
-	XMFLOAT4 color = sp_titleoper->GetColor();
+	if (toStartFrame > 0) {
+		--toStartFrame;
+	}
+	else
+	{//指定時間たったら
+		constexpr float ColorWDec = 0.012f;//透明にしていく速度
+		constexpr float Transparency = 0.5f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+		XMFLOAT4 color = sp_titleoper->GetColor();
 
-	toStartFrame = std::max(--toStartFrame, 0);//toStartFrameの最小値は0
-
-	if (toStartFrame <= 0) {//指定時間たったら
 		color.w -= ColorWDec;
-	}
+		if (color.w <= Transparency) {
+			toStartFrame = toStartFrameDef;//またこの時間分まつ
+			color.w = 1.f;//一番明るい状態
+		}
 
-	if (color.w <= Transparency) {
-		toStartFrame = toStartFrameDef;//またこの時間分まつ
-		color.w = 1.f;//一番明るい状態
+		sp_titleoper->SetColor(color);
+		sp_titleoper->TransferVertexBuffer();
+		sp_titleoper->Update();
 	}
-
-	sp_titleoper->SetColor(color);
-	sp_titleoper->TransferVertexBuffer();
-	sp_titleoper->Update();
 }
 
 void TitleScene::LogoMove()
@@ -304,32 +298,29 @@ void TitleScene::Update()
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	//セレクトから振動少し続ける
-	if (--vibCount == 0) {
+	if (--vibCount <= 0) {
 		input->PadVibrationDef();
 	}
 
 	if (pAppearFlag) {
 		PlayerAppear();//自機登場
 	}
-
-	//登場完了して退場前
-	if (pAppearFlag == false && sceneChangeFlag == false)
-	{
-		if ((cInput->Decision()))     // スペースキーorEnterが押されていたら
-		{
-			GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-			sceneChangeFlag = true;//チェンジ移動フラグ立てる
-			input->PadVibration();
+	else {
+		if (sceneChangeFlag) {
+			sceneChangeDirection->sceneChangeDirectionFlag = true;
+			NextScene();//チェンジ移動開始
 		}
+		else {	//登場完了して退場前
+			if (cInput->Decision())     // スペースキーorEnterが押されていたら
+			{
+				GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+				sceneChangeFlag = true;//チェンジ移動フラグ立てる
+				input->PadVibration();
+			}
 
-		PlayerStandby();//たいきもーしょん
-		ToStartSprite();//ENTER押してね的な画像関係
-		//postEffect->Update();
-	}
-
-	if (sceneChangeFlag) {
-		sceneChangeDirection->sceneChangeDirectionFlag = true;
-		NextScene();//チェンジ移動開始
+			PlayerStandby();//たいきもーしょん
+			ToStartSprite();//ENTER押してね的な画像関係
+		}
 	}
 
 	LogoMove();//ロゴの動き

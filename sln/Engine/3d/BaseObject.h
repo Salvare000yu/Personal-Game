@@ -32,7 +32,6 @@ public:
 	//モデル初期化関数
 	inline void SetModel(Model* model) { obj->SetModel(model); }
 
-
 	/// <summary>
 	/// 回転行列の取得
 	/// </summary>

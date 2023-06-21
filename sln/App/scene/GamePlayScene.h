@@ -97,8 +97,8 @@ public:
 	//指定フレームごとに雑魚出現
 	static const int sEneAppInterval = 60;
 
-	std::list <std::unique_ptr<SmallEnemy>> smallEnemys_;
-	std::list <std::unique_ptr<Boss>> boss_;
+	std::forward_list <std::unique_ptr<SmallEnemy>> smallEnemys_;
+	std::forward_list <std::unique_ptr<Boss>> boss_;
 
 	std::unique_ptr < Player> player_ = nullptr;
 	SmallEnemy* sEnemys_ = nullptr;
@@ -253,6 +253,6 @@ private:
 	//実際に増やす値
 	const float dashVelIncDef = 6;
 	float dashVelInc = dashVelIncDef;
-	
+
 	//----自機ダッシュ
 };

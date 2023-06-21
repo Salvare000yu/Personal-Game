@@ -118,7 +118,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -138,7 +138,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

@@ -17,13 +17,11 @@ void SmallEnemy::Attack()
 	//弾発射
 	XMFLOAT3 sePos = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<SmallEnemyBullet> madeBullet = std::make_unique<SmallEnemyBullet>();
+	std::unique_ptr<SmallEnemyBullet>& madeBullet =
+		bullets_.emplace_front(std::make_unique<SmallEnemyBullet>());
 	madeBullet->Initialize();
 	madeBullet->SetModel(seBulModel);
 	madeBullet->SetPosition(sePos);
-
-	//弾登録
-	bullets_.push_back(std::move(madeBullet));
 }
 
 void SmallEnemy::Initialize()
@@ -88,7 +86,7 @@ void SmallEnemy::Exit()
 	seColor.w -= seColDecVal;
 	obj->SetColor(seColor);
 
-	if(seColor.w<=0){
+	if (seColor.w <= 0) {
 		alive = false;//消滅
 	}
 }

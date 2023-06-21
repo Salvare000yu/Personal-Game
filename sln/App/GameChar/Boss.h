@@ -77,9 +77,9 @@ public:
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
-	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
-	const std::list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
-	const std::list<std::unique_ptr<BossStraightBul>>& GetStraightBullets() { return straightBullets_; }
+	const std::forward_list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
+	const std::forward_list<std::unique_ptr<BossAimBul>>& GetAimBullets() { return aimBullets_; }
+	const std::forward_list<std::unique_ptr<BossStraightBul>>& GetStraightBullets() { return straightBullets_; }
 
 	inline void SetBulModel(Model* model) { bulModel = model; }
 	inline void SetAimBulModel(Model* model) { aimBulModel = model; }
@@ -105,7 +105,7 @@ public:
 	//狙い弾　打つ相手
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 
-	void SetBossDamageEffect(bool bossDamageEffectFlag) {this->bossDamageEffectFlag = bossDamageEffectFlag;}
+	void SetBossDamageEffect(bool bossDamageEffectFlag) { this->bossDamageEffectFlag = bossDamageEffectFlag; }
 	//-----------------↑げったーせったー↑------------------//
 
 private:
@@ -208,9 +208,9 @@ private:
 
 	std::function<void()> actionPattern;
 
-	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
-	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
-	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
+	std::forward_list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
+	std::forward_list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
+	std::forward_list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
 
 	float time;
 
@@ -269,9 +269,9 @@ private:
 
 	const float necesLeaveFirstFrame = 180.f;
 
-	XMFLOAT4 coreCol{0,0,1,1};//コアの色　最初青
+	XMFLOAT4 coreCol{ 0,0,1,1 };//コアの色　最初青
 	//-------↑HPHALF↑------//
-	
+
 	//------HP半分以下円運動↓
 	const float hpHalf_AngleDef = 20.f;
 	float hpHalf_Angle = hpHalf_AngleDef;

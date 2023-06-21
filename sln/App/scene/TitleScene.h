@@ -114,8 +114,8 @@ private:
 	//------自機退場(シーンチェンジ)
 
 	//------ENTERスプライト点滅
-	const int toStartFrameDef = 40;//透明じゃない時間
-	int toStartFrame = toStartFrameDef;
+	const uint32_t toStartFrameDef = 40;//透明じゃない時間
+	uint32_t toStartFrame = toStartFrameDef;
 	//-------
 
 	//ロゴの動き　デフォルト

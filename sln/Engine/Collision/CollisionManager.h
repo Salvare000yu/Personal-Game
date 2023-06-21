@@ -20,4 +20,3 @@ public:
 		std::forward_list<Collider> list2,
 		std::function<void(BaseObject*)> hitFunc2);
 };
-

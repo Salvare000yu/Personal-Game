@@ -33,8 +33,6 @@ private:
 public:
 	inline void SetPBulModel(Model* model) { pBulModel = model; }
 
-	/*static Player* GetInstance();*/
-
 	//初期化
 	void Initialize() override;
 
@@ -55,11 +53,10 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	//PlayerBullet* bullet_ = nullptr;
-	std::list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+	std::forward_list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//弾リストを取得 gamesceneに自弾貸すため
-	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
+	const std::forward_list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
 	Player()
 		: lookVec(DirectX::XMVectorSet(0, 0, 1, 0)),
@@ -117,7 +114,7 @@ private:
 	//-----自機死亡演出
 	DirectX::XMFLOAT3 pPosDeath = {};
 	uint32_t nowFrame = 0;//現在フレ
-	uint32_t necesFrame ;//かかる時間
+	uint32_t necesFrame;//かかる時間
 	DirectX::XMFLOAT3 moveSp = {};//移動速度
 	DirectX::XMFLOAT3 targetPos;//目標座標
 	DirectX::XMFLOAT3 nowPos = {};//その時の位置

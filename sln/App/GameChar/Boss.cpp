@@ -387,7 +387,6 @@ void Boss::CircularMotionMove()
 	addX = std::cosf(hpHalf_rad) * hpHalf_Length;
 	addY = std::sinf(hpHalf_rad) * hpHalf_Length;
 
-
 	XMFLOAT3 position = obj->GetPosition();
 	if (getPosOnlyFlag)
 	{
@@ -401,7 +400,7 @@ void Boss::CircularMotionMove()
 	obj->SetPosition({
 		circlePosMem.x + addX ,
 		circularY + addY,
-		position.z-ApproachZ//地味に迫ってくる
+		position.z - ApproachZ//地味に迫ってくる
 		});
 
 	hpHalf_Angle += 5.0f;//角度　増やすと移動速くなる
@@ -694,13 +693,11 @@ void Boss::Attack()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<BossAimBul> madeAimBullet = std::make_unique<BossAimBul>();
+	std::unique_ptr<BossAimBul>& madeAimBullet =
+		aimBullets_.emplace_front(std::make_unique<BossAimBul>());
 	madeAimBullet->Initialize();
 	madeAimBullet->SetModel(aimBulModel);
 	madeAimBullet->SetPosition(position);
-
-	//弾登録
-	aimBullets_.push_back(std::move(madeAimBullet));
 }
 void Boss::PAimBul()
 {
@@ -750,9 +747,12 @@ void Boss::DiffusionAttack()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<BossBullet> madeBullet_center = std::make_unique<BossBullet>();
-	std::unique_ptr<BossBullet> madeBullet_L = std::make_unique<BossBullet>();
-	std::unique_ptr<BossBullet> madeBullet_R = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet>& madeBullet_center =
+		bullets_.emplace_front(std::make_unique<BossBullet>());
+	std::unique_ptr<BossBullet>& madeBullet_L =
+		bullets_.emplace_front(std::make_unique<BossBullet>());
+	std::unique_ptr<BossBullet>& madeBullet_R =
+		bullets_.emplace_front(std::make_unique<BossBullet>());
 
 	madeBullet_center->Initialize();
 	madeBullet_L->Initialize();
@@ -782,11 +782,6 @@ void Boss::DiffusionAttack()
 	madeBullet_center->SetVelocity(xmfloat3velocity_center);
 	madeBullet_L->SetVelocity(xmfloat3velocity_L);
 	madeBullet_R->SetVelocity(xmfloat3velocity_R);
-
-	//弾登録
-	bullets_.push_back(std::move(madeBullet_center));
-	bullets_.push_back(std::move(madeBullet_L));
-	bullets_.push_back(std::move(madeBullet_R));
 }
 void Boss::DiffusionAttackEavenNumber()
 {
@@ -796,10 +791,10 @@ void Boss::DiffusionAttackEavenNumber()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<BossBullet> madeBullet_L1 = std::make_unique<BossBullet>();
-	std::unique_ptr<BossBullet> madeBullet_L2 = std::make_unique<BossBullet>();
-	std::unique_ptr<BossBullet> madeBullet_R1 = std::make_unique<BossBullet>();
-	std::unique_ptr<BossBullet> madeBullet_R2 = std::make_unique<BossBullet>();
+	std::unique_ptr<BossBullet>& madeBullet_L1 = bullets_.emplace_front(std::make_unique<BossBullet>());
+	std::unique_ptr<BossBullet>& madeBullet_L2 = bullets_.emplace_front(std::make_unique<BossBullet>());
+	std::unique_ptr<BossBullet>& madeBullet_R1 = bullets_.emplace_front(std::make_unique<BossBullet>());
+	std::unique_ptr<BossBullet>& madeBullet_R2 = bullets_.emplace_front(std::make_unique<BossBullet>());
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeBullet_L1->Initialize();
 	madeBullet_L2->Initialize();
@@ -837,13 +832,8 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_L2->SetVelocity(xmfloat3velocity_L2);
 	madeBullet_R1->SetVelocity(xmfloat3velocity_R1);
 	madeBullet_R2->SetVelocity(xmfloat3velocity_R2);
-
-	//弾登録
-	bullets_.push_back(std::move(madeBullet_L1));
-	bullets_.push_back(std::move(madeBullet_L2));
-	bullets_.push_back(std::move(madeBullet_R1));
-	bullets_.push_back(std::move(madeBullet_R2));
 }
+
 void Boss::StraightAttack()
 {
 	// 音声再生 鳴らしたいとき
@@ -852,15 +842,13 @@ void Boss::StraightAttack()
 	//弾発射
 	XMFLOAT3 position = obj->GetPosition();
 	//弾生成
-	std::unique_ptr<BossStraightBul> madeBullet = std::make_unique<BossStraightBul>();
+	std::unique_ptr<BossStraightBul>& madeBullet =
+		straightBullets_.emplace_front(std::make_unique<BossStraightBul>());
 	//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 	madeBullet->Initialize();
 	madeBullet->SetModel(straightBulModel);
 	madeBullet->SetPosition(position);
 	madeBullet->SetScale({ 30.f, 30.f, 30.f });
-
-	//弾登録
-	straightBullets_.push_back(std::move(madeBullet));
 }
 
 void Boss::DamageEffect()
@@ -927,7 +915,7 @@ void Boss::Death() {
 	obj_SideSquare->SetRotation({ sideSquareRot.x,sideSquareRot.y,sideSquareRot.z -= 0.2f });
 
 	XMFLOAT3 aroundCoreRot = obj_AroundCore->GetRotation();
-	obj_AroundCore->SetRotation({ aroundCoreRot.x -= 0.2f,aroundCoreRot.y,aroundCoreRot.z});
+	obj_AroundCore->SetRotation({ aroundCoreRot.x -= 0.2f,aroundCoreRot.y,aroundCoreRot.z });
 }
 
 void Boss::AlwaysmMotion()

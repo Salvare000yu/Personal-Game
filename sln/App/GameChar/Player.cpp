@@ -9,14 +9,6 @@
 
 #include <DirectXMath.h>
 
-#ifdef max
-#undef max
-#endif // max
-
-#ifdef min
-#undef min
-#endif // min
-
 using namespace DirectX;
 
 void Player::Attack()
@@ -46,7 +38,7 @@ void Player::Attack()
 	{
 		XMFLOAT3 PlayerPos = obj->GetPosition();
 		//弾生成
-		std::unique_ptr<PlayerBullet> madeBullet = std::make_unique<PlayerBullet>();
+		auto& madeBullet = bullets_.emplace_front(std::make_unique<PlayerBullet>());
 		//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 		madeBullet->Initialize();
 		madeBullet->SetModel(pBulModel);
@@ -61,11 +53,6 @@ void Player::Attack()
 
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("shot.wav", 0.1f);
-
-		//弾登録
-		bullets_.push_back(std::move(madeBullet));
-
-		//input->PadVibrationDef();
 
 		attackIntervalFlag = true;
 	}
@@ -129,7 +116,6 @@ void Player::Shake() {
 	Input* input = Input::GetInstance();
 
 	if (--pShakeTimer_ >= 0) {// 0まで減らす
-
 		input->PadVibration();
 
 		//pos揺らす
@@ -209,7 +195,7 @@ void Player::Initialize()
 		Yaml::Node root;
 		try
 		{
-			Yaml::Parse(root, "Resoujrces/charDataFile/player.yml");
+			Yaml::Parse(root, "Resources/charDataFile/player.yml");
 		}
 		catch (...)
 		{

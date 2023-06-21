@@ -6,6 +6,7 @@
 #include "SmallEnemyBullet.h"
 
 #include <functional>
+#include <forward_list>
 
 #include <memory>
 
@@ -54,11 +55,11 @@ public:
 	//雑魚敵行動パターン
 	std::function<void()>smallEnemyActionPattern;
 
-	std::list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+	std::forward_list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
-	const std::list<std::unique_ptr<SmallEnemyBullet>>& GetBullets() { return bullets_; }
+	const std::forward_list<std::unique_ptr<SmallEnemyBullet>>& GetBullets() { return bullets_; }
 
 	inline void SetSEBulModel(Model* model) { seBulModel = model; }
 

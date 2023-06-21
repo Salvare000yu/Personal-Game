@@ -52,5 +52,4 @@ private:
 
 	bool sSOp0_1Flag = false;//1に移動開始フラグ
 	bool sSStart1_0Flag = false;//1から0に
-
 };

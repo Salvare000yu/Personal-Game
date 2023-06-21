@@ -1,4 +1,4 @@
-#include <DirectXMath.h>
+ï»¿#include <DirectXMath.h>
 #include <vector>
 #include <string>
 #include<d3d12.h>
@@ -12,36 +12,36 @@
 class Model
 {
 public:
-	// ’¸“_ƒf[ƒ^\‘¢‘Ì
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 	struct VertexPosNormalUv
 	{
-		DirectX::XMFLOAT3 pos; // xyzÀ•W
-		DirectX::XMFLOAT3 normal; // –@üƒxƒNƒgƒ‹
-		DirectX::XMFLOAT2 uv;  // uvÀ•W
+		DirectX::XMFLOAT3 pos; // xyzåº§æ¨™
+		DirectX::XMFLOAT3 normal; // æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+		DirectX::XMFLOAT2 uv;  // uvåº§æ¨™
 	};
 
-	//’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘ÌB1
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“B1
 	struct ConstBufferDataB1
 	{
-		DirectX::XMFLOAT3 ambient;//ƒAƒ“ƒrƒGƒ“ƒgŒW”
-		float pad1;//ƒpƒfƒBƒ“ƒO
-		DirectX::XMFLOAT3 diffuse;//ƒfƒBƒtƒ…[ƒYŒW”
-		float pad2;//ƒpƒfƒBƒ“ƒO
-		DirectX::XMFLOAT3 specular;//ƒXƒyƒLƒ…ƒ‰[ŒW”
-		float alpha;//ƒAƒ‹ƒtƒ@
-		DirectX::XMFLOAT2 tiling{ 1,1 };//ƒ^ƒCƒŠƒ“ƒO
+		DirectX::XMFLOAT3 ambient;//ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆä¿‚æ•°
+		float pad1;//ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
+		DirectX::XMFLOAT3 diffuse;//ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºä¿‚æ•°
+		float pad2;//ãƒ‘ãƒ‡ã‚£ãƒ³ã‚°
+		DirectX::XMFLOAT3 specular;//ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ä¿‚æ•°
+		float alpha;//ã‚¢ãƒ«ãƒ•ã‚¡
+		DirectX::XMFLOAT2 tiling{ 1, 1 };//ã‚¿ã‚¤ãƒªãƒ³ã‚°
 	};
 
-	//ƒ}ƒeƒŠƒAƒ‹
+	//ãƒãƒ†ãƒªã‚¢ãƒ«
 	struct Material
 	{
-		std::string name;//ƒ}ƒeƒŠƒAƒ‹–¼
-		DirectX::XMFLOAT3 ambient;//ƒAƒ“ƒrƒGƒ“ƒg‰e‹¿“x
-		DirectX::XMFLOAT3 diffuse;//ƒfƒBƒtƒ…[ƒY‰e‹¿“x
-		DirectX::XMFLOAT3 specular;//ƒXƒyƒLƒ…ƒ‰[‰e‹¿“x
-		float alpha;//ƒAƒ‹ƒtƒ@
-		std::string textureFilename;//ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹–¼
-		//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		std::string name;//ãƒãƒ†ãƒªã‚¢ãƒ«å
+		DirectX::XMFLOAT3 ambient;//ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆå½±éŸ¿åº¦
+		DirectX::XMFLOAT3 diffuse;//ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºå½±éŸ¿åº¦
+		DirectX::XMFLOAT3 specular;//ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼å½±éŸ¿åº¦
+		float alpha;//ã‚¢ãƒ«ãƒ•ã‚¡
+		std::string textureFilename;//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«å
+		//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Material() {
 			ambient = { 0.3f,0.3f,0.3f };
 			diffuse = { 0.0f,0.0f,0.0f };
@@ -50,19 +50,19 @@ public:
 		}
 	};
 
-public://Ã“Iƒƒ“ƒoŠÖ”
+public://é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	static Model* GetInstance();
 
-	//OBJƒtƒ@ƒCƒ‹‚©‚ç3Dƒ‚ƒfƒ‹‚ğ“Ç‚İ‚İ
+	//OBJãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰3Dãƒ¢ãƒ‡ãƒ«ã‚’èª­ã¿è¾¼ã¿
 	static Model* LoadFromOBJ(const std::string& modelname);
 
-	/// ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ
+	/// ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	bool LoadTexture(const std::string& directoryPath, const std::string& filename);
 
-	//•`‰æƒRƒ}ƒ“ƒhƒŠƒXƒg
+	//æç”»ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
 
 	static void SetDevice(ID3D12Device* device) { Model::device = device; }
@@ -74,47 +74,47 @@ public://Ã“Iƒƒ“ƒoŠÖ”
 	const DirectX::XMFLOAT2& GetTiling() { return tiling; }
 
 private:
-	//Ø‚è‚éƒfƒoƒCƒX
+	//å€Ÿã‚Šã‚‹ãƒ‡ãƒã‚¤ã‚¹
 	static ID3D12Device* device;
 
-	// ’¸“_ƒf[ƒ^”z—ñ
+	// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿é…åˆ—
 	std::vector<VertexPosNormalUv> vertices;
-	// ’¸“_ƒCƒ“ƒfƒbƒNƒX”z—ñ
+	// é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹é…åˆ—
 	std::vector<unsigned short>indices;
 
 	Material material;
 
-	DirectX::XMFLOAT2 tiling{ 1,1 };
+	DirectX::XMFLOAT2 tiling{ 1, 1 };
 
-	//ƒeƒNƒXƒ`ƒƒƒoƒbƒtƒ@
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource> texbuff;
-	// ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descHeap;
-	//’è”ƒoƒbƒtƒ@iƒ}ƒeƒŠƒAƒ‹j
+	//å®šæ•°ãƒãƒƒãƒ•ã‚¡ï¼ˆãƒãƒ†ãƒªã‚¢ãƒ«ï¼‰
 	Microsoft::WRL::ComPtr<ID3D12Resource>constBuffB1;
-	// ƒfƒXƒNƒŠƒvƒ^ƒTƒCƒY
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
 	UINT descriptorHandleIncrementSize;
-	// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(CPU)
 	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-	// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(GPU)
+	// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(GPU)
 	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
 
-	//’¸“_ƒoƒbƒtƒ@
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertBuff;
-	//ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@
+	//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexBuff;
-	//’¸“_ƒoƒbƒtƒ@ƒrƒ…[
+	//é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
 	D3D12_VERTEX_BUFFER_VIEW vbView;
-	//ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@ƒrƒ…[
+	//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
 	D3D12_INDEX_BUFFER_VIEW ibView;
 
 private:
 	void LoadFromOBJInternal(const std::string& modelname);
 
-	//ƒfƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì‰Šú‰»
+	//ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®åˆæœŸåŒ–
 	void InitializeDescriptorHeap();
 
-	//Šeíƒoƒbƒtƒ@¶¬
+	//å„ç¨®ãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
 	void CreateBuffers();
 
 	void TransferBuffers();

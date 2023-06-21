@@ -1,4 +1,4 @@
-#include "DebugText.h"
+﻿#include "DebugText.h"
 
 DebugText* DebugText::GetInstance()
 {
@@ -11,13 +11,13 @@ void DebugText::Initialize(SpriteBase* spriteBase, UINT texnumber)
 {
 	//nullptr
 	assert(spriteBase);
-	//���������o�ϐ��Ɋi�[
-	spriteBase = spriteBase;
+	//引数メンバ変数に格納
+	this->spriteBase_ = spriteBase;
 
-	// �S�ẴX�v���C�g�f�[�^�ɂ���
+	// 全てのスプライトデータについて
 	for (int i = 0; i < _countof(sprites_); i++)
 	{
-		// �X�v���C�g�𐶐�����
+		// スプライトを生成する
 		sprites_[i] = Sprite::Create(texnumber, DirectX::XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 });
 	}
 }
@@ -31,18 +31,18 @@ void DebugText::Finalize()
 
 void DebugText::Print(const std::string& text, float x, float y, float scale)
 {
-	// �S�Ă̕����ɂ���
-	for (int i = 0; i < text.size(); i++)
+	// 全ての文字について
+	for (size_t i = 0, size = text.size(); i < size; ++i)
 	{
-		// �ő啶��������
+		// 最大文字数超過
 		if (spriteIndex_ >= maxCharCount) {
 			break;
 		}
 
-		// 1�������o��(��ASCII�R�[�h�ł������藧���Ȃ�)
+		// 1文字取り出す(※ASCIIコードでしか成り立たない)
 		const unsigned char& character = text[i];
 
-		// ASCII�R�[�h��2�i����΂����ԍ����v�Z
+		// ASCIIコードの2段分飛ばした番号を計算
 		int fontIndex = character - 32;
 		if (character >= 0x7f) {
 			fontIndex = 0;
@@ -51,35 +51,28 @@ void DebugText::Print(const std::string& text, float x, float y, float scale)
 		int fontIndexY = fontIndex / fontLineCount;
 		int fontIndexX = fontIndex % fontLineCount;
 
-		// ���W�v�Z
-		//sprites[spriteIndex]->position_ = { x + fontWidth * scale * i, y, 0 };
+		// 座標計算
 		sprites_[spriteIndex_]->SetPosition({ x + fontWidth * scale * i, y, 0 });
-		// sprites[spriteIndex].texLeftTop = { (float)fontIndexX * fontWidth, (float)fontIndexY * fontHeight };
 		sprites_[spriteIndex_]->SetTexLeftTop({ (float)fontIndexX * fontWidth, (float)fontIndexY * fontHeight });
-		//sprites[spriteIndex].texSize = { fontWidth, fontHeight };
 		sprites_[spriteIndex_]->SetTexSize({ fontWidth, fontHeight });
-		//sprites[spriteIndex].size = { fontWidth * scale, fontHeight * scale };
 		sprites_[spriteIndex_]->SetSize({ fontWidth * scale, fontHeight * scale });
-		// ���_�o�b�t�@�]��
-	   // SpriteTransferVertexBuffer(sprites[spriteIndex], spriteBase);
+		// 頂点バッファ転送
 		sprites_[spriteIndex_]->TransferVertexBuffer();
-		// �X�V
-		//SpriteUpdate(sprites[spriteIndex], spriteBase);
+		// 更新
 		sprites_[spriteIndex_]->Update();
 
-		// �������P�i�߂�
-		spriteIndex_++;
+		// 文字を１つ進める
+		++spriteIndex_;
 	}
 }
 
-// �܂Ƃ߂ĕ`��
+// まとめて描画
 void DebugText::DrawAll()
 {
-	// �S�Ă̕����̃X�v���C�g�ɂ���
+	// 全ての文字のスプライトについて
 	for (int i = 0; i < spriteIndex_; i++)
 	{
-		// �X�v���C�g�`��
-		//SpriteDraw(sprites[i], cmdList, spriteBase, dev);
+		// スプライト描画
 		sprites_[i]->Draw();
 	}
 
