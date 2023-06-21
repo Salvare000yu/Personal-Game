@@ -106,24 +106,24 @@ private:
 	std::unique_ptr< ParticleManager> particle;
 
 	//自機通常弾威力
-	const float pBulPowerMax = 70;
-	float pBulPower = pBulPowerMax;
+	float pBulPowerMax;
+	float pBulPower;
 
 	//自機体力が0より少ないとき false:　０より多い
 	bool isPHpLessThan0 = false;
 
-	const float pDeathRot = 0.4f;
+	float pDeathRot;
 
 	//-----自機死亡演出
 	DirectX::XMFLOAT3 pPosDeath = {};
-	float nowframe = 0;//現在フレ
-	const float necesFrame = 180.0f;//かかる時間
+	uint32_t nowFrame = 0;//現在フレ
+	uint32_t necesFrame ;//かかる時間
 	DirectX::XMFLOAT3 moveSp = {};//移動速度
-	DirectX::XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
+	DirectX::XMFLOAT3 targetPos;//目標座標
 	DirectX::XMFLOAT3 nowPos = {};//その時の位置
 
-	float partTimeInterval = 0;
-	float particleFrame = 39;//パーティクル出すフレ
+	uint32_t partTimeInterval;
+	uint32_t particleFrame;//パーティクル出すフレ
 
 	bool getPosFlag = true;//一度きりの座標読み込み
 

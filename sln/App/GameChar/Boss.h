@@ -17,13 +17,6 @@
 
 class Boss :public BaseObject
 {
-
-	//enum class AfterPlungePattern {//突っ込み後行動
-	//	Wait,//時間空けてから行動
-	//	Attack,//攻撃
-	//	Fin,//最後指定の場所へ
-	//};
-
 public:
 
 	//初期化
@@ -82,42 +75,6 @@ public:
 	//近づく処理初期化
 	void ApproachInit();
 
-	std::unique_ptr<Camera> camera; //カメラ
-
-	float time;
-
-	//近づく速さ
-	const float approachSpZ = 3.f;
-	const float approachSpY = 2.f;
-	//離れる速さ
-	const float leaveSpZ = 3.f;
-	const float leaveSpY = 2.f;
-	////近づける距離
-	//float ApproachLim;
-	//離れられる距離
-	float leaveLim = 90;
-
-	bool bossDamageEffectFlag = false;//ダメージ演出　false:やってない
-
-	std::function<void()> actionPattern;
-
-	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
-	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
-	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
-
-	//フレームごとに発射
-	static const uint8_t atkInterval = 10;
-	static const uint8_t atkInterval_LeaveFirst = 20;
-	static const uint8_t diffusionAtkInterval = 20;
-
-	//縦攻撃
-	std::function<void()> verticalPattern;
-	//一度離れてから突っ込む行動パターン　最初離れる
-	std::function<void()> plungeIntoPattern;
-	//突っ込み後の行動パターン 最初待ち
-	//AfterPlungePattern afterPlungePattern_ = AfterPlungePattern::Wait;
-	std::function<void()> afterPlungePattern;
-
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
 	const std::list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
@@ -147,6 +104,8 @@ public:
 
 	//狙い弾　打つ相手
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
+
+	void SetBossDamageEffect(bool bossDamageEffectFlag) {this->bossDamageEffectFlag = bossDamageEffectFlag;}
 	//-----------------↑げったーせったー↑------------------//
 
 private:
@@ -174,6 +133,18 @@ private:
 
 	//パーティクル
 	std::unique_ptr< ParticleManager> particle;
+
+	std::unique_ptr<Camera> camera; //カメラ
+
+	//離れられる距離
+	float leaveLim = 90;
+
+	bool bossDamageEffectFlag = false;//ダメージ演出　false:やってない
+
+	//フレームごとに発射
+	static const uint8_t atkInterval = 10;
+	static const uint8_t atkInterval_LeaveFirst = 20;
+	static const uint8_t diffusionAtkInterval = 20;
 
 	//フレーム
 	float frame = 0;
@@ -227,6 +198,28 @@ private:
 
 	uint8_t partTimeInterval;
 	uint8_t particleFrame = 39;//パーティクル出すフレ
+
+	//縦攻撃
+	std::function<void()> verticalPattern;
+	//一度離れてから突っ込む行動パターン　最初離れる
+	std::function<void()> plungeIntoPattern;
+	//突っ込み後の行動パターン 最初待ち
+	std::function<void()> afterPlungePattern;
+
+	std::function<void()> actionPattern;
+
+	std::list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
+	std::list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
+	std::list <std::unique_ptr<BossStraightBul>> straightBullets_;//ボスの直線弾
+
+	float time;
+
+	//近づく速さ
+	const float approachSpZ = 3.f;
+	const float approachSpY = 2.f;
+	//離れる速さ
+	const float leaveSpZ = 3.f;
+	const float leaveSpY = 2.f;
 
 	//この時間だけこの行動をする
 	const uint16_t approachCountDef = 150;

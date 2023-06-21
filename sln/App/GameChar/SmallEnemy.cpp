@@ -99,6 +99,13 @@ void SmallEnemy::RetireRight()
 	sePos.x += retireSp;
 	obj->SetPosition(sePos);
 
+	//傾ける　Playerのように
+	XMFLOAT3 seRot = obj->GetRotation();
+	if (seRot.x >= -rotMax) {
+		seRot.x -= rotSp;
+		obj->SetRotation(seRot);
+	}
+
 	if (sePos.x >= 700) {
 		Exit();//消える
 	}
@@ -106,6 +113,13 @@ void SmallEnemy::RetireRight()
 void SmallEnemy::RetireLeft()
 {//左に捌ける
 	XMFLOAT3 sePos = obj->GetPosition();
+
+	//傾ける　Playerのように
+	XMFLOAT3 seRot = obj->GetRotation();
+	if (seRot.x <= rotMax) {
+		seRot.x += rotSp;
+		obj->SetRotation(seRot);
+	}
 
 	sePos.x -= retireSp;
 	if (sePos.x <= -700) {

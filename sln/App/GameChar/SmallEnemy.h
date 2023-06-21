@@ -100,4 +100,6 @@ private:
 
 	//はける速度
 	const float retireSp = 3.f;
+	const float rotSp = 1.f;//傾け速度
+	const float rotMax = 10.f;//どこまで傾けるか
 };

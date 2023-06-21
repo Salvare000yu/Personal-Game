@@ -5,6 +5,7 @@
 #include "CharParameters.h"
 #include "DebugText.h"
 #include "DxBase.h"
+#include <yaml/Yaml.hpp>
 
 #include <DirectXMath.h>
 
@@ -149,7 +150,7 @@ void Player::Shake() {
 }
 void Player::PlayerDeath()
 {
-	nowframe++;
+	nowFrame++;
 	particleFrame++;
 	partTimeInterval = particleFrame / 40;
 
@@ -167,9 +168,9 @@ void Player::PlayerDeath()
 	moveSp.y = (targetPos.y - pPosDeath.y) / necesFrame;
 	moveSp.z = (pPosDeath.z - pPosDeath.z) / necesFrame;//奥行きついたらここもそうする
 	//その時の位置＝最初位置＋移動速度＊経過時間
-	nowPos.x = pPosDeath.x + moveSp.x * nowframe;
-	nowPos.y = pPosDeath.y + moveSp.y * nowframe;
-	nowPos.z = pPosDeath.z + moveSp.z * nowframe;
+	nowPos.x = pPosDeath.x + moveSp.x * nowFrame;
+	nowPos.y = pPosDeath.y + moveSp.y * nowFrame;
+	nowPos.z = pPosDeath.z + moveSp.z * nowFrame;
 
 	obj->SetPosition(nowPos);//その時の位置
 
@@ -204,6 +205,31 @@ void Player::PlayerDeath()
 
 void Player::Initialize()
 {
+	{
+		Yaml::Node root;
+		try
+		{
+			Yaml::Parse(root, "Resoujrces/charDataFile/player.yml");
+		}
+		catch (...)
+		{
+			throw;
+		}
+
+		pBulPowerMax = root["pBulPowerMax"].As<float>();
+		pBulPower = pBulPowerMax;
+		pDeathRot = root["pDeathRot"].As<float>();
+		necesFrame = root["necesFrame"].As<uint32_t>();
+		auto& targetPosNode = root["targetPos"];
+		targetPos = {
+			targetPosNode["x"].As<float>(),
+			targetPosNode["y"].As<float>(),
+			targetPosNode["z"].As<float>()
+		};
+		particleFrame = root["particleFrame"].As<uint32_t>();
+		partTimeInterval = 0;
+	}
+
 	particle.reset(new ParticleManager());
 	particle->SetCamera(this->obj->GetCamera());
 

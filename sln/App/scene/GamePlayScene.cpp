@@ -210,7 +210,7 @@ void GamePlayScene::Initialize()
 	// パーティクル初期化
 	particle->SetCamera(camera.get());
 
-	csvData = GameUtility::LoadCsv("Resources/SmallEnemy.csv", true, ',', "#");
+	csvData = GameUtility::LoadCsv("Resources/charDataFile/SmallEnemy.csv", true, ',', "#");
 
 	//今あるパーティクルを削除する
 	particle->DeleteParticles();
@@ -795,7 +795,7 @@ void GamePlayScene::CollisionAll()
 				//喰らってまだ生きてたら
 				const float damage = pBulPow - BossDefense;
 				if (NowBoHp > damage) {
-					bo->bossDamageEffectFlag = true;//くらい演出オン
+					bo->SetBossDamageEffect(true);//くらい演出オン
 					NowBoHp -= damage;
 					charParams->SetNowBoHp(NowBoHp);//ボスHPセット
 					particle->CreateParticle(bo->GetPosition(), 100, 50, 5);

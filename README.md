@@ -18,3 +18,7 @@
   - 1人
 - モデル、画像、BGM
   - 自作
+- 外部ライブラリ
+  - [mini-yaml](https://github.com/jimmiebergmann/mini-yaml)
+  - FBX SDK
+  - DirectXTex

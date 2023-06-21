@@ -44,8 +44,7 @@ public:
         std::vector<std::vector<std::string>> csvData{}; // csvの中身を格納
 
         std::ifstream ifs(csvFilePath);
-        if (!ifs)
-        {
+        if (!ifs){
             //標準エラー出力
             std::cerr << "!Error! Could not open file... : " << csvFilePath << std::endl;
             return csvData;
@@ -56,14 +55,12 @@ public:
         while (std::getline(ifs, line))
         {
             // コメントが有効かつ行頭が指定文字なら、その行は無視する
-            if (commentFlag && line.find(commentStartStr) == 0U)
-            {
+            if (commentFlag && line.find(commentStartStr) == 0U){
                 continue;
             }
 
             // 空行の場合は無視する
-            if (line.empty())
-            {
+            if (line.empty()){
                 continue;
             }
 
@@ -73,8 +70,7 @@ public:
             std::istringstream stream(line);
             std::string field;
             // 読み込んだ行を','区切りで分割
-            while (std::getline(stream, field, divChar))
-            {
+            while (std::getline(stream, field, divChar)){
                 csvData.back().emplace_back(field);
             }
         }
