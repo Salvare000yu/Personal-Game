@@ -7,6 +7,7 @@
 #include "CharParameters.h"
 #include "DxBase.h"
 #include "GameUtility.h"
+#include <yaml/Yaml.hpp>
 
 #include <DirectXMath.h>
 
@@ -16,6 +17,29 @@ using namespace DirectX;
 
 void Boss::Initialize()
 {
+	////ymlデータ
+	//{
+	//	Yaml::Node root;
+	//	try
+	//	{
+	//		Yaml::Parse(root, "Resources/charDataFile/Boss.yml");
+	//	}
+	//	catch (...)
+	//	{
+	//		throw;
+	//	}
+
+	//	pBulPowerMax = root["pBulPowerMax"].As<float>();
+	//	pBulPower = pBulPowerMax;
+
+	//	auto& targetPosNode = root["targetPos"];
+	//	targetPos = {
+	//		targetPosNode["x"].As<float>(),
+	//		targetPosNode["y"].As<float>(),
+	//		targetPosNode["z"].As<float>()
+	//	};
+	//}
+
 	particle.reset(new ParticleManager());
 	particle->SetCamera(this->obj->GetCamera());
 

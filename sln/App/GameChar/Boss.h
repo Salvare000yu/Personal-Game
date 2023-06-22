@@ -86,13 +86,13 @@ public:
 	inline void SetStraightBulModel(Model* model) { straightBulModel = model; }
 
 	//通常弾威力
-	const float& GetBulPow() { return bulPow; }
+	const int32_t& GetBulPow() { return bulPow; }
 	//狙い弾威力
-	const float& GetAimBulPow() { return aimBulPow; }
+	const int32_t& GetAimBulPow() { return aimBulPow; }
 	//直線威力
-	const float& GetStraightBulPow() { return straightBulPow; }
+	const int32_t& GetStraightBulPow() { return straightBulPow; }
 	//ボス本体にぶつかった時の威力
-	const int& GetBodyPow() { return bodyPow; }
+	const int32_t& GetBodyPow() { return bodyPow; }
 
 	//ボス生死
 	void SetisDeath(bool isDeath) { this->isDeath = isDeath; }
@@ -175,12 +175,12 @@ private:
 	Model* straightBulModel = nullptr;
 
 	//弾威力
-	const float bulPow = 200;
-	const float aimBulPow = 150;
-	const float straightBulPow = 170;
+	const int32_t bulPow = 200;
+	const int32_t aimBulPow = 150;
+	const int32_t straightBulPow = 170;
 
 	//ボス本体の威力
-	const int bodyPow = 250;
+	const int32_t bodyPow = 250;
 
 	//false：まだ死んでない
 	bool isDeath = false;

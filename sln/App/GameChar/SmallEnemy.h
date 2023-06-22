@@ -64,8 +64,8 @@ public:
 	inline void SetSEBulModel(Model* model) { seBulModel = model; }
 
 	//通常弾威力
-	void SetBulPow(float seBulPower) { this->seBulPower = seBulPower; }
-	const float& GetBulPow() { return seBulPower; }
+	void SetBulPow(int32_t seBulPower) { this->seBulPower = seBulPower; }
+	const int32_t& GetBulPow() { return seBulPower; }
 
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 	//-----------------↑げったーせったー↑------------------//
@@ -91,8 +91,8 @@ private:
 	Model* seBulModel = nullptr;
 
 	//通常弾威力
-	const float seBulPowerMax = 100;
-	float seBulPower = seBulPowerMax;
+	const int32_t seBulPowerMax = 100;
+	int32_t seBulPower = seBulPowerMax;
 
 	BaseObject* shotTag;//弾うつターゲット
 

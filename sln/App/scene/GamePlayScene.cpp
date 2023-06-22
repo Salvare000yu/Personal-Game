@@ -18,6 +18,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "WinApp.h"
+#include <yaml/Yaml.hpp>
 
 #include "PostEffect.h"
 
@@ -32,6 +33,22 @@ using namespace DirectX;
 
 void GamePlayScene::Initialize()
 {
+	//ymlデータ
+	{
+		Yaml::Node root;
+		try
+		{
+			Yaml::Parse(root, "Resources/charDataFile/gameParameters.yml");
+		}
+		catch (...)
+		{
+			throw;
+		}
+
+		pHpBarFrameDef = root["pHpBarFrameDef"].As<uint32_t>();//自機Hpバー点滅間隔
+		pHpBarFrame = pHpBarFrameDef;
+	}
+
 	camera.reset(new CameraTracking());
 
 	Object3d::SetCamera(camera.get());
@@ -54,6 +71,8 @@ void GamePlayScene::Initialize()
 	updatePattern = std::bind(&GamePlayScene::GameReadyUpdate, this);
 
 	beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDef, this);
+
+	playerHpBarPattern = std::bind(&GamePlayScene::PlayerHpSafety, this);
 
 	//------objからモデルデータ読み込み---
 	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
@@ -166,6 +185,8 @@ void GamePlayScene::Initialize()
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_oper.emplace("w", Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5f, 1 }, false, false));
@@ -205,6 +226,11 @@ void GamePlayScene::Initialize()
 
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
+	sp_playerhpbar->SetPosition({ 70,520,0 });
+	sp_playerhpbarwaku->SetPosition({ 20,520,0 });
+	//ｰｰ色
+	///自機HPバー最初の色
+	sp_playerhpbar->SetColor({ 0.4f,1,0.4f,1 });
 
 	// パーティクル初期化
 	particle->SetCamera(camera.get());
@@ -656,7 +682,7 @@ void GamePlayScene::UpdateMouse()
 void GamePlayScene::UpdateCamera()
 {
 	// 自機の視線ベクトル
-	
+
 	// 感度
 	const float camMoveVel = 0.05f;
 
@@ -723,6 +749,56 @@ void GamePlayScene::PadStickCamera()
 	}
 }
 
+void GamePlayScene::PlayerHpUpdate()
+{
+	//Hpバーサイズ
+	sp_playerhpbar->size_.x = sp_playerhpbar->texSize_.x * player_->GetPlayerHp() / player_->GetPlayerMaxHp();
+	sp_playerhpbar->TransferVertexBuffer();
+
+	playerHpBarPattern();
+
+	sp_playerhpbar->Update();
+	sp_playerhpbarwaku->Update();
+}
+void GamePlayScene::PlayerHpSafety()
+{
+	//半分以下で
+	if (player_->GetPlayerHp() <= player_->GetPlayerMaxHp() / 2.f) {
+		///自機HPバー半分以下黄色
+		sp_playerhpbar->SetColor({ 1,1,0,1 });
+		playerHpBarPattern = std::bind(&GamePlayScene::PlayerHpLessThanHalf, this);
+	}
+}
+void GamePlayScene::PlayerHpLessThanHalf()
+{
+	//HP指定した値まで減ったら
+	if (player_->GetPlayerHp() <= player_->GetPlayerMaxHp() / 4.f) {
+		sp_playerhpbar->SetColor({ 1,0,0,1 });//赤
+		playerHpBarPattern = std::bind(&GamePlayScene::PlayerHpDanger, this);
+	}
+}
+void GamePlayScene::PlayerHpDanger()
+{
+	constexpr float ColorWDec = 0.015f;//透明にしていく速度
+	constexpr float Transparency = 0.4f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+
+	XMFLOAT4 color = sp_playerhpbar->GetColor();
+
+	if (pHpBarFrame <= 0) {//指定時間たったら
+		color.w -= ColorWDec;
+	}
+
+	if (color.w <= Transparency) {
+		pHpBarFrame = pHpBarFrameDef;//またこの時間分まつ
+		color.w = 1.f;//一番明るい状態
+	}
+
+	pHpBarFrame = std::max(--pHpBarFrame, 0);//ToStartFrameの最小値は0
+
+	sp_playerhpbar->SetColor(color);
+	sp_playerhpbar->TransferVertexBuffer();
+}
+
 void GamePlayScene::PlayerErase()
 {
 	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
@@ -736,7 +812,6 @@ void GamePlayScene::PlayerDamage()
 	pDamFlag = true;
 
 	charParams->SetispDam(true);
-	float NowpHp = charParams->GetNowpHp();//自機体力取得
 
 	GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 }
@@ -746,7 +821,6 @@ void GamePlayScene::CollisionAll()
 
 	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
 	float BossDefense = charParams->GetBossDefense();//ボス防御力取得 先頭要素
-	float NowpHp = charParams->GetNowpHp();//自機体力取得
 	float pBulPow = player_->GetpBulPow();//自機弾威力
 	//<<<<<<<<<<<<<<<（複数回使用）
 	//自機弾
@@ -781,7 +855,7 @@ void GamePlayScene::CollisionAll()
 	//>>>>>>>>>>>>>>（複数回使用）
 
 	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
-	if (NowpHp > 0 && bossEnemyAdvent) {
+	if (player_->GetPlayerHp() > 0 && bossEnemyAdvent) {
 		CollisionManager::CheckHitFromColliderList(
 			pbColliders,
 			pbHitFunc,
@@ -857,8 +931,8 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						NowpHp -= bo->GetBulPow();//自機ダメージ
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						int32_t pHp = player_->GetPlayerHp();//自機体力
+						player_->SetPlayerHp(pHp -= bo->GetBulPow());//自機ダメージ
 						PlayerDamage();
 						bob->SetAlive(false);//弾消す
 					}
@@ -885,8 +959,8 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						NowpHp -= bo->GetAimBulPow();//自機ダメージ
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						int32_t pHp = player_->GetPlayerHp();//自機体力
+						player_->SetPlayerHp(pHp -= bo->GetAimBulPow());//自機ダメージ
 						PlayerDamage();
 						boaimbul->SetAlive(false);
 					}
@@ -911,8 +985,8 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						NowpHp -= bo->GetStraightBulPow();//自機ダメージ
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						int32_t pHp = player_->GetPlayerHp();//自機体力
+						player_->SetPlayerHp(pHp -= bo->GetStraightBulPow());//自機ダメージ
 						PlayerDamage();
 						boStraightBul->SetAlive(false);
 					}
@@ -936,9 +1010,8 @@ void GamePlayScene::CollisionAll()
 					pColliders,
 
 					[&](BaseObject* p) {
-						float seBulPow = se->GetBulPow();//雑魚敵通常弾威力
-						NowpHp -= seBulPow;//自機ダメージ
-						charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+						int32_t pHp = player_->GetPlayerHp();//自機体力
+						player_->SetPlayerHp(pHp -= se->GetBulPow());//自機ダメージ
 						PlayerDamage();
 						seb->SetAlive(false);
 					}
@@ -957,9 +1030,8 @@ void GamePlayScene::CollisionAll()
 				Boss* bo = (Boss*)boss;
 				//定期的にダメージ
 				if (bodyDamFlag == false) {
-					int bodyPow = bo->GetBodyPow();//ボス体威力
-					NowpHp -= bodyPow;//自機にダメージ
-					charParams->SetNowpHp(NowpHp);//プレイヤーHPセット
+					int32_t pHp = player_->GetPlayerHp();//自機体力
+					player_->SetPlayerHp(pHp -= bo->GetBodyPow());//自機ダメージ
 					PlayerDamage();
 					bodyDamFlag = true;//クールたいむ
 				}
@@ -1171,6 +1243,7 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	UpdateCamera();
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
+	PlayerHpUpdate();//自機HPバー
 
 	//雑魚敵更新
 	if (bossEnemyAdvent == false) {
@@ -1237,6 +1310,7 @@ void GamePlayScene::BossBattleUpdate()
 	UpdateCamera();
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
+	PlayerHpUpdate();//自機HPバー
 
 	CharParameters* charParams = CharParameters::GetInstance();
 
@@ -1295,7 +1369,7 @@ void GamePlayScene::Update()
 			pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 		}
 		else if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
-			if (charParams->GetNowpHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
+			if (player_->GetPlayerHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
 				if (cInput->PauseOpenClose()) {
 					pause->EveryInit();
 					GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
@@ -1339,7 +1413,6 @@ void GamePlayScene::Update()
 
 		//スプライト更新
 		sprite_back->Update();
-		charParams->pHpUpdate();
 
 		pause->SpUpdate();
 
@@ -1421,7 +1494,6 @@ void GamePlayScene::DrawUI()
 	//---------------お手前スプライト描画
 	Pause* pause = Pause::GetInstance();
 	if (pause->GetPauseFlag() == false) {
-		charParameters->pHpDraw();
 		pause->SpOpenPauseDraw();
 		sp_ready->Draw();
 		sp_ready_go->Draw();
@@ -1450,6 +1522,9 @@ void GamePlayScene::DrawUI()
 			i.second->Draw();
 		}
 	}
+	//自機HPバー
+	sp_playerhpbar->Draw();
+	sp_playerhpbarwaku->Draw();
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画

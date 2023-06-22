@@ -1,9 +1,10 @@
-#自機パラメータ
-pBulPowerMax: 70
-pDeathRot: 0.4
-necesFrame: 180
+#自機データ
+pBulPowerMax: 70 #自機弾最大攻撃力
+pDeathRot: 0.4 #死亡時演出で回転していく速度
+necesFrame: 180 #かかる時間
 targetPos: #死亡落下位置
     x: 0
     y: -150
     z: 0
-particleFrame: 39
+particleFrame: 39 #パーティクル出す間隔
+playerMaxHP: 1000 #自機最大HP

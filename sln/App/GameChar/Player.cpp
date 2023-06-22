@@ -9,6 +9,8 @@
 
 #include <DirectXMath.h>
 
+#include <algorithm>
+
 using namespace DirectX;
 
 void Player::Attack()
@@ -191,6 +193,7 @@ void Player::PlayerDeath()
 
 void Player::Initialize()
 {
+	//ymlデータ
 	{
 		Yaml::Node root;
 		try
@@ -214,6 +217,8 @@ void Player::Initialize()
 		};
 		particleFrame = root["particleFrame"].As<uint32_t>();
 		partTimeInterval = 0;
+		playerMaxHp = root["playerMaxHP"].As<uint32_t>();
+		nowPlayerHp = playerMaxHp;//現在の自機HP
 	}
 
 	particle.reset(new ParticleManager());
@@ -246,8 +251,7 @@ void Player::Update()
 {
 	CharParameters* charParameters = CharParameters::GetInstance();
 
-	float pHp = charParameters->GetNowpHp();
-	if (pHp <= 0) {
+	if (nowPlayerHp <= 0) {
 		isPHpLessThan0 = true;//自機体力が0を下回っている
 	}
 
@@ -290,11 +294,14 @@ void Player::Update()
 	//自機が喰らってる状態になったら
 	if (charParameters->GetispDam()) {
 		//HP0以下ならやらないように　死亡演出やってるもんね
-		if (charParameters->GetNowpHp() > 0)
+		if (nowPlayerHp > 0)
 		{
 			Shake();
 		}
 	}
+
+	//自機Hpの最大最小値。HPが負になったりバーが反対に飛び出ないように
+	nowPlayerHp = std::clamp(nowPlayerHp, 0, playerMaxHp);
 
 	//自機弾威力最小値１
 	pBulPower = std::max(pBulPower, 1.f);

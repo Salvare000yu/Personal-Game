@@ -70,6 +70,11 @@ public:
 	//自機攻撃可能か
 	const void SetAtkPossible(bool pAtkPossibleFlag) { this->pAtkPossibleFlag= pAtkPossibleFlag; }
 	const bool& GetAtkPossible() { return pAtkPossibleFlag; }
+	//自機現在HP
+	const void SetPlayerHp(int32_t nowPlayerHp) { this->nowPlayerHp = nowPlayerHp; }
+	const int32_t& GetPlayerHp() { return nowPlayerHp; }
+	//自機最大Hp
+	const int32_t& GetPlayerMaxHp() { return playerMaxHp; }
 	//-------------------↑げったーせったー↑-------------------//
 
 	Player()
@@ -136,4 +141,8 @@ private:
 
 	//自機が攻撃できるようにするか true:攻撃できる
 	bool pAtkPossibleFlag = false;
+
+	//自機HP
+	int32_t playerMaxHp;//じきさいだいHP
+	int32_t nowPlayerHp;//現在HP
 };

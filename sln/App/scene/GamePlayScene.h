@@ -49,6 +49,12 @@ public:
 
 	void PadStickCamera();
 
+	void PlayerHpUpdate();
+	//自機Hpバー更新
+	void PlayerHpSafety();//安全
+	void PlayerHpLessThanHalf();//半分以下
+	void PlayerHpDanger();//危険状態、赤色
+
 	void PlayerErase();//自機死亡時消す
 
 	void PlayerDamage();//自機ダメージ
@@ -98,6 +104,8 @@ private:
 	std::unique_ptr < Sprite> sp_ready_go = nullptr;
 	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_oper;//操作説明
 	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_mouse;//マウス操作説明
+	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
+	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
 
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
@@ -188,6 +196,8 @@ private:
 	uint32_t pRotReturnFrame = 0;
 	DirectX::XMFLOAT3 pClearRot;//ボス撃破時自機回転
 
+	std::function<void()> playerHpBarPattern;//自機HPばー
+
 	//ダメージ画面端赤く　false：まだやってない
 	bool damEfRedFlag = false;
 
@@ -255,4 +265,8 @@ private:
 
 	//ダッシュする方向
 	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
+
+	//------自機HPスプライト点滅
+	int pHpBarFrameDef;//透明じゃない時間
+	int pHpBarFrame;
 };
