@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 //directXcommon
 #include <d3d12.h>
 #include <d3dx12.h>
@@ -9,7 +9,7 @@
 
 #include <DirectXMath.h>
 
-//directXŠî”Õ
+//directXåŸºç›¤
 class DxBase
 {
 	DxBase(const DxBase& dxBase) = delete;
@@ -17,33 +17,31 @@ class DxBase
 
 	DxBase() {};
 
-public://ƒƒ“ƒoŠÖ”
+public://ãƒ¡ãƒ³ãƒé–¢æ•°
 	static DxBase* GetInstance();
 
 	void Initialize(WinApp* winApp);
 
-	//•`‰æ‘O
+	//æç”»å‰
 	void PreDraw();
-	//•`‰æŒãˆ—
+	//æç”»å¾Œå‡¦ç†
 	void PostDraw();
 
-	//ƒfƒoƒCƒXæ“¾
+	//ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	ID3D12Device* GetDevice() { return device.Get(); }
 
-	//ƒRƒ}ƒ“ƒhƒŠƒXƒgæ“¾
+	//ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆå–å¾—
 	ID3D12GraphicsCommandList* GetCmdList() { return cmdList.Get(); }
 
 	inline float GetFps()const { return fps; }
 
 private:
-	//ƒfƒoƒCƒX
-	//Microsoft::WRL::ComPtr<ID3D12Device>dev;
-	//DXGIƒtƒ@ƒNƒgƒŠ
+	//DXGIãƒ•ã‚¡ã‚¯ãƒˆãƒª
 	Microsoft::WRL::ComPtr<IDXGIFactory6>dxgiFactory;
 
 	WinApp* winApp = nullptr;
 
-	//direct3DŒnƒƒ“ƒo•Ï”
+	//direct3Dç³»ãƒ¡ãƒ³ãƒå¤‰æ•°
 	Microsoft::WRL::ComPtr<ID3D12Device> device;
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> cmdList;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> cmdAllocator;
@@ -56,10 +54,10 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heapforimgui;
 	UINT64 fenceVal = 0;
 	//------
-	//ƒoƒbƒNƒoƒbƒtƒ@
+	//ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>>backBuffers;
 
-	//FPSŒÅ’è ŠÔ‹L˜^
+	//FPSå›ºå®š æ™‚é–“è¨˜éŒ²
 	std::chrono::steady_clock::time_point reference_;
 
 	float fps = -1;
@@ -79,8 +77,8 @@ private:
 	bool DebugLayer();
 
 	bool SetBreakOnSeverity();
-	//----//FPSŒÅ’è
-	void InitFixFps();//‰Šú‰»
-	void UpdateFixFps();//XV
+	//----//FPSå›ºå®š
+	void InitFixFps();//åˆæœŸåŒ–
+	void UpdateFixFps();//æ›´æ–°
 	//-----
 };

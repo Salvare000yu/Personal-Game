@@ -51,32 +51,8 @@ public:
 
 	void PlayerDeath();
 
-	std::unique_ptr<Camera> camera; //カメラ
-
-	std::forward_list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
-
 	//弾リストを取得 gamesceneに自弾貸すため
 	const std::forward_list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
-
-	Player()
-		: lookVec(DirectX::XMVectorSet(0, 0, 1, 0)),
-		position(DirectX::XMVectorSet(0, 0, 0, 1)) {
-	}
-	//向き取得
-	inline const DirectX::XMVECTOR& GetLookVec() { return lookVec; }
-	inline DirectX::XMVECTOR GetPosVec() { return position; }
-
-	//攻撃インターバル
-	static const int32_t atkInterval = 15;
-	//攻撃インターバルタイマー
-	int32_t atkInterval_ = atkInterval;
-
-	//揺れる時間
-	static const int32_t pShakeTime = 60 / 2;
-	//揺れたいまー
-	int32_t pShakeTimer_ = pShakeTime;
-
-	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;//射線
 
 	//-------------------↓げったーせったー↓-------------------//
 	//弾威力
@@ -91,10 +67,15 @@ public:
 	const bool& GetpDeath() { return playerDeathFlag; }
 	//射線表示フラグ
 	const void SetFireLineDrawFlag(bool flag) { firingline_->SetAlive(flag); }
+	//自機攻撃可能か
+	const void SetAtkPossible(bool pAtkPossibleFlag) { this->pAtkPossibleFlag= pAtkPossibleFlag; }
+	const bool& GetAtkPossible() { return pAtkPossibleFlag; }
 	//-------------------↑げったーせったー↑-------------------//
 
-	//自機が攻撃できるようにするか true:攻撃できる
-	bool pAtkPossibleFlag = false;
+	Player()
+		: lookVec(DirectX::XMVectorSet(0, 0, 1, 0)),
+		position(DirectX::XMVectorSet(0, 0, 0, 1)) {
+	}
 
 private:
 	std::unique_ptr < Model> mod_firingline = nullptr;
@@ -132,4 +113,27 @@ private:
 
 	//自機死亡演出時　false:爆発してない
 	bool explosionFlag = false;
+
+	std::unique_ptr<Camera> camera; //カメラ
+
+	std::forward_list <std::unique_ptr<PlayerBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
+
+	//向き取得
+	inline const DirectX::XMVECTOR& GetLookVec() { return lookVec; }
+	inline DirectX::XMVECTOR GetPosVec() { return position; }
+
+	//攻撃インターバル
+	static const int32_t atkInterval = 15;
+	//攻撃インターバルタイマー
+	int32_t atkInterval_ = atkInterval;
+
+	//揺れる時間
+	static const int32_t pShakeTime = 60 / 2;
+	//揺れたいまー
+	int32_t pShakeTimer_ = pShakeTime;
+
+	std::unique_ptr < PlayerFireLine> firingline_ = nullptr;//射線
+
+	//自機が攻撃できるようにするか true:攻撃できる
+	bool pAtkPossibleFlag = false;
 };

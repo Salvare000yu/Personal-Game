@@ -27,7 +27,7 @@ std::vector<std::vector<std::string>> GameUtility::LoadCsv(const std::string& cs
 	std::vector<std::vector<std::string>> csvData{}; // csvの中身を格納
 
 	std::ifstream ifs(csvFilePath);
-	if (ifs) {
+	if (!ifs) {
 		//標準エラー出力
 		std::cerr << "!Error! Could not open file... : " << csvFilePath << std::endl;
 		return csvData;

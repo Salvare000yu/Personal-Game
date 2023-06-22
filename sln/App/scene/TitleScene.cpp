@@ -88,7 +88,7 @@ void TitleScene::Initialize()
 	player_->SetPosition({ playerInitPos });
 	player_->SetModel(mod_player.get());
 
-	player_->pAtkPossibleFlag = false;//タイトルでは弾を打たない
+	player_->SetAtkPossible(false);//タイトルでは弾を打たない
 
 	//自機登場演出
 	apEndPPos = player_->GetPosition();

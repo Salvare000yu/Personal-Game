@@ -90,33 +90,6 @@ public:
 	void PlayerMove();
 	void PlayerDash();//ダッシュ
 
-	float time = 0;
-
-	std::function<void()> updatePattern;
-
-	//指定フレームごとに雑魚出現
-	static const int sEneAppInterval = 60;
-
-	std::forward_list <std::unique_ptr<SmallEnemy>> smallEnemys_;
-	std::forward_list <std::unique_ptr<Boss>> boss_;
-
-	std::unique_ptr < Player> player_ = nullptr;
-	SmallEnemy* sEnemys_ = nullptr;
-
-	//揺れる時間
-	static const int32_t pShakeTime = 60 / 2;
-	//揺れたいまー
-	int32_t pShakeTimer_ = pShakeTime;
-
-	//自機ダメージフラグ 喰らってない
-	bool pDamFlag = false;
-
-	//ボス戦前演出
-	std::function<void()> beforeBossPattern;
-
-	//ダッシュする方向
-	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
-
 private:
 	//sprite
 	std::unique_ptr < Sprite> sprite_back = nullptr;
@@ -255,4 +228,31 @@ private:
 	float dashVelInc = dashVelIncDef;
 
 	//----自機ダッシュ
+
+	float time = 0;
+
+	std::function<void()> updatePattern;
+
+	//指定フレームごとに雑魚出現
+	static const int sEneAppInterval = 60;
+
+	std::forward_list <std::unique_ptr<SmallEnemy>> smallEnemys_;
+	std::forward_list <std::unique_ptr<Boss>> boss_;
+
+	std::unique_ptr < Player> player_ = nullptr;
+	SmallEnemy* sEnemys_ = nullptr;
+
+	//揺れる時間
+	static const int32_t pShakeTime = 60 / 2;
+	//揺れたいまー
+	int32_t pShakeTimer_ = pShakeTime;
+
+	//自機ダメージフラグ 喰らってない
+	bool pDamFlag = false;
+
+	//ボス戦前演出
+	std::function<void()> beforeBossPattern;
+
+	//ダッシュする方向
+	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
 };

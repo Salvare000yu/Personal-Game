@@ -15,7 +15,6 @@
 #include "ClearScene.h"
 #include "GameOver.h"
 
-#include "FbxObject3d.h"
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "WinApp.h"
@@ -375,7 +374,7 @@ void GamePlayScene::BossDeathEffect()
 			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, raito));
 		}//回転戻し終わったらもう移動攻撃しない
 		else {
-			player_->pAtkPossibleFlag = false;
+			player_->SetAtkPossible(false);
 			pDontMoveFlag = true;
 			pTracking = false;
 			camera->SetTrackingTarget(nullptr);
@@ -593,7 +592,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//攻撃できないように
-	player_->pAtkPossibleFlag = false;
+	player_->SetAtkPossible(false);
 
 	pNextPlaceGoSp = std::min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
 	pNextPlaceGoSp += accelVal;
@@ -608,7 +607,7 @@ void GamePlayScene::pHeadingToTheNextPlace()
 			charParams->pNextPlaceGoFlag = false;//移動完了でボス行動開始
 			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
-			player_->pAtkPossibleFlag = true;
+			player_->SetAtkPossible(true);
 			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
 		}
 	}
@@ -657,35 +656,34 @@ void GamePlayScene::UpdateMouse()
 void GamePlayScene::UpdateCamera()
 {
 	// 自機の視線ベクトル
-	{
-		//感度
-		const float camMoveVel = 0.05f;
+	
+	// 感度
+	const float camMoveVel = 0.05f;
 
-		XMFLOAT3 rota = player_->GetRotation();
+	XMFLOAT3 rota = player_->GetRotation();
 
-		//カメラ上下移動制限
-		const float rotXrim = 60.f;
-		const float rotYrim = 90.f;
-		if (rota.x > rotXrim) {
-			rota.x = rotXrim;
-		}
-		if (rota.x < -rotXrim) {
-			rota.x = -rotXrim;
-		}
-		//カメラ左右移動制限
-		if (rota.y > rotYrim) {
-			rota.y = rotYrim;
-		}
-		if (rota.y < -rotYrim) {
-			rota.y = -rotYrim;
-		}
-		// マウスの横方向(X)の移動がカメラの縦方向(Y)の回転になる
-		rota.x += cameraMoveVel.y * camMoveVel;
-		// マウスの縦方向(Y)の移動がカメラの横方向(X)の回転になる
-		rota.y += cameraMoveVel.x * camMoveVel;
-
-		player_->SetRotation(rota);
+	//カメラ上下移動制限
+	const float rotXrim = 60.f;
+	const float rotYrim = 90.f;
+	if (rota.x > rotXrim) {
+		rota.x = rotXrim;
 	}
+	if (rota.x < -rotXrim) {
+		rota.x = -rotXrim;
+	}
+	//カメラ左右移動制限
+	if (rota.y > rotYrim) {
+		rota.y = rotYrim;
+	}
+	if (rota.y < -rotYrim) {
+		rota.y = -rotYrim;
+	}
+	// マウスの横方向(X)の移動がカメラの縦方向(Y)の回転になる
+	rota.x += cameraMoveVel.y * camMoveVel;
+	// マウスの縦方向(Y)の移動がカメラの横方向(X)の回転になる
+	rota.y += cameraMoveVel.x * camMoveVel;
+
+	player_->SetRotation(rota);
 }
 
 void GamePlayScene::ChangeGameOverScene()
@@ -1025,7 +1023,7 @@ void GamePlayScene::Operation()
 	operD->SetColor(color);
 	operD->SetSize(size);
 
-	if (!player_->pAtkPossibleFlag) {
+	if (!player_->GetAtkPossible()) {
 		for (auto& i : sp_oper) {//WASD
 			i.second->isInvisible = false;
 		}
@@ -1065,7 +1063,7 @@ void GamePlayScene::MouseOper()
 	mouse_R->SetColor(Rcolor);
 
 	//攻撃不可能事非表示
-	if (!player_->pAtkPossibleFlag) {
+	if (!player_->GetAtkPossible()) {
 		for (auto& i : sp_mouse) {//WASD
 			i.second->isInvisible = false;
 		}
@@ -1155,7 +1153,7 @@ void GamePlayScene::GameReadyUpdate()
 
 			if (GOCol.w < 0.f) {//透明になったら
 				//アタック開始してよき
-				player_->pAtkPossibleFlag = true;
+				player_->SetAtkPossible(true);
 				//動いていいよ
 				pDontMoveFlag = false;
 				sp_ready_go->isInvisible = true;
@@ -1319,7 +1317,7 @@ void GamePlayScene::Update()
 
 		Operation();//操作説明
 		MouseOper();//マウス説明画像
-		if (player_->pAtkPossibleFlag) {//攻撃可能状態なら
+		if (player_->GetAtkPossible()) {//攻撃可能状態なら
 			player_->SetFireLineDrawFlag(true);//射線表示
 		}
 		else {
@@ -1409,8 +1407,6 @@ void GamePlayScene::Draw()
 	DxBase* dxBase = DxBase::GetInstance();
 	particle->Draw(dxBase->GetCmdList());
 
-	float NowBoHp = charParameters->GetNowBoHp();//現在のぼすHP取得
-
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
 }
@@ -1446,7 +1442,7 @@ void GamePlayScene::DrawUI()
 	}
 
 	//攻撃可能かつポーズでない時のみのスプライト表示
-	if (player_->pAtkPossibleFlag && pause->GetPauseFlag() == false) {
+	if (player_->GetAtkPossible() && pause->GetPauseFlag() == false) {
 		for (auto& i : sp_oper) {
 			i.second->Draw();
 		}
@@ -1464,10 +1460,4 @@ void GamePlayScene::DrawUI()
 	}
 
 	charParameters->DrawUI();
-
-	//{
-	//	char tmp[32]{};
-	//	sprintf_s(tmp, 32, "PlayerZ : %2.f", player_->GetPosition().z);
-	//	DebugText::GetInstance()->Print(tmp, 150, 220, 1);
-	//}
 }

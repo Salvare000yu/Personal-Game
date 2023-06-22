@@ -9,12 +9,6 @@
 class BossAimBul :public BaseObject
 {
 private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
-
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略

@@ -13,7 +13,6 @@ BossAimBul* BossAimBul::GetInstance()
 	return &instance;
 }
 
-//bulletのinitializeにpos入れてその時のプレイヤーposに表示するようにする
 void BossAimBul::Initialize()
 {
 	//定義とか仮おいておこう
@@ -34,7 +33,6 @@ void BossAimBul::Initialize()
 
 	shotTagMomOnlyFlag = true;
 	shotTagMoment = {};
-
 	//-------↑狙い弾↑-------//
 }
 
