@@ -269,4 +269,6 @@ private:
 	//------自機HPスプライト点滅
 	int pHpBarFrameDef;//透明じゃない時間
 	int pHpBarFrame;
+
+	bool pHpBarFlag = false;//自機Hpバー false:非表示
 };

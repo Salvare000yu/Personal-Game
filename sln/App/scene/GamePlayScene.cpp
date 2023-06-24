@@ -1244,6 +1244,7 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 	PlayerHpUpdate();//自機HPバー
+	pHpBarFlag = true;//次はHpバー表示
 
 	//雑魚敵更新
 	if (bossEnemyAdvent == false) {
@@ -1493,38 +1494,43 @@ void GamePlayScene::DrawUI()
 
 	//---------------お手前スプライト描画
 	Pause* pause = Pause::GetInstance();
-	if (pause->GetPauseFlag() == false) {
+
+	//ポーズ中なら
+	if (pause->GetPauseFlag()) {
+		pause->SpFlagTrueNowDraw();
+		if (pause->GetOpWindOpenFlag()) { pause->SpOperWindDraw(); }
+	}
+	else {//ポーズ中でないなら
+		//ボス戦前 ポーズ中は見せない
+		if (beforeBossAppearNow)
+		{
+			sp_beforeboss->Draw();
+		}
+
+		if (bossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
+			charParameters->boHpDraw();
+		}//ボス戦時のみ表示
+
+		//攻撃可能かつポーズでない時のみのスプライト表示
+		if (player_->GetAtkPossible()) {
+			for (auto& i : sp_oper) {
+				i.second->Draw();
+			}
+			for (auto& i : sp_mouse) {
+				i.second->Draw();
+			}
+		}
+
+		if (pHpBarFlag == true) {
+			//自機HPバー
+			sp_playerhpbar->Draw();
+			sp_playerhpbarwaku->Draw();
+		}
+
 		pause->SpOpenPauseDraw();
 		sp_ready->Draw();
 		sp_ready_go->Draw();
 	}
-	if (pause->GetPauseFlag()) {
-		pause->SpFlagTrueNowDraw();
-	}
-	else if (bossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
-		charParameters->boHpDraw();
-	}//ボス戦時のみ表示
-
-	if (pause->GetOpWindOpenFlag()) { pause->SpOperWindDraw(); }
-
-	//ボス戦前 ポーズ中は見せない
-	if (beforeBossAppearNow && pause->GetPauseFlag() == false)
-	{
-		sp_beforeboss->Draw();
-	}
-
-	//攻撃可能かつポーズでない時のみのスプライト表示
-	if (player_->GetAtkPossible() && pause->GetPauseFlag() == false) {
-		for (auto& i : sp_oper) {
-			i.second->Draw();
-		}
-		for (auto& i : sp_mouse) {
-			i.second->Draw();
-		}
-	}
-	//自機HPバー
-	sp_playerhpbar->Draw();
-	sp_playerhpbarwaku->Draw();
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	sceneChangeDirection->Draw();//シーン遷移演出描画
