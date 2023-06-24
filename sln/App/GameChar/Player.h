@@ -56,8 +56,8 @@ public:
 
 	//-------------------↓げったーせったー↓-------------------//
 	//弾威力
-	void SetpBulPow(float pBulPower) { this->pBulPower = pBulPower; }
-	const float& GetpBulPow() { return pBulPower; }
+	void SetpBulPow(int32_t pBulPower) { this->pBulPower = pBulPower; }
+	const int32_t& GetpBulPow() { return pBulPower; }
 	//自機体力が0より少ないか
 	void SetPHpLessThan0(bool isPHpLessThan0) { this->isPHpLessThan0 = isPHpLessThan0; }
 	//自機体力が0より少ないか
@@ -89,8 +89,8 @@ private:
 	std::unique_ptr< ParticleManager> particle;
 
 	//自機通常弾威力
-	float pBulPowerMax;
-	float pBulPower;
+	int32_t pBulPowerMax;
+	int32_t pBulPower;
 
 	//自機体力が0より少ないとき false:　０より多い
 	bool isPHpLessThan0 = false;

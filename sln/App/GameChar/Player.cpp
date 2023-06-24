@@ -205,7 +205,7 @@ void Player::Initialize()
 			throw;
 		}
 
-		pBulPowerMax = root["pBulPowerMax"].As<float>();
+		pBulPowerMax = root["pBulPowerMax"].As<int32_t>();
 		pBulPower = pBulPowerMax;
 		pDeathRot = root["pDeathRot"].As<float>();
 		necesFrame = root["necesFrame"].As<uint32_t>();
@@ -304,7 +304,7 @@ void Player::Update()
 	nowPlayerHp = std::clamp(nowPlayerHp, 0, playerMaxHp);
 
 	//自機弾威力最小値１
-	pBulPower = std::max(pBulPower, 1.f);
+	pBulPower = std::max(pBulPower, 1);
 
 	// パーティクル更新
 	particle->Update();

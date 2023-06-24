@@ -49,11 +49,16 @@ public:
 
 	void PadStickCamera();
 
-	void PlayerHpUpdate();
 	//自機Hpバー更新
+	void PlayerHpUpdate();
 	void PlayerHpSafety();//安全
 	void PlayerHpLessThanHalf();//半分以下
 	void PlayerHpDanger();//危険状態、赤色
+	//ボスHp更新
+	void BossHpUpdate();
+	void BossHpSafety();
+	void BossHpLessThanHalf();
+	void BossHpDanger();
 
 	void PlayerErase();//自機死亡時消す
 
@@ -106,6 +111,8 @@ private:
 	std::unordered_map <std::string, std::unique_ptr < Sprite>> sp_mouse;//マウス操作説明
 	std::unique_ptr < Sprite> sp_playerhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_playerhpbarwaku = nullptr;
+	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
+	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
@@ -271,4 +278,10 @@ private:
 	int pHpBarFrame;
 
 	bool pHpBarFlag = false;//自機Hpバー false:非表示
+
+	//bossHPバー色変えるパターン
+	std::function<void()> boHpColorPattern;
+	//------ボスHPスプライト点滅
+	int32_t boHpBarFrameDef = 20;//透明じゃない時間
+	int32_t boHpBarFrame = boHpBarFrameDef;
 };

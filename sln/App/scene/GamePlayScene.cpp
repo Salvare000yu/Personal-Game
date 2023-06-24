@@ -71,8 +71,9 @@ void GamePlayScene::Initialize()
 	updatePattern = std::bind(&GamePlayScene::GameReadyUpdate, this);
 
 	beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDef, this);
-
+	//HP色を設定 最初緑
 	playerHpBarPattern = std::bind(&GamePlayScene::PlayerHpSafety, this);
+	boHpColorPattern = std::bind(&GamePlayScene::BossHpSafety, this);
 
 	//------objからモデルデータ読み込み---
 	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
@@ -171,6 +172,10 @@ void GamePlayScene::Initialize()
 	pause->Initialize();
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
+	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
+	SpriteBase::GetInstance()->LoadTexture(4, L"Resources/HPbar_waku.png");
+	SpriteBase::GetInstance()->LoadTexture(5, L"Resources/playerHPbar.png");
+	SpriteBase::GetInstance()->LoadTexture(6, L"Resources/playerHPbar_waku.png");
 	SpriteBase::GetInstance()->LoadTexture(14, L"Resources/Before_Boss.png");
 	SpriteBase::GetInstance()->LoadTexture(15, L"Resources/GameReady.png");
 	SpriteBase::GetInstance()->LoadTexture(16, L"Resources/GameGO!.png");
@@ -184,9 +189,11 @@ void GamePlayScene::Initialize()
 
 	// スプライトの生成
 	sprite_back.reset(Sprite::Create(1, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
-	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_enemyhpbar.reset(Sprite::Create(3, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_enemyhpbarwaku.reset(Sprite::Create(4, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbar.reset(Sprite::Create(5, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_playerhpbarwaku.reset(Sprite::Create(6, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
+	sp_beforeboss.reset(Sprite::Create(14, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready.reset(Sprite::Create(15, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_ready_go.reset(Sprite::Create(16, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 	sp_oper.emplace("w", Sprite::Create(17, XMFLOAT3(1, 1, 1), { 0,0 }, { 1,1,1,1 }, { 0.5f, 1 }, false, false));
@@ -228,9 +235,12 @@ void GamePlayScene::Initialize()
 	sprite_back->SetPosition({ -11400,0,0 });
 	sp_playerhpbar->SetPosition({ 70,520,0 });
 	sp_playerhpbarwaku->SetPosition({ 20,520,0 });
+	sp_enemyhpbar->SetPosition({ 140,-80,0 });
+	sp_enemyhpbarwaku->SetPosition({ 90,-80,0 });
 	//ｰｰ色
 	///自機HPバー最初の色
 	sp_playerhpbar->SetColor({ 0.4f,1,0.4f,1 });
+	sp_enemyhpbar->SetColor({ 0.4f,1,0.4f,1 });	//ボスHPバー最初の色
 
 	// パーティクル初期化
 	particle->SetCamera(camera.get());
@@ -799,6 +809,64 @@ void GamePlayScene::PlayerHpDanger()
 	sp_playerhpbar->TransferVertexBuffer();
 }
 
+void GamePlayScene::BossHpUpdate()
+{
+	for (auto& bo : boss_) {
+		//サイズ変更
+		sp_enemyhpbar->size_.x = sp_enemyhpbar->texSize_.x * bo->GetNowBoHp() / bo->GetBoMaxHp();
+		sp_enemyhpbar->TransferVertexBuffer();
+	}
+	boHpColorPattern();
+
+	//更新
+	sp_enemyhpbar->Update();
+	sp_enemyhpbarwaku->Update();
+}
+void GamePlayScene::BossHpSafety()
+{
+	for (auto& bo : boss_) {
+		//半分以下で
+		if (bo->GetNowBoHp() <= bo->GetBoMaxHp() / 2.f) {
+			///自機HPバー半分以下黄色
+			sp_enemyhpbar->SetColor({ 1,1,0,1 });
+			boHpColorPattern = std::bind(&GamePlayScene::BossHpLessThanHalf, this);
+		}
+	}
+}
+void GamePlayScene::BossHpLessThanHalf()
+{
+	for (auto& bo : boss_) {
+		//HP指定した値まで減ったら
+		if (bo->GetNowBoHp() <= bo->GetBoMaxHp() / 4.f) {
+			sp_enemyhpbar->SetColor({ 1,0,0,1 });//赤
+			boHpColorPattern = std::bind(&GamePlayScene::BossHpDanger, this);
+		}
+	}
+}
+void GamePlayScene::BossHpDanger()
+{
+	constexpr float ColorWDec = 0.015f;//透明にしていく速度
+	constexpr float Transparency = 0.4f;//最終的な透明度がどこまで行くか。ここまでいったらデフォ値に戻す
+
+	XMFLOAT4 color = sp_enemyhpbar->GetColor();
+
+	for (auto& bo : boss_) {
+		//---自機と同じ動き
+		if (boHpBarFrame <= 0) {//指定時間たったら
+			color.w -= ColorWDec;
+		}
+
+		if (color.w <= Transparency) {
+			boHpBarFrame = boHpBarFrameDef;//またこの時間分まつ
+			color.w = 1.f;//一番明るい状態
+		}
+
+		boHpBarFrame = std::max(--boHpBarFrame, 0);//ToStartFrameの最小値は0
+	}
+	sp_enemyhpbar->SetColor(color);
+	sp_enemyhpbar->TransferVertexBuffer();
+}
+
 void GamePlayScene::PlayerErase()
 {
 	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
@@ -819,9 +887,8 @@ void GamePlayScene::CollisionAll()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
-	float BossDefense = charParams->GetBossDefense();//ボス防御力取得 先頭要素
-	float pBulPow = player_->GetpBulPow();//自機弾威力
+	int32_t BossDefense = charParams->GetBossDefense();//ボス防御力取得 先頭要素
+	int32_t pBulPow = player_->GetpBulPow();//自機弾威力
 	//<<<<<<<<<<<<<<<（複数回使用）
 	//自機弾
 	std::forward_list<CollisionManager::Collider> pbColliders;
@@ -863,15 +930,14 @@ void GamePlayScene::CollisionAll()
 			[&](BaseObject* boss) {
 				Boss* bo = (Boss*)boss;
 				//喰らってまだ生きてたら
-				const float damage = pBulPow - BossDefense;
-				if (NowBoHp > damage) {
+				const int32_t damage = pBulPow - BossDefense;
+				if (bo->GetNowBoHp() > damage) {
 					bo->SetBossDamageEffect(true);//くらい演出オン
-					NowBoHp -= damage;
-					charParams->SetNowBoHp(NowBoHp);//ボスHPセット
+					bo->SetNowBoHp(bo->GetNowBoHp()-damage);//ボスHPセット
 					particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
 				}
 				else {
-					charParams->SetNowBoHp(0);//ボスHPセット
+					bo->SetNowBoHp(0);//ボスHPセット
 					bo->SetisDeath(true);
 					pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
 					//残っている雑魚敵はもういらない
@@ -913,30 +979,32 @@ void GamePlayScene::CollisionAll()
 
 	//[自機]と[ボス弾]の当たり判定
 	//ボスHPがあるとき
-	if (NowBoHp > 0) {
-		//ボス弾当たり判定
-		std::forward_list<CollisionManager::Collider> bobColliders;//ボス弾
-		for (auto& bo : boss_) {
-			for (auto& bob : bo->GetBullets()) {
-				if (!bo->GetAlive())continue;//死んでたらスキップ
-				//ボスの弾bob
-				auto& c = bobColliders.emplace_front();
-				c.baseObject = bob.get();
-				c.radius = bob->GetScale().z;
-				std::function<void(BaseObject*)> bobHitFunc = [](BaseObject* bob) {bob->SetAlive(false); };
+	for (auto& bo : boss_) {
+		if (bo->GetNowBoHp() > 0) {
+			//ボス弾当たり判定
+			std::forward_list<CollisionManager::Collider> bobColliders;//ボス弾
+			for (auto& bo : boss_) {
+				for (auto& bob : bo->GetBullets()) {
+					if (!bo->GetAlive())continue;//死んでたらスキップ
+					//ボスの弾bob
+					auto& c = bobColliders.emplace_front();
+					c.baseObject = bob.get();
+					c.radius = bob->GetScale().z;
+					std::function<void(BaseObject*)> bobHitFunc = [](BaseObject* bob) {bob->SetAlive(false); };
 
-				CollisionManager::CheckHitFromColliderList(
-					bobColliders,
-					bobHitFunc,
-					pColliders,
+					CollisionManager::CheckHitFromColliderList(
+						bobColliders,
+						bobHitFunc,
+						pColliders,
 
-					[&](BaseObject* p) {
-						int32_t pHp = player_->GetPlayerHp();//自機体力
-						player_->SetPlayerHp(pHp -= bo->GetBulPow());//自機ダメージ
-						PlayerDamage();
-						bob->SetAlive(false);//弾消す
-					}
-				);
+						[&](BaseObject* p) {
+								int32_t pHp = player_->GetPlayerHp();//自機体力
+								player_->SetPlayerHp(pHp -= bo->GetBulPow());//自機ダメージ
+								PlayerDamage();
+								bob->SetAlive(false);//弾消す
+						}
+					);
+				}
 			}
 		}
 	}
@@ -1303,7 +1371,7 @@ void GamePlayScene::BossBattleReadyUpdate()
 	}
 
 	sp_beforeboss->Update();//アラート画像
-	charParams->boHpUpdate();//Hp画像
+	BossHpUpdate();//Hp画像
 }
 
 void GamePlayScene::BossBattleUpdate()
@@ -1316,9 +1384,10 @@ void GamePlayScene::BossBattleUpdate()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//敵のHPバー
-	float NowBoHp = charParams->GetNowBoHp();//現在のぼすHP取得
-	if (bossEnemyAdvent && NowBoHp > 0) {
-		charParams->boHpUpdate();
+	for (auto& bo : boss_) {
+		if (bossEnemyAdvent && bo->GetNowBoHp() > 0) {
+			BossHpUpdate();
+		}
 	}
 
 	//狙い弾どこに打つか
@@ -1370,11 +1439,13 @@ void GamePlayScene::Update()
 			pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 		}
 		else if (pause->WaitKeyP >= 2) {//ある程度経ったら受付
-			if (player_->GetPlayerHp() > 0 && charParams->GetNowBoHp() > 0) {//生存時
-				if (cInput->PauseOpenClose()) {
-					pause->EveryInit();
-					GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
-					pause->SetPauseFlag(true);
+			for (auto& bo : boss_) {
+				if (player_->GetPlayerHp() > 0 && bo->GetNowBoHp() > 0) {//生存時
+					if (cInput->PauseOpenClose()) {
+						pause->EveryInit();
+						GameSound::GetInstance()->PlayWave("personalgame_decision.wav", 0.2f);
+						pause->SetPauseFlag(true);
+					}
 				}
 			}
 		}
@@ -1507,9 +1578,12 @@ void GamePlayScene::DrawUI()
 			sp_beforeboss->Draw();
 		}
 
-		if (bossEnemyAdvent && charParameters->GetNowBoHp() > 0) {
-			charParameters->boHpDraw();
-		}//ボス戦時のみ表示
+		for (auto& bo : boss_) {
+			if (bossEnemyAdvent && bo->GetNowBoHp() > 0) {
+				sp_enemyhpbar->Draw();
+				sp_enemyhpbarwaku->Draw();
+			}//ボス戦時のみ表示
+		}
 
 		//攻撃可能かつポーズでない時のみのスプライト表示
 		if (player_->GetAtkPossible()) {

@@ -359,7 +359,7 @@ void Boss::HpHalfPatStart()
 		targetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
 		//防御力上がる
-		float Defence = charParams->GetBossDefense();
+		int32_t Defence = charParams->GetBossDefense();
 		Defence += 10;
 		charParams->SetBossDefense(Defence);
 	}
@@ -994,7 +994,7 @@ void Boss::Update()
 		}
 	}
 	if (isHpHalfPattern == false) {
-		if (charParameters->GetNowBoHp() <= charParameters->GetBoMaxHp() / 2) {
+		if (nowBossHP <= bossMaxHP / 2) {
 			actionPattern = std::bind(&Boss::HpHalfPatStart, this);
 		}
 	}
@@ -1023,6 +1023,9 @@ void Boss::Update()
 	if (!GetisDeath()) {
 		AlwaysmMotion();//常に動かす
 	}
+
+	//ボスHpの最大最小値。HPが負になったりバーが反対に飛び出ないように
+	nowBossHP = std::clamp(nowBossHP, 0, bossMaxHP);
 
 	XMFLOAT3 pos = obj->GetPosition();
 	obj_core->SetPosition(pos);

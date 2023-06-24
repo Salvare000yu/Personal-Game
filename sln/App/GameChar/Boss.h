@@ -94,6 +94,12 @@ public:
 	//ボス本体にぶつかった時の威力
 	const int32_t& GetBodyPow() { return bodyPow; }
 
+	//現在ボスHP
+	void SetNowBoHp(int32_t nowBossHP) { this->nowBossHP = nowBossHP; }
+	const int32_t& GetNowBoHp() { return nowBossHP; }
+	//ボスHPMax
+	const int32_t& GetBoMaxHp() { return bossMaxHP; }
+
 	//ボス生死
 	void SetisDeath(bool isDeath) { this->isDeath = isDeath; }
 	const bool& GetisDeath() { return isDeath; }
@@ -385,4 +391,9 @@ private:
 	float reCol = 0.f;//赤状態
 	float reColVal = 0.05f;//戻す数値
 	//>>>>>>ダメージ受けた時体赤くする演出
+
+	//敵HP
+	int32_t bossMaxHP = 1000;//てきさいだいHP
+	int32_t nowBossHP = bossMaxHP;//現在の敵HP
+
 };
