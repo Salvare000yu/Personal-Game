@@ -17,28 +17,36 @@ using namespace DirectX;
 
 void Boss::Initialize()
 {
-	////ymlデータ
-	//{
-	//	Yaml::Node root;
-	//	try
-	//	{
-	//		Yaml::Parse(root, "Resources/charDataFile/Boss.yml");
-	//	}
-	//	catch (...)
-	//	{
-	//		throw;
-	//	}
+	//ymlデータ
+	{
+		Yaml::Node root;
+		try
+		{
+			Yaml::Parse(root, "Resources/charDataFile/Boss.yml");
+		}
+		catch (...)
+		{
+			throw;
+		}
 
-	//	pBulPowerMax = root["pBulPowerMax"].As<float>();
-	//	pBulPower = pBulPowerMax;
+		bossMaxHP = root["bossMaxHP"].As<int32_t>();
+		nowBossHP = bossMaxHP;//現在の敵HP
+		reCol = root["reCol"].As<float>();
+		reColVal = root["reColVal"].As<float>();
+		bossBodyRedTimeDef = root["bossBodyRedTimeDef"].As<int16_t>();
+		bossBodyRedTime = bossBodyRedTimeDef;
+		leaveLim = root["leaveLim"].As<float>();
+		atkInterval = root["atkInterval"].As<uint8_t>();
+		atkInterval_LeaveFirst = root["atkInterval_LeaveFirst"].As<uint8_t>();
+		diffusionAtkInterval = root["diffusionAtkInterval"].As<uint8_t>();
 
-	//	auto& targetPosNode = root["targetPos"];
-	//	targetPos = {
-	//		targetPosNode["x"].As<float>(),
-	//		targetPosNode["y"].As<float>(),
-	//		targetPosNode["z"].As<float>()
-	//	};
-	//}
+		/*auto& targetPosNode = root["targetPos"];
+		targetPos = {
+			targetPosNode["x"].As<float>(),
+			targetPosNode["y"].As<float>(),
+			targetPosNode["z"].As<float>()
+		};*/
+	}
 
 	particle.reset(new ParticleManager());
 	particle->SetCamera(this->obj->GetCamera());
@@ -879,6 +887,7 @@ void Boss::DamageEffect()
 {
 	XMFLOAT4 col = { 1,reCol,reCol,1 };//赤
 	reCol += reColVal;
+	reCol = std::min(reCol, 1.f);//Y座標はPosYMaxまでしかいけないように
 
 	if (--bossBodyRedTime <= 0) {//時間になったら
 		reCol = 0.f;//戻す

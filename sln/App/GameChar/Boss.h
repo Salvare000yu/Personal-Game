@@ -143,14 +143,14 @@ private:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	//離れられる距離
-	float leaveLim = 90;
+	float leaveLim;
 
 	bool bossDamageEffectFlag = false;//ダメージ演出　false:やってない
 
 	//フレームごとに発射
-	static const uint8_t atkInterval = 10;
-	static const uint8_t atkInterval_LeaveFirst = 20;
-	static const uint8_t diffusionAtkInterval = 20;
+	uint8_t atkInterval = 10;
+	uint8_t atkInterval_LeaveFirst = 20;
+	uint8_t diffusionAtkInterval = 20;
 
 	//フレーム
 	float frame = 0;
@@ -385,15 +385,15 @@ private:
 	//>>>>>>シェイク
 
 	//<<<<<<ダメージ受けた時体赤くする演出
-	const uint8_t bossBodyRedTimeDef = 10;
-	uint8_t bossBodyRedTime = bossBodyRedTimeDef;
+	int16_t bossBodyRedTimeDef;
+	int16_t bossBodyRedTime;
 	//赤から戻していく色
-	float reCol = 0.f;//赤状態
-	float reColVal = 0.05f;//戻す数値
+	float reCol;//赤状態
+	float reColVal;//戻す数値
 	//>>>>>>ダメージ受けた時体赤くする演出
 
 	//敵HP
-	int32_t bossMaxHP = 1000;//てきさいだいHP
-	int32_t nowBossHP = bossMaxHP;//現在の敵HP
+	int32_t bossMaxHP;//てきさいだいHP
+	int32_t nowBossHP;//現在の敵HP
 
 };

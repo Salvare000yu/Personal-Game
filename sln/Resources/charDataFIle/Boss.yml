@@ -1,1 +1,13 @@
 #ボスデータ
+bossMaxHP: 1000 #最大Hp
+
+#ボスダメージ時
+reCol: 0 #ダメージ時赤gbの初期値
+reColVal: 0.05 #戻してく値
+bossBodyRedTimeDef: 10 #赤くする時間
+
+leaveLim: 90 #離れられる距離
+#フレームごとに発射
+atkInterval: 10
+atkInterval_LeaveFirst: 20
+diffusionAtkInterval: 20
