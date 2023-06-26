@@ -15,18 +15,13 @@ public:
 	void DrawUI();
 
 	//-----------------------↓げったーせったー↓-----------------------//
-	//自機喰らった
-	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
-	const bool& GetispDam() { return ispDam; }
+
 	//-----------------------↑げったーせったー↑-----------------------//
 
-	const int stopPos = 1800;//自機次座標への移動の停止場所
-	//次の場所へ向かう　true：向かっている false:完了
-	bool pNextPlaceGoFlag = true;
+
 
 private:
 
-	//自機がダメージ喰らった false:喰らってない
-	bool ispDam = false;
+
 
 };

@@ -20,8 +20,6 @@ void CharParameters::Initialize()
 	// -----------------スプライト共通テクスチャ読み込み
 	//ｰｰ色
 
-	//パラメータ関連初期化
-	pNextPlaceGoFlag = true;
 
 }
 

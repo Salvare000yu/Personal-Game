@@ -109,6 +109,10 @@ public:
 	void SetDoCollision(bool doCollision) { this->doCollision = doCollision; }
 	const bool& GetDoCollision() { return doCollision; }
 
+	//ボス戦中か
+	void SetBossEnemyAdvent(bool bossEnemyAdvent) { this->bossEnemyAdvent = bossEnemyAdvent; }
+	const bool& GetBossEnemyAdvent() { return bossEnemyAdvent; }
+
 	//狙い弾　打つ相手
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 
@@ -236,6 +240,8 @@ private:
 	//この時間だけこの行動をする
 	uint16_t approachCountDef;
 	uint16_t approachCount;
+
+	bool bossEnemyAdvent = false;//ボス戦中 false:まだ
 
 	//------縦に揺れる攻撃F
 	int16_t changeVerticalCountDef;//デフォ0　終わったら消してん

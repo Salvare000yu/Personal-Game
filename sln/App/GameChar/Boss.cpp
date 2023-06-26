@@ -196,7 +196,7 @@ void Boss::BossAppear()
 	XMFLOAT3 pos = obj->GetPosition();
 
 	//移動完了確認しだい
-	if (charParams->pNextPlaceGoFlag == false) {
+	if (bossEnemyAdvent) {
 		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}

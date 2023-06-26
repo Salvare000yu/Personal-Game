@@ -286,25 +286,23 @@ void GamePlayScene::SmallEnemyCreate()
 }
 void GamePlayScene::SmallEnemyAppear()
 {
-	if (bossEnemyAdvent == false)
-	{
-		//時が満ちたら
-		if (sEneAppCount == 0) {
-			//雑魚敵来る
-			//csvの最後まで行った場合最初に戻す
-			if (++seIndex >= csvData.size()) {
-				seIndex = 0;
-			}
-			SmallEnemyCreate();
-			float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
-			float posy = std::stof(csvData[seIndex][1]);
-			float posz = std::stof(csvData[seIndex][2]);
-			//雑魚敵をcsv通りの場所に出す
-			smallEnemys_.front()->SetPosition(XMFLOAT3{ posx,posy,posz });
-
-			//再びカウントできるように初期化
-			sEneAppCount = sEneAppInterval;
+	//時が満ちたら
+	if (sEneAppCount == 0) {
+		//雑魚敵来る
+		//csvの最後まで行った場合最初に戻す
+		if (++seIndex >= csvData.size()) {
+			seIndex = 0;
 		}
+		SmallEnemyCreate();
+		float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
+		float posy = std::stof(csvData[seIndex][1]);
+		float posz = std::stof(csvData[seIndex][2]);
+		//雑魚敵をcsv通りの場所に出す
+		smallEnemys_.front()->SetPosition(XMFLOAT3{ posx,posy,posz });
+
+		//再びカウントできるように初期化
+		sEneAppCount = sEneAppInterval;
+
 	}
 	//雑魚敵カウントをデクリメント
 	sEneAppCount--;
@@ -352,7 +350,6 @@ void GamePlayScene::BeforeBossAppear()
 	if (bBPaternCount == BBPaternCountNum && SP_BossWarning.w < 0.0)
 	{
 		beforeBossAppearFlag = true;
-		beforeBossAppearNow = true;
 	}
 
 	beforeBossPattern();
@@ -636,14 +633,20 @@ void GamePlayScene::pHeadingToTheNextPlace()
 	XMFLOAT3 pPos = player_->GetPosition();
 
 	//指定した場所超えたら
-	if (pPos.z > charParams->stopPos) {
+	if (pPos.z > player_->GetStopPos()) {
 		pNextPlaceGoSp -= decelVal;
 
 		if ((pNextPlaceGoSp - decelVal) < 0) {
-			charParams->pNextPlaceGoFlag = false;//移動完了でボス行動開始
 			pBossBattlePos = pPos;//ボス戦時の自機座標
 			//攻撃可能にしてから終わる
 			player_->SetAtkPossible(true);
+			//ボス戦前の演出
+			if (beforeBossAppearFlag) {//演出終わったら
+				//ボス戦突入のお知らせです
+				for (auto& bo : boss_) {
+					bo->SetBossEnemyAdvent(true);
+				}
+			}
 			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
 		}
 	}
@@ -879,7 +882,7 @@ void GamePlayScene::PlayerDamage()
 
 	pDamFlag = true;
 
-	charParams->SetispDam(true);
+	player_->SetispDam(true);
 
 	GameSound::GetInstance()->PlayWave("playerdam.wav", 0.1f, 0);
 }
@@ -921,31 +924,33 @@ void GamePlayScene::CollisionAll()
 	//>>>>>>>>>>>>>>（複数回使用）
 
 	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
-	if (player_->GetPlayerHp() > 0 && bossEnemyAdvent) {
+	if (player_->GetPlayerHp() > 0) {
 		CollisionManager::CheckHitFromColliderList(
 			pbColliders,
 			pbHitFunc,
 			boColliders,
 			[&](BaseObject* boss) {
 				Boss* bo = (Boss*)boss;
-				//喰らってまだ生きてたら
-				const int32_t damage = pBulPow - bo->GetBossDefense();
-				if (bo->GetNowBoHp() > damage) {
-					bo->SetBossDamageEffect(true);//くらい演出オン
-					bo->SetNowBoHp(bo->GetNowBoHp()-damage);//ボスHPセット
-					particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
-				}
-				else {
-					bo->SetNowBoHp(0);//ボスHPセット
-					bo->SetisDeath(true);
-					pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
-					//残っている雑魚敵はもういらない
-					for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
-						bob->SetAlive(false);//消す
+				if (bo->GetBossEnemyAdvent()) {
+					//喰らってまだ生きてたら
+					const int32_t damage = pBulPow - bo->GetBossDefense();
+					if (bo->GetNowBoHp() > damage) {
+						bo->SetBossDamageEffect(true);//くらい演出オン
+						bo->SetNowBoHp(bo->GetNowBoHp() - damage);//ボスHPセット
+						particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
 					}
-					GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
+					else {
+						bo->SetNowBoHp(0);//ボスHPセット
+						bo->SetisDeath(true);
+						pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
+						//残っている雑魚敵はもういらない
+						for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
+							bob->SetAlive(false);//消す
+						}
+						GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
+					}
+					GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 				}
-				GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 			});
 	}
 
@@ -997,10 +1002,10 @@ void GamePlayScene::CollisionAll()
 						pColliders,
 
 						[&](BaseObject* p) {
-								int32_t pHp = player_->GetPlayerHp();//自機体力
-								player_->SetPlayerHp(pHp -= bo->GetBulPow());//自機ダメージ
-								PlayerDamage();
-								bob->SetAlive(false);//弾消す
+							int32_t pHp = player_->GetPlayerHp();//自機体力
+							player_->SetPlayerHp(pHp -= bo->GetBulPow());//自機ダメージ
+							PlayerDamage();
+							bob->SetAlive(false);//弾消す
 						}
 					);
 				}
@@ -1087,22 +1092,24 @@ void GamePlayScene::CollisionAll()
 	}
 
 	//[ボス]と[自機]の当たり判定
-	if (bossEnemyAdvent) {
-		std::function<void(BaseObject*)> pHitFunc = [](BaseObject* p) {};
-		CollisionManager::CheckHitFromColliderList(
-			pColliders,
-			pHitFunc,
-			boColliders,
-			[&](BaseObject* boss) {
-				Boss* bo = (Boss*)boss;
-				//定期的にダメージ
-				if (bodyDamFlag == false) {
-					int32_t pHp = player_->GetPlayerHp();//自機体力
-					player_->SetPlayerHp(pHp -= bo->GetBodyPow());//自機ダメージ
-					PlayerDamage();
-					bodyDamFlag = true;//クールたいむ
-				}
-			});
+	for (auto& bo : boss_) {
+		if (bo->GetBossEnemyAdvent()) {
+			std::function<void(BaseObject*)> pHitFunc = [](BaseObject* p) {};
+			CollisionManager::CheckHitFromColliderList(
+				pColliders,
+				pHitFunc,
+				boColliders,
+				[&](BaseObject* boss) {
+					Boss* bo = (Boss*)boss;
+					//定期的にダメージ
+					if (bodyDamFlag == false) {
+						int32_t pHp = player_->GetPlayerHp();//自機体力
+						player_->SetPlayerHp(pHp -= bo->GetBodyPow());//自機ダメージ
+						PlayerDamage();
+						bodyDamFlag = true;//クールたいむ
+					}
+				});
+		}
 	}
 }
 
@@ -1314,10 +1321,8 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	pHpBarFlag = true;//次はHpバー表示
 
 	//雑魚敵更新
-	if (bossEnemyAdvent == false) {
-		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-			smallEnemy->Update();
-		}
+	for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+		smallEnemy->Update();
 	}
 
 	//撃破数達成
@@ -1336,9 +1341,11 @@ void GamePlayScene::BossBattleReadyUpdate()
 	CharParameters* charParams = CharParameters::GetInstance();
 
 	//雑魚敵更新
-	if (bossEnemyAdvent == false) {
-		for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
-			smallEnemy->Update();
+	for (auto& bo : boss_) {
+		if (!bo->GetBossEnemyAdvent()) {
+			for (std::unique_ptr<SmallEnemy>& smallEnemy : smallEnemys_) {
+				smallEnemy->Update();
+			}
 		}
 	}
 	//残っている雑魚敵はもういらない
@@ -1346,28 +1353,17 @@ void GamePlayScene::BossBattleReadyUpdate()
 		se->SetAlive(false);//消す
 	}
 
-	//ボス戦前の演出
-	if (beforeBossAppearFlag) {//演出終わったら
-		//ボス戦突入のお知らせです
-		bossEnemyAdvent = true;
-	}
-	else {
+	if (!beforeBossAppearFlag) {
 		BeforeBossAppear();
 	}
 	//条件達成でボス登場演出
 	for (std::unique_ptr<Boss>& boss : boss_) {
 		boss->Update();//ボス更新
-
-		if (boss->GetisDeath()) {
-			BossDeathEffect();//死亡条件達成で死亡時えふぇくと
-		}
 	}
 	//扉を開ける
 	if (doorOpenFlag == false) { DoorOpen(); }
 
-	if (charParams->pNextPlaceGoFlag) {
-		pHeadingToTheNextPlace();
-	}
+	pHeadingToTheNextPlace();
 
 	sp_beforeboss->Update();//アラート画像
 	BossHpUpdate();//Hp画像
@@ -1384,7 +1380,7 @@ void GamePlayScene::BossBattleUpdate()
 
 	//敵のHPバー
 	for (auto& bo : boss_) {
-		if (bossEnemyAdvent && bo->GetNowBoHp() > 0) {
+		if (bo->GetBossEnemyAdvent() && bo->GetNowBoHp() > 0) {
 			BossHpUpdate();
 		}
 	}
@@ -1578,7 +1574,7 @@ void GamePlayScene::DrawUI()
 		}
 
 		for (auto& bo : boss_) {
-			if (bossEnemyAdvent && bo->GetNowBoHp() > 0) {
+			if (bo->GetBossEnemyAdvent() && bo->GetNowBoHp() > 0) {
 				sp_enemyhpbar->Draw();
 				sp_enemyhpbarwaku->Draw();
 			}//ボス戦時のみ表示
@@ -1609,7 +1605,7 @@ void GamePlayScene::DrawUI()
 	sceneChangeDirection->Draw();//シーン遷移演出描画
 
 	//向こうでダメージくらい状態解除したらこっちでも同様
-	if (charParameters->GetispDam() == false) {
+	if (!player_->GetispDam()) {
 		pDamFlag = false;
 	}
 

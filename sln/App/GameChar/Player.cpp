@@ -133,7 +133,7 @@ void Player::Shake() {
 	}
 	else {
 		pShakeTimer_ = pShakeTime;
-		charParameters->SetispDam(false);
+		SetispDam(false);
 	}
 }
 void Player::PlayerDeath()
@@ -219,6 +219,7 @@ void Player::Initialize()
 		partTimeInterval = 0;
 		playerMaxHp = root["playerMaxHP"].As<uint32_t>();
 		nowPlayerHp = playerMaxHp;//現在の自機HP
+		stopPos = root["stopPos"].As<int32_t>();
 	}
 
 	particle.reset(new ParticleManager());
@@ -292,7 +293,7 @@ void Player::Update()
 	}
 
 	//自機が喰らってる状態になったら
-	if (charParameters->GetispDam()) {
+	if (GetispDam()) {
 		//HP0以下ならやらないように　死亡演出やってるもんね
 		if (nowPlayerHp > 0)
 		{

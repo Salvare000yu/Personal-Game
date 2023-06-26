@@ -75,6 +75,11 @@ public:
 	const int32_t& GetPlayerHp() { return nowPlayerHp; }
 	//自機最大Hp
 	const int32_t& GetPlayerMaxHp() { return playerMaxHp; }
+	//自機喰らった
+	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
+	const bool& GetispDam() { return ispDam; }
+	//とまる
+	const int32_t& GetStopPos() { return stopPos; }
 	//-------------------↑げったーせったー↑-------------------//
 
 	Player()
@@ -96,6 +101,11 @@ private:
 	bool isPHpLessThan0 = false;
 
 	float pDeathRot;
+
+	int32_t stopPos;//自機次座標への移動の停止場所
+
+	//自機がダメージ喰らった false:喰らってない
+	bool ispDam = false;
 
 	//-----自機死亡演出
 	DirectX::XMFLOAT3 pPosDeath = {};
