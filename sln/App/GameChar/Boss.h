@@ -72,9 +72,6 @@ public:
 
 	void AlwaysmMotion();
 
-	//近づく処理初期化
-	void ApproachInit();
-
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
 	const std::forward_list<std::unique_ptr<BossBullet>>& GetBullets() { return bullets_; }
@@ -148,9 +145,9 @@ private:
 	bool bossDamageEffectFlag = false;//ダメージ演出　false:やってない
 
 	//フレームごとに発射
-	uint8_t atkInterval = 10;
-	uint8_t atkInterval_LeaveFirst = 20;
-	uint8_t diffusionAtkInterval = 20;
+	uint32_t atkInterval;
+	uint32_t atkInterval_LeaveFirst;
+	uint32_t diffusionAtkInterval;
 
 	//フレーム
 	float frame = 0;
@@ -169,10 +166,10 @@ private:
 	float bossLerpMoveRaito = 0;
 
 	//攻撃用カウント
-	uint8_t atkCount = 0;
-	uint8_t diffusionAtkCount = 0;
-	uint8_t circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
-	uint8_t afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
+	uint32_t atkCount = 0;
+	uint32_t diffusionAtkCount = 0;
+	uint32_t circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
+	uint32_t afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -297,11 +294,8 @@ private:
 	float addY = addYDef;
 	//------HP半分以下円運動↑
 
-	static const int circular_AtkIntervalDef = 45;
-	int circular_AtkInterval = circular_AtkIntervalDef;
-
-	//突っ込み後行動のAimBulインターバル
-	static const int afterPlungePatAtkInterval = 15;
+	uint8_t circular_AtkIntervalDef;
+	uint8_t circular_AtkInterval;
 
 	BaseObject* shotTag;//弾うつターゲット
 
@@ -310,14 +304,14 @@ private:
 
 	//-------PlungeInto
 	//2回Leaveをしたら突っ込む行動　　デフォ2
-	const int plungeCountDef = 1;
-	int plungeCount = plungeCountDef;
+	uint32_t plungeCountDef;
+	uint32_t plungeCount;
 	//突っ込み行動へ移行する前に最後にいた場所を記憶する
 	XMFLOAT3 wasPosMem;
 	//離れる速度
-	const int leaveVel = 40;
+	uint16_t leaveVel;
 	//Leaveの時どの程度下がるか
-	const int leavePos = 6000;
+	uint32_t leavePos;
 	//戻る前の座標取得フラグ　false:してない
 	bool beforeReversePosMemFlag = false;
 	//戻る前座標入れる
@@ -327,10 +321,10 @@ private:
 	//どこに戻るかの場所
 	XMFLOAT3 reverseTargetPos;
 	//突っ込み待ち待機時間 でふぉ140
-	const int plungeIntoWaitCountDef = 140;
-	int plungeIntoWaitCount = plungeIntoWaitCountDef;
+	uint16_t plungeIntoWaitCountDef;
+	uint16_t plungeIntoWaitCount;
 	//最後定位置戻るのにかかる時間
-	const int plungeFinFrameMax = 60;
+	uint16_t plungeFinFrameMax;
 	//Finで最初いた一度位置取得 false:まだ
 	bool plungeFinOnlyFlag = false;
 
@@ -347,7 +341,7 @@ private:
 	//ボスいた場所
 	XMFLOAT3 boPosMom{};
 	//突っ込み速度
-	const uint32_t plungeNecesFrame = 40;
+	uint16_t plungeNecesFrame;
 	//その時のボスの位置
 	XMFLOAT3 plungeNowPos;
 	//-------PlungeInto
@@ -355,27 +349,28 @@ private:
 	//-------AfterPlungeInto
 	//
 	//待ち時間
-	const uint8_t waitTimeDef = 60;
-	uint8_t waitTime = waitTimeDef;
+	int16_t waitTimeDef;
+	int16_t waitTime;
 	//攻撃時に自機のいた場所へ（XY）移動する速度
 	XMFLOAT3 atkMoveSp;
 	//ボスいた場所
 	XMFLOAT3 boPosMem;
 	//ボスの現在地
 	XMFLOAT3 boNowPos;
-	//攻撃に移動にかかる絶対時間
-	const int necesAtkMoveTime = 60;
+	//攻撃移動にかかる絶対時間
+	int16_t necesAtkMoveTime;
 	//WaitとAttack繰り返した回数
 	const int loopCountDef = 0;
 	int loopCount = loopCountDef;
 	//この回数でつぎへ
-	const int loopCountMax = 7;
+	int16_t loopCountMax;
+	//突っ込み後行動のAimBulインターバル
+	uint32_t afterPlungePatAtkInterval;
 	//
 	//-------AfterPlungeInto
 
 	//<<<<<<シェイク
-	int randShakeDef = 0;
-	int randShakeNow = randShakeDef;
+	int16_t randShakeVal;
 	//いた場所保存 false:保存前
 	bool shakePosMemFlag = false;
 	//揺らし終えたか false:まだ

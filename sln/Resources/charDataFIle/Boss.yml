@@ -11,3 +11,21 @@ leaveLim: 90 #離れられる距離
 atkInterval: 10
 atkInterval_LeaveFirst: 20
 diffusionAtkInterval: 20
+
+randShakeVal: 8 #シェイク値
+
+circular_AtkIntervalDef: 45 #円行動攻撃インターバル
+
+#突っ込み
+plungeCountDef: 1 #突っ込み行動行くために必要なLeave回数
+leaveVel: 40 #離れる速度
+leavePos: 6000 #Leaveの時どの程度下がるか
+plungeIntoWaitCountDef: 140 #突っ込み待ち待機時間
+plungeFinFrameMax: 60 #最後定位置戻るのにかかる時間
+plungeNecesFrame: 40 #突っ込み速度
+
+#突っ込み後
+afterPlungePatAtkInterval: 15 #突っ込み後行動のAimBulインターバル
+loopCountMax: 7 #行動繰り返す回数
+necesAtkMoveTime: 60 #攻撃移動にかかる絶対時間
+waitTimeDef: 60 #待ち時間

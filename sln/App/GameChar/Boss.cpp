@@ -36,9 +36,25 @@ void Boss::Initialize()
 		bossBodyRedTimeDef = root["bossBodyRedTimeDef"].As<int16_t>();
 		bossBodyRedTime = bossBodyRedTimeDef;
 		leaveLim = root["leaveLim"].As<float>();
-		atkInterval = root["atkInterval"].As<uint8_t>();
-		atkInterval_LeaveFirst = root["atkInterval_LeaveFirst"].As<uint8_t>();
-		diffusionAtkInterval = root["diffusionAtkInterval"].As<uint8_t>();
+		atkInterval = root["atkInterval"].As<uint32_t>();
+		atkInterval_LeaveFirst = root["atkInterval_LeaveFirst"].As<uint32_t>();
+		diffusionAtkInterval = root["diffusionAtkInterval"].As<uint32_t>();
+		randShakeVal = root["randShakeVal"].As<int16_t>();
+		loopCountMax = root["loopCountMax"].As<int16_t>();
+		necesAtkMoveTime = root["necesAtkMoveTime"].As<int16_t>();
+		waitTimeDef = root["waitTimeDef"].As<int16_t>();
+		waitTime = waitTimeDef;
+		afterPlungePatAtkInterval = root["afterPlungePatAtkInterval"].As<uint32_t>();
+		plungeNecesFrame = root["plungeNecesFrame"].As<uint16_t>();
+		plungeFinFrameMax = root["plungeFinFrameMax"].As<uint16_t>();
+		plungeIntoWaitCountDef = root["plungeIntoWaitCountDef"].As<uint16_t>();
+		plungeIntoWaitCount = plungeIntoWaitCountDef;
+		leavePos = root["leavePos"].As<uint32_t>();
+		leaveVel = root["leaveVel"].As<uint16_t>();
+		plungeCountDef = root["plungeCountDef"].As<uint32_t>();
+		plungeCount = plungeCountDef;
+		circular_AtkIntervalDef = root["circular_AtkIntervalDef"].As<uint32_t>();
+		circular_AtkInterval = circular_AtkIntervalDef;
 
 		/*auto& targetPosNode = root["targetPos"];
 		targetPos = {
@@ -105,8 +121,10 @@ void Boss::Initialize()
 	GameSound::GetInstance()->LoadWave("enemy_beam.wav");
 	GameSound::GetInstance()->LoadWave("destruction1.wav");
 
-	//近づくパターン初期化
-	ApproachInit();
+	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
+	atkCount = atkInterval;
+	diffusionAtkCount = diffusionAtkInterval;
+	circular_AtkCount = circular_AtkInterval;
 
 	//デフォルトの行動を設定
 	actionPattern = std::bind(&Boss::BossAppear, this);
@@ -132,14 +150,6 @@ void Boss::BossAppear()
 	pos.y += 2.f * std::sinf(time * XM_PI);
 
 	obj->SetPosition(pos);
-}
-
-void Boss::ApproachInit()
-{
-	//攻撃用カウント初期化して間隔代入すれば一旦待ってから発射可能
-	atkCount = atkInterval;
-	diffusionAtkCount = diffusionAtkInterval;
-	circular_AtkCount = circular_AtkInterval;
 }
 
 void Boss::Approach()
@@ -513,6 +523,7 @@ void Boss::LeaveFirstPos()
 			actionPattern = std::bind(&Boss::CircularMotionMove, this);
 		}
 	}
+
 }
 void Boss::PlungeInto()
 {
@@ -703,15 +714,13 @@ void Boss::Shake() {
 	//pos揺らす
 	XMFLOAT3 pos = obj->GetPosition();
 
-	randShakeNow = 7 + 1;//a~b
-
 	if (shakePosMemFlag == false) {
 		posMem = pos;
 		shakePosMemFlag = true;
 	}
 	if (shakePosMemFlag) {
-		pos.x = posMem.x + rand() % randShakeNow - 4.f;
-		pos.y = posMem.y + rand() % randShakeNow - 4.f;
+		pos.x = posMem.x + rand() % randShakeVal - 4.f;
+		pos.y = posMem.y + rand() % randShakeVal - 4.f;
 	}
 	obj->SetPosition(pos);
 }
