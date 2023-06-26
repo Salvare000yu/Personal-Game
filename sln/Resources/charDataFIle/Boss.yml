@@ -1,11 +1,40 @@
 #ボスデータ
 bossMaxHP: 1000 #最大Hp
+#弾の威力
+bulPow: 200
+aimBulPow: 150
+straightBulPow: 170
+
+bossRot: 1 #ボス回転
+
+afterPlungePatAtkCount: 10 #突っ込み後行動の攻撃カウント
 
 #ボスダメージ時
 reCol: 0 #ダメージ時赤gbの初期値
 reColVal: 0.05 #戻してく値
 bossBodyRedTimeDef: 10 #赤くする時間
 
+necesFrame: 190 #かかる時間
+
+targetPos: #目標座標
+    x: 0
+    y: -150
+    z: 0
+
+particleFrame: 39 #パーティクル出すフレ
+
+#近づく速さ
+approachSpZ: 3
+approachSpY: 2
+#離れる速さ
+leaveSpZ: 3
+leaveSpY: 2
+
+approachCountDef: 150 #この時間だけこの行動をする
+changeVerticalCountDef: 0 #デフォ0
+
+changeVerticalNeces: 3 #縦攻撃に移る為に必要カウント
+startVerticalValDef: -5 #最初の上昇値
 leaveLim: 90 #離れられる距離
 #フレームごとに発射
 atkInterval: 10
@@ -14,6 +43,30 @@ diffusionAtkInterval: 20
 
 randShakeVal: 8 #シェイク値
 
+verticalSp: 15 #上昇下降速度
+verticalWaitCountDef: 50 #待ち時間
+upDownPosDef: #上昇下降開始座標
+    x: -600
+    y: 900
+    z: 0
+upStartPosY: -350 #上昇開始Y座標
+downStartPosY: 1000 #下降開始Y座標
+nextMoveX: 200 #UpDownの最後にXをずらす値
+verticalLoopCountDef: 4 #UpDown何回ループさせるか
+vertical_AtkInterval: 7 #縦攻撃用インターバル
+#HP Half
+necesHpHalfFrame: 100 #HP半分時このフレーム分移動まで時間かかる
+necesLeaveFirstFrame: 180
+coreCol: #コアの色　最初青
+    x: 0
+    y: 0
+    z: 1
+    w: 1
+#円行動
+hpHalf_AngleDef: 20
+hpHalf_radDef: 100
+hpHalf_LengthDef: 10 #円運動の半径の長さ
+circularY: 40 #どの高さで回るか
 circular_AtkIntervalDef: 45 #円行動攻撃インターバル
 
 #突っ込み

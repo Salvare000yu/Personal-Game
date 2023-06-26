@@ -160,7 +160,7 @@ private:
 	bool doCollision = true;
 
 	//ボス回転
-	float bossRot = 1.f;
+	float bossRot;
 
 	//ボスlerp動きレート
 	float bossLerpMoveRaito = 0;
@@ -169,7 +169,7 @@ private:
 	uint32_t atkCount = 0;
 	uint32_t diffusionAtkCount = 0;
 	uint32_t circular_AtkCount = 0;	//ぐるぐる時攻撃用カウント
-	uint32_t afterPlungePatAtkCount = 10;//突っ込み後行動の攻撃カウント
+	uint32_t afterPlungePatAtkCount;//突っ込み後行動の攻撃カウント
 
 	bool even_odd_NumFlag = true;//奇数弾
 
@@ -178,9 +178,9 @@ private:
 	Model* straightBulModel = nullptr;
 
 	//弾威力
-	const int32_t bulPow = 200;
-	const int32_t aimBulPow = 150;
-	const int32_t straightBulPow = 170;
+	int32_t bulPow;
+	int32_t aimBulPow;
+	int32_t straightBulPow;
 
 	//ボス本体の威力
 	const int32_t bodyPow = 250;
@@ -194,13 +194,13 @@ private:
 	XMFLOAT3 boPosDeath = {};
 	bool getPosOnlyFlag = true;//一度きりの座標読み込み
 	bool getPosDeathOnlyFlag = true;//一度きりの座標読み込み
-	const float necesFrame = 190.0f;//かかる時間
+	float necesFrame;//かかる時間
 	XMFLOAT3 moveSp = {};//移動速度
-	XMFLOAT3 targetPos = { 0,-150,0 };//目標座標
+	XMFLOAT3 targetPos;//目標座標
 	float coreColChangeRaito = 0;//死亡時コアの色変え
 
 	uint8_t partTimeInterval;
-	uint8_t particleFrame = 39;//パーティクル出すフレ
+	uint8_t particleFrame;//パーティクル出すフレ
 
 	//縦攻撃
 	std::function<void()> verticalPattern;
@@ -218,47 +218,47 @@ private:
 	float time;
 
 	//近づく速さ
-	const float approachSpZ = 3.f;
-	const float approachSpY = 2.f;
+	float approachSpZ;
+	float approachSpY;
 	//離れる速さ
-	const float leaveSpZ = 3.f;
-	const float leaveSpY = 2.f;
+	float leaveSpZ;
+	float leaveSpY;
 
 	//この時間だけこの行動をする
-	const uint16_t approachCountDef = 150;
-	uint16_t approachCount = approachCountDef;
+	uint16_t approachCountDef;
+	uint16_t approachCount;
 
 	//------縦に揺れる攻撃F
-	const int changeVerticalCountDef = 0;//デフォ0　終わったら消してん
-	int changeVerticalCount = changeVerticalCountDef;
-	const int changeVerticalNeces = 3;//縦攻撃に移る為に必要カウント
+	int16_t changeVerticalCountDef;//デフォ0　終わったら消してん
+	int16_t changeVerticalCount;
+	int16_t changeVerticalNeces;//縦攻撃に移る為に必要カウント
 	//最初の上昇値
-	const int startVerticalValDef = -5;
-	int startVerticalVal = startVerticalValDef;
+	int16_t startVerticalValDef;
+	int16_t startVerticalVal;
 	//上昇下降速度
-	float verticalSp = 15;
+	float verticalSp;
 	//待ち時間
-	const int verticalWaitCountDef = 50;
-	int verticalWaitCount = verticalWaitCountDef;
-	const XMFLOAT3 upDownPosDef = { -600,900,0 };	//上昇下降開始座標
-	XMFLOAT3 upDownPos = upDownPosDef;
-	float upStartPosY = -350;//上昇開始Y座標
-	float downStartPosY = 1000;//下降開始Y座標
-	const float nextMoveX = 200;//UpDownの最後にXをずらす値
+	int16_t verticalWaitCountDef;
+	int16_t verticalWaitCount;
+	XMFLOAT3 upDownPosDef;	//上昇下降開始座標
+	XMFLOAT3 upDownPos;
+	float upStartPosY;//上昇開始Y座標
+	float downStartPosY;//下降開始Y座標
+	float nextMoveX;//UpDownの最後にXをずらす値
 	//UpDown時の最初に開始位置決めるフラグ false:決める前
 	bool verticalStartPosFlag = false;
 	//次の動き false:これじゃない
 	bool nextUp = false;
 	bool nextDown = true;//最初は下降
 	//UpDown何回ループさせるか
-	const int verticalLoopCountDef = 4;
-	int verticalLoopCount = verticalLoopCountDef;
+	int16_t verticalLoopCountDef;
+	int16_t verticalLoopCount;
 	//戻る行動開始座標に移動
 	XMFLOAT3 reverseStartPos;
 	//戻る行動開始座標を最初に一回やる　false:まだ
 	bool reverseStartPosFlag = false;
 	//縦攻撃用インターバル
-	static const int vertical_AtkInterval = 7;
+	int16_t vertical_AtkInterval;
 
 	//------
 
@@ -268,23 +268,23 @@ private:
 	XMFLOAT3 hpHalfMomentPos = {};
 	//まずこの位置に行く
 	XMFLOAT3 targetHpHalfPos;
-	const float necesHpHalfFrame = 100.0f;//HP半分時このフレーム分移動まで時間かかる
+	float necesHpHalfFrame;//HP半分時このフレーム分移動まで時間かかる
 
-	const float necesLeaveFirstFrame = 180.f;
+	float necesLeaveFirstFrame;
 
-	XMFLOAT4 coreCol{ 0,0,1,1 };//コアの色　最初青
+	XMFLOAT4 coreCol;//コアの色　最初青
 	//-------↑HPHALF↑------//
 
 	//------HP半分以下円運動↓
-	const float hpHalf_AngleDef = 20.f;
-	float hpHalf_Angle = hpHalf_AngleDef;
-	const float hpHalf_radDef = 100.f;
-	float hpHalf_rad = hpHalf_radDef;
+	float hpHalf_AngleDef;
+	float hpHalf_Angle;
+	float hpHalf_radDef;
+	float hpHalf_rad;
 
-	const float hpHalf_LengthDef = 10.f;//円運動の半径の長さ
-	float hpHalf_Length = hpHalf_LengthDef;
+	float hpHalf_LengthDef;//円運動の半径の長さ
+	float hpHalf_Length;
 
-	const float circularY = 40;//どの高さで回るか
+	float circularY;//どの高さで回るか
 
 	XMFLOAT3 circlePosMem;//その時の座標取得
 	//移動値

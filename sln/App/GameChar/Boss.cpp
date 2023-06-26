@@ -55,13 +55,62 @@ void Boss::Initialize()
 		plungeCount = plungeCountDef;
 		circular_AtkIntervalDef = root["circular_AtkIntervalDef"].As<uint32_t>();
 		circular_AtkInterval = circular_AtkIntervalDef;
-
-		/*auto& targetPosNode = root["targetPos"];
+		circularY = root["circularY"].As<float>();
+		hpHalf_LengthDef = root["hpHalf_LengthDef"].As<float>();
+		hpHalf_Length = hpHalf_LengthDef;
+		hpHalf_radDef = root["hpHalf_radDef"].As<float>();
+		hpHalf_rad = hpHalf_radDef;
+		hpHalf_AngleDef = root["hpHalf_AngleDef"].As<float>();
+		hpHalf_Angle = hpHalf_AngleDef;
+		auto& coreColNode = root["coreCol"];
+		coreCol = {
+			coreColNode["x"].As<float>(),
+			coreColNode["y"].As<float>(),
+			coreColNode["z"].As<float>(),
+			coreColNode["w"].As<float>()
+		};
+		necesLeaveFirstFrame = root["necesLeaveFirstFrame"].As<float>();
+		necesHpHalfFrame = root["necesHpHalfFrame"].As<float>();
+		vertical_AtkInterval = root["vertical_AtkInterval"].As<int16_t>();
+		verticalLoopCountDef = root["verticalLoopCountDef"].As<int16_t>();
+		verticalLoopCount = verticalLoopCountDef;
+		upStartPosY = root["upStartPosY"].As<float>();
+		downStartPosY = root["downStartPosY"].As<float>();
+		nextMoveX = root["nextMoveX"].As<float>();
+		auto& upDownPosDefNode = root["upDownPosDef"];
+		upDownPosDef = {
+			upDownPosDefNode["x"].As<float>(),
+			upDownPosDefNode["y"].As<float>(),
+			upDownPosDefNode["z"].As<float>()
+		};
+		upDownPos = upDownPosDef;
+		verticalWaitCountDef = root["verticalWaitCountDef"].As<int16_t>();
+		verticalWaitCount = verticalWaitCountDef;
+		verticalSp = root["verticalSp"].As<float>();
+		startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
+		startVerticalVal = startVerticalValDef;
+		changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
+		changeVerticalCountDef = root["changeVerticalCountDef"].As<int16_t>();
+		changeVerticalCount = changeVerticalCountDef;
+		approachCountDef = root["approachCountDef"].As<uint16_t>();
+		approachCount = approachCountDef;
+		approachSpZ = root["approachSpZ"].As<float>();
+		approachSpY = root["approachSpY"].As<float>();
+		leaveSpZ = root["leaveSpZ"].As<float>();
+		leaveSpY = root["leaveSpY"].As<float>();
+		particleFrame = root["particleFrame"].As<uint8_t>();
+		auto& targetPosNode = root["targetPos"];
 		targetPos = {
 			targetPosNode["x"].As<float>(),
 			targetPosNode["y"].As<float>(),
 			targetPosNode["z"].As<float>()
-		};*/
+		};
+		necesFrame = root["necesFrame"].As<float>();
+		bulPow = root["bulPow"].As<int32_t>();
+		aimBulPow = root["aimBulPow"].As<int32_t>();
+		straightBulPow = root["straightBulPow"].As<int32_t>();
+		afterPlungePatAtkCount = root["afterPlungePatAtkCount"].As<uint32_t>();
+		bossRot = root["bossRot"].As<float>();
 	}
 
 	particle.reset(new ParticleManager());
