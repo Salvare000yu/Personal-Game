@@ -18,9 +18,6 @@ public:
 	//自機喰らった
 	void SetispDam(bool ispDam) { this->ispDam = ispDam; }
 	const bool& GetispDam() { return ispDam; }
-	//ボス防御力
-	void SetBossDefense(int32_t bossDefense) { this->bossDefense = bossDefense; }
-	const int32_t& GetBossDefense() { return bossDefense; }
 	//-----------------------↑げったーせったー↑-----------------------//
 
 	const int stopPos = 1800;//自機次座標への移動の停止場所
@@ -32,7 +29,4 @@ private:
 	//自機がダメージ喰らった false:喰らってない
 	bool ispDam = false;
 
-	//防御力
-	const int32_t bossDefenseDef = 50;
-	int32_t bossDefense = bossDefenseDef;
 };

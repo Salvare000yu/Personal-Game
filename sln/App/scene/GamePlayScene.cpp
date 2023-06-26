@@ -887,7 +887,6 @@ void GamePlayScene::CollisionAll()
 {
 	CharParameters* charParams = CharParameters::GetInstance();
 
-	int32_t BossDefense = charParams->GetBossDefense();//ボス防御力取得 先頭要素
 	int32_t pBulPow = player_->GetpBulPow();//自機弾威力
 	//<<<<<<<<<<<<<<<（複数回使用）
 	//自機弾
@@ -930,7 +929,7 @@ void GamePlayScene::CollisionAll()
 			[&](BaseObject* boss) {
 				Boss* bo = (Boss*)boss;
 				//喰らってまだ生きてたら
-				const int32_t damage = pBulPow - BossDefense;
+				const int32_t damage = pBulPow - bo->GetBossDefense();
 				if (bo->GetNowBoHp() > damage) {
 					bo->SetBossDamageEffect(true);//くらい演出オン
 					bo->SetNowBoHp(bo->GetNowBoHp()-damage);//ボスHPセット

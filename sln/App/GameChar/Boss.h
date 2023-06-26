@@ -91,6 +91,10 @@ public:
 	//ボス本体にぶつかった時の威力
 	const int32_t& GetBodyPow() { return bodyPow; }
 
+	//ボス防御力
+	void SetBossDefense(int32_t bossDefense) { this->bossDefense = bossDefense; }
+	const int32_t& GetBossDefense() { return bossDefense; }
+
 	//現在ボスHP
 	void SetNowBoHp(int32_t nowBossHP) { this->nowBossHP = nowBossHP; }
 	const int32_t& GetNowBoHp() { return nowBossHP; }
@@ -183,7 +187,12 @@ private:
 	int32_t straightBulPow;
 
 	//ボス本体の威力
-	const int32_t bodyPow = 250;
+	int32_t bodyPow;
+
+	//防御力
+	int32_t bossDefenseDef;
+	int32_t bossDefense;
+	int32_t haHalfDefence;
 
 	//false：まだ死んでない
 	bool isDeath = false;

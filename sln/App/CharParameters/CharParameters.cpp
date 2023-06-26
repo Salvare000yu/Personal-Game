@@ -21,7 +21,6 @@ void CharParameters::Initialize()
 	//ｰｰ色
 
 	//パラメータ関連初期化
-	bossDefense = bossDefenseDef;
 	pNextPlaceGoFlag = true;
 
 }

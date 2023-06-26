@@ -5,6 +5,13 @@ bulPow: 200
 aimBulPow: 150
 straightBulPow: 170
 
+#防御力
+bossDefenseDef: 50
+haHalfDefence: 60 #hp半分以下になった時の防御力
+
+#本体の威力
+bodyPow: 250
+
 bossRot: 1 #ボス回転
 
 afterPlungePatAtkCount: 10 #突っ込み後行動の攻撃カウント

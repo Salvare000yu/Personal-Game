@@ -111,6 +111,10 @@ void Boss::Initialize()
 		straightBulPow = root["straightBulPow"].As<int32_t>();
 		afterPlungePatAtkCount = root["afterPlungePatAtkCount"].As<uint32_t>();
 		bossRot = root["bossRot"].As<float>();
+		bossDefenseDef = root["bossDefenseDef"].As<int32_t>();
+		bossDefense = bossDefenseDef;
+		bodyPow = root["bodyPow"].As<int32_t>();
+		haHalfDefence = root["haHalfDefence"].As<int32_t>();
 	}
 
 	particle.reset(new ParticleManager());
@@ -426,9 +430,7 @@ void Boss::HpHalfPatStart()
 		targetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
 		//防御力上がる
-		int32_t Defence = charParams->GetBossDefense();
-		Defence += 10;
-		charParams->SetBossDefense(Defence);
+		bossDefenseDef = haHalfDefence;
 	}
 
 	float raito = (float)nowframe / necesHpHalfFrame;
