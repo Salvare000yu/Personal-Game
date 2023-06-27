@@ -5,7 +5,6 @@
 #include "ComplexInput.h"
 #include "DebugText.h"
 #include "GamePlayScene.h"
-#include "CharParameters.h"
 #include "GameUtility.h"
 #include "PostEffect.h"
 
@@ -22,7 +21,6 @@ void TitleScene::Initialize()
 
 	WinApp* winApp = WinApp::GetInstance();
 
-	CharParameters* charParameters = CharParameters::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	// マウスカーソル非表示
@@ -98,7 +96,6 @@ void TitleScene::Initialize()
 	camera->SetTarget(player_->GetPosition());
 	camera->SetEye(eyeStartPos);//ここにカメラをおいて、最初の演出で自機を追いかける
 
-	charParameters->Initialize();
 	//シーン遷移演出初期化
 	sceneChangeDirection->Initialize();
 

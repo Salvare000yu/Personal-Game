@@ -2,7 +2,6 @@
 //#include "Object3d.h"
 #include "Input.h"
 #include "GameSound.h"
-#include "CharParameters.h"
 #include "DebugText.h"
 #include "DxBase.h"
 #include <yaml/Yaml.hpp>
@@ -17,8 +16,6 @@ void Player::Attack()
 {
 	//キー入力使う
 	Input* input = Input::GetInstance();
-
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//triggerkey
 	const bool TriggerSPACE = input->TriggerKey(DIK_SPACE);
@@ -114,7 +111,6 @@ void Player::Move()
 }
 
 void Player::Shake() {
-	CharParameters* charParameters = CharParameters::GetInstance();
 	Input* input = Input::GetInstance();
 
 	if (--pShakeTimer_ >= 0) {// 0まで減らす
@@ -250,7 +246,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	if (nowPlayerHp <= 0) {
 		isPHpLessThan0 = true;//自機体力が0を下回っている
@@ -316,7 +311,6 @@ void Player::Update()
 
 void Player::Draw()
 {
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {

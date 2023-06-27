@@ -6,7 +6,6 @@
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "DxBase.h"
-#include "CharParameters.h"
 #include "Pause.h"
 #include "SceneChangeDirection.h"
 #include "GameUtility.h"
@@ -61,8 +60,6 @@ void GamePlayScene::Initialize()
 
 	//デバイスをセット
 	FbxObject3d::SetDevice(DxBase::GetInstance()->GetDevice());
-
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//時間
 	time = (float)frame / 60.f;	// 60fps想定
@@ -229,8 +226,6 @@ void GamePlayScene::Initialize()
 
 	sprite_back->TransferVertexBuffer();
 
-	charParameters->Initialize();
-
 	//スプライトポジション
 	sprite_back->SetPosition({ -11400,0,0 });
 	sp_playerhpbar->SetPosition({ 70,520,0 });
@@ -315,84 +310,6 @@ void GamePlayScene::SmallEnemyAimBul()
 		//ターゲット
 		se->SetShotTag(player_.get());
 	}
-}
-
-void GamePlayScene::DoorOpen()
-{
-	int LDoorPosXRim = -2200;//左の壁開け終わる場所
-	int DoorMoveSp = 6;//ドアが開く速度
-
-	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
-	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
-
-	//左の壁が一定行ったら終わり
-	if (LDoorPos.x < LDoorPosXRim) {
-		doorOpenFlag = true;
-	}
-	else {
-		LDoorPos.x -= DoorMoveSp;
-		RDoorPos.x += DoorMoveSp;
-	}
-	obj_kabeleft->SetPosition(LDoorPos);
-	obj_kaberight->SetPosition(RDoorPos);
-}
-
-void GamePlayScene::BeforeBossAppear()
-{
-	//演出中時のみtrue
-	beforeBossAppearNow = true;
-
-	const uint32_t BBPaternCountNum = 2;
-
-	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
-
-	//--繰り返す回数0~------消えてからボス戦へ
-	if (bBPaternCount == BBPaternCountNum && SP_BossWarning.w < 0.0)
-	{
-		beforeBossAppearFlag = true;
-	}
-
-	beforeBossPattern();
-}
-void GamePlayScene::BeforeBossAppearDef()
-{
-	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
-
-	if (alertSoundFlag) {
-		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
-		alertSoundFlag = false;
-	}
-	SP_BossWarning.w -= WarningW;
-	if (SP_BossWarning.w < 0.0f) {
-		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
-	}
-	sp_beforeboss->SetColor(SP_BossWarning);
-}
-void GamePlayScene::BeforeBossAppearInc()
-{
-	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
-
-	SP_BossWarning.w += WarningW;
-	if (SP_BossWarning.w > 1.0f) {
-		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDec, this);
-		alertSoundFlag = true;
-		bBPaternCount++;//繰り返す回数
-	}
-	sp_beforeboss->SetColor(SP_BossWarning);
-}
-void GamePlayScene::BeforeBossAppearDec()
-{
-	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
-
-	if (alertSoundFlag) {
-		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
-		alertSoundFlag = false;
-	}
-	SP_BossWarning.w -= WarningW;
-	if (SP_BossWarning.w < 0.0) {
-		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
-	}
-	sp_beforeboss->SetColor(SP_BossWarning);
 }
 
 void GamePlayScene::BossDeathEffect()
@@ -622,7 +539,6 @@ void GamePlayScene::PlayerDash()
 
 void GamePlayScene::pHeadingToTheNextPlace()
 {
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	//攻撃できないように
 	player_->SetAtkPossible(false);
@@ -870,6 +786,84 @@ void GamePlayScene::BossHpDanger()
 	sp_enemyhpbar->TransferVertexBuffer();
 }
 
+void GamePlayScene::DoorOpen()
+{
+	int LDoorPosXRim = -2200;//左の壁開け終わる場所
+	int DoorMoveSp = 6;//ドアが開く速度
+
+	XMFLOAT3 LDoorPos = obj_kabeleft->GetPosition();
+	XMFLOAT3 RDoorPos = obj_kaberight->GetPosition();
+
+	//左の壁が一定行ったら終わり
+	if (LDoorPos.x < LDoorPosXRim) {
+		doorOpenFlag = true;
+	}
+	else {
+		LDoorPos.x -= DoorMoveSp;
+		RDoorPos.x += DoorMoveSp;
+	}
+	obj_kabeleft->SetPosition(LDoorPos);
+	obj_kaberight->SetPosition(RDoorPos);
+}
+void GamePlayScene::BeforeBossAppear()
+{
+	//演出中時のみtrue
+	beforeBossAppearNow = true;
+
+	const uint32_t BBPaternCountNum = 2;
+
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	//--繰り返す回数0~------消えてからボス戦へ
+	if (bBPaternCount == BBPaternCountNum && SP_BossWarning.w < 0.0)
+	{
+		beforeBossAppearFlag = true;
+	}
+
+	beforeBossPattern();
+}
+void GamePlayScene::BeforeBossAppearDef()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	if (alertSoundFlag) {
+		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.1f, 0);
+		alertSoundFlag = false;
+	}
+	SP_BossWarning.w -= WarningW;
+	if (SP_BossWarning.w < 0.0f) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
+	}
+	sp_beforeboss->SetColor(SP_BossWarning);
+}
+void GamePlayScene::BeforeBossAppearInc()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	SP_BossWarning.w += WarningW;
+	if (SP_BossWarning.w > 1.0f) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearDec, this);
+		alertSoundFlag = true;
+		bBPaternCount++;//繰り返す回数
+	}
+	sp_beforeboss->SetColor(SP_BossWarning);
+}
+void GamePlayScene::BeforeBossAppearDec()
+{
+	XMFLOAT4 SP_BossWarning = sp_beforeboss->GetColor();
+
+	if (alertSoundFlag) {
+		GameSound::GetInstance()->PlayWave("personalgame_bosswarning.wav", 0.3f, 0);
+		alertSoundFlag = false;
+	}
+	SP_BossWarning.w -= WarningW;
+	if (SP_BossWarning.w < 0.0) {
+		beforeBossPattern = std::bind(&GamePlayScene::BeforeBossAppearInc, this);
+	}
+	sp_beforeboss->SetColor(SP_BossWarning);
+}
+
+
 void GamePlayScene::PlayerErase()
 {
 	GameSound::GetInstance()->PlayWave("playerdeath.wav", 0.3f, 0);
@@ -878,7 +872,6 @@ void GamePlayScene::PlayerErase()
 
 void GamePlayScene::PlayerDamage()
 {
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	pDamFlag = true;
 
@@ -888,7 +881,6 @@ void GamePlayScene::PlayerDamage()
 }
 void GamePlayScene::CollisionAll()
 {
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	int32_t pBulPow = player_->GetpBulPow();//自機弾威力
 	//<<<<<<<<<<<<<<<（複数回使用）
@@ -1240,7 +1232,6 @@ void GamePlayScene::PauseOpen()
 
 void GamePlayScene::GameReadyUpdate()
 {
-	CharParameters* charParameters = CharParameters::GetInstance();
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 
 	XMFLOAT4 ReadyCol = sp_ready->GetColor();
@@ -1338,8 +1329,6 @@ void GamePlayScene::BossBattleReadyUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 
-	CharParameters* charParams = CharParameters::GetInstance();
-
 	//雑魚敵更新
 	for (auto& bo : boss_) {
 		if (!bo->GetBossEnemyAdvent()) {
@@ -1375,8 +1364,6 @@ void GamePlayScene::BossBattleUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 	PlayerHpUpdate();//自機HPバー
-
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	//敵のHPバー
 	for (auto& bo : boss_) {
@@ -1415,7 +1402,6 @@ void GamePlayScene::Update()
 
 	Pause* pause = Pause::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	if (pause->GetPauseFlag()) {
 		PauseOpen();
@@ -1509,7 +1495,6 @@ void GamePlayScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = DxBase::GetInstance()->GetCmdList();
 
-	CharParameters* charParameters = CharParameters::GetInstance();
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 	//// スプライト描画
@@ -1555,8 +1540,6 @@ void GamePlayScene::DrawUI()
 {
 	//// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
-
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	//---------------お手前スプライト描画
 	Pause* pause = Pause::GetInstance();
@@ -1609,5 +1592,4 @@ void GamePlayScene::DrawUI()
 		pDamFlag = false;
 	}
 
-	charParameters->DrawUI();
 }

@@ -167,7 +167,6 @@
     <ClCompile Include="App\GameChar\BossStraightBul.cpp" />
     <ClCompile Include="Engine\input\ComplexInput.cpp" />
     <ClCompile Include="App\GameChar\PlayerFireLine.cpp" />
-    <ClCompile Include="App\CharParameters\CharParameters.cpp" />
     <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
     <ClCompile Include="App\Pause\Pause.cpp" />
     <ClCompile Include="App\SceneChangeDirection\SceneChangeDirection.cpp" />
@@ -298,7 +297,6 @@
     <ClInclude Include="Engine\Collision\CollisionPrimitive.h" />
     <ClInclude Include="Engine\input\ComplexInput.h" />
     <ClInclude Include="App\GameChar\PlayerFireLine.h" />
-    <ClInclude Include="App\CharParameters\CharParameters.h" />
     <ClInclude Include="Engine\Particle\ParticleManager.h" />
     <ClInclude Include="App\Pause\Pause.h" />
     <ClInclude Include="App\SceneChangeDirection\SceneChangeDirection.h" />

@@ -4,7 +4,6 @@
 #include "GameSound.h"
 #include "DebugText.h"
 #include "ParticleManager.h"
-#include "CharParameters.h"
 #include "DxBase.h"
 #include "GameUtility.h"
 #include <yaml/Yaml.hpp>
@@ -191,7 +190,6 @@ void Boss::Initialize()
 
 void Boss::BossAppear()
 {
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	XMFLOAT3 pos = obj->GetPosition();
 
@@ -406,7 +404,6 @@ void Boss::EndVertical()
 
 void Boss::HpHalfPatStart()
 {
-	CharParameters* charParams = CharParameters::GetInstance();
 
 	nowframe++;
 
@@ -761,7 +758,6 @@ void Boss::AfterPlungeFin()
 }
 
 void Boss::Shake() {
-	CharParameters* charParameters = CharParameters::GetInstance();
 	//pos揺らす
 	XMFLOAT3 pos = obj->GetPosition();
 
@@ -1037,7 +1033,6 @@ void Boss::AlwaysmMotion()
 void Boss::Update()
 {
 	Input* input = Input::GetInstance();
-	CharParameters* charParameters = CharParameters::GetInstance();
 
 	const bool input3 = input->PushKey(DIK_3);
 
