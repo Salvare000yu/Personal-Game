@@ -24,15 +24,15 @@ public:
 	void Draw();
 
 	//シーン遷移フラグ　false:してない
-	bool sceneChangeDirectionFlag;
+	bool sceneChangeDirectionFlag = false;
 	//シーン遷移完了　false:完了前
-	bool sceneChangeCompFlag;
+	bool sceneChangeCompFlag = false;
 	//画面隠す　false:隠し始める前
-	bool hideTheScreenFlag;
+	bool hideTheScreenFlag = false;
 	//playsceneが始まり演出始める　false:まだ
-	bool gameReadyStartFlag;
+	bool gameReadyStartFlag = false;
 	//開き切った　false:開く前
-	bool openTheScreenFlag;
+	bool openTheScreenFlag = false;
 
 private:
 

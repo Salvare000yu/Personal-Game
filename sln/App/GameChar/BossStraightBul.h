@@ -10,11 +10,6 @@
 class BossStraightBul :public BaseObject
 {
 private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
 
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -23,10 +18,6 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-
-	float frame = 0;
-
-	XMFLOAT3 velocity{ 0,0,0 };
 
 public:
 	//初期化
@@ -43,6 +34,9 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
+	float frame = 0;
+
+	XMFLOAT3 velocity{ 0,0,0 };
 
 	//消えるまで
 	static const int32_t bulVanishTime = 60 * 7;//寿命

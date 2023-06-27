@@ -10,12 +10,6 @@ class SmallEnemyBullet :public BaseObject
 {
 private:
 
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//自機
-
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//自機
-
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::を省略
@@ -23,10 +17,6 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-
-	//float frame = 0;
-
-	XMFLOAT3 velocity{ 0,0,0 };
 
 public:
 	//初期化
@@ -49,6 +39,8 @@ public:
 
 	//消滅の宣告
 	int32_t vanishTimer_ = BulVanishTime;
+
+	XMFLOAT3 velocity{ 0,0,0 };
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 

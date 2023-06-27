@@ -23,10 +23,6 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	float frame = 0;
-
-	XMFLOAT3 velocity{ 0,0,0 };
-
 public:
 	//初期化
 	void Initialize()override;
@@ -42,6 +38,9 @@ public:
 	std::unique_ptr<Camera> camera; //カメラ
 
 	float time;
+	float frame = 0;
+
+	XMFLOAT3 velocity{ 0,0,0 };
 
 	//消えるまで
 	static const int32_t bulVanishTime = 60 * 9;//寿命

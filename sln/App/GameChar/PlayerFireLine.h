@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "BaseObject.h"
 
 #include <memory>
@@ -6,15 +6,10 @@
 class PlayerFireLine :public BaseObject
 {
 private:
-	////-----------------model
-	//std::unique_ptr < Model> mod_classplayer = nullptr;//©‹@
 
-	////-----------------obj
-	//std::unique_ptr < Object3d> obj_classplayer = nullptr;//©‹@
-
-	// Microsoft::WRL::‚ğÈ—ª
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -23,16 +18,16 @@ private:
 	XMFLOAT3 velocity{ 0,0,6 };
 
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize()override;
 
-	//XV
+	//æ›´æ–°
 	void Update()override;
 
-	//•`‰æ
+	//æç”»
 	void Draw()override;
 
-	std::unique_ptr<Camera> camera; //ƒJƒƒ‰
+	std::unique_ptr<Camera> camera; //ã‚«ãƒ¡ãƒ©
 
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 

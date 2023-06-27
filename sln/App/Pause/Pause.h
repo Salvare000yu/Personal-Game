@@ -4,7 +4,7 @@
 #include "Sprite.h"
 #include "BaseScene.h"
 
-class Pause :public BaseScene, public BaseObject
+class Pause :public BaseScene
 {
 public:
 	static Pause* GetInstance();
@@ -43,6 +43,7 @@ public:
 	//-------------↑げったーせったー↑--------------//
 
 	int WaitKeyP = 0;//０だけでポーズ開閉できるように
+
 private:
 	std::unique_ptr < Sprite> sp_openpause = nullptr;
 	std::unique_ptr < Sprite> sp_pause = nullptr;
@@ -61,4 +62,5 @@ private:
 	bool operWindOpenFlag = false;//開いていない
 
 	bool sceneChangeTitleFlag = false;//タイトルへ
+
 };

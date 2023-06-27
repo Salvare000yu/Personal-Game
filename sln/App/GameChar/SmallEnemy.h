@@ -48,13 +48,6 @@ public:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
-	//左右に捌ける
-	static const int32_t retireFrameDef = 120;
-	int32_t retireFrame = retireFrameDef;
-
-	//雑魚敵行動パターン
-	std::function<void()>smallEnemyActionPattern;
-
 	std::forward_list <std::unique_ptr<SmallEnemyBullet>> bullets_;//プレイヤーの弾　ユニークポインタ
 
 	//-----------------↓げったーせったー↓------------------//
@@ -70,9 +63,6 @@ public:
 	inline void SetShotTag(BaseObject* shotTag) { this->shotTag = shotTag; }
 	//-----------------↑げったーせったー↑------------------//
 
-	//フレームごとに発射
-	static const uint8_t atkInterval = 90;
-
 private:
 
 	// Microsoft::WRL::を省略
@@ -82,6 +72,9 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+
+	//フレームごとに発射
+	static const uint8_t atkInterval = 90;
 
 	//SEneXの乱数入れる変数
 	float sEneRandX = 0;
@@ -103,4 +96,11 @@ private:
 	const float retireSp = 3.f;
 	const float rotSp = 1.f;//傾け速度
 	const float rotMax = 10.f;//どこまで傾けるか
+
+	//左右に捌ける
+	static const int32_t retireFrameDef = 120;
+	int32_t retireFrame = retireFrameDef;
+
+	//雑魚敵行動パターン
+	std::function<void()>smallEnemyActionPattern;
 };

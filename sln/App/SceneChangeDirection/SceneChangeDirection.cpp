@@ -18,11 +18,6 @@ void SceneChangeDirection::Initialize()
 
 	sp_scenechange->SetPosition({ 1280,0,0 });
 
-	sceneChangeDirectionFlag = false;
-	sceneChangeCompFlag = false;
-	hideTheScreenFlag = false;
-	gameReadyStartFlag = false;
-	openTheScreenFlag = false;
 }
 
 void SceneChangeDirection::HideTheScreen()

@@ -53,16 +53,7 @@ public:
 	void Draw() override;
 	void DrawUI() override;
 
-	bool pAppearFlag = true;//自機登場フラグ　true：登場中
-	float sp = 1.5;
-	float startSp = 1.5;
-
-	bool sceneChangeFlag = false;//シーンチェンジ開始前
-
 	std::unique_ptr < Player> player_ = nullptr;
-
-	float time = 0;
-	float frame = 0;
 
 private:
 
@@ -88,6 +79,16 @@ private:
 	std::unique_ptr < Object3d> obj_logo = nullptr;//タイトルロゴ
 
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
+
+	float time = 0;
+	float frame = 0;
+
+	bool pAppearFlag = true;//自機登場フラグ　true：登場中
+	float sp = 1.5;
+	float startSp = 1.5;
+
+	bool sceneChangeFlag = false;//シーンチェンジ開始前
+
 	//---地面
 	//地面二種類を上下に揺らす
 	const float swingDist = 10.f;//揺らす距離

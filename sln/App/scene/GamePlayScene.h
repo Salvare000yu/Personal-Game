@@ -167,12 +167,12 @@ private:
 	bool pTracking = false;//true:自機追従中
 
 	//雑魚敵出現用カウント
-	float sEneAppCount = 0;
+	int32_t sEneAppCount = 0;
 
 	//敵撃破数
-	float sEnemyMurdersNum = 0;
+	uint32_t sEnemyMurdersNum = 0;
 	//ボス戦までの敵殺害必要数 8
-	float bossTermsEMurdersNum = 0;
+	uint32_t NeededBeforeBossBattleNum;
 	//ボス出現前演出フラグ
 	bool beforeBossAppearFlag = false;
 	//true:今やってる
@@ -180,7 +180,7 @@ private:
 
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
 	bool bodyDamFlag = false;
-	//↑のクールタイムカウント
+	//クールタイムカウント
 	const int bodyDamCountDef = 30;
 	uint32_t bodyDamCount = bodyDamCountDef;
 
@@ -225,22 +225,22 @@ private:
 	//false:してない
 	bool dashFlag = false;
 	//ダッシュ時間
-	const uint32_t dashCountDef = 30;
-	uint32_t dashCount = dashCountDef;
+	uint32_t dashCountDef;
+	uint32_t dashCount;
 	//ダッシュカウントがこの分引いた値になったら減衰
-	const int dashAttenuation = 10;
+	int16_t dashAttenuation;
 	bool dashAttenuationFlag = false;//減衰開始 fasle:まだしてない
 	//減衰数値
-	float attenuation = -0.2f;
+	float attenuation;
 	//ダッシュクールインターバル
-	const int dashIntervalDef = 40;
-	int dashInterval = dashIntervalDef;
+	uint16_t dashIntervalDef;
+	uint16_t dashInterval;
 	bool dashIntervalFlag = false;//false:計測前 true:ダッシュできない時
 	//ダッシュ速度
 	DirectX::XMFLOAT3 dashVel = { 0,0,0 };
 	//実際に増やす値
-	const float dashVelIncDef = 6;
-	float dashVelInc = dashVelIncDef;
+	float dashVelIncDef;
+	float dashVelInc;
 
 	//----自機ダッシュ
 
@@ -249,7 +249,7 @@ private:
 	std::function<void()> updatePattern;
 
 	//指定フレームごとに雑魚出現
-	static const int sEneAppInterval = 60;
+	int16_t sEneAppInterval;
 
 	std::forward_list <std::unique_ptr<SmallEnemy>> smallEnemys_;
 	std::forward_list <std::unique_ptr<Boss>> boss_;
@@ -272,14 +272,14 @@ private:
 	PlayerDashDirection playerDashDirection_ = PlayerDashDirection::def;
 
 	//------自機HPスプライト点滅
-	int pHpBarFrameDef;//透明じゃない時間
-	int pHpBarFrame;
+	int32_t pHpBarFrameDef;//透明じゃない時間
+	int32_t pHpBarFrame;
 
 	bool pHpBarFlag = false;//自機Hpバー false:非表示
 
 	//bossHPバー色変えるパターン
 	std::function<void()> boHpColorPattern;
 	//------ボスHPスプライト点滅
-	int32_t boHpBarFrameDef = 20;//透明じゃない時間
-	int32_t boHpBarFrame = boHpBarFrameDef;
+	int32_t boHpBarFrameDef;//透明じゃない時間
+	int32_t boHpBarFrame;
 };

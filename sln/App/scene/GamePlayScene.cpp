@@ -44,8 +44,20 @@ void GamePlayScene::Initialize()
 			throw;
 		}
 
-		pHpBarFrameDef = root["pHpBarFrameDef"].As<uint32_t>();//自機Hpバー点滅間隔
+		pHpBarFrameDef = root["pHpBarFrameDef"].As<int32_t>();//自機Hpバー点滅間隔
 		pHpBarFrame = pHpBarFrameDef;
+		boHpBarFrameDef = root["boHpBarFrameDef"].As<int32_t>();//ボスHpバー点滅間隔
+		boHpBarFrame = boHpBarFrameDef;
+		NeededBeforeBossBattleNum = root["NeededBeforeBossBattleNum"].As<uint32_t>();//自機Hpバー点滅間隔
+		sEneAppInterval = root["sEneAppInterval"].As<int16_t>();
+		dashVelIncDef = root["dashVelIncDef"].As<float>();
+		dashVelInc = dashVelIncDef;
+		dashIntervalDef = root["dashIntervalDef"].As<uint16_t>();
+		dashInterval = dashIntervalDef;
+		attenuation = root["attenuation"].As<float>();
+		dashAttenuation = root["dashAttenuation"].As<int16_t>();
+		dashCountDef = root["dashCountDef"].As<uint32_t>();
+		dashCount = dashCountDef;
 	}
 
 	camera.reset(new CameraTracking());
@@ -465,8 +477,6 @@ void GamePlayScene::PlayerDash()
 	}
 	//ダッシュスタート
 	if (dashFlag) {
-		//ダッシュする時間
-		dashCount--;
 
 		//まだ方向決める前なら
 		//ダッシュ中に反対方向押してもそっち方向にダッシュできないようにする目的で一回決めた方向にしかダッシュできないように
@@ -503,7 +513,7 @@ void GamePlayScene::PlayerDash()
 			dashVel.x = -dashVelInc;
 		}
 		//現ダッシュ時間が減衰開始時間になったら
-		if (dashCount == (dashCountDef - dashAttenuation)) {
+		if (--dashCount == (dashCountDef - dashAttenuation)) {
 			dashAttenuationFlag = true;//減衰開始
 		}
 
@@ -916,34 +926,34 @@ void GamePlayScene::CollisionAll()
 	//>>>>>>>>>>>>>>（複数回使用）
 
 	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
-	if (player_->GetPlayerHp() > 0) {
-		CollisionManager::CheckHitFromColliderList(
-			pbColliders,
-			pbHitFunc,
-			boColliders,
-			[&](BaseObject* boss) {
-				Boss* bo = (Boss*)boss;
-				if (bo->GetBossEnemyAdvent()) {
-					//喰らってまだ生きてたら
-					const int32_t damage = pBulPow - bo->GetBossDefense();
-					if (bo->GetNowBoHp() > damage) {
-						bo->SetBossDamageEffect(true);//くらい演出オン
-						bo->SetNowBoHp(bo->GetNowBoHp() - damage);//ボスHPセット
-						particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
-					}
-					else {
-						bo->SetNowBoHp(0);//ボスHPセット
-						bo->SetisDeath(true);
-						pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
-						//残っている雑魚敵はもういらない
-						for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
-							bob->SetAlive(false);//消す
+	for (auto& bo : boss_) {
+		if (player_->GetPlayerHp() > 0&& bo->GetBossEnemyAdvent()) {
+			CollisionManager::CheckHitFromColliderList(
+				pbColliders,
+				pbHitFunc,
+				boColliders,
+				[&](BaseObject* boss) {
+						Boss* bo = (Boss*)boss;
+						//喰らってまだ生きてたら
+						const int32_t damage = pBulPow - bo->GetBossDefense();
+						if (bo->GetNowBoHp() > damage) {
+							bo->SetBossDamageEffect(true);//くらい演出オン
+							bo->SetNowBoHp(bo->GetNowBoHp() - damage);//ボスHPセット
+							particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
 						}
-						GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
-					}
-					GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
-				}
-			});
+						else {
+							bo->SetNowBoHp(0);//ボスHPセット
+							bo->SetisDeath(true);
+							pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
+							//残っている雑魚敵はもういらない
+							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
+								bob->SetAlive(false);//消す
+							}
+							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
+						}
+						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
+				});
+		}
 	}
 
 	//[自機の弾]と[雑魚敵]当たり判定
@@ -1317,7 +1327,7 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 	}
 
 	//撃破数達成
-	if (sEnemyMurdersNum >= bossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= NeededBeforeBossBattleNum) {
 		//ボス戦前演出
 		updatePattern = std::bind(&GamePlayScene::BossBattleReadyUpdate, this);
 	}
@@ -1519,7 +1529,7 @@ void GamePlayScene::Draw()
 	obj_backwall->Draw();
 
 	//敵描画
-	if (sEnemyMurdersNum >= bossTermsEMurdersNum) {
+	if (sEnemyMurdersNum >= NeededBeforeBossBattleNum) {
 		for (std::unique_ptr<Boss>& boss : boss_) {
 			boss->Draw();
 		}
