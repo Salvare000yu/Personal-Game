@@ -146,9 +146,9 @@ private:
 
 	//---地面
 	//地面二種類を上下に揺らす
-	const float swingDist = 10.f;//揺らす距離
-	const float swingSp = 4.f;//揺らす速度
-	float groundPosDef = -200;//地面を置く座標　ここ中心に上下
+	float swingDist ;//揺らす距離
+	float swingSp;//揺らす速度
+	float groundPosDef;//地面を置く座標　ここ中心に上下
 
 	//<<<<<開始時演出
 	//ゲーム開始時フレーム
@@ -171,7 +171,7 @@ private:
 
 	//敵撃破数
 	uint32_t sEnemyMurdersNum = 0;
-	//ボス戦までの敵殺害必要数 8
+	//ボス戦までの敵殺害必要数
 	uint32_t NeededBeforeBossBattleNum;
 	//ボス出現前演出フラグ
 	bool beforeBossAppearFlag = false;
@@ -181,8 +181,8 @@ private:
 	//ボスの体と衝突ダメージクールタイム false:喰らう前
 	bool bodyDamFlag = false;
 	//クールタイムカウント
-	const int bodyDamCountDef = 30;
-	uint32_t bodyDamCount = bodyDamCountDef;
+	uint16_t bodyDamCountDef;
+	uint16_t bodyDamCount;
 
 	int randShakeDef = 0;
 	int randShakeNow = randShakeDef;
@@ -191,15 +191,17 @@ private:
 
 	bool alertSoundFlag = true;//警告音繰り返しに一回のみ
 
-	const float WarningW = 0.03f;//透明度変化値
+	float WarningW;//透明度変化値
 
 	bool pRotDef = false;//カメラ最初にマウスの場所でズレちゃうから一度正面に向ける
 
-	uint32_t pClearMoveCount = 120;//ボス撃破から自機移動開始まで
+	uint32_t pClearMoveCount;//ボス撃破から自機移動開始まで
 	uint32_t clearPMoveFrame = 0;//クリア演出自機移動ふれ
 	DirectX::XMFLOAT3 pBossBattlePos;
 	uint32_t pRotReturnFrame = 0;
+	uint32_t pRotReturnFrameMax;//この時間かけて戻す
 	DirectX::XMFLOAT3 pClearRot;//ボス撃破時自機回転
+	uint32_t clearMoveFrame;//クリア時この時間かけて移動する
 
 	std::function<void()> playerHpBarPattern;//自機HPばー
 
@@ -219,7 +221,7 @@ private:
 
 	std::vector<std::vector<std::string>> SmallEnemyCsvData;
 	//何行目まで出したか
-	int seIndex = -1;
+	int32_t seIndex;
 
 	//----自機ダッシュ
 	//false:してない

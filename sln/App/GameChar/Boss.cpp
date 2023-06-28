@@ -427,7 +427,7 @@ void Boss::HpHalfPatStart()
 		targetHpHalfPos = { 0,0,pPos.z + SpaceDistance };
 
 		//防御力上がる
-		bossDefenseDef = haHalfDefence;
+		bossDefense = haHalfDefence;
 	}
 
 	float raito = (float)nowframe / necesHpHalfFrame;

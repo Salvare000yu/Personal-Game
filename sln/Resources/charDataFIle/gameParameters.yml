@@ -9,8 +9,23 @@ dashCountDef: 30 #ダッシュ時間
 
 sEneAppInterval: 60 #指定フレームごとに雑魚出現
 
+bodyDamCountDef: 30 #ボス体ダメージクールタイムカウント
+
 pHpBarFrameDef: 20 #HPバー点滅間隔
 boHpBarFrameDef: 20 #HPボスバー点滅間隔
+
+seIndex: -1 #何行目まで出したか
+
+pClearMoveCount: 120 #ボス撃破から自機移動開始まで
+pRotReturnFrameMax: 60 #この時間かけて戻す
+clearMoveFrame: 120 #クリア時この時間かけて移動する
+
+WarningW: 0.03 #ボス戦前の警告透明変化値
+
+#地面の動き
+swingDist: 10 #揺らす距離
+swingSp: 4 #揺らす速度
+groundPosDef: -200 #地面を置く座標　ここ中心に上下
 
 #雑魚敵出現位置
 SmallEnemyCsvData : |

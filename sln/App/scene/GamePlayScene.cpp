@@ -58,6 +58,17 @@ void GamePlayScene::Initialize()
 		dashAttenuation = root["dashAttenuation"].As<int16_t>();
 		dashCountDef = root["dashCountDef"].As<uint32_t>();
 		dashCount = dashCountDef;
+		seIndex = root["seIndex"].As<int32_t>();
+		pClearMoveCount = root["pClearMoveCount"].As<uint32_t>();
+		pRotReturnFrameMax = root["pRotReturnFrameMax"].As<uint32_t>();
+		clearMoveFrame = root["clearMoveFrame"].As<uint32_t>();
+		bodyDamCountDef = root["bodyDamCountDef"].As<uint16_t>();
+		bodyDamCount = bodyDamCountDef;
+		swingDist = root["swingDist"].As<float>();
+		swingSp = root["swingSp"].As<float>();
+		groundPosDef = root["groundPosDef"].As<float>();
+		WarningW = root["WarningW"].As<float>();
+
 		SmallEnemyCsvData = GameUtility::LoadCsvFromString(root["SmallEnemyCsvData"].As<std::string>(), true, ',', "#");
 	}
 
@@ -326,11 +337,10 @@ void GamePlayScene::SmallEnemyAimBul()
 void GamePlayScene::BossDeathEffect()
 {
 	{
-		const uint32_t frameMax = 60;//この時間かけて戻す
-		if (!(pRotReturnFrame == frameMax)) {
+		if (!(pRotReturnFrame == pRotReturnFrameMax)) {
 			//カメラ回転と自機の回転同時戻す
 			pRotReturnFrame++;
-			float raito = (float)pRotReturnFrame / frameMax;
+			float raito = (float)pRotReturnFrame / pRotReturnFrameMax;
 			//自機を正面に
 			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, raito));
 		}//回転戻し終わったらもう移動攻撃しない
@@ -343,9 +353,8 @@ void GamePlayScene::BossDeathEffect()
 	}
 
 	if (pClearMoveCount == 0) {
-		const uint32_t frameMax = 120;//この時間かけて移動する
 		const float pClearMoveEndPos = pBossBattlePos.z + 2000;//ここまで移動
-		float raito = (float)clearPMoveFrame / frameMax;
+		float raito = (float)clearPMoveFrame / clearMoveFrame;
 		++clearPMoveFrame;
 		//クリア時前へ進む
 		player_->SetPosition({
