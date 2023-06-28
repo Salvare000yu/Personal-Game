@@ -7,6 +7,7 @@
 #include "GamePlayScene.h"
 #include "GameUtility.h"
 #include "PostEffect.h"
+#include <yaml/Yaml.hpp>
 
 using namespace DirectX;
 
@@ -17,6 +18,23 @@ namespace {
 
 void TitleScene::Initialize()
 {
+	//ymlデータ
+	{
+		Yaml::Node root;
+		try
+		{
+			Yaml::Parse(root, "Resources/charDataFile/title.yml");
+		}
+		catch (...)
+		{
+			throw;
+		}
+
+		RotSp = root["RotSp"].As<float>();
+		RotMax = root["RotMax"].As<float>();
+		PosYSp = root["PosYSp"].As<int16_t>();
+		PosYMax = root["PosYMax"].As<int16_t>();
+	}
 #pragma region 描画初期化処理
 
 	WinApp* winApp = WinApp::GetInstance();
@@ -113,7 +131,7 @@ void TitleScene::Initialize()
 	// スプライトの生成
 	sp_titleoper.reset(Sprite::Create(3, XMFLOAT3(0, 0, 0), { 0,0 }, { 1,1,1,1 }, { 0, 0 }, false, false));
 
-	//スプライトポジション
+	logoPattern = std::bind(&TitleScene::RightRot, this);//ロゴの動き
 
 #pragma endregion 描画初期化処理
 }
@@ -236,56 +254,51 @@ void TitleScene::ToStartSprite()
 
 void TitleScene::LogoMove()
 {
-	XMFLOAT3 rot = obj_logo->GetRotation();
-	XMFLOAT3 pos = obj_logo->GetPosition();
-
-	constexpr float RotSp = 0.03f;//回転速度
-	constexpr float RotMax = 1.7f;//どこまで回転するか
-	constexpr int PosYSp = 5;//上にずらす値
-	constexpr int PosYMax = 300;//Y座標の最大値
-
-	switch (logoPattern_) {
-	case LogoPattern::def:
-		if (pAppearFlag == false) {//登場が終わったら
-			logoPattern_ = LogoPattern::rightRot;
-		}
-		break;
-
-	case LogoPattern::rightRot:
-		logoRotVel = -RotSp;
-		if (rot.y <= -RotMax) {//最大値まで回転したら
-			logoPattern_ = LogoPattern::leftRot;//次左回転
-		}
-		break;
-
-	case LogoPattern::leftRot:
-		logoRotVel = RotSp;
-		if (rot.y >= RotMax) {//最大値まで回転したら
-			logoPattern_ = LogoPattern::rightRot;//次右回転
-		}
-		break;
-
-	case LogoPattern::beforeNextScene:
-		logoRotVel = 0;
-		pos.y = std::min(pos.y, (float)PosYMax);//Y座標はPosYMaxまでしかいけないように
-		pos.y += PosYSp;
-		break;
+	if (pAppearFlag == false) {//登場が終わったら
+		logoPattern();
 	}
 
 	//シーンチェンジフラグ経ってなかったら上下移動
 	if (!sceneChangeFlag) {
+		XMFLOAT3 pos = obj_logo->GetPosition();
 		pos.y += 0.2f * std::sin(time * XM_PI);
+		obj_logo->SetPosition(pos);
 	}
 	else {
 		//シーンチェンジ開始したら
-		logoPattern_ = LogoPattern::beforeNextScene;
+		logoPattern = std::bind(&TitleScene::BeforeNextScene, this);
 	}
 
-	rot.y += logoRotVel;
-	obj_logo->SetRotation(rot);
-	obj_logo->SetPosition(pos);
+	obj_logo->SetRotation({ obj_logo->GetRotation().x, obj_logo->GetRotation().y + logoRotVel, obj_logo->GetRotation().z });
 
 	time = frame++ / 60.f;
+}
+void TitleScene::RightRot()
+{
+	XMFLOAT3 rot = obj_logo->GetRotation();
+	logoRotVel = -RotSp;
+	if (rot.y <= -RotMax) {//最大値まで回転したら
+		logoPattern = std::bind(&TitleScene::LeftRot, this);
+	}
+	obj_logo->SetRotation(rot);
+}
+
+void TitleScene::LeftRot()
+{
+	XMFLOAT3 rot = obj_logo->GetRotation();
+	logoRotVel = RotSp;
+	if (rot.y >= RotMax) {//最大値まで回転したら
+		logoPattern = std::bind(&TitleScene::RightRot, this);
+	}
+	obj_logo->SetRotation(rot);
+}
+void TitleScene::BeforeNextScene()
+{
+	XMFLOAT3 pos = obj_logo->GetPosition();
+	logoRotVel = 0;
+	pos.y = std::min(pos.y, (float)PosYMax);//Y座標はPosYMaxまでしかいけないように
+	pos.y += PosYSp;
+	obj_logo->SetPosition(pos);
 }
 
 void TitleScene::Update()

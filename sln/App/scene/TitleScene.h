@@ -16,13 +16,6 @@
 
 class TitleScene :public BaseScene
 {
-	//ロゴの動き
-	enum class LogoPattern {
-		def,
-		rightRot,
-		leftRot,
-		beforeNextScene,//シーン遷移前
-	};
 
 	//待機中回転
 	enum class StandbyRotPattern {
@@ -45,6 +38,11 @@ public:
 	void NextScene();
 	void ToStartSprite();//エンターを押してね!的なUI表示
 	void LogoMove();
+
+	//ロゴ動き
+	void RightRot();
+	void LeftRot();
+	void BeforeNextScene();
 
 	void DoorOpen();//扉が開く
 
@@ -120,9 +118,14 @@ private:
 	//-------
 
 	//ロゴの動き　デフォルト
-	LogoPattern logoPattern_ = LogoPattern::def;
+	std::function<void()> logoPattern;
 
 	float logoRotVel = 0;//常にロゴのRotに加算される値
+
+	float RotSp;//回転速度
+	float RotMax;//どこまで回転するか
+	int16_t PosYSp;//上にずらす値
+	int16_t PosYMax;//Y座標の最大値
 
 	int vibCount = 15;//タイトルから何フレーム振動させるか
 	int sceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
