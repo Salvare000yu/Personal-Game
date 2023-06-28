@@ -60,3 +60,37 @@ std::vector<std::vector<std::string>> GameUtility::LoadCsv(const std::string& cs
 
 	return csvData;
 }
+
+std::vector<std::vector<std::string>> GameUtility::LoadCsvFromString(const std::string& source, bool commentFlag, char divChar, const std::string& commentStartStr)
+{
+	std::vector<std::vector<std::string>> csvData{}; // csvの中身を格納
+
+	std::stringstream ss(source);
+
+	std::string line{};
+	// 開いたファイルを一行読み込む(カーソルも動く)
+	while (std::getline(ss, line))
+	{
+		// 空行の場合は無視する
+		if (line.empty()) {
+			continue;
+		}
+
+		// コメントが有効かつ行頭が指定文字なら、その行は無視する
+		if (commentFlag && line.find(commentStartStr) == 0U) {
+			continue;
+		}
+
+		// 行数を増やす
+		csvData.emplace_back();
+
+		std::istringstream stream(line);
+		std::string field;
+		// 読み込んだ行を','区切りで分割
+		while (std::getline(stream, field, divChar)) {
+			csvData.back().emplace_back(field);
+		}
+	}
+
+	return csvData;
+}

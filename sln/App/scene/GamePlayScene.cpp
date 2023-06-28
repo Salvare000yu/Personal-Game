@@ -58,6 +58,7 @@ void GamePlayScene::Initialize()
 		dashAttenuation = root["dashAttenuation"].As<int16_t>();
 		dashCountDef = root["dashCountDef"].As<uint32_t>();
 		dashCount = dashCountDef;
+		SmallEnemyCsvData = GameUtility::LoadCsvFromString(root["SmallEnemyCsvData"].As<std::string>(), true, ',', "#");
 	}
 
 	camera.reset(new CameraTracking());
@@ -252,8 +253,6 @@ void GamePlayScene::Initialize()
 	// パーティクル初期化
 	particle->SetCamera(camera.get());
 
-	csvData = GameUtility::LoadCsv("Resources/charDataFile/SmallEnemy.csv", true, ',', "#");
-
 	//今あるパーティクルを削除する
 	particle->DeleteParticles();
 }
@@ -297,13 +296,13 @@ void GamePlayScene::SmallEnemyAppear()
 	if (sEneAppCount == 0) {
 		//雑魚敵来る
 		//csvの最後まで行った場合最初に戻す
-		if (++seIndex >= csvData.size()) {
+		if (++seIndex >= SmallEnemyCsvData.size()) {
 			seIndex = 0;
 		}
 		SmallEnemyCreate();
-		float posx = std::stof(csvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
-		float posy = std::stof(csvData[seIndex][1]);
-		float posz = std::stof(csvData[seIndex][2]);
+		float posx = std::stof(SmallEnemyCsvData[seIndex][0]);//雑魚敵X座標はcsvの0番目
+		float posy = std::stof(SmallEnemyCsvData[seIndex][1]);
+		float posz = std::stof(SmallEnemyCsvData[seIndex][2]);
 		//雑魚敵をcsv通りの場所に出す
 		smallEnemys_.front()->SetPosition(XMFLOAT3{ posx,posy,posz });
 

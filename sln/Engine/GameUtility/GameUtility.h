@@ -55,4 +55,15 @@ public:
 		bool commentFlag,
 		char divChar,
 		const std::string& commentStartStr);
+
+	/// @brief String変数からCSV読み込み
+	/// @param source csvFilePath　ファイルパス
+	/// @param commentFlag ファイルコメント有効かどうか
+	/// @param divChar 行の区切り文字
+	/// @param commentStartStr コメントの先頭文字
+	static std::vector<std::vector<std::string>> LoadCsvFromString(
+		const std::string& source,
+		bool commentFlag,
+		char divChar,
+		const std::string& commentStartStr);
 };
