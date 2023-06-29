@@ -22,3 +22,8 @@
   - [mini-yaml](https://github.com/jimmiebergmann/mini-yaml)
   - FBX SDK
   - DirectXTex
+
+## 運用メモ
+- 2023/6月~
+  - README.mdを追加
+  - タスクはIssuesをつかって管理する
