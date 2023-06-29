@@ -43,7 +43,7 @@ public:
 	XMFLOAT3 velocity{ 0,0,0 };
 
 	//消えるまで
-	static const int32_t bulVanishTime = 60 * 9;//寿命
+	static const int32_t bulVanishTime = 60 * 10;//寿命
 
 	//消滅の宣告
 	int32_t vanishTimer_ = bulVanishTime;

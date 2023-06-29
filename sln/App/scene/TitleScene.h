@@ -17,14 +17,6 @@
 class TitleScene :public BaseScene
 {
 
-	//待機中回転
-	enum class StandbyRotPattern {
-		def,
-		accel,
-		deceleration,
-		debug,
-	};
-
 public:
 
 	void Initialize() override;
@@ -94,27 +86,27 @@ private:
 	float posDef = -150;//地面を置く座標　ここ中心に上下
 
 	//----------登場退場共通----------//
-	const float pApMoveFrameMax = 60.f;//経過時間最大フレーム(登場)
-	const float pExitMoveFrameMax = 100.f;//経過時間最大フレーム(退場)
+	float pApMoveFrameMax;//経過時間最大フレーム(登場)
 	const int pMoveFrameDef = 0;//経過時間でふぉ
 	int pMoveFrame = pMoveFrameDef;//経過時間
 	//-----自機登場
-	DirectX::XMFLOAT3 playerInitPos{ 0, 150, -1950 };
+	DirectX::XMFLOAT3 playerInitPos;
 	DirectX::XMFLOAT3 apStartPPos{};//開始時自機座標
 	DirectX::XMFLOAT3 apEndPPos{};//終了
-	const float camEyeMoveSpX = 1.5f;//カメラ横ずらす値
+	float camEyeMoveSpX;//カメラ横ずらす値
 	//------自機登場
 	//------自機退場(シーンチェンジ)
 	DirectX::XMFLOAT3 exitStartPPos{};//開始時自機座標
 	DirectX::XMFLOAT3 exitEndPPos{};//終了
-	const float exitPosZ = 1300;//ここでおわる
-	const float sceneChangeDirecPosZ = -100;//シーン遷移演出開始位置
+	float exitPosZ;//ここでおわる
+	float sceneChangeDirecPosZ;//シーン遷移演出開始位置
 	bool hideTheScreenOnly = false;//一度きり画面隠しフラグ　false：まだしてない
+	float pExitMoveFrameMax;//経過時間最大フレーム(退場)
 	//------自機退場(シーンチェンジ)
 
 	//------ENTERスプライト点滅
-	const uint32_t toStartFrameDef = 40;//透明じゃない時間
-	uint32_t toStartFrame = toStartFrameDef;
+	uint32_t toStartFrameDef;//透明じゃない時間
+	uint32_t toStartFrame;
 	//-------
 
 	//ロゴの動き　デフォルト
@@ -127,8 +119,8 @@ private:
 	int16_t PosYSp;//上にずらす値
 	int16_t PosYMax;//Y座標の最大値
 
-	int vibCount = 15;//タイトルから何フレーム振動させるか
-	int sceneChangeVibCount = 15;//シーンチェンジ中何フレーム振動させるか
+	int16_t vibCount;//タイトルから何フレーム振動させるか
+	int16_t sceneChangeVibCount;//シーンチェンジ中何フレーム振動させるか
 
 	bool doorOpenFlag = false;//扉開けてない
 

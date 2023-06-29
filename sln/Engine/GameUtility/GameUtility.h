@@ -41,7 +41,7 @@ public:
 	/// @param startPos　開始座標
 	/// @param endPos　開始座標
 	/// @param t　現在補間値
-	static auto UtilSLerp(const DirectX::XMFLOAT3& startPos,
+	static DirectX::XMFLOAT3 UtilSLerp(const DirectX::XMFLOAT3& startPos,
 		const DirectX::XMFLOAT3& endPos,
 		float t);
 

@@ -114,6 +114,7 @@ void Boss::Initialize()
 		bossDefense = bossDefenseDef;
 		bodyPow = root["bodyPow"].As<int32_t>();
 		haHalfDefence = root["haHalfDefence"].As<int32_t>();
+		TimeRequiredForVerticalUp = root["TimeRequiredForVerticalUp"].As<float>();
 	}
 
 	particle.reset(new ParticleManager());
@@ -278,17 +279,16 @@ void Boss::Leave()
 }
 void Boss::Vertical()
 {
-	//縦攻撃
-	verticalPattern();
+	verticalPattern();//縦攻撃pパターン
 }
 void Boss::StartVertical()
 {
 	XMFLOAT3 position = obj->GetPosition();
 	//まずは上昇
 	position.y += startVerticalVal;
-	startVerticalVal++;
+	startVerticalVal--;
 
-	if (position.y > downStartPosY) {//一定超えたら判定切ってから待ち
+	if (position.y < upStartPosY) {//一定超えたら判定切ってから待ち
 		startVerticalVal = startVerticalValDef;//最初の上昇値戻す
 		verticalPattern = std::bind(&Boss::VerticalWait, this);
 	}
@@ -359,22 +359,27 @@ void Boss::VerticalUp()
 		position = upDownPos;//今の位置を下に下がる開始位置にする
 		verticalStartPosFlag = true;//最初の開始位置を決め終わった
 	}
-	position.y += verticalSp;//移動
-	if (position.y >= downStartPosY) {//上昇開始位置のYまできたら
-		upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
-		//↓待ち時間挟んでね　Wait時は判定切る
-		verticalStartPosFlag = false;//開始位置決定フラグ戻す
-		nextDown = true;//次上昇
-		verticalPattern = std::bind(&Boss::VerticalWait, this);
-	}
-	obj->SetPosition(position);
-	atkCount--;
-	//時が満ちたら
-	if (atkCount == 0) {
-		//突撃時、生存時のみ発射
-		if (alive) { StraightAttack(); }
-		//再びカウントできるように初期化
-		atkCount = vertical_AtkInterval;
+	else {
+		float raito = (float)++nowframe / TimeRequiredForVerticalUp;
+		XMFLOAT3 UpEndPos = { upDownPos.x + nextMoveX,downStartPosY,position.z };//上昇終了位置
+		obj->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, raito));//下降開始位置まで移動
+
+		if (raito == 1) {//lerp終了で
+			upDownPos.x += nextMoveX;//次の移動時はnextMoveX分Xずらす
+			//↓待ち時間挟んでね　Wait時は判定切る
+			verticalStartPosFlag = false;//開始位置決定フラグ戻す
+			nextDown = true;//次上昇
+			nowframe = nowframeDef;
+			verticalPattern = std::bind(&Boss::VerticalWait, this);
+		}
+		atkCount--;
+		//時が満ちたら
+		if (atkCount == 0) {
+			//突撃時、生存時のみ発射
+			if (alive) { StraightAttack(); }
+			//再びカウントできるように初期化
+			atkCount = vertical_AtkInterval;
+		}
 	}
 }
 void Boss::VerticalReverse()
@@ -389,6 +394,7 @@ void Boss::VerticalReverse()
 
 	if (position.y >= reverseStartPos.y) {//ボス戦開始時のY座標到達で行動終わり
 		reverseStartPosFlag = false;
+		nextUp = true;//次も最初は絶対Up統一
 		verticalPattern = std::bind(&Boss::EndVertical, this);//縦パターンの行動終了する前にやること
 	}
 }
@@ -855,8 +861,8 @@ void Boss::DiffusionAttack()
 	madeBullet_R->SetPosition(position);
 
 	// velocityを算出
-	const float MoveZ = 2.7f;//移動量
-	const float MoveX = 3.f;
+	const float MoveZ = 3.f;//移動量
+	const float MoveX = 1.5f;
 	DirectX::XMVECTOR vecvelocity_center = DirectX::XMVectorSet(0, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_L = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_R = DirectX::XMVectorSet(MoveX, 0, MoveZ, 0);
@@ -900,8 +906,8 @@ void Boss::DiffusionAttackEavenNumber()
 	madeBullet_R2->SetPosition(position);
 
 	// velocityを算出
-	const float MoveZ = 1.7f;//移動量
-	const float MoveEdgeX = 3.f;//端弾移動量
+	const float MoveZ = 2.f;//移動量
+	const float MoveEdgeX = 1.5f;//端弾移動量
 	const float MoveX = 0.5f;//移動量
 	DirectX::XMVECTOR vecvelocity_L1 = DirectX::XMVectorSet(-MoveEdgeX, 0, MoveZ, 0);
 	DirectX::XMVECTOR vecvelocity_L2 = DirectX::XMVectorSet(-MoveX, 0, MoveZ, 0);

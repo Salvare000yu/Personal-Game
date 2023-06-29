@@ -5,3 +5,20 @@ RotSp: 0.03 #回転速度
 RotMax: 1.7 #どこまで回転するか
 PosYSp: 5 #上にずらす値
 PosYMax: 300 #Y座標の最大値
+
+toStartFrameDef: 40 # ENTERスプライト透明じゃない時間
+
+vibCount: 15 #タイトルから何フレーム振動させるか
+sceneChangeVibCount: 15 #シーンチェンジ中何フレーム振動させるか
+
+#自機登場
+playerInitPos: 
+  x: 0
+  y: 150
+  z: -1950
+camEyeMoveSpX: 1.5 #カメラ横ずらす値
+pApMoveFrameMax: 60 #経過時間最大フレーム
+#自機退場(シーンチェンジ)
+exitPosZ: 1300 #ここでおわる
+sceneChangeDirecPosZ: -100 #シーン遷移演出開始位置
+pExitMoveFrameMax: 100 #経過時間最大フレーム

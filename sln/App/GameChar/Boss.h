@@ -252,6 +252,7 @@ private:
 	int16_t startVerticalVal;
 	//上昇下降速度
 	float verticalSp;
+	float TimeRequiredForVerticalUp;//上移動にかかる時間
 	//待ち時間
 	int16_t verticalWaitCountDef;
 	int16_t verticalWaitCount;
@@ -263,8 +264,8 @@ private:
 	//UpDown時の最初に開始位置決めるフラグ false:決める前
 	bool verticalStartPosFlag = false;
 	//次の動き false:これじゃない
-	bool nextUp = false;
-	bool nextDown = true;//最初は下降
+	bool nextUp = true;//最初
+	bool nextDown = false;
 	//UpDown何回ループさせるか
 	int16_t verticalLoopCountDef;
 	int16_t verticalLoopCount;

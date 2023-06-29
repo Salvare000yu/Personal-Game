@@ -41,7 +41,7 @@ approachCountDef: 150 #この時間だけこの行動をする
 changeVerticalCountDef: 0 #デフォ0
 
 changeVerticalNeces: 3 #縦攻撃に移る為に必要カウント
-startVerticalValDef: -5 #最初の上昇値
+startVerticalValDef: 10 #最初の上昇値
 leaveLim: 90 #離れられる距離
 #フレームごとに発射
 atkInterval: 10
@@ -51,15 +51,16 @@ diffusionAtkInterval: 20
 randShakeVal: 8 #シェイク値
 
 verticalSp: 15 #上昇下降速度
-verticalWaitCountDef: 50 #待ち時間
+verticalWaitCountDef: 30 #待ち時間
 upDownPosDef: #上昇下降開始座標
     x: -600
     y: 900
     z: 0
 upStartPosY: -350 #上昇開始Y座標
-downStartPosY: 1000 #下降開始Y座標
-nextMoveX: 200 #UpDownの最後にXをずらす値
-verticalLoopCountDef: 4 #UpDown何回ループさせるか
+downStartPosY: 400 #下降開始Y座標
+nextMoveX: 250 #UpDownの最後にXをずらす値
+TimeRequiredForVerticalUp: 80 #上移動にかかる時間
+verticalLoopCountDef: 3 #UpDown何回ループさせるか
 vertical_AtkInterval: 7 #縦攻撃用インターバル
 #HP Half
 necesHpHalfFrame: 100 #HP半分時このフレーム分移動まで時間かかる

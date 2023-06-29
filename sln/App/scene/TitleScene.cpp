@@ -34,12 +34,29 @@ void TitleScene::Initialize()
 		RotMax = root["RotMax"].As<float>();
 		PosYSp = root["PosYSp"].As<int16_t>();
 		PosYMax = root["PosYMax"].As<int16_t>();
+		vibCount = root["vibCount"].As<int16_t>();
+		sceneChangeVibCount = root["sceneChangeVibCount"].As<int16_t>();
+		toStartFrameDef = root["toStartFrameDef"].As<uint32_t>();
+		toStartFrame = toStartFrameDef;
+		exitPosZ = root["exitPosZ"].As<float>();
+		sceneChangeDirecPosZ = root["sceneChangeDirecPosZ"].As<float>();
+		auto& playerInitPosNode = root["playerInitPos"];
+		playerInitPos = {
+			playerInitPosNode["x"].As<float>(),
+			playerInitPosNode["y"].As<float>(),
+			playerInitPosNode["z"].As<float>()
+		};
+		camEyeMoveSpX = root["camEyeMoveSpX"].As<float>();
+		pApMoveFrameMax = root["pApMoveFrameMax"].As<float>();
+		pExitMoveFrameMax = root["pExitMoveFrameMax"].As<float>();
 	}
 #pragma region 描画初期化処理
 
 	WinApp* winApp = WinApp::GetInstance();
 
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
+	//シーン遷移演出初期化
+	sceneChangeDirection->Initialize();
 
 	// マウスカーソル非表示
 	Input* input = Input::GetInstance();
@@ -113,9 +130,6 @@ void TitleScene::Initialize()
 
 	camera->SetTarget(player_->GetPosition());
 	camera->SetEye(eyeStartPos);//ここにカメラをおいて、最初の演出で自機を追いかける
-
-	//シーン遷移演出初期化
-	sceneChangeDirection->Initialize();
 
 	// 音声読み込み
 	GameSound::GetInstance()->LoadWave("A_rhythmaze_125.wav");

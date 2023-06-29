@@ -366,7 +366,6 @@ void GamePlayScene::BossDeathEffect()
 		pClearMoveCount--;
 	}
 
-	//todo 決めうちなおす
 	if (boss_.front()->GetPosition().y < -150.f)
 	{
 		boss_.front()->SetAlive(false);
@@ -974,7 +973,7 @@ void GamePlayScene::CollisionAll()
 
 			auto& c = seColliders.emplace_front();
 			c.baseObject = se.get();
-			c.radius = se->GetScale().z + 5.f;
+			c.radius = se->GetScale().z + 8.f;
 		}
 
 		CollisionManager::CheckHitFromColliderList(
@@ -1421,19 +1420,16 @@ void GamePlayScene::Update()
 	Pause* pause = Pause::GetInstance();
 	ComplexInput* cInput = ComplexInput::GetInstance();
 
-	if (pause->GetPauseFlag()) {
-		PauseOpen();
-	}
-
 	UpdateMouse();//ポーズしてるときもマウス更新　元はPause関数内
 
 	if (pTracking) {
 		camera->SetTrackingTarget(player_.get());
 	}
 
-	//ポーズでないとき～
-	//--------------この外に出すとポーズ中も実行
-	if (pause->GetPauseFlag() == false) {
+	if (pause->GetPauseFlag()) {
+		PauseOpen();
+	}////ポーズでないとき～ この外に出すとポーズ中も実行
+	else {
 		if (pause->WaitKeyP < 10) {
 			pause->WaitKeyP++;//ポーズから入力待つ。1フレで開いて閉じちゃうから2回押した的な感じになっちゃう
 		}
@@ -1609,5 +1605,4 @@ void GamePlayScene::DrawUI()
 	if (!player_->GetispDam()) {
 		pDamFlag = false;
 	}
-
 }

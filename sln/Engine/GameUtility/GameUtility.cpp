@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>	// std::cerr
 
-auto GameUtility::UtilSLerp(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos, float t)
+DirectX::XMFLOAT3 GameUtility::UtilSLerp(const DirectX::XMFLOAT3& startPos, const DirectX::XMFLOAT3& endPos, float t)
 {
 	const float startLength = std::sqrt(startPos.x * startPos.x + startPos.y * startPos.y + startPos.z * startPos.z);
 	const float endLength = std::sqrt(endPos.x * endPos.x + endPos.y * endPos.y + endPos.z * endPos.z);
