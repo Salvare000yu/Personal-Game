@@ -593,7 +593,7 @@ void GamePlayScene::CoolTime()
 {
 	constexpr float DamEffectPow = 0.03f;
 
-	//くーーーーるたいむ仮　今は文字だけ
+	//くーるたいむ
 	if (pDamFlag) {
 		//画像薄くしてく
 		vignettePow -= DamEffectPow;
@@ -627,8 +627,6 @@ void GamePlayScene::UpdateMouse()
 
 void GamePlayScene::UpdateCamera()
 {
-	// 自機の視線ベクトル
-
 	// 感度
 	const float camMoveVel = 0.05f;
 
@@ -973,7 +971,7 @@ void GamePlayScene::CollisionAll()
 
 			auto& c = seColliders.emplace_front();
 			c.baseObject = se.get();
-			c.radius = se->GetScale().z + 8.f;
+			c.radius = se->GetScale().z + 10.f;
 		}
 
 		CollisionManager::CheckHitFromColliderList(

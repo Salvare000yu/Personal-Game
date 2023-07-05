@@ -1,5 +1,5 @@
 ﻿#include "Player.h"
-//#include "Object3d.h"
+#include "GameUtility.h"
 #include "Input.h"
 #include "GameSound.h"
 #include "DebugText.h"
@@ -147,16 +147,8 @@ void Player::PlayerDeath()
 		getPosFlag = false;
 	}
 
-	//移動速度＝（指定座標-最初位置）/かかる時間
-	moveSp.x = (pPosDeath.x - pPosDeath.x) / necesFrame;//ここの指定座標は自機最初のX座標にして真下に落ちるようにする
-	moveSp.y = (targetPos.y - pPosDeath.y) / necesFrame;
-	moveSp.z = (pPosDeath.z - pPosDeath.z) / necesFrame;//奥行きついたらここもそうする
-	//その時の位置＝最初位置＋移動速度＊経過時間
-	nowPos.x = pPosDeath.x + moveSp.x * nowFrame;
-	nowPos.y = pPosDeath.y + moveSp.y * nowFrame;
-	nowPos.z = pPosDeath.z + moveSp.z * nowFrame;
-
-	obj->SetPosition(nowPos);//その時の位置
+	float raito = (float)nowFrame / necesFrame;
+	obj->SetPosition(GameUtility::UtilLerp(pPosDeath, { pPosDeath.x,targetPos.y,pPosDeath.z }, raito));
 
 	//一定時間ごとにパーティクル
 	if (partTimeInterval == 1) {
