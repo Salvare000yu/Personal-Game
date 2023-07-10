@@ -150,6 +150,10 @@ public: // メンバ関数
 						matWorld.r[3].m128_f32[2]);
 	}
 
+	/// @brief モデル
+	/// @return 
+	Model* GetModel() { return model; }
+
 	/// <summary>
 	/// 座標の設定
 	/// </summary>

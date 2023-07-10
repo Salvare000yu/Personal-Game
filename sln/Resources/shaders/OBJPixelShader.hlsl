@@ -5,7 +5,7 @@ SamplerState smp : register(s0); // 0番スロットに設定されたサンプ�
 
 float4 main(VSOutput input) : SV_TARGET
 {
-	float4 texcolor = tex.Sample(smp, input.uv * tiling) * color;
+	float4 texcolor = tex.Sample(smp, input.uv * tiling + uvShift) * color;
 	if (texcolor.a <= 0.f) { discard; }
 
 	float3 light = normalize(float3(1, -1, 1)); // 右下奥　向きのライト

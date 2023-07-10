@@ -30,6 +30,8 @@ public:
 		DirectX::XMFLOAT3 specular;//スペキュラー係数
 		float alpha;//アルファ
 		DirectX::XMFLOAT2 tiling{ 1, 1 };//タイリング
+		DirectX::XMFLOAT2 pad3{ 1, 1 };//パディング
+		DirectX::XMFLOAT2 uvShift{ 0, 0 };//uvシフト
 	};
 
 	//マテリアル
@@ -73,6 +75,9 @@ public://静的メンバ関数
 	void SetTiling(const DirectX::XMFLOAT2& tiling) { this->tiling = tiling; }
 	const DirectX::XMFLOAT2& GetTiling() { return tiling; }
 
+	void SetUvShift(const DirectX::XMFLOAT2& uvShift) { this->uvShift = uvShift; }
+	const DirectX::XMFLOAT2& GetUvShift() { return uvShift; }
+
 private:
 	//借りるデバイス
 	static ID3D12Device* device;
@@ -85,6 +90,7 @@ private:
 	Material material;
 
 	DirectX::XMFLOAT2 tiling{ 1, 1 };
+	DirectX::XMFLOAT2 uvShift{ 0, 0 };
 
 	//テクスチャバッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> texbuff;

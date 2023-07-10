@@ -120,15 +120,6 @@ void GamePlayScene::Initialize()
 	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
 
-	for (auto& i : obj_ground) {
-		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		constexpr float tilingNum = 16.f;
-		model->second->SetTiling({ tilingNum, tilingNum });
-		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale({ 10000.0f, 1.f, 10000.0f });
-	}
-	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
-
 	//------3dオブジェクトに3dモデルを紐づける------//
 	obj_groundBottom->SetModel(mod_groundBottom.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
@@ -136,20 +127,30 @@ void GamePlayScene::Initialize()
 	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
-	obj_groundBottom->SetScale({ 10000.0f, 10000.0f, 10000.0f });
+	constexpr float groundScale = 5000;
+	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
+	obj_tunnel->SetScale({ groundScale, groundScale, groundScale * 2.f });
+
+	for (auto& i : obj_ground) {
+		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
+		constexpr float tilingNum = 16.f;
+		model->second->SetTiling({ tilingNum, tilingNum });
+		i.second->SetModel(mod_ground.at(i.first).get());
+		i.second->SetScale(obj_groundBottom->GetScale());
+	}
+	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 	//------object3d位置------//
 	obj_groundBottom->SetPosition({ 0,-220,0 });
 	obj_kaberight->SetPosition({ 490,300,2000 });
 	obj_kabeleft->SetPosition({ -490,300,2000 });
-	obj_tunnel->SetPosition({ 0,40,1000 });
+	obj_tunnel->SetPosition({ 0,40,0 });
 	obj_backwall->SetPosition({ 0,40,7000 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
-	obj_tunnel->SetRotation({ 0,-90,0 });
+	obj_tunnel->SetRotation({ 0,0,0 });
 
 	//いろいろ生成
 	player_.reset(new Player());
@@ -275,6 +276,12 @@ void GamePlayScene::Finalize()
 
 void GamePlayScene::GroundMove()
 {
+	constexpr float shiftSpeed = 0.01f;
+
+	XMFLOAT2 tmp = mod_tunnel->GetUvShift();
+	tmp.y += shiftSpeed / mod_ground.at("ground_gre")->GetTiling().y;
+	mod_tunnel->SetUvShift(tmp);
+
 	float num = std::sinf((float)time * swingSp) * swingDist;
 	//地面の数だけ
 	for (auto& i : obj_ground) {
@@ -282,6 +289,10 @@ void GamePlayScene::GroundMove()
 		pos.y = groundPosDef + num;//初期位置＋揺らす値
 		i.second->SetPosition(pos);
 		num = -num;//二枚目は逆に揺らす
+
+		tmp = i.second->GetModel()->GetUvShift();
+		tmp.y += shiftSpeed;
+		i.second->GetModel()->SetUvShift(tmp);
 
 		i.second->Update();
 	}
@@ -932,31 +943,31 @@ void GamePlayScene::CollisionAll()
 
 	//[自機の弾]と[ボス]の当たり判定   自機の体力あるとき
 	for (auto& bo : boss_) {
-		if (player_->GetPlayerHp() > 0&& bo->GetBossEnemyAdvent()) {
+		if (player_->GetPlayerHp() > 0 && bo->GetBossEnemyAdvent()) {
 			CollisionManager::CheckHitFromColliderList(
 				pbColliders,
 				pbHitFunc,
 				boColliders,
 				[&](BaseObject* boss) {
-						Boss* bo = (Boss*)boss;
-						//喰らってまだ生きてたら
-						const int32_t damage = pBulPow - bo->GetBossDefense();
-						if (bo->GetNowBoHp() > damage) {
-							bo->SetBossDamageEffect(true);//くらい演出オン
-							bo->SetNowBoHp(bo->GetNowBoHp() - damage);//ボスHPセット
-							particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
+					Boss* bo = (Boss*)boss;
+					//喰らってまだ生きてたら
+					const int32_t damage = pBulPow - bo->GetBossDefense();
+					if (bo->GetNowBoHp() > damage) {
+						bo->SetBossDamageEffect(true);//くらい演出オン
+						bo->SetNowBoHp(bo->GetNowBoHp() - damage);//ボスHPセット
+						particle->CreateParticle(bo->GetPosition(), 100, 50, 5);
+					}
+					else {
+						bo->SetNowBoHp(0);//ボスHPセット
+						bo->SetisDeath(true);
+						pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
+						//残っている雑魚敵はもういらない
+						for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
+							bob->SetAlive(false);//消す
 						}
-						else {
-							bo->SetNowBoHp(0);//ボスHPセット
-							bo->SetisDeath(true);
-							pClearRot = player_->GetRotation();//ボス撃破時自機どれくらい回転してたか
-							//残っている雑魚敵はもういらない
-							for (auto& bob : bo->GetBullets()) {//いる雑魚敵の分だけ
-								bob->SetAlive(false);//消す
-							}
-							GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
-						}
-						GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
+						GameSound::GetInstance()->PlayWave("bossdeath.wav", 0.3f, 0);
+					}
+					GameSound::GetInstance()->PlayWave("bossdam_1.wav", 0.4f, 0);
 				});
 		}
 	}

@@ -1,5 +1,5 @@
 #ゲーム内調整項目
-NeededBeforeBossBattleNum: 7 #ボス戦に必要な雑魚敵撃破数
+NeededBeforeBossBattleNum: 2 #ボス戦に必要な雑魚敵撃破数
 #ダッシュ
 dashVelIncDef: 6 #実際に増やす値
 dashIntervalDef: 40 #ダッシュクールインターバル
