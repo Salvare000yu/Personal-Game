@@ -133,12 +133,13 @@ void GamePlayScene::Initialize()
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_tunnel->SetScale({ groundScale, groundScale, groundScale * 2.f });
 
+	//地面
 	for (auto& i : obj_ground) {
 		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
 		constexpr float tilingNum = 16.f;
 		model->second->SetTiling({ tilingNum, tilingNum });
 		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale(obj_groundBottom->GetScale());
+		i.second->SetScale(obj_groundBottom->GetScale());//地面下と合わせる
 	}
 	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 	//------object3d位置------//
@@ -150,7 +151,6 @@ void GamePlayScene::Initialize()
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
-	obj_tunnel->SetRotation({ 0,0,0 });
 
 	//いろいろ生成
 	player_.reset(new Player());

@@ -76,15 +76,6 @@ void TitleScene::Initialize()
 	obj_ground.emplace("ground_gre", Object3d::Create());
 	obj_ground.emplace("ground_mag", Object3d::Create());
 
-	for (auto& i : obj_ground) {
-		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		constexpr float tilingNum = 16.f;
-		model->second->SetTiling({ tilingNum, tilingNum });
-		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale({ 10000.0f, 1.0f, 10000.0f });
-	}
-	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
-
 	////---3dオブジェクト生成---
 	obj_tunnel.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
@@ -98,19 +89,30 @@ void TitleScene::Initialize()
 	obj_logo->SetModel(mod_logo.get());
 	obj_groundBottom->SetModel(mod_groundBottom.get());
 	//------object3dスケール------//
-	obj_tunnel->SetScale({ 100.0f, 40.0f, 40.0f });
+	constexpr float groundScale = 5000;
+	obj_tunnel->SetScale({ groundScale, groundScale, groundScale });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_logo->SetScale({ 40.f,40.f,40.f });
-	obj_groundBottom->SetScale({ 10000.0f, 10000.0f, 10000.0f });
+	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale*2.f });
+
+	//地面
+	for (auto& i : obj_ground) {
+		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
+		constexpr float tilingNum = 16.f;
+		model->second->SetTiling({ tilingNum, tilingNum });
+		i.second->SetModel(mod_ground.at(i.first).get());
+		i.second->SetScale(obj_groundBottom->GetScale());//地面下と合わせる
+	}
+	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
+
 	//------object3d位置------//
-	obj_tunnel->SetPosition({ 0,40,-500 });
+	obj_tunnel->SetPosition({ 0,40,0 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
 	obj_logo->SetPosition({ 0,100,-1000 });
-	obj_groundBottom->SetPosition({ 0,-190,0 });
+	obj_groundBottom->SetPosition({ 0,-220,0 });
 	//------object回転
-	obj_tunnel->SetRotation({ 0,-90,0 });
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
 
@@ -356,6 +358,12 @@ void TitleScene::Update()
 	obj_logo->Update();
 	obj_groundBottom->Update();
 	{
+		constexpr float shiftSpeed = 0.01f;
+
+		XMFLOAT2 tmp = mod_tunnel->GetUvShift();
+		tmp.y += shiftSpeed / mod_ground.at("ground_gre")->GetTiling().y;
+		mod_tunnel->SetUvShift(tmp);
+
 		float num = std::sin((float)time * swingSp) * swingDist;
 		//地面の数だけ
 		for (auto& i : obj_ground) {
@@ -363,6 +371,10 @@ void TitleScene::Update()
 			pos.y = posDef + num;//初期位置＋揺らす値
 			i.second->SetPosition(pos);
 			num = -num;//二枚目は逆に揺らす
+
+			tmp = i.second->GetModel()->GetUvShift();
+			tmp.y += shiftSpeed;
+			i.second->GetModel()->SetUvShift(tmp);
 
 			i.second->Update();
 		}
