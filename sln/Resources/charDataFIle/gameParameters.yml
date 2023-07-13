@@ -22,11 +22,6 @@ clearMoveFrame: 120 #クリア時この時間かけて移動する
 
 WarningW: 0.03 #ボス戦前の警告透明変化値
 
-#地面の動き
-swingDist: 10 #揺らす距離
-swingSp: 4 #揺らす速度
-groundPosDef: -200 #地面を置く座標　ここ中心に上下
-
 #雑魚敵出現位置
 SmallEnemyCsvData : |
   #横一列左から順に。60ごと

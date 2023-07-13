@@ -9,6 +9,7 @@
 #include "Pause.h"
 #include "SceneChangeDirection.h"
 #include "GameUtility.h"
+#include "Field.h"
 
 #include "TitleScene.h"
 #include "ClearScene.h"
@@ -64,9 +65,6 @@ void GamePlayScene::Initialize()
 		clearMoveFrame = root["clearMoveFrame"].As<uint32_t>();
 		bodyDamCountDef = root["bodyDamCountDef"].As<uint16_t>();
 		bodyDamCount = bodyDamCountDef;
-		swingDist = root["swingDist"].As<float>();
-		swingSp = root["swingSp"].As<float>();
-		groundPosDef = root["groundPosDef"].As<float>();
 		WarningW = root["WarningW"].As<float>();
 
 		SmallEnemyCsvData = GameUtility::LoadCsvFromString(root["SmallEnemyCsvData"].As<std::string>(), true, ',', "#");
@@ -97,7 +95,6 @@ void GamePlayScene::Initialize()
 	boHpColorPattern = std::bind(&GamePlayScene::BossHpSafety, this);
 
 	//------objからモデルデータ読み込み---
-	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_smallenemy.reset(Model::LoadFromOBJ("SmallEnemy"));
@@ -107,54 +104,33 @@ void GamePlayScene::Initialize()
 	mod_straightbul.reset(Model::LoadFromOBJ("StraightBul"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_bossColli.reset(Model::LoadFromOBJ("boss_Colli"));
-	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_backwall.reset(Model::LoadFromOBJ("back_wall"));
 
 	//------3dオブジェクト生成------//
 	// todo 上に書いたほうが手前にあったら描画されない
-	obj_groundBottom.reset(Object3d::Create());
-	obj_ground.emplace("ground_gre", Object3d::Create());
-	obj_ground.emplace("ground_mag", Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
-	obj_tunnel.reset(Object3d::Create());
 	obj_backwall.reset(Object3d::Create());
 
 	//------3dオブジェクトに3dモデルを紐づける------//
-	obj_groundBottom->SetModel(mod_groundBottom.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
-	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_backwall->SetModel(mod_backwall.get());
 	//------object3dスケール------//
-	constexpr float groundScale = 5000;
-	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_tunnel->SetScale({ groundScale, groundScale, groundScale * 2.f });
 
-	//地面
-	for (auto& i : obj_ground) {
-		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		constexpr float tilingNum = 16.f;
-		model->second->SetTiling({ tilingNum, tilingNum });
-		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale(obj_groundBottom->GetScale());//地面下と合わせる
-	}
-	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 	//------object3d位置------//
-	obj_groundBottom->SetPosition({ 0,-220,0 });
 	obj_kaberight->SetPosition({ 490,300,2000 });
 	obj_kabeleft->SetPosition({ -490,300,2000 });
-	obj_tunnel->SetPosition({ 0,40,0 });
 	obj_backwall->SetPosition({ 0,40,7000 });
 	//------object回転------//
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
 
-	//いろいろ生成
+	//自機
 	player_.reset(new Player());
-	//いろいろキャラ初期化
+	//自機初期化
 	player_->Initialize();
 	player_->SetModel(mod_player.get());
 	player_->SetPBulModel(mod_playerbullet.get());
@@ -192,6 +168,11 @@ void GamePlayScene::Initialize()
 
 	Pause* pause = Pause::GetInstance();
 	pause->Initialize();
+
+	//フィールド初期化
+	Field* field = Field::GetInstance();
+	field->Initialize();
+
 	// -----------------スプライト共通テクスチャ読み込み
 	SpriteBase::GetInstance()->LoadTexture(1, L"Resources/play.png");
 	SpriteBase::GetInstance()->LoadTexture(3, L"Resources/HPbar.png");
@@ -272,30 +253,6 @@ void GamePlayScene::Initialize()
 void GamePlayScene::Finalize()
 {
 	PostEffect::GetInstance()->SetVignettePow(0.f);
-}
-
-void GamePlayScene::GroundMove()
-{
-	constexpr float shiftSpeed = 0.01f;
-
-	XMFLOAT2 tmp = mod_tunnel->GetUvShift();
-	tmp.y += shiftSpeed / mod_ground.at("ground_gre")->GetTiling().y;
-	mod_tunnel->SetUvShift(tmp);
-
-	float num = std::sinf((float)time * swingSp) * swingDist;
-	//地面の数だけ
-	for (auto& i : obj_ground) {
-		XMFLOAT3 pos = i.second->GetPosition();
-		pos.y = groundPosDef + num;//初期位置＋揺らす値
-		i.second->SetPosition(pos);
-		num = -num;//二枚目は逆に揺らす
-
-		tmp = i.second->GetModel()->GetUvShift();
-		tmp.y += shiftSpeed;
-		i.second->GetModel()->SetUvShift(tmp);
-
-		i.second->Update();
-	}
 }
 
 void GamePlayScene::SmallEnemyCreate()
@@ -1474,25 +1431,18 @@ void GamePlayScene::Update()
 			player_->SetFireLineDrawFlag(false);//射線非表示
 		}
 
-		// カメラの更新
-		camera->Update();
-
-		//メンバ関数ポインタ呼び出し
-		updatePattern();
-
-		GroundMove();//地面揺らす
-		obj_groundBottom->Update();
-		obj_kaberight->Update();
-		obj_kabeleft->Update();
-		obj_tunnel->Update();
-		//obj_backwall->Update();
-
 		//スプライト更新
 		sprite_back->Update();
 
+		camera->Update();// カメラの更新
+		updatePattern();//更新パターン
+		Field* field = Field::GetInstance();
+		field->Update();//フィールド更新
+		obj_kaberight->Update();
+		obj_kabeleft->Update();
 		pause->SpUpdate();
-
 		player_->Update();
+		particle->Update();// パーティクル更新
 
 		//----------------↓シーン切り替え関連↓----------------//
 		//自機HP0でゲームオーバー
@@ -1504,9 +1454,6 @@ void GamePlayScene::Update()
 		if (player_->GetPHpLessThan0() == false) {
 			CollisionAll();
 		}
-
-		// パーティクル更新
-		particle->Update();
 	}//ここまでポーズしてないとき
 
 	//くらったらクールタイム
@@ -1532,14 +1479,8 @@ void GamePlayScene::Draw()
 	}
 
 	//3dオブジェ描画
-	for (auto& i : obj_ground) {
-		i.second->Draw();
-	}
-	obj_groundBottom->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
-	obj_tunnel->Draw();
-	//obj_backwall->Draw();
 
 	//敵描画
 	if (sEnemyMurdersNum >= NeededBeforeBossBattleNum) {
@@ -1547,9 +1488,9 @@ void GamePlayScene::Draw()
 			boss->Draw();
 		}
 	}
-
-	//自キャラ描画
-	player_->Draw();
+	Field* field = Field::GetInstance();//フィールド描画
+	field->Draw();
+	player_->Draw();//自キャラ描画
 
 	// パーティクル描画
 	DxBase* dxBase = DxBase::GetInstance();
@@ -1561,7 +1502,7 @@ void GamePlayScene::Draw()
 
 void GamePlayScene::DrawUI()
 {
-	//// スプライト共通コマンド
+	// スプライト共通コマンド
 	SpriteBase::GetInstance()->PreDraw();
 
 	//---------------お手前スプライト描画

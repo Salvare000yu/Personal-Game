@@ -39,8 +39,6 @@ public:
 
 	void Finalize() override;
 
-	void GroundMove();
-
 	void UpdateMouse();
 	void UpdateCamera();
 
@@ -114,9 +112,6 @@ private:
 	std::unique_ptr < Sprite> sp_enemyhpbar = nullptr;
 	std::unique_ptr < Sprite> sp_enemyhpbarwaku = nullptr;
 
-	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
-	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
-	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Model> mod_kabeleft = nullptr;//壁
 	std::unique_ptr < Model> mod_smallenemy = nullptr;//雑魚敵
@@ -126,13 +121,10 @@ private:
 	std::unique_ptr < Model> mod_straightbul = nullptr;//直線弾
 	std::unique_ptr < Model> mod_player = nullptr;// 自機
 	std::unique_ptr < Model> mod_bossColli = nullptr;
-	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Model> mod_backwall = nullptr;//仮最後の壁
 
-	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
 	std::unique_ptr < Object3d> obj_kabeleft = nullptr;
-	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 	std::unique_ptr < Object3d> obj_backwall = nullptr;
 
 	// カメラ
@@ -143,12 +135,6 @@ private:
 	//----ポストエフェクト関連
 	//ヴィネット強さ
 	float vignettePow = 0;
-
-	//---地面
-	//地面二種類を上下に揺らす
-	float swingDist ;//揺らす距離
-	float swingSp;//揺らす速度
-	float groundPosDef;//地面を置く座標　ここ中心に上下
 
 	//<<<<<開始時演出
 	//ゲーム開始時フレーム
