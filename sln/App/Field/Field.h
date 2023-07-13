@@ -15,7 +15,7 @@ public:
 	void Draw();
 
 	void GroundUpDown();//地面上下
-	void GroundMove();//地面の動き
+	void GroundAdvance();//地面前進
 	void TunnelMove();//トンネルの動き
 
 	void Departure();//発進

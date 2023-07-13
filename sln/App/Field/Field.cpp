@@ -77,7 +77,7 @@ void Field::GroundUpDown()
 	}
 }
 
-void Field::GroundMove()
+void Field::GroundAdvance()
 {
 	XMFLOAT2 tmp{};
 
@@ -101,7 +101,7 @@ void Field::TunnelMove()
 void Field::Departure()
 {
 	TunnelMove();
-	GroundMove();
+	GroundAdvance();
 }
 
 void Field::Update()

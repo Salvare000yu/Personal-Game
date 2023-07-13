@@ -1,4 +1,5 @@
 ﻿#include "PlayerFireLine.h"
+#include <yaml/Yaml.hpp>
 
 using namespace DirectX;
 
@@ -17,7 +18,7 @@ void PlayerFireLine::Update()
 	XMFLOAT3 FireLinePos = obj->GetPosition();
 
 	obj->SetPosition(FireLinePos);
-
+	obj->SetColor({ 1,1,1,0.6f });
 	obj->Update();
 }
 

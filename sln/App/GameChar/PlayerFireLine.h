@@ -15,8 +15,6 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-	XMFLOAT3 velocity{ 0,0,6 };
-
 public:
 	//初期化
 	void Initialize()override;
@@ -32,4 +30,7 @@ public:
 	void SetVelocity(const XMFLOAT3& velocity) { this->velocity = velocity; }
 
 	const XMFLOAT3& GetVelocity() { return velocity; }
+
+private:
+	XMFLOAT3 velocity{ 0,0,6 };
 };
