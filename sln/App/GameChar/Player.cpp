@@ -155,7 +155,7 @@ void Player::PlayerDeath()
 		explosionFlag = true;
 		// 音声再生 鳴らしたいとき
 		GameSound::GetInstance()->PlayWave("destruction1.wav", 0.2f);
-		particle->CreateParticle(nowPos, 50, 30, 10, { 1,0.1f,0.8f }, { 1,0,0 });
+		particle->CreateParticle(obj->GetPosition(), 50, 30, 10, {1,0.1f,0.8f}, {1,0,0});
 		partTimeInterval = 0;
 		particleFrame = 0;
 	}

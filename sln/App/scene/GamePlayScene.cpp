@@ -1485,7 +1485,7 @@ void GamePlayScene::Update()
 		obj_kaberight->Update();
 		obj_kabeleft->Update();
 		obj_tunnel->Update();
-		obj_backwall->Update();
+		//obj_backwall->Update();
 
 		//スプライト更新
 		sprite_back->Update();
@@ -1539,7 +1539,7 @@ void GamePlayScene::Draw()
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_tunnel->Draw();
-	obj_backwall->Draw();
+	//obj_backwall->Draw();
 
 	//敵描画
 	if (sEnemyMurdersNum >= NeededBeforeBossBattleNum) {

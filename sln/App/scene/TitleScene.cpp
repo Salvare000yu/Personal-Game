@@ -90,11 +90,11 @@ void TitleScene::Initialize()
 	obj_groundBottom->SetModel(mod_groundBottom.get());
 	//------object3dスケール------//
 	constexpr float groundScale = 5000;
-	obj_tunnel->SetScale({ groundScale, groundScale, groundScale });
+	obj_tunnel->SetScale({ groundScale, groundScale, groundScale*2.f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_logo->SetScale({ 40.f,40.f,40.f });
-	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale*2.f });
+	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale });
 
 	//地面
 	for (auto& i : obj_ground) {

@@ -113,7 +113,7 @@ private:
 	uint32_t necesFrame;//かかる時間
 	DirectX::XMFLOAT3 moveSp = {};//移動速度
 	DirectX::XMFLOAT3 targetPos;//目標座標
-	DirectX::XMFLOAT3 nowPos = {};//その時の位置
+	//DirectX::XMFLOAT3 nowPos = {};//その時の位置
 
 	uint32_t partTimeInterval;
 	uint32_t particleFrame;//パーティクル出すフレ
