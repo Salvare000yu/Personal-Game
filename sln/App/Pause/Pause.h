@@ -4,20 +4,20 @@
 #include "Sprite.h"
 #include "BaseScene.h"
 
-class Pause :public BaseScene
+class Pause
 {
 public:
 	static Pause* GetInstance();
 
-	void Initialize()override;
+	void Initialize();
 	void EveryInit();
 	//ポーズしているとき
 	void PauseNow();
 	//タイトルへ
-	void Update()override;
-	void Draw()override;
-	void DrawUI()override;
-	void Finalize()override;
+	void Update();
+	void Draw();
+	void DrawUI();
+	void Finalize();
 	void PauseGoTitle();
 	void SpUpdate();
 	void SpOpenPauseDraw();
