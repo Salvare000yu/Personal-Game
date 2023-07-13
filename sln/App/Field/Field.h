@@ -25,6 +25,8 @@ private:
 	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
 	std::unique_ptr < Object3d> obj_tunnel = nullptr;
 
+	DirectX::XMFLOAT3 fieldScale;//トンネルと地面の大きさ
+
 	//<<<<<地面
 	float groundPosDef;//地面を置く座標　ここ中心に上下
 	float swingSp;//揺らす速度

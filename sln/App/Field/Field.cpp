@@ -25,6 +25,13 @@ void Field::Initialize()
 		swingDist = root["swingDist"].As<float>();
 		swingSp = root["swingSp"].As<float>();
 		groundPosDef = root["groundPosDef"].As<float>();
+		
+		auto& fieldScaleNode = root["fieldScale"];
+		fieldScale = {
+			fieldScaleNode["x"].As<float>(),
+			fieldScaleNode["y"].As<float>(),
+			fieldScaleNode["z"].As<float>()
+		};
 		shiftSpeed = root["shiftSpeed"].As<float>();
 	}
 	//------objからモデルデータ読み込み---
@@ -39,9 +46,8 @@ void Field::Initialize()
 	obj_groundBottom->SetModel(mod_groundBottom.get());
 	obj_tunnel->SetModel(mod_tunnel.get());
 	//------object3dスケール------//
-	constexpr float groundScale = 5000;
-	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale });
-	obj_tunnel->SetScale({ groundScale, groundScale, groundScale * 2.f });
+	obj_groundBottom->SetScale(fieldScale);
+	obj_tunnel->SetScale({ fieldScale.x, fieldScale.y, fieldScale.z * 2.f });
 
 	//地面
 	for (auto& i : obj_ground) {
