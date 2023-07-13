@@ -63,26 +63,30 @@ void Field::Initialize()
 	obj_tunnel->SetPosition({ 0,40,0 });
 }
 
-void Field::GroundMove()
+void Field::GroundUpDown()
 {
 	groundMoveTime = ++groundMoveFrame / 60.f;
 
 	float num = std::sinf((float)groundMoveTime * swingSp) * swingDist;
-	XMFLOAT2 tmp{};
-
 	//地面の数だけ
 	for (auto& i : obj_ground) {
 		XMFLOAT3 pos = i.second->GetPosition();
 		pos.y = groundPosDef + num;//初期位置＋揺らす値
 		i.second->SetPosition(pos);
 		num = -num;//二枚目は逆に揺らす
+	}
+}
 
+void Field::GroundMove()
+{
+	XMFLOAT2 tmp{};
+
+	//地面の数だけ
+	for (auto& i : obj_ground) {
 		//UVシフト
 		tmp = i.second->GetModel()->GetUvShift();
 		tmp.y += shiftSpeed;
 		i.second->GetModel()->SetUvShift(tmp);
-
-		i.second->Update();
 	}
 }
 
@@ -94,11 +98,20 @@ void Field::TunnelMove()
 	mod_tunnel->SetUvShift(tmp);
 }
 
+void Field::Departure()
+{
+	TunnelMove();
+	GroundMove();
+}
+
 void Field::Update()
 {
-	GroundMove();//地面揺らす
-	TunnelMove();//トンネル動き
+	GroundUpDown();
 
+	//地面の数だけ
+	for (auto& i : obj_ground) {
+		i.second->Update();
+	}
 	obj_groundBottom->Update();
 	obj_tunnel->Update();
 }

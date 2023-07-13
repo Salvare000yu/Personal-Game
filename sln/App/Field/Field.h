@@ -14,8 +14,11 @@ public:
 	void Update();
 	void Draw();
 
+	void GroundUpDown();//地面上下
 	void GroundMove();//地面の動き
 	void TunnelMove();//トンネルの動き
+
+	void Departure();//発進
 private:
 	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
 	std::unique_ptr < Object3d> obj_groundBottom = nullptr;

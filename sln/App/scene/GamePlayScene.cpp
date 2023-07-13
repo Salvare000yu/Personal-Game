@@ -1312,6 +1312,9 @@ void GamePlayScene::BossBattleReadyUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 
+	Field*field=Field::GetInstance();
+	field->Departure();//発進
+
 	//雑魚敵更新
 	for (auto& bo : boss_) {
 		if (!bo->GetBossEnemyAdvent()) {
@@ -1347,6 +1350,9 @@ void GamePlayScene::BossBattleUpdate()
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 	PlayerHpUpdate();//自機HPバー
+
+	Field* field = Field::GetInstance();
+	field->Departure();//発進
 
 	//敵のHPバー
 	for (auto& bo : boss_) {
