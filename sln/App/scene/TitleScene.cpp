@@ -7,6 +7,7 @@
 #include "GamePlayScene.h"
 #include "GameUtility.h"
 #include "PostEffect.h"
+#include "Field.h"
 #include <yaml/Yaml.hpp>
 
 using namespace DirectX;
@@ -54,6 +55,10 @@ void TitleScene::Initialize()
 
 	WinApp* winApp = WinApp::GetInstance();
 
+	//フィールド初期化
+	Field* field = Field::GetInstance();
+	field->Initialize();
+
 	SceneChangeDirection* sceneChangeDirection = SceneChangeDirection::GetInstance();
 	//シーン遷移演出初期化
 	sceneChangeDirection->Initialize();
@@ -66,52 +71,28 @@ void TitleScene::Initialize()
 	Object3d::SetCamera(camera.get());
 
 	////---objからモデルデータ読み込み---
-	mod_tunnel.reset(Model::LoadFromOBJ("tunnel"));
 	mod_player.reset(Model::LoadFromOBJ("player"));
 	mod_kaberight.reset(Model::LoadFromOBJ("Rkabetaijin"));
 	mod_kabeleft.reset(Model::LoadFromOBJ("kabetaijin"));
 	mod_logo.reset(Model::LoadFromOBJ("STRIKER_Logo"));
-	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
-
-	obj_ground.emplace("ground_gre", Object3d::Create());
-	obj_ground.emplace("ground_mag", Object3d::Create());
 
 	////---3dオブジェクト生成---
-	obj_tunnel.reset(Object3d::Create());
 	obj_kaberight.reset(Object3d::Create());
 	obj_kabeleft.reset(Object3d::Create());
 	obj_logo.reset(Object3d::Create());
-	obj_groundBottom.reset(Object3d::Create());
 	////---3dオブジェクトに3dモデルを紐づける---
-	obj_tunnel->SetModel(mod_tunnel.get());
 	obj_kaberight->SetModel(mod_kaberight.get());
 	obj_kabeleft->SetModel(mod_kabeleft.get());
 	obj_logo->SetModel(mod_logo.get());
-	obj_groundBottom->SetModel(mod_groundBottom.get());
 	//------object3dスケール------//
-	constexpr float groundScale = 5000;
-	obj_tunnel->SetScale({ groundScale, groundScale, groundScale*2.f });
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_logo->SetScale({ 40.f,40.f,40.f });
-	obj_groundBottom->SetScale({ groundScale, groundScale, groundScale });
-
-	//地面
-	for (auto& i : obj_ground) {
-		auto& model = mod_ground.emplace(i.first, Model::LoadFromOBJ(i.first)).first;
-		constexpr float tilingNum = 16.f;
-		model->second->SetTiling({ tilingNum, tilingNum });
-		i.second->SetModel(mod_ground.at(i.first).get());
-		i.second->SetScale(obj_groundBottom->GetScale());//地面下と合わせる
-	}
-	obj_ground.at("ground_mag")->SetPosition({ 0,-299,0 });
 
 	//------object3d位置------//
-	obj_tunnel->SetPosition({ 0,40,0 });
 	obj_kaberight->SetPosition({ 490,340,-500 });
 	obj_kabeleft->SetPosition({ -490,340,-500 });
 	obj_logo->SetPosition({ 0,100,-1000 });
-	obj_groundBottom->SetPosition({ 0,-220,0 });
 	//------object回転
 	obj_kaberight->SetRotation({ 0,0,0 });
 	obj_kabeleft->SetRotation({ 0,180,0 });
@@ -349,36 +330,16 @@ void TitleScene::Update()
 		}
 	}
 
+	//フィールド更新
+	Field* field = Field::GetInstance();
+	field->Update();
+
 	LogoMove();//ロゴの動き
 
-	obj_tunnel->Update();
 	player_->Update();
 	obj_kaberight->Update();
 	obj_kabeleft->Update();
 	obj_logo->Update();
-	obj_groundBottom->Update();
-	{
-		constexpr float shiftSpeed = 0.01f;
-
-		XMFLOAT2 tmp = mod_tunnel->GetUvShift();
-		tmp.y += shiftSpeed / mod_ground.at("ground_gre")->GetTiling().y;
-		mod_tunnel->SetUvShift(tmp);
-
-		float num = std::sin((float)time * swingSp) * swingDist;
-		//地面の数だけ
-		for (auto& i : obj_ground) {
-			XMFLOAT3 pos = i.second->GetPosition();
-			pos.y = posDef + num;//初期位置＋揺らす値
-			i.second->SetPosition(pos);
-			num = -num;//二枚目は逆に揺らす
-
-			tmp = i.second->GetModel()->GetUvShift();
-			tmp.y += shiftSpeed;
-			i.second->GetModel()->SetUvShift(tmp);
-
-			i.second->Update();
-		}
-	}
 
 	// カメラの更新
 	camera->Update();
@@ -392,16 +353,15 @@ void TitleScene::Draw()
 	//3dオブジェ描画前処理
 	Object3d::PreDraw(DxBase::GetInstance()->GetCmdList());
 
+	//フィールド描画
+	Field* field = Field::GetInstance();
+	field->Draw();
+
 	//３DオブジェクトDraw
-	obj_tunnel->Draw();
 	player_->Draw();
 	obj_kaberight->Draw();
 	obj_kabeleft->Draw();
 	obj_logo->Draw();
-	obj_groundBottom->Draw();
-	for (auto& i : obj_ground) {
-		i.second->Draw();
-	}
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();

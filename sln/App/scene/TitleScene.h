@@ -50,14 +50,6 @@ private:
 	std::unique_ptr < Sprite> sp_titleoper = nullptr;
 
 	//----------3dobj
-	std::unique_ptr < Model> mod_tunnel = nullptr;//トンネル
-	std::unique_ptr < Object3d> obj_tunnel = nullptr;
-
-	std::unique_ptr < Model> mod_groundBottom = nullptr;//した地面
-	std::unique_ptr < Object3d> obj_groundBottom = nullptr;
-
-	std::unordered_map <std::string, std::unique_ptr < Model>> mod_ground;//地面
-	std::unordered_map <std::string, std::unique_ptr < Object3d>> obj_ground;
 
 	std::unique_ptr < Model> mod_kaberight = nullptr;//壁
 	std::unique_ptr < Object3d> obj_kaberight = nullptr;
@@ -78,12 +70,6 @@ private:
 	float startSp = 1.5;
 
 	bool sceneChangeFlag = false;//シーンチェンジ開始前
-
-	//---地面
-	//地面二種類を上下に揺らす
-	const float swingDist = 10.f;//揺らす距離
-	const float swingSp = 2.f;//揺らす速度
-	float posDef = -150;//地面を置く座標　ここ中心に上下
 
 	//----------登場退場共通----------//
 	float pApMoveFrameMax;//経過時間最大フレーム(登場)
