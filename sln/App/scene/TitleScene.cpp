@@ -8,6 +8,7 @@
 #include "GameUtility.h"
 #include "PostEffect.h"
 #include "Field.h"
+#include "Easing.h"
 #include <yaml/Yaml.hpp>
 
 using namespace DirectX;
