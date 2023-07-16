@@ -112,4 +112,6 @@ private:
 
 	// カメラ
 	std::unique_ptr<CameraTracking> camera;
+
+	int testTime = 0;
 };
