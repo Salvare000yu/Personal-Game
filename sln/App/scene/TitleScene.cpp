@@ -88,7 +88,7 @@ void TitleScene::Initialize()
 	//------object3dスケール------//
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_logo->SetScale({ 40.f,40.f,40.f });
+	obj_logo->SetScale({ 3.f,3.f,3.f });//40
 
 	//------object3d位置------//
 	obj_kaberight->SetPosition({ 490,340,-500 });
@@ -336,11 +336,11 @@ void TitleScene::Update()
 		
 		constexpr float sPos = 0.f;
 		constexpr float ePos = -100.f;
-		constexpr float totalT = 180.f;
+		constexpr float totalT = 100.f;
 
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		//if (pos.x >= ePos) {//maxPosで終了
-			pos.x += Easing::EaseInOutElastic((float)testTime, sPos, ePos, totalT);
+			pos.x += Easing::EaseIn((float)testTime, sPos, ePos, totalT);
 			obj_logo->SetPosition(pos);
 			testTime++;
 		//}

@@ -11,11 +11,16 @@ float Easing::EaseIn(
 )
 {
 	// 間隔
-	const float dist = t / totalTime;
-	// 加速度の変化
-	const float acceleration = std::pow(dist, 2.f);
-	//現在位置
-	const float currentPos = startPos + (endPos - startPos) * acceleration;
+	const float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	const float result= std::sin(1.5707963f * distTime);
+
+	// 現在位置
+	const float currentPos= startPos + distPos * result;
 
 	return currentPos;
 }
