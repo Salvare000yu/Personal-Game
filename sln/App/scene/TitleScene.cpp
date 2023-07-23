@@ -335,15 +335,15 @@ void TitleScene::Update()
 	if (input->PushKey(DIK_0)) {
 		
 		constexpr float sPos = 0.f;
-		constexpr float ePos = -200.f;
+		constexpr float ePos = -100.f;
 		constexpr float totalT = 180.f;
 
 		XMFLOAT3 pos = obj_logo->GetPosition();
-		if (pos.x >= ePos) {//maxPosで終了
-			pos.x += Easing::EaseIn((float)testTime, sPos, ePos, totalT);
+		//if (pos.x >= ePos) {//maxPosで終了
+			pos.x += Easing::EaseOutElastic((float)testTime, sPos, ePos, totalT);
 			obj_logo->SetPosition(pos);
 			testTime++;
-		}
+		//}
 		{//でばてき　現在位置
 			char tmp[32]{};
 			sprintf_s(tmp, 32, "%f", pos.x);

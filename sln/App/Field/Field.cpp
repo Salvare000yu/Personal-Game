@@ -123,5 +123,5 @@ void Field::Draw()
 		i.second->Draw();
 	}
 	obj_groundBottom->Draw();
-	obj_tunnel->Draw();
+	//obj_tunnel->Draw();
 }

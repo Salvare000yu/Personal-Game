@@ -14,15 +14,22 @@ public:
 
 	/// @brief イーズイン
 	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
-	/// @param maxPos 最大位置
-	/// @param nowPos 現在位置
-	/// @return 現在位置から時間内で進んだ位置
-	static inline float EaseIn(float t, float startPos,float endPos, float totalTime) {
-		float acceleration =std::pow(t/totalTime,2.f);
-		float currentPos = startPos+(endPos-startPos)*acceleration;
+	/// @return 現在の位置
+	static float EaseIn(
+		const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
 
-		return currentPos;
-	}
+	static float EaseOutElastic(const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
+
 };
 
