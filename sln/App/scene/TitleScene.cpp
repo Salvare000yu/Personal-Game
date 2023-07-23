@@ -340,7 +340,7 @@ void TitleScene::Update()
 
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		//if (pos.x >= ePos) {//maxPosで終了
-			pos.x += Easing::EaseInElastic((float)testTime, sPos, ePos, totalT);
+			pos.x += Easing::EaseInOutElastic((float)testTime, sPos, ePos, totalT);
 			obj_logo->SetPosition(pos);
 			testTime++;
 		//}

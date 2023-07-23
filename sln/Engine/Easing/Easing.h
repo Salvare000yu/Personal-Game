@@ -25,7 +25,7 @@ public:
 		const float totalTime
 	);
 
-	/// @brief 揺れてから速くなっていく
+	/// @brief 揺れてから速くなる感じ
 	/// @param t 時間
 	/// @param startPos 開始位置
 	/// @param endPos 最大位置
@@ -38,11 +38,30 @@ public:
 		const float totalTime
 	);
 
+	/// @brief 最終地点で揺れる感じ
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在位置
 	static float EaseOutElastic(
-const float t,
+		const float t,
 		const float startPos,
 		const float endPos,
 		const float totalTime
+	);
+
+	/// @brief 揺れてから速くなる最終地点で揺れる複合
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在位置
+	static float EaseInOutElastic(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
 	);
 
 };
