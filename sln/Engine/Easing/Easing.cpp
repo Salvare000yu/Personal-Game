@@ -130,10 +130,10 @@ float Easing::EaseInOutQuad(
 	float result;
 
 	if (distTime < 0.5f) {// EaseInQuad → EaseOutQuad
-		result = 2*std::pow(distTime, 2.f);
+		result = 2 * std::pow(distTime, 2.f);
 	}
 	else {
-		result = distTime * (4-2 *distTime)-1;
+		result = distTime * (4 - 2 * distTime) - 1;
 	}
 
 	// 現在位置
@@ -144,7 +144,7 @@ float Easing::EaseInOutQuad(
 float Easing::EaseInCubic(
 	const float t,
 	const float startPos,
-	const float endPos, 
+	const float endPos,
 	const float totalTime
 )
 {
@@ -155,7 +155,7 @@ float Easing::EaseInCubic(
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納
-	const float result=std::pow(distTime,3.f);
+	const float result = std::pow(distTime, 3.f);
 
 	// 現在位置
 	const float currentPos = distPos * result + startPos;
@@ -164,19 +164,48 @@ float Easing::EaseInCubic(
 
 float Easing::EaseOutCubic(
 	const float t,
-	const float startPos, 
-	const float endPos, 
+	const float startPos,
+	const float endPos,
 	const float totalTime
 )
 {
 	// 間隔
-	const float distTime = t / totalTime-1.f;
+	const float distTime = t / totalTime - 1.f;
 
 	// 場所の間隔
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納
-	const float result = 1+std::pow(distTime, 3.f);
+	const float result = 1 + std::pow(distTime, 3.f);
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
+
+float Easing::EaseInOutCubic(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / (totalTime / 2.f);
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	float result;
+
+	if (distTime < 1.f) {
+		result = 0.5f * std::pow(distTime, 3.f);
+	}
+	else {
+		distTime -= 2.f;
+		result = 0.5f * (std::pow(distTime, 3.f) + 2.f);
+	}
 
 	// 現在位置
 	const float currentPos = distPos * result + startPos;
