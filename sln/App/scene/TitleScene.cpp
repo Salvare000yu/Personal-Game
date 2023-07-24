@@ -340,7 +340,7 @@ void TitleScene::Update()
 
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		if (testTime<=totalT) {//指定時間で終了
-			pos.x = Easing::EaseOutSine((float)testTime, sPos, ePos, totalT);
+			pos.x = Easing::EaseInOutSine((float)testTime, sPos, ePos, totalT);
 			obj_logo->SetPosition(pos);
 			testTime++;
 		}

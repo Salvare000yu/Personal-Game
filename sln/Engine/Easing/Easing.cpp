@@ -16,7 +16,7 @@ float Easing::EaseInSine(
 	// 場所の間隔
 	const float distPos = endPos - startPos;
 
-	// 計算結果一時格納				1.5707963f
+	// 計算結果一時格納				1.5707963f(π/2)
 	const float result= std::cos(distTime*XM_PIDIV2);
 
 	// 現在位置
@@ -38,11 +38,33 @@ float Easing::EaseOutSine(
 	// 場所の間隔
 	const float distPos = endPos - startPos;
 
-	// 計算結果一時格納				1.5707963f
+	// 計算結果一時格納				1.5707963f(π/2)
 	const float result = std::sin(distTime * XM_PIDIV2);
 
 	// 現在位置
 	const float currentPos = distPos * result + startPos;
+
+	return currentPos;
+}
+
+float Easing::EaseInOutSine(
+	const float t, 
+	const float startPos, 
+	const float endPos, 
+	const float totalTime
+)
+{
+	// 間隔
+	const float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	const float result = std::cos(distTime * XM_PI)-1;
+
+	// 現在位置
+	const float currentPos = -distPos/2*result+startPos;
 
 	return currentPos;
 }
