@@ -162,6 +162,27 @@ float Easing::EaseInCubic(
 	return currentPos;
 }
 
+float Easing::EaseOutCubic(
+	const float t,
+	const float startPos, 
+	const float endPos, 
+	const float totalTime
+)
+{
+	// 間隔
+	const float distTime = t / totalTime-1.f;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	const float result = 1+std::pow(distTime, 3.f);
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
+
 float Easing::EaseInElastic(
 	const float t,
 	const float startPos,
