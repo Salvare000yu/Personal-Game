@@ -463,25 +463,25 @@ float Easing::EaseInBounce(
 	return currentPos;
 }
 
-//float Easing::EaseInBounce(
-//	const float t,
-//	const float startPos,
-//	const float endPos,
-//	const float totalTime
-//)
-//{
-//	// 間隔
-//	float distTime = t / totalTime;
-//
-//	// 場所の間隔
-//	const float distPos = endPos - startPos;
-//
-//	// 計算結果一時格納
-//	const float result =
-//		std::pow(2.f, -6 * distTime) *
-//		std::abs(std::sin(distTime * XM_PI * 3.5f));// 複素数の絶対値
-//
-//	// 現在位置
-//	const float currentPos = distPos * result + startPos;
-//	return currentPos;
-//}
+float Easing::EaseOutBounce(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	const float result =
+		1-std::pow(2.f, -6 * distTime) *
+		std::abs(std::cos(distTime * XM_PI * 3.5f));// 複素数の絶対値
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
