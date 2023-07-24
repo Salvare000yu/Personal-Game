@@ -305,6 +305,28 @@ float Easing::EaseInBack(
 	return currentPos;
 }
 
+float Easing::EaseOutBack(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / totalTime;
+	--distTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納 2.70158f-1.70158f=1
+	const float result = 1+std::pow(distTime, 2.f) * (2.70158f * distTime + 1.70158f);
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
+
 float Easing::EaseInElastic(
 	const float t,
 	const float startPos,

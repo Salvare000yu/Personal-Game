@@ -168,13 +168,26 @@ public:
 		const float totalTime
 	);
 
-	/// @brief イーズインバック(下がってから速くなる感じ)
+	/// @brief イーズインバック(下がってから速くなる感じ、チョロQ)
 	/// @param t 時間
 	/// @param startPos 開始位置
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
 	static float EaseInBack(
+		const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
+
+	/// @brief イーズアウトバック(だんだん遅くなる時に少し前に出てから戻って止まる)
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在の位置
+	static float EaseOutBack(
 		const float t,
 		const float startPos,
 		const float endPos,
