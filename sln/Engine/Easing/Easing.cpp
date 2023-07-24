@@ -17,10 +17,10 @@ float Easing::EaseInSine(
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納				1.5707963f(π/2)
-	const float result= std::cos(distTime*XM_PIDIV2);
+	const float result = std::cos(distTime * XM_PIDIV2);
 
 	// 現在位置
-	const float currentPos= -distPos * result+distPos+startPos;
+	const float currentPos = -distPos * result + distPos + startPos;
 
 	return currentPos;
 }
@@ -48,9 +48,9 @@ float Easing::EaseOutSine(
 }
 
 float Easing::EaseInOutSine(
-	const float t, 
-	const float startPos, 
-	const float endPos, 
+	const float t,
+	const float startPos,
+	const float endPos,
 	const float totalTime
 )
 {
@@ -61,10 +61,10 @@ float Easing::EaseInOutSine(
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納
-	const float result = std::cos(distTime * XM_PI)-1;
+	const float result = std::cos(distTime * XM_PI) - 1;
 
 	// 現在位置
-	const float currentPos = -distPos/2*result+startPos;
+	const float currentPos = -distPos / 2 * result + startPos;
 
 	return currentPos;
 }
@@ -72,7 +72,7 @@ float Easing::EaseInOutSine(
 float Easing::EaseInQuad(
 	const float t,
 	const float startPos,
-	const float endPos, 
+	const float endPos,
 	const float totalTime
 )
 {
@@ -83,7 +83,7 @@ float Easing::EaseInQuad(
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納
-	const float result = std::pow(distTime,2.f);
+	const float result = std::pow(distTime, 2.f);
 
 	// 現在位置
 	const float currentPos = distPos * result + startPos;
@@ -105,11 +105,39 @@ float Easing::EaseOutQuad(
 	const float distPos = endPos - startPos;
 
 	// 計算結果一時格納
-	const float result = distTime*(distTime-2.f);
+	const float result = distTime * (distTime - 2.f);
 
 	// 現在位置
-	const float currentPos =  - distPos * result+startPos;
+	const float currentPos = -distPos * result + startPos;
 
+	return currentPos;
+}
+
+float Easing::EaseInOutQuad(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
+)
+{
+	// 間隔
+	const float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	float result;
+
+	if (distTime < 0.5f) {// EaseInQuad → EaseOutQuad
+		result = 2*std::pow(distTime, 2.f);
+	}
+	else {
+		result = distTime * (4-2 *distTime)-1;
+	}
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
 	return currentPos;
 }
 
@@ -186,7 +214,7 @@ float Easing::EaseInOutElastic(
 		result = 0.5f + 0.75f * std::sin(distTime * XM_PI * 4.f);
 	}
 	else {
-		t2 = std::pow(distTime-1,2.f);
+		t2 = std::pow(distTime - 1, 2.f);
 		// 計算結果
 		result = 1 - 8 * t2 * t2 * std::sin(distTime * XM_PI * 9.f);
 	}
