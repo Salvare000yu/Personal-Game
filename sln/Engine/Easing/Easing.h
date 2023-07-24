@@ -272,5 +272,17 @@ public:
 		const float totalTime
 	);
 
+	/// @brief イーズインアウトバウンス（最初と最後にはねる）
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在位置
+	static float EaseInOutBounce(
+		const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
 };
 

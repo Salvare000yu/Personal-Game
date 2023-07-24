@@ -485,3 +485,35 @@ float Easing::EaseOutBounce(
 	const float currentPos = distPos * result + startPos;
 	return currentPos;
 }
+
+float Easing::EaseInOutBounce(
+	const float t, 
+	const float startPos,
+	const float endPos, 
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	float result;
+
+	if (distTime < 0.5f) {
+		result= 
+			8.f * std::pow(2.f, 8.f * (distTime - 1.f)) *
+			std::abs(std::sin(distTime * XM_PI * 7.f));
+	}
+	else {
+		result= 
+			1.f - 8.f *std:: pow(2.f, -8.f * distTime) *
+			std::abs(std::sin(distTime * XM_PI * 7.f));
+	}
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
