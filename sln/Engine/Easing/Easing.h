@@ -155,6 +155,19 @@ public:
 		const float totalTime
 	);
 
+	/// @brief イーズインアウト(Quart)4次 複合
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在の位置
+	static float EaseInOutQuart(
+		const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
+
 	/// @brief 揺れてから速くなる感じ
 	/// @param t 時間
 	/// @param startPos 開始位置

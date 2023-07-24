@@ -254,6 +254,36 @@ float Easing::EaseOutQuart(
 	return currentPos;
 }
 
+float Easing::EaseInOutQuart(
+	const float t,
+	const float startPos,
+	const float endPos, 
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	float result;
+
+	if (distTime < 0.5f ) {
+		distTime *= distTime;
+		result = 8 * distTime * distTime;
+	}
+	else {
+		distTime = (--distTime)*distTime;
+		result= (1 - 8 * distTime * distTime);
+	}
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
+
 float Easing::EaseInElastic(
 	const float t,
 	const float startPos,
