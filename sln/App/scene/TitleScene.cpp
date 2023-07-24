@@ -334,15 +334,14 @@ void TitleScene::Update()
 	// todo テストコード
 	if (input->PushKey(DIK_0)) {
 		
-		constexpr float sPos = 0.f;
-		constexpr float ePos = -500.f;
+		constexpr XMFLOAT3 startPos= { 0,100,-1000 };
+		constexpr XMFLOAT3 endPos= { -400,200,-800 };
 		constexpr float totalT = 120.f;
 
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		if (testTime<=totalT) {//指定時間で終了
 			//やりたいイージング
-			pos.x = Easing::EaseInOutBounce((float)testTime, sPos, ePos, totalT);
-			obj_logo->SetPosition(pos);
+			obj_logo->SetPosition(Easing::EaseInCubic((float)testTime, startPos, endPos, totalT));
 			testTime++;
 		}
 	}

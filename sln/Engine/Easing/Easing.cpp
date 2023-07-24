@@ -141,10 +141,10 @@ float Easing::EaseInOutQuad(
 	return currentPos;
 }
 
-float Easing::EaseInCubic(
+XMFLOAT3 Easing::EaseInCubic(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -152,13 +152,19 @@ float Easing::EaseInCubic(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	const float distPosX = endPos.x - startPos.x;
+	const float distPosY = endPos.y - startPos.y;
+	const float distPosZ = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::pow(distTime, 3.f);
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	const float currentPosX = distPosX * result + startPos.x;
+	const float currentPosY = distPosY * result + startPos.y;
+	const float currentPosZ = distPosZ * result + startPos.z;
+	const XMFLOAT3 currentPos{ currentPosX ,currentPosY ,currentPosZ };
+
 	return currentPos;
 }
 
@@ -478,7 +484,7 @@ float Easing::EaseOutBounce(
 
 	// 計算結果一時格納
 	const float result =
-		1-std::pow(2.f, -6 * distTime) *
+		1-std::pow(2.f, -6.f * distTime) *
 		std::abs(std::cos(distTime * XM_PI * 3.5f));// 複素数の絶対値
 
 	// 現在位置
@@ -512,6 +518,29 @@ float Easing::EaseInOutBounce(
 			1.f - 8.f *std:: pow(2.f, -8.f * distTime) *
 			std::abs(std::sin(distTime * XM_PI * 7.f));
 	}
+
+	// 現在位置
+	const float currentPos = distPos * result + startPos;
+	return currentPos;
+}
+
+float Easing::EaseCurrentBounce(
+	const float t,
+	const float startPos,
+	const float endPos,
+	const float totalTime
+)
+{
+	// 間隔
+	float distTime = t / totalTime;
+
+	// 場所の間隔
+	const float distPos = endPos - startPos;
+
+	// 計算結果一時格納
+	const float result =
+		std::pow(2.f, -6.f * distTime) *
+		std::abs(std::sin(distTime * XM_PI * 3.5f));// 複素数の絶対値
 
 	// 現在位置
 	const float currentPos = distPos * result + startPos;

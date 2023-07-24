@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "DxBase.h"
 #include "GameUtility.h"
+#include "Easing.h"
 #include <yaml/Yaml.hpp>
 
 #include <DirectXMath.h>

@@ -3,6 +3,7 @@
 /// @brief イージングをするクラス
 /// >>>>>>>>
 #include <cmath>
+#include <DirectXMath.h>
 
 class Easing final//継承禁止
 {
@@ -96,10 +97,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInCubic(
+	static DirectX::XMFLOAT3 EaseInCubic(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -279,6 +280,19 @@ public:
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
 	static float EaseInOutBounce(
+		const float t,
+		const float startPos,
+		const float endPos,
+		const float totalTime
+	);
+
+	/// @brief イーズカレントバウンス（その場でバウンドし戻る、ずれる）
+	/// @param t 時間
+	/// @param startPos 開始位置
+	/// @param endPos 最大位置
+	/// @param totalTime 移動にかける時間
+	/// @return 現在位置
+	static float EaseCurrentBounce(
 		const float t,
 		const float startPos,
 		const float endPos,
