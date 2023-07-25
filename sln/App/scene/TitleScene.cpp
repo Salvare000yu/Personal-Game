@@ -341,7 +341,7 @@ void TitleScene::Update()
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		if (testTime<=totalT) {//指定時間で終了
 			//やりたいイージング
-			obj_logo->SetPosition(Easing::EaseInCubic((float)testTime, startPos, endPos, totalT));
+			obj_logo->SetPosition(Easing::EaseOutCubic((float)testTime, startPos, endPos, totalT));
 			testTime++;
 		}
 	}
