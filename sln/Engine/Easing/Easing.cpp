@@ -14,19 +14,21 @@ XMFLOAT3 Easing::EaseInSine(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納				1.5707963f(π/2)
 	const float result = std::cos(distTime * XM_PIDIV2);
 
 	// 現在位置
-	const float currentPosX = -distPosX * result + distPosX + startPos.x;
-	const float currentPosY = -distPosY * result + distPosY + startPos.y;
-	const float currentPosZ = -distPosZ * result + distPosZ + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = -distPos.x * result + distPos.x + startPos.x;
+	currentPos.y = -distPos.y * result + distPos.y + startPos.y;
+	currentPos.z = -distPos.z * result + distPos.z + startPos.z;
 
-	return { currentPosX,currentPosY,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseOutSine(
@@ -40,19 +42,21 @@ XMFLOAT3 Easing::EaseOutSine(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納				1.5707963f(π/2)
 	const float result = std::sin(distTime * XM_PIDIV2);
 
 	// 現在位置
-	const float currentPosX = distPosX * result + startPos.x;
-	const float currentPosY = distPosY * result + startPos.y;
-	const float currentPosZ = distPosZ * result + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 
-	return { currentPosX,currentPosY,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseInOutSine(
@@ -66,19 +70,21 @@ XMFLOAT3 Easing::EaseInOutSine(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::cos(distTime * XM_PI) - 1;
 
 	// 現在位置
-	const float currentPosX = -distPosX / 2 * result + startPos.x;
-	const float currentPosY = -distPosY / 2 * result + startPos.y;
-	const float currentPosZ = -distPosZ / 2 * result + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = -distPos.x / 2 * result + startPos.x;
+	currentPos.y = -distPos.y / 2 * result + startPos.y;
+	currentPos.z = -distPos.z / 2 * result + startPos.z;
 
-	return { currentPosX ,currentPosY ,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseInQuad(
@@ -92,19 +98,21 @@ XMFLOAT3 Easing::EaseInQuad(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::pow(distTime, 2.f);
 
 	// 現在位置
-	const float currentPosX = distPosX * result + startPos.x;
-	const float currentPosY = distPosY * result + startPos.y;
-	const float currentPosZ = distPosZ * result + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 
-	return { currentPosX ,currentPosY ,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseOutQuad(
@@ -118,19 +126,21 @@ XMFLOAT3 Easing::EaseOutQuad(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = distTime * (distTime - 2.f);
 
 	// 現在位置
-	const float currentPosX = -distPosX * result + startPos.x;
-	const float currentPosY = -distPosY * result + startPos.y;
-	const float currentPosZ = -distPosZ * result + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = -distPos.x * result + startPos.x;
+	currentPos.y = -distPos.y * result + startPos.y;
+	currentPos.z = -distPos.z * result + startPos.z;
 
-	return { currentPosX ,currentPosY ,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseInOutQuad(
@@ -144,9 +154,10 @@ XMFLOAT3 Easing::EaseInOutQuad(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	float result;
@@ -159,10 +170,11 @@ XMFLOAT3 Easing::EaseInOutQuad(
 	}
 
 	// 現在位置
-	const float currentPosX = distPosX * result + startPos.x;
-	const float currentPosY = distPosY * result + startPos.y;
-	const float currentPosZ = distPosZ * result + startPos.z;
-	return { currentPosX ,currentPosY ,currentPosZ };
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseInCubic(
@@ -176,19 +188,21 @@ XMFLOAT3 Easing::EaseInCubic(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::pow(distTime, 3.f);
 
 	// 現在位置
-	const float currentPosX = distPosX * result + startPos.x;
-	const float currentPosY = distPosY * result + startPos.y;
-	const float currentPosZ = distPosZ * result + startPos.z;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 
-	return { currentPosX ,currentPosY ,currentPosZ };
+	return currentPos;
 }
 
 XMFLOAT3 Easing::EaseOutCubic(
@@ -202,24 +216,26 @@ XMFLOAT3 Easing::EaseOutCubic(
 	const float distTime = t / totalTime - 1.f;
 
 	// 場所の間隔
-	const float distPosX = endPos.x - startPos.x;
-	const float distPosY = endPos.y - startPos.y;
-	const float distPosZ = endPos.z - startPos.z;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = 1 + std::pow(distTime, 3.f);
 
 	// 現在位置
-	const float currentPosX = distPosX * result + startPos.x;
-	const float currentPosY = distPosY * result + startPos.y;
-	const float currentPosZ = distPosZ * result + startPos.z;
-	return { currentPosX ,currentPosY ,currentPosZ };
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
+	return currentPos;
 }
 
-float Easing::EaseInOutCubic(
+XMFLOAT3 Easing::EaseInOutCubic(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -227,7 +243,10 @@ float Easing::EaseInOutCubic(
 	float distTime = t / (totalTime / 2.f);
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	float result;
@@ -241,14 +260,17 @@ float Easing::EaseInOutCubic(
 	}
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseInQuart(
+XMFLOAT3 Easing::EaseInQuart(
 	const float t,
-	const float startPos, 
-	const float endPos,
+	const XMFLOAT3 startPos, 
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -256,20 +278,26 @@ float Easing::EaseInQuart(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::pow(distTime, 4.f);
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseOutQuart(
+XMFLOAT3 Easing::EaseOutQuart(
 	const float t, 
-	const float startPos, 
-	const float endPos, 
+	const XMFLOAT3 startPos, 
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -277,20 +305,26 @@ float Easing::EaseOutQuart(
 	const float distTime = t / totalTime-1.f;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result = std::pow(distTime, 4.f)-1.f;
 
 	// 現在位置
-	const float currentPos = -distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = -distPos.x * result + startPos.x;
+	currentPos.y = -distPos.y * result + startPos.y;
+	currentPos.z = -distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseInOutQuart(
+XMFLOAT3 Easing::EaseInOutQuart(
 	const float t,
-	const float startPos,
-	const float endPos, 
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -298,7 +332,10 @@ float Easing::EaseInOutQuart(
 	float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	float result;
@@ -313,14 +350,17 @@ float Easing::EaseInOutQuart(
 	}
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseInBack(
+XMFLOAT3 Easing::EaseInBack(
 	const float t,
-	const float startPos,
-	const float endPos, 
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -328,20 +368,26 @@ float Easing::EaseInBack(
 	const float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納 2.70158f-1.70158f=1
 	const float result = std::pow(distTime, 2.f) *(2.70158f*distTime-1.70158f);
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseOutBack(
+XMFLOAT3 Easing::EaseOutBack(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -350,20 +396,26 @@ float Easing::EaseOutBack(
 	--distTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納 2.70158f-1.70158f=1
 	const float result = 1+std::pow(distTime, 2.f) * (2.70158f * distTime + 1.70158f);
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseInOutBack(
+XMFLOAT3 Easing::EaseInOutBack(
 	const float t,
-	const float startPos,
-	const float endPos, 
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -371,7 +423,10 @@ float Easing::EaseInOutBack(
 	float distTime = t / totalTime;
 	
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	float result;
@@ -385,14 +440,17 @@ float Easing::EaseInOutBack(
 	}
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = distPos.x * result + startPos.x;
+	currentPos.y = distPos.y * result + startPos.y;
+	currentPos.z = distPos.z * result + startPos.z;
 	return currentPos;
 }
 
-float Easing::EaseInElastic(
+XMFLOAT3 Easing::EaseInElastic(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -405,17 +463,24 @@ float Easing::EaseInElastic(
 	const float result = t2 * t2 * std::sin(distTime * XM_PI * 4.5f);
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
+
 	// 現在位置
-	const float currentPos = startPos + distPos * result;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 
 	return currentPos;
 }
 
-float Easing::EaseOutElastic(
+XMFLOAT3 Easing::EaseOutElastic(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -428,17 +493,24 @@ float Easing::EaseOutElastic(
 	const float result = 1 - t2 * t2 * std::cos(distTime * XM_PI * 4.5f);
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
-	// 現在位置 -result
-	const float currentPos = startPos + distPos * result;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
+
+	// 現在位置
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 
 	return currentPos;
 }
 
-float Easing::EaseInOutElastic(
+XMFLOAT3 Easing::EaseInOutElastic(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -450,7 +522,10 @@ float Easing::EaseInOutElastic(
 	float result;// 計算結果一時格納
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	if (distTime < 0.45) {
 		t2 = std::pow(distTime, 2.f);
@@ -468,15 +543,18 @@ float Easing::EaseInOutElastic(
 	}
 
 	// 現在位置
-	const float currentPos = startPos + distPos * result;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 
 	return currentPos;
 }
 
-float Easing::EaseInBounce(
+XMFLOAT3 Easing::EaseInBounce(
 	const float t, 
-	const float startPos, 
-	const float endPos, 
+	const XMFLOAT3 startPos, 
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -484,7 +562,10 @@ float Easing::EaseInBounce(
 	float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result=
@@ -492,14 +573,17 @@ float Easing::EaseInBounce(
 		std::abs(std::sin(distTime*XM_PI*3.5f));// 複素数の絶対値
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 	return currentPos;
 }
 
-float Easing::EaseOutBounce(
+XMFLOAT3 Easing::EaseOutBounce(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -507,7 +591,10 @@ float Easing::EaseOutBounce(
 	float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result =
@@ -515,14 +602,17 @@ float Easing::EaseOutBounce(
 		std::abs(std::cos(distTime * XM_PI * 3.5f));// 複素数の絶対値
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 	return currentPos;
 }
 
-float Easing::EaseInOutBounce(
+XMFLOAT3 Easing::EaseInOutBounce(
 	const float t, 
-	const float startPos,
-	const float endPos, 
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos, 
 	const float totalTime
 )
 {
@@ -530,7 +620,10 @@ float Easing::EaseInOutBounce(
 	float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	float result;
@@ -547,14 +640,17 @@ float Easing::EaseInOutBounce(
 	}
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 	return currentPos;
 }
 
-float Easing::EaseCurrentBounce(
+XMFLOAT3 Easing::EaseCurrentBounce(
 	const float t,
-	const float startPos,
-	const float endPos,
+	const XMFLOAT3 startPos,
+	const XMFLOAT3 endPos,
 	const float totalTime
 )
 {
@@ -562,7 +658,10 @@ float Easing::EaseCurrentBounce(
 	float distTime = t / totalTime;
 
 	// 場所の間隔
-	const float distPos = endPos - startPos;
+	XMFLOAT3 distPos;
+	distPos.x = endPos.x - startPos.x;
+	distPos.y = endPos.y - startPos.y;
+	distPos.z = endPos.z - startPos.z;
 
 	// 計算結果一時格納
 	const float result =
@@ -570,6 +669,9 @@ float Easing::EaseCurrentBounce(
 		std::abs(std::sin(distTime * XM_PI * 3.5f));// 複素数の絶対値
 
 	// 現在位置
-	const float currentPos = distPos * result + startPos;
+	XMFLOAT3 currentPos;
+	currentPos.x = startPos.x + distPos.x * result;
+	currentPos.y = startPos.y + distPos.y * result;
+	currentPos.z = startPos.z + distPos.z * result;
 	return currentPos;
 }

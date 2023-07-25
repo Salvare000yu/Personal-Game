@@ -123,10 +123,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInOutCubic(
+	static DirectX::XMFLOAT3 EaseInOutCubic(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -136,10 +136,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInQuart(
+	static DirectX::XMFLOAT3 EaseInQuart(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -149,10 +149,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseOutQuart(
+	static DirectX::XMFLOAT3 EaseOutQuart(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -162,10 +162,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInOutQuart(
+	static DirectX::XMFLOAT3 EaseInOutQuart(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -175,10 +175,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInBack(
+	static DirectX::XMFLOAT3 EaseInBack(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -188,10 +188,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseOutBack(
+	static DirectX::XMFLOAT3 EaseOutBack(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -201,10 +201,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在の位置
-	static float EaseInOutBack(
+	static DirectX::XMFLOAT3 EaseInOutBack(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -214,10 +214,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseInElastic(
+	static DirectX::XMFLOAT3 EaseInElastic(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -227,10 +227,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseOutElastic(
+	static DirectX::XMFLOAT3 EaseOutElastic(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -240,11 +240,11 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseInOutElastic(
-	const float t,
-	const float startPos,
-	const float endPos,
-	const float totalTime
+	static DirectX::XMFLOAT3 EaseInOutElastic(
+		const float t,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
+		const float totalTime
 	);
 
 	/// @brief イーズインバウンス（だんだん跳ねていく）
@@ -253,10 +253,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseInBounce(
+	static DirectX::XMFLOAT3 EaseInBounce(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -266,10 +266,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseOutBounce(
+	static DirectX::XMFLOAT3 EaseOutBounce(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -279,10 +279,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseInOutBounce(
+	static DirectX::XMFLOAT3 EaseInOutBounce(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 
@@ -292,10 +292,10 @@ public:
 	/// @param endPos 最大位置
 	/// @param totalTime 移動にかける時間
 	/// @return 現在位置
-	static float EaseCurrentBounce(
+	static DirectX::XMFLOAT3 EaseCurrentBounce(
 		const float t,
-		const float startPos,
-		const float endPos,
+		const DirectX::XMFLOAT3 startPos,
+		const DirectX::XMFLOAT3 endPos,
 		const float totalTime
 	);
 };
