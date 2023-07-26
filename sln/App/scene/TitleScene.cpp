@@ -88,7 +88,7 @@ void TitleScene::Initialize()
 	//------object3dスケール------//
 	obj_kaberight->SetScale({ 40.0f, 40.0f, 40.0f });
 	obj_kabeleft->SetScale({ 40.0f, 40.0f, 40.0f });
-	obj_logo->SetScale({ 3.f,3.f,3.f });//40
+	obj_logo->SetScale({ 40.f,40.f,40.f });//40
 
 	//------object3d位置------//
 	obj_kaberight->SetPosition({ 490,340,-500 });
@@ -341,7 +341,7 @@ void TitleScene::Update()
 		XMFLOAT3 pos = obj_logo->GetPosition();
 		if (testTime<=totalT) {//指定時間で終了
 			//やりたいイージング
-			obj_logo->SetPosition(Easing::EaseCurrentBounce((float)testTime, startPos, endPos, totalT));
+			obj_logo->SetPosition(Easing::EaseInOutBounce((float)testTime, startPos, endPos, totalT));
 			testTime++;
 		}
 	}

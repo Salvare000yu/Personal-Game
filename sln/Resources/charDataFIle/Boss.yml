@@ -78,6 +78,7 @@ circularY: 40 #どの高さで回るか
 circular_AtkIntervalDef: 45 #円行動攻撃インターバル
 
 #突っ込み
+plungeTotalTime: 180 #突撃にかける時間
 plungeCountDef: 1 #突っ込み行動行くために必要なLeave回数
 leaveVel: 40 #離れる速度
 leavePos: 6000 #Leaveの時どの程度下がるか

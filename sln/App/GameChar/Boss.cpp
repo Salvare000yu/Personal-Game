@@ -51,6 +51,7 @@ void Boss::Initialize()
 		plungeIntoWaitCount = plungeIntoWaitCountDef;
 		leavePos = root["leavePos"].As<uint32_t>();
 		leaveVel = root["leaveVel"].As<uint16_t>();
+		plungeTotalTime = root["plungeTotalTime"].As<float>();
 		plungeCountDef = root["plungeCountDef"].As<uint32_t>();
 		plungeCount = plungeCountDef;
 		circular_AtkIntervalDef = root["circular_AtkIntervalDef"].As<uint32_t>();
@@ -644,12 +645,11 @@ void Boss::Plunge()
 	//突っ込んでくる
 	nowframe++;
 
-	bossLerpMoveRaito = (float)nowframe / plungeNecesFrame;
 	//場所移動
-	obj->SetPosition(GameUtility::UtilLerp(boPosMom, pPosMem, bossLerpMoveRaito));
+	obj->SetPosition(Easing::EaseInOutElastic((float)nowframe, boPosMom, pPosMem, plungeTotalTime));
 
 	XMFLOAT3 position = obj->GetPosition();
-	if (position.z < shotTag->GetPosition().z) {//突撃終わったら
+	if (nowframe / plungeTotalTime==1) {//突撃終わったら
 		boPosFlag = false;//一度きり読み込みリセ
 		pMemFlag = false;//一度きりセット
 

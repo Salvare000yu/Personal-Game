@@ -343,6 +343,8 @@ private:
 	uint16_t plungeFinFrameMax;
 	//Finで最初いた一度位置取得 false:まだ
 	bool plungeFinOnlyFlag = false;
+	//突撃にかける時間
+	float plungeTotalTime;
 
 	//----plungeとafter両立しないのでafterでも使う
 	//自機いた場所取得フラグ false:未取得
