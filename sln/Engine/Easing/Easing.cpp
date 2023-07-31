@@ -345,7 +345,7 @@ XMFLOAT3 Easing::EaseInOutQuart(
 		result = 8.f * distTime * distTime;
 	}
 	else {
-		distTime = (--distTime) * distTime;
+		distTime = (distTime-1.f) * distTime;
 		result = (1.f - 8.f * distTime * distTime);
 	}
 
@@ -392,8 +392,7 @@ XMFLOAT3 Easing::EaseOutBack(
 )
 {
 	// 間隔
-	float distTime = t / totalTime;
-	--distTime;
+	float distTime = t / totalTime-1.f;
 
 	// 場所の間隔
 	XMFLOAT3 distPos{};
@@ -435,7 +434,7 @@ XMFLOAT3 Easing::EaseInOutBack(
 		result = std::pow(distTime, 2.f) * (7.f * distTime - 2.5f) * 2.f;
 	}
 	else {
-		--distTime;
+		distTime-=1.f;
 		result = 1.f + std::pow(distTime, 2.f) * 2.f * (7.f * distTime + 2.5f);
 	}
 

@@ -438,7 +438,7 @@ void Boss::HpHalfPatStart()
 		bossDefense = haHalfDefence;
 	}
 
-	float raito = (float)nowframe / necesHpHalfFrame;
+	float raito = nowframe / necesHpHalfFrame;
 	//場所移動
 	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, targetHpHalfPos, raito));
 
@@ -544,7 +544,7 @@ void Boss::LeaveFirstPos()
 		plungeCount--;
 	}
 
-	bossLerpMoveRaito = (float)nowframe / necesLeaveFirstFrame;
+	bossLerpMoveRaito = nowframe / necesLeaveFirstFrame;
 	//場所移動
 	//x自機ちょい追う感じ
 	XMFLOAT3 endPos = targetHpHalfPos;
@@ -646,10 +646,10 @@ void Boss::Plunge()
 	nowframe++;
 
 	//場所移動
-	obj->SetPosition(Easing::EaseInOutElastic((float)nowframe, boPosMom, pPosMem, plungeTotalTime));
+	obj->SetPosition(Easing::EaseInOutElastic(nowframe, boPosMom, pPosMem, plungeTotalTime));
 
 	XMFLOAT3 position = obj->GetPosition();
-	if (nowframe / plungeTotalTime==1) {//突撃終わったら
+	if (nowframe / plungeTotalTime==1.f) {//突撃終わったら
 		boPosFlag = false;//一度きり読み込みリセ
 		pMemFlag = false;//一度きりセット
 
@@ -670,7 +670,7 @@ void Boss::PlungeIntoReverse()
 		beforeReversePosMemFlag = true;
 	}
 
-	bossLerpMoveRaito = (float)nowframe / plungeNecesFrame;
+	bossLerpMoveRaito = nowframe / plungeNecesFrame;
 	//場所移動
 	XMFLOAT3 reversePos{};
 	reversePos = GameUtility::UtilLerp(beforeReversePosMem, reverseTargetPos, bossLerpMoveRaito);
@@ -722,7 +722,7 @@ void Boss::AfterPlungeAttack()
 {
 	nowframe++;
 
-	bossLerpMoveRaito = (float)nowframe / necesAtkMoveTime;
+	bossLerpMoveRaito = nowframe / necesAtkMoveTime;
 	//場所移動
 	obj->SetPosition(GameUtility::UtilLerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRaito));
 
@@ -747,7 +747,7 @@ void Boss::AfterPlungeFin()
 		plungeFinOnlyFlag = true;
 	}
 	else {
-		bossLerpMoveRaito = (float)nowframe / plungeFinFrameMax;
+		bossLerpMoveRaito = nowframe / plungeFinFrameMax;
 		nowframe++;
 
 		//円行動に合うようにその場所へ移動
@@ -979,7 +979,7 @@ void Boss::Death() {
 		getPosDeathOnlyFlag = false;
 	}
 
-	bossLerpMoveRaito = (float)nowframe / necesFrame;
+	bossLerpMoveRaito = nowframe / necesFrame;
 	obj->SetPosition(GameUtility::UtilLerp(boPosDeath, { boPosDeath.x,targetPos.y,boPosDeath.z }, bossLerpMoveRaito));
 
 	//一定時間ごとにパーティクル
@@ -995,7 +995,7 @@ void Boss::Death() {
 	constexpr float coreColChangeNecesFrame = 60;//この時間かけて色変え
 
 	XMFLOAT4 coreCol = obj_core->GetColor();
-	coreColChangeRaito = (float)nowframe / coreColChangeNecesFrame;
+	coreColChangeRaito = nowframe / coreColChangeNecesFrame;
 	obj_core->SetColor({ std::lerp(1.f, 0.f, coreColChangeRaito),coreCol.y,coreCol.z,coreCol.w });
 
 	XMFLOAT3 upDownRot = obj_UpDown->GetRotation();

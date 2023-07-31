@@ -331,36 +331,6 @@ void TitleScene::Update()
 		}
 	}
 
-	// todo テストコード
-	if (input->PushKey(DIK_0)) {
-		
-		constexpr XMFLOAT3 startPos= { 0,100,-1000 };
-		constexpr XMFLOAT3 endPos= { -400,200,-800 };
-		constexpr float totalT = 120.f;
-
-		XMFLOAT3 pos = obj_logo->GetPosition();
-		if (testTime<=totalT) {//指定時間で終了
-			//やりたいイージング
-			obj_logo->SetPosition(Easing::EaseInOutBounce((float)testTime, startPos, endPos, totalT));
-			testTime++;
-		}
-	}
-	else if (input->PushKey(DIK_1)) {//座標と時間リセット
-		XMFLOAT3 pos = obj_logo->GetPosition();
-		obj_logo->SetPosition({ 0,100,-1000 });
-		testTime = 0;
-	}
-	{//でばてき　現在位置
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%f", obj_logo->GetPosition().x);
-		DebugText::GetInstance()->Print(tmp, 430, 430, 3);
-	}
-	{//でばてき　現在位置
-		char tmp[32]{};
-		sprintf_s(tmp, 32, "%f", (float)testTime);
-		DebugText::GetInstance()->Print(tmp, 430, 460, 3);
-	}
-
 	//フィールド更新
 	Field* field = Field::GetInstance();
 	field->Update();

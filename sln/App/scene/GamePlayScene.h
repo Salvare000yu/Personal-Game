@@ -183,7 +183,6 @@ private:
 
 	uint32_t pClearMoveCount;//ボス撃破から自機移動開始まで
 	uint32_t clearPMoveFrame = 0;//クリア演出自機移動ふれ
-	DirectX::XMFLOAT3 pBossBattlePos;
 	uint32_t pRotReturnFrame = 0;
 	uint32_t pRotReturnFrameMax;//この時間かけて戻す
 	DirectX::XMFLOAT3 pClearRot;//ボス撃破時自機回転
@@ -198,12 +197,6 @@ private:
 	bool pDontMoveFlag = true;
 
 	bool doorOpenFlag = false;//扉開けてない
-
-	//次の場所へ行くスピード
-	const float pNextPlaceGoSpMax = 12.f;
-	float pNextPlaceGoSp = 2.f;
-	float accelVal = 0.2f;//加速値
-	float decelVal = 0.4f;//減速値
 
 	std::vector<std::vector<std::string>> SmallEnemyCsvData;
 	//何行目まで出したか

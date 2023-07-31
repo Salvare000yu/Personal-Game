@@ -161,8 +161,8 @@ private:
 	float frame = 0;
 
 	//フレーム計測
-	const int nowframeDef = 0;
-	int nowframe = nowframeDef;
+	const float nowframeDef = 0;
+	float nowframe = nowframeDef;
 
 	//当たり判定取るか true:取る
 	bool doCollision = true;

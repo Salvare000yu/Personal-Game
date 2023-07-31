@@ -320,18 +320,20 @@ void GamePlayScene::BossDeathEffect()
 		}
 	}
 
+	XMFLOAT3 pPosMoment{};
 	if (pClearMoveCount == 0) {
-		const float pClearMoveEndPos = pBossBattlePos.z + 2000;//ここまで移動
+		const float pClearMoveEndPos = pPosMoment.z + 2000;//ここまで移動
 		float raito = (float)clearPMoveFrame / clearMoveFrame;
 		++clearPMoveFrame;
 		//クリア時前へ進む
 		player_->SetPosition({
 			player_->GetPosition().x,
 			player_->GetPosition().y,
-			std::lerp(pBossBattlePos.z, pClearMoveEndPos, raito) });
+			std::lerp(pPosMoment.z, pClearMoveEndPos, raito) });
 	}
 	else {
 		pClearMoveCount--;
+		pPosMoment = player_->GetPosition();
 	}
 
 	if (boss_.front()->GetPosition().y < -150.f)
@@ -525,36 +527,18 @@ void GamePlayScene::PlayerDash()
 void GamePlayScene::pHeadingToTheNextPlace()
 {
 
-	//攻撃できないように
-	player_->SetAtkPossible(false);
 
-	pNextPlaceGoSp = std::min(pNextPlaceGoSp, pNextPlaceGoSpMax);//Y座標はPosYMaxまでしかいけないように
-	pNextPlaceGoSp += accelVal;
-
-	XMFLOAT3 pPos = player_->GetPosition();
-
-	//指定した場所超えたら
-	if (pPos.z > player_->GetStopPos()) {
-		pNextPlaceGoSp -= decelVal;
-
-		if ((pNextPlaceGoSp - decelVal) < 0) {
-			pBossBattlePos = pPos;//ボス戦時の自機座標
+		//ボス戦前の演出
+		if (beforeBossAppearFlag) {//演出終わったら
 			//攻撃可能にしてから終わる
 			player_->SetAtkPossible(true);
-			//ボス戦前の演出
-			if (beforeBossAppearFlag) {//演出終わったら
-				//ボス戦突入のお知らせです
-				for (auto& bo : boss_) {
-					bo->SetBossEnemyAdvent(true);
-				}
+			//ボス戦突入のお知らせです
+			for (auto& bo : boss_) {
+				bo->SetBossEnemyAdvent(true);
 			}
+
 			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
 		}
-	}
-
-	pPos.z += pNextPlaceGoSp;
-
-	player_->SetPosition(pPos);
 }
 
 void GamePlayScene::CoolTime()
@@ -1308,11 +1292,14 @@ void GamePlayScene::SmallEnemyBattleUpdate()
 
 void GamePlayScene::BossBattleReadyUpdate()
 {
+	//攻撃できないように
+	player_->SetAtkPossible(false);
+
 	UpdateCamera();
 	//パッド右スティックカメラ視点移動
 	PadStickCamera();
 
-	Field*field=Field::GetInstance();
+	Field* field = Field::GetInstance();
 	field->Departure();//発進
 
 	//雑魚敵更新
