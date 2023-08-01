@@ -29,6 +29,20 @@ void Boss::Initialize()
 			throw;
 		}
 
+		auto& initBossPosNode = root["initBossPos"];
+		initBossPos = {
+			initBossPosNode["x"].As<float>(),
+			initBossPosNode["y"].As<float>(),
+			initBossPosNode["z"].As<float>()
+		};
+		auto& afterAppearPosNode = root["afterAppearPos"];
+		afterAppearPos = {
+			afterAppearPosNode["x"].As<float>(),
+			afterAppearPosNode["y"].As<float>(),
+			afterAppearPosNode["z"].As<float>()
+		};
+		appearTotalFrame= root["appearTotalFrame"].As<float>();
+		
 		bossMaxHP = root["bossMaxHP"].As<int32_t>();
 		nowBossHP = bossMaxHP;//現在の敵HP
 		reCol = root["reCol"].As<float>();
@@ -154,7 +168,7 @@ void Boss::Initialize()
 	obj_UpDown->SetScale({ 40.f, 40.f, 40.f });
 	obj_VerticalCircle->SetScale({ 40.f, 40.f, 40.f });
 	//場所
-	obj->SetPosition({ 0,0,3300 });
+	obj->SetPosition(initBossPos);
 	obj_core->SetPosition({ 0,30,2500 });
 	obj_AroundCore->SetPosition({ 0,30,2500 });
 	obj_outside->SetPosition({ 0,30,2500 });
@@ -193,17 +207,25 @@ void Boss::Initialize()
 
 void Boss::BossAppear()
 {
+	//常に上下させるY
+	//float alwaysUpDownVal = 2.f * std::sinf(time * XM_PI);
+	
+	float rate=++appearFrame / appearTotalFrame;
+	// 目標座標に行くために足してく値
+	XMFLOAT3 goToAfterAppearVal = GameUtility::UtilLerp(
+		initBossPos, afterAppearPos, rate);
 
-	XMFLOAT3 pos = obj->GetPosition();
+	obj->SetPosition({ 
+		goToAfterAppearVal.x,
+		goToAfterAppearVal.y,
+		goToAfterAppearVal.z 
+		});
 
 	//移動完了確認しだい
 	if (bossEnemyAdvent) {
 		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
-	pos.y += 2.f * std::sinf(time * XM_PI);
-
-	obj->SetPosition(pos);
 }
 
 void Boss::Approach()
@@ -362,11 +384,11 @@ void Boss::VerticalUp()
 		verticalStartPosFlag = true;//最初の開始位置を決め終わった
 	}
 	else {
-		float raito = (float)++nowframe / TimeRequiredForVerticalUp;
+		float rate = (float)++nowframe / TimeRequiredForVerticalUp;
 		XMFLOAT3 UpEndPos = { upDownPos.x + nextMoveX,downStartPosY,position.z };//上昇終了位置
-		obj->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, raito));//下降開始位置まで移動
+		obj->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, rate));//下降開始位置まで移動
 
-		if (raito == 1) {//lerp終了で
+		if (rate == 1) {//lerp終了で
 			upDownPos.x += nextMoveX;//次の移動時はnextMoveX分Xずらす
 			//↓待ち時間挟んでね　Wait時は判定切る
 			verticalStartPosFlag = false;//開始位置決定フラグ戻す
@@ -438,9 +460,9 @@ void Boss::HpHalfPatStart()
 		bossDefense = haHalfDefence;
 	}
 
-	float raito = nowframe / necesHpHalfFrame;
+	float rate = nowframe / necesHpHalfFrame;
 	//場所移動
-	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, targetHpHalfPos, raito));
+	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, targetHpHalfPos, rate));
 
 	//発射カウントをデクリメント
 	diffusionAtkCount--;
@@ -544,12 +566,12 @@ void Boss::LeaveFirstPos()
 		plungeCount--;
 	}
 
-	bossLerpMoveRaito = nowframe / necesLeaveFirstFrame;
+	bossLerpMoveRate = nowframe / necesLeaveFirstFrame;
 	//場所移動
 	//x自機ちょい追う感じ
 	XMFLOAT3 endPos = targetHpHalfPos;
 	endPos.x = shotTag->GetPosition().x - targetHpHalfPos.x;
-	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, endPos, bossLerpMoveRaito));
+	obj->SetPosition(GameUtility::UtilLerp(hpHalfMomentPos, endPos, bossLerpMoveRate));
 
 	//発射カウントをデクリメント
 	atkCount--;
@@ -670,10 +692,10 @@ void Boss::PlungeIntoReverse()
 		beforeReversePosMemFlag = true;
 	}
 
-	bossLerpMoveRaito = nowframe / plungeNecesFrame;
+	bossLerpMoveRate = nowframe / plungeNecesFrame;
 	//場所移動
 	XMFLOAT3 reversePos{};
-	reversePos = GameUtility::UtilLerp(beforeReversePosMem, reverseTargetPos, bossLerpMoveRaito);
+	reversePos = GameUtility::UtilLerp(beforeReversePosMem, reverseTargetPos, bossLerpMoveRate);
 	obj->SetPosition(reversePos);
 
 	//z座標が指定座標になったら
@@ -722,9 +744,9 @@ void Boss::AfterPlungeAttack()
 {
 	nowframe++;
 
-	bossLerpMoveRaito = nowframe / necesAtkMoveTime;
+	bossLerpMoveRate = nowframe / necesAtkMoveTime;
 	//場所移動
-	obj->SetPosition(GameUtility::UtilLerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRaito));
+	obj->SetPosition(GameUtility::UtilLerp(boPosMem, { pPosMem.x,pPosMem.y,boPosMem.z }, bossLerpMoveRate));
 
 	afterPlungePatAtkCount--;
 	//時が満ちたら
@@ -747,13 +769,13 @@ void Boss::AfterPlungeFin()
 		plungeFinOnlyFlag = true;
 	}
 	else {
-		bossLerpMoveRaito = nowframe / plungeFinFrameMax;
+		bossLerpMoveRate = nowframe / plungeFinFrameMax;
 		nowframe++;
 
 		//円行動に合うようにその場所へ移動
 		XMFLOAT3 endPos = obj->GetPosition();
 		endPos.y = circularY;
-		obj->SetPosition(GameUtility::UtilLerp(boPosMem, endPos, bossLerpMoveRaito));
+		obj->SetPosition(GameUtility::UtilLerp(boPosMem, endPos, bossLerpMoveRate));
 		if (nowframe == plungeFinFrameMax) {
 			nowframe = 0;
 			plungeFinOnlyFlag = false;
@@ -979,8 +1001,8 @@ void Boss::Death() {
 		getPosDeathOnlyFlag = false;
 	}
 
-	bossLerpMoveRaito = nowframe / necesFrame;
-	obj->SetPosition(GameUtility::UtilLerp(boPosDeath, { boPosDeath.x,targetPos.y,boPosDeath.z }, bossLerpMoveRaito));
+	bossLerpMoveRate = nowframe / necesFrame;
+	obj->SetPosition(GameUtility::UtilLerp(boPosDeath, { boPosDeath.x,targetPos.y,boPosDeath.z }, bossLerpMoveRate));
 
 	//一定時間ごとにパーティクル
 	if (partTimeInterval == 1) {
@@ -995,8 +1017,8 @@ void Boss::Death() {
 	constexpr float coreColChangeNecesFrame = 60;//この時間かけて色変え
 
 	XMFLOAT4 coreCol = obj_core->GetColor();
-	coreColChangeRaito = nowframe / coreColChangeNecesFrame;
-	obj_core->SetColor({ std::lerp(1.f, 0.f, coreColChangeRaito),coreCol.y,coreCol.z,coreCol.w });
+	coreColChangeRate = nowframe / coreColChangeNecesFrame;
+	obj_core->SetColor({ std::lerp(1.f, 0.f, coreColChangeRate),coreCol.y,coreCol.z,coreCol.w });
 
 	XMFLOAT3 upDownRot = obj_UpDown->GetRotation();
 	obj_UpDown->SetRotation({ upDownRot.x += 0.2f ,upDownRot.y,upDownRot.z });
@@ -1014,7 +1036,7 @@ void Boss::Death() {
 	obj_AroundCore->SetRotation({ aroundCoreRot.x -= 0.2f,aroundCoreRot.y,aroundCoreRot.z });
 }
 
-void Boss::AlwaysmMotion()
+void Boss::AlwaysMotion()
 {
 	auto core_rot = obj_core->GetRotation();
 	core_rot.y++;
@@ -1092,7 +1114,7 @@ void Boss::Update()
 	}
 
 	if (!GetisDeath()) {
-		AlwaysmMotion();//常に動かす
+		AlwaysMotion();//常に動かす
 	}
 
 	//ボスHpの最大最小値。HPが負になったりバーが反対に飛び出ないように

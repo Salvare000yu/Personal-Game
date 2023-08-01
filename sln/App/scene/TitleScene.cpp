@@ -152,13 +152,13 @@ void TitleScene::PlayerStandby()
 void TitleScene::PlayerAppear()
 {
 	if (pMoveFrame < pApMoveFrameMax) {//最大フレーム到達までやる
-		float raito = (float)pMoveFrame / pApMoveFrameMax;
+		float rate = (float)pMoveFrame / pApMoveFrameMax;
 		pMoveFrame++;
 		//タイトルの最初に自機が移動しながら登場
-		player_->SetPosition(GameUtility::UtilLerp(apStartPPos, apEndPPos, raito));
+		player_->SetPosition(GameUtility::UtilLerp(apStartPPos, apEndPPos, rate));
 
 		//カメラずらしながら
-		camera->SetEye(GameUtility::UtilLerp(eyeStartPos, eyeEndPos, raito));
+		camera->SetEye(GameUtility::UtilLerp(eyeStartPos, eyeEndPos, rate));
 
 		camera->SetTarget(player_->GetPosition());
 	}
@@ -202,9 +202,9 @@ void TitleScene::NextScene()
 	}
 
 	{//指定時間で移動
-		float raito = (float)pMoveFrame / pExitMoveFrameMax;
+		float rate = (float)pMoveFrame / pExitMoveFrameMax;
 		pMoveFrame++;
-		player_->SetPosition(GameUtility::UtilLerp(exitStartPPos, exitEndPPos, raito));
+		player_->SetPosition(GameUtility::UtilLerp(exitStartPPos, exitEndPPos, rate));
 		//カメラが自機をみる
 		camera->SetTarget(player_->GetPosition());
 	}

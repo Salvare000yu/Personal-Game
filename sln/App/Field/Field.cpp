@@ -1,5 +1,6 @@
 ﻿#include "Field.h"
 #include "Easing.h"
+#include "DebugText.h"
 #include <yaml/Yaml.hpp>
 
 using namespace DirectX;//DirectX::省略
@@ -26,7 +27,7 @@ void Field::Initialize()
 		swingDist = root["swingDist"].As<float>();
 		swingSp = root["swingSp"].As<float>();
 		groundPosDef = root["groundPosDef"].As<float>();
-		
+
 		auto& fieldScaleNode = root["fieldScale"];
 		fieldScale = {
 			fieldScaleNode["x"].As<float>(),
@@ -40,6 +41,8 @@ void Field::Initialize()
 			shiftSpeedNode["y"].As<float>(),
 			shiftSpeedNode["z"].As<float>()
 		};
+		easeUvShiftTotalFrame= root["easeUvShiftTotalFrame"].As<float>();
+		shiftNowFrame = 0;
 	}
 	//------objからモデルデータ読み込み---
 	mod_groundBottom.reset(Model::LoadFromOBJ("ground_bottom"));
@@ -107,16 +110,16 @@ void Field::TunnelMove()
 
 void Field::Departure()
 {
-	++shiftNowFrame;//経過フレーム
-	constexpr float easeUvShiftTotalFrame = 120;//最大速度に到達するまでにかかるフレーム
-	//if (shiftNowFrame == shiftNowFrame / easeUvShiftTotalFrame) {
+	//指定時間（easeUvShiftTotalFrame）経過でイージング終了
+	if (1.f == shiftNowFrame / easeUvShiftTotalFrame) {
 		shiftSpeedEase = shiftSpeed;
-	//}
-	//else {
-		shiftSpeedEase = Easing::EaseInQuad(shiftNowFrame, {}, shiftSpeed, easeUvShiftTotalFrame);
-	//}
+	}
+	else {
+		shiftSpeedEase = Easing::EaseInQuad(++shiftNowFrame, {}, shiftSpeed, easeUvShiftTotalFrame);
+	}
 	TunnelMove();
 	GroundAdvance();
+
 }
 
 void Field::Update()

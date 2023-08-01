@@ -308,9 +308,9 @@ void GamePlayScene::BossDeathEffect()
 		if (!(pRotReturnFrame == pRotReturnFrameMax)) {
 			//カメラ回転と自機の回転同時戻す
 			pRotReturnFrame++;
-			float raito = (float)pRotReturnFrame / pRotReturnFrameMax;
+			float rate = (float)pRotReturnFrame / pRotReturnFrameMax;
 			//自機を正面に
-			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, raito));
+			player_->SetRotation(GameUtility::UtilLerp(pClearRot, {}, rate));
 		}//回転戻し終わったらもう移動攻撃しない
 		else {
 			player_->SetAtkPossible(false);
@@ -323,13 +323,13 @@ void GamePlayScene::BossDeathEffect()
 	XMFLOAT3 pPosMoment{};
 	if (pClearMoveCount == 0) {
 		const float pClearMoveEndPos = pPosMoment.z + 2000;//ここまで移動
-		float raito = (float)clearPMoveFrame / clearMoveFrame;
+		float rate = (float)clearPMoveFrame / clearMoveFrame;
 		++clearPMoveFrame;
 		//クリア時前へ進む
 		player_->SetPosition({
 			player_->GetPosition().x,
 			player_->GetPosition().y,
-			std::lerp(pPosMoment.z, pClearMoveEndPos, raito) });
+			std::lerp(pPosMoment.z, pClearMoveEndPos, rate) });
 	}
 	else {
 		pClearMoveCount--;
@@ -1221,13 +1221,13 @@ void GamePlayScene::GameReadyUpdate()
 			//最初演出中は動くな
 			pDontMoveFlag = true;
 
-			float raito = (float)gameReadyFrame / frameMax;
+			float rate = (float)gameReadyFrame / frameMax;
 			++gameReadyFrame;
-			ReadyCol.w = 1.f - raito;
+			ReadyCol.w = 1.f - rate;
 			sp_ready->SetColor({ ReadyCol });
 			sp_ready->Update();
 			//開始時演出で前に進む
-			player_->SetPosition(GameUtility::UtilLerp(ApStartPPos, ApEndPPos, raito));
+			player_->SetPosition(GameUtility::UtilLerp(ApStartPPos, ApEndPPos, rate));
 
 			if (gameReadyFrame == frameMax) {
 				pTracking = true;

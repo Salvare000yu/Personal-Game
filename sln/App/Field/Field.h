@@ -37,6 +37,7 @@ private:
 	uint32_t groundMoveFrame = 0;
 	float groundMoveTime = 0;
 
+	float easeUvShiftTotalFrame;//最大速度に到達するまでにかかるフレーム
 	float shiftNowFrame = 0;//UVシフト中経過フレーム
 	DirectX::XMFLOAT3 shiftSpeedEase{};//UVシフトイージング時実際足してく値
 	DirectX::XMFLOAT3 shiftSpeed;//UVシフトの最終速度

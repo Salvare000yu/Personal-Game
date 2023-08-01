@@ -147,8 +147,8 @@ void Player::PlayerDeath()
 		getPosFlag = false;
 	}
 
-	float raito = (float)nowFrame / necesFrame;
-	obj->SetPosition(GameUtility::UtilLerp(pPosDeath, { pPosDeath.x,targetPos.y,pPosDeath.z }, raito));
+	float rate = (float)nowFrame / necesFrame;
+	obj->SetPosition(GameUtility::UtilLerp(pPosDeath, { pPosDeath.x,targetPos.y,pPosDeath.z }, rate));
 
 	//一定時間ごとにパーティクル
 	if (partTimeInterval == 1) {

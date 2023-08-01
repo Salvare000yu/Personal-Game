@@ -70,7 +70,7 @@ public:
 
 	void Death();
 
-	void AlwaysmMotion();
+	void AlwaysMotion();
 
 	//-----------------↓げったーせったー↓------------------//
 	//弾リストを取得
@@ -147,6 +147,11 @@ private:
 
 	std::unique_ptr<Camera> camera; //カメラ
 
+	XMFLOAT3 initBossPos;//ボス初期位置
+	XMFLOAT3 afterAppearPos;//登場後座標（目指す場所）
+	float appearFrame = 0;//登場時フレーム
+	float appearTotalFrame;//登場時に指定場所まで移動するのにかけるフレーム
+
 	//離れられる距離
 	float leaveLim;
 
@@ -171,7 +176,7 @@ private:
 	float bossRot;
 
 	//ボスlerp動きレート
-	float bossLerpMoveRaito = 0;
+	float bossLerpMoveRate = 0;
 
 	//攻撃用カウント
 	uint32_t atkCount = 0;
@@ -210,7 +215,7 @@ private:
 	float necesFrame;//かかる時間
 	XMFLOAT3 moveSp = {};//移動速度
 	XMFLOAT3 targetPos;//目標座標
-	float coreColChangeRaito = 0;//死亡時コアの色変え
+	float coreColChangeRate = 0;//死亡時コアの色変え
 
 	uint8_t partTimeInterval;
 	uint8_t particleFrame;//パーティクル出すフレ

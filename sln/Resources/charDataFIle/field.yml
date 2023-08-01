@@ -10,7 +10,9 @@ swingDist: 10 #揺らす距離
 swingSp: 4 #揺らす速度
 groundPosDef: -200 #地面を置く座標　ここ中心に上下
 
+easeUvShiftTotalFrame: 120 #イージングする時間
+
 shiftSpeed: #UVシフト速度
   x: 0
   y: 0
-  z: 0.02
+  z: 0.03

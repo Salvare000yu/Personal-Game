@@ -1,4 +1,17 @@
 #ボスデータ
+
+initBossPos: #ボス初期位置
+    x: 0
+    y: 0
+    z: 3300
+
+afterAppearPos: #登場後座標（目指す場所）
+    x: 0
+    y: 0
+    z: -1750
+    
+appearTotalFrame: 180 #登場時に指定場所まで移動するのにかけるフレーム
+
 bossMaxHP: 1000 #最大Hp
 #弾の威力
 bulPow: 200
