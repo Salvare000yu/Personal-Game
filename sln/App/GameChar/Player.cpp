@@ -207,7 +207,6 @@ void Player::Initialize()
 		partTimeInterval = 0;
 		playerMaxHp = root["playerMaxHP"].As<uint32_t>();
 		nowPlayerHp = playerMaxHp;//現在の自機HP
-		stopPos = root["stopPos"].As<int32_t>();
 	}
 
 	particle.reset(new ParticleManager());

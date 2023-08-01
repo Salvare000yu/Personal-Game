@@ -209,23 +209,20 @@ void Boss::BossAppear()
 {
 	//常に上下させるY
 	//float alwaysUpDownVal = 2.f * std::sinf(time * XM_PI);
-	
-	float rate=++appearFrame / appearTotalFrame;
-	// 目標座標に行くために足してく値
-	XMFLOAT3 goToAfterAppearVal = GameUtility::UtilLerp(
-		initBossPos, afterAppearPos, rate);
+	float rate = ++appearFrame / appearTotalFrame;
 
-	obj->SetPosition({ 
-		goToAfterAppearVal.x,
-		goToAfterAppearVal.y,
-		goToAfterAppearVal.z 
-		});
+	if (appearFrame != rate) {
+		// 目標座標に行く
+		obj->SetPosition(GameUtility::UtilLerp(
+			initBossPos, afterAppearPos, rate));
+	}
 
 	//移動完了確認しだい
 	if (bossEnemyAdvent) {
 		actionStartPos = obj->GetPosition();//攻撃に移るときの座標取得Leaveで離れる限界値で使う
 		actionPattern = std::bind(&Boss::Approach, this);
 	}
+
 }
 
 void Boss::Approach()

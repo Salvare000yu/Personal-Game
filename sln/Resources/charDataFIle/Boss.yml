@@ -2,13 +2,13 @@
 
 initBossPos: #ボス初期位置
     x: 0
-    y: 0
+    y: 200
     z: 3300
 
 afterAppearPos: #登場後座標（目指す場所）
     x: 0
     y: 0
-    z: -1750
+    z: 1000
     
 appearTotalFrame: 180 #登場時に指定場所まで移動するのにかけるフレーム
 

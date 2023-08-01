@@ -1491,6 +1491,7 @@ void GamePlayScene::Draw()
 
 	//3dオブジェ描画後処理
 	Object3d::PostDraw();
+
 }
 
 void GamePlayScene::DrawUI()
