@@ -14,6 +14,7 @@ class FbxLoader
 private:
 	//std省略
 	using string = std::string;
+	using Node = FBX::Node;
 
 public:
 	/// <summary>

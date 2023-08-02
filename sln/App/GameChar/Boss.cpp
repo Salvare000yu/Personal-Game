@@ -41,7 +41,7 @@ void Boss::Initialize()
 			afterAppearPosNode["y"].As<float>(),
 			afterAppearPosNode["z"].As<float>()
 		};
-		appearTotalFrame= root["appearTotalFrame"].As<float>();
+		appearTotalFrame= root["appearTotalFrame"].As<uint32_t>();
 		
 		bossMaxHP = root["bossMaxHP"].As<int32_t>();
 		nowBossHP = bossMaxHP;//現在の敵HP
@@ -196,6 +196,12 @@ void Boss::Initialize()
 	circular_AtkCount = circular_AtkInterval;
 
 	//デフォルトの行動を設定
+	behavior = std::make_unique<BossBehavior>();
+	behavior->SetBoss(this);
+	behavior->SetAppearTotalFrame(appearTotalFrame);
+	behavior->SetAppearStartPos(initBossPos);
+	behavior->SetAppearEndPos(afterAppearPos);
+
 	actionPattern = std::bind(&Boss::BossAppear, this);
 
 	plungeIntoPattern = std::bind(&Boss::PlungeIntoLeave, this);
@@ -1090,7 +1096,8 @@ void Boss::Update()
 	}
 
 	//メンバ関数ポインタ呼び出し
-	actionPattern();
+	//actionPattern();
+	behavior->Run();
 
 	//弾更新
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {

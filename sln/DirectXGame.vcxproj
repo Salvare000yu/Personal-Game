@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;$(ProjectDir)App/Field;$(ProjectDir)Engine/Easing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;$(ProjectDir)App/Field;$(ProjectDir)Engine/Easing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -140,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;$(ProjectDir)App/Field;$(ProjectDir)Engine/Easing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)App/Pause;$(ProjectDir)App/CharParameters;$(ProjectDir)Engine/Particle;$(ProjectDir)Engine/Collision;$(ProjectDir)Engine/PostEffect;$(ProjectDir)App/scene;$(ProjectDir)Engine/input;$(ProjectDir)Engine/GameSound;$(ProjectDir)App/GameChar;$(ProjectDir)Engine/fbx;$(ProjectDir)Engine/camera;$(ProjectDir)Engine/base;$(ProjectDir)Engine/3d;$(ProjectDir)App/Timer;$(ProjectDir)Engine;$(ProjectDir)Engine/2d;$(SolutionDir)DirectXTex;$(ProjectDir)App/SceneChangeDirection;$(ProjectDir)Engine/GameUtility;$(ProjectDir)App/Field;$(ProjectDir)Engine/Easing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App\GameChar\BossBehavior.cpp" />
     <ClCompile Include="Engine\Easing\Easing.cpp" />
     <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\BaseObject.cpp" />
@@ -201,6 +202,8 @@
     <ClCompile Include="Engine\2d\SpriteBase.cpp" />
     <ClCompile Include="App\scene\TitleScene.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="Engine\BehaviorTree\Selector.cpp" />
+    <ClCompile Include="Engine\BehaviorTree\Sequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\FBXPS.hlsl">
@@ -289,6 +292,8 @@
     <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="App\GameChar\BossBehavior.h" />
+    <ClInclude Include="Engine\BehaviorTree\BaseComposite.h" />
     <ClInclude Include="Engine\Easing\Easing.h" />
     <ClInclude Include="Engine\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\BaseObject.h" />
@@ -333,6 +338,9 @@
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\GameUtility\GameUtility.h" />
     <ClInclude Include="App\Field\Field.h" />
+    <ClInclude Include="Engine\BehaviorTree\Node.h" />
+    <ClInclude Include="Engine\BehaviorTree\Selector.h" />
+    <ClInclude Include="Engine\BehaviorTree\Sequencer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

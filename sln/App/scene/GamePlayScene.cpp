@@ -527,7 +527,6 @@ void GamePlayScene::PlayerDash()
 void GamePlayScene::pHeadingToTheNextPlace()
 {
 
-
 		//ボス戦前の演出
 		if (beforeBossAppearFlag) {//演出終わったら
 			//攻撃可能にしてから終わる

@@ -11,12 +11,14 @@
 #include "BossStraightBul.h"
 #include "BaseObject.h"
 #include "ParticleManager.h"
+#include "BossBehavior.h"
 
 #include <memory>
 #include <functional>
 
 class Boss :public BaseObject
 {
+	friend class BossBehavior;
 public:
 
 	//初期化
@@ -150,7 +152,7 @@ private:
 	XMFLOAT3 initBossPos;//ボス初期位置
 	XMFLOAT3 afterAppearPos;//登場後座標（目指す場所）
 	float appearFrame = 0;//登場時フレーム
-	float appearTotalFrame;//登場時に指定場所まで移動するのにかけるフレーム
+	uint32_t appearTotalFrame;//登場時に指定場所まで移動するのにかけるフレーム
 
 	//離れられる距離
 	float leaveLim;
@@ -228,6 +230,7 @@ private:
 	std::function<void()> afterPlungePattern;
 
 	std::function<void()> actionPattern;
+	std::unique_ptr<BossBehavior> behavior;
 
 	std::forward_list <std::unique_ptr<BossBullet>> bullets_;//ボスの弾　ユニークポインタ
 	std::forward_list <std::unique_ptr<BossAimBul>> aimBullets_;//ボスの狙い弾
