@@ -151,6 +151,7 @@ void GamePlayScene::Initialize()
 		boss->SetBulModel(mod_enemybullet.get());
 		boss->SetAimBulModel(mod_bossaimbullet.get());//狙い弾
 		boss->SetStraightBulModel(mod_straightbul.get());//直線弾
+		boss->SetShotTag(player_.get());
 	}
 
 	// 音声読み込み
@@ -527,17 +528,17 @@ void GamePlayScene::PlayerDash()
 void GamePlayScene::pHeadingToTheNextPlace()
 {
 
-		//ボス戦前の演出
-		if (beforeBossAppearFlag) {//演出終わったら
-			//攻撃可能にしてから終わる
-			player_->SetAtkPossible(true);
-			//ボス戦突入のお知らせです
-			for (auto& bo : boss_) {
-				bo->SetBossEnemyAdvent(true);
-			}
-
-			updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
+	//ボス戦前の演出
+	if (beforeBossAppearFlag) {//演出終わったら
+		//攻撃可能にしてから終わる
+		player_->SetAtkPossible(true);
+		//ボス戦突入のお知らせです
+		for (auto& bo : boss_) {
+			bo->SetBossEnemyAdvent(true);
 		}
+
+		updatePattern = std::bind(&GamePlayScene::BossBattleUpdate, this);//ボス戦UPDATE
+	}
 }
 
 void GamePlayScene::CoolTime()

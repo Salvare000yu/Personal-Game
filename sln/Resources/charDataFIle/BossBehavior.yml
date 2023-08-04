@@ -1,0 +1,20 @@
+#ボス行動データ
+
+appearStartPos: #ボス初期位置
+    x: 0
+    y: 200
+    z: 3300
+
+appearEndPos: #登場後座標（目指す場所）
+    x: 0
+    y: 0
+    z: 1000
+    
+appearTotalFrame: 180 #登場時に指定場所まで移動するのにかけるフレーム
+approachCountDef: 150 #この時間だけこの行動をする
+#近づく速さ
+approachSpZ: 3
+approachSpY: 2
+changeVerticalCountDef: 0 #デフォ0
+
+atkInterval: 10

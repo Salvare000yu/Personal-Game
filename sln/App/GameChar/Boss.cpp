@@ -28,20 +28,6 @@ void Boss::Initialize()
 		{
 			throw;
 		}
-
-		auto& initBossPosNode = root["initBossPos"];
-		initBossPos = {
-			initBossPosNode["x"].As<float>(),
-			initBossPosNode["y"].As<float>(),
-			initBossPosNode["z"].As<float>()
-		};
-		auto& afterAppearPosNode = root["afterAppearPos"];
-		afterAppearPos = {
-			afterAppearPosNode["x"].As<float>(),
-			afterAppearPosNode["y"].As<float>(),
-			afterAppearPosNode["z"].As<float>()
-		};
-		appearTotalFrame= root["appearTotalFrame"].As<uint32_t>();
 		
 		bossMaxHP = root["bossMaxHP"].As<int32_t>();
 		nowBossHP = bossMaxHP;//現在の敵HP
@@ -50,7 +36,6 @@ void Boss::Initialize()
 		bossBodyRedTimeDef = root["bossBodyRedTimeDef"].As<int16_t>();
 		bossBodyRedTime = bossBodyRedTimeDef;
 		leaveLim = root["leaveLim"].As<float>();
-		atkInterval = root["atkInterval"].As<uint32_t>();
 		atkInterval_LeaveFirst = root["atkInterval_LeaveFirst"].As<uint32_t>();
 		diffusionAtkInterval = root["diffusionAtkInterval"].As<uint32_t>();
 		randShakeVal = root["randShakeVal"].As<int16_t>();
@@ -105,12 +90,6 @@ void Boss::Initialize()
 		startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
 		startVerticalVal = startVerticalValDef;
 		changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
-		changeVerticalCountDef = root["changeVerticalCountDef"].As<int16_t>();
-		changeVerticalCount = changeVerticalCountDef;
-		approachCountDef = root["approachCountDef"].As<uint16_t>();
-		approachCount = approachCountDef;
-		approachSpZ = root["approachSpZ"].As<float>();
-		approachSpY = root["approachSpY"].As<float>();
 		leaveSpZ = root["leaveSpZ"].As<float>();
 		leaveSpY = root["leaveSpY"].As<float>();
 		particleFrame = root["particleFrame"].As<uint8_t>();
@@ -198,9 +177,6 @@ void Boss::Initialize()
 	//デフォルトの行動を設定
 	behavior = std::make_unique<BossBehavior>();
 	behavior->SetBoss(this);
-	behavior->SetAppearTotalFrame(appearTotalFrame);
-	behavior->SetAppearStartPos(initBossPos);
-	behavior->SetAppearEndPos(afterAppearPos);
 
 	actionPattern = std::bind(&Boss::BossAppear, this);
 
@@ -1070,7 +1046,7 @@ void Boss::Update()
 
 	time = frame / 60.f;
 	frame += 1.f;
-
+	
 	//消滅フラグ立ったらその弾は死して拝せよ
 	bullets_.remove_if([](std::unique_ptr<BossBullet>& bullet) {
 		return !bullet->GetAlive();

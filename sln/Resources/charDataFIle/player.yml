@@ -8,4 +8,3 @@ targetPos: #死亡落下位置
     z: 0
 particleFrame: 39 #パーティクル出す間隔
 playerMaxHP: 1000 #自機最大HP
-stopPos: 1800 #自機次座標への移動の停止場所
