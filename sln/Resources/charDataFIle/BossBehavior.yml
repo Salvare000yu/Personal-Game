@@ -18,3 +18,10 @@ approachSpY: 2
 changeVerticalCountDef: 0 #デフォ0
 
 atkInterval: 10
+
+#フレームごとに発射
+diffusionAtkInterval: 20
+
+#離れる速さ
+leaveSpZ: 3
+leaveSpY: 2

@@ -35,9 +35,7 @@ void Boss::Initialize()
 		reColVal = root["reColVal"].As<float>();
 		bossBodyRedTimeDef = root["bossBodyRedTimeDef"].As<int16_t>();
 		bossBodyRedTime = bossBodyRedTimeDef;
-		leaveLim = root["leaveLim"].As<float>();
 		atkInterval_LeaveFirst = root["atkInterval_LeaveFirst"].As<uint32_t>();
-		diffusionAtkInterval = root["diffusionAtkInterval"].As<uint32_t>();
 		randShakeVal = root["randShakeVal"].As<int16_t>();
 		loopCountMax = root["loopCountMax"].As<int16_t>();
 		necesAtkMoveTime = root["necesAtkMoveTime"].As<int16_t>();
@@ -89,9 +87,6 @@ void Boss::Initialize()
 		verticalSp = root["verticalSp"].As<float>();
 		startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
 		startVerticalVal = startVerticalValDef;
-		changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
-		leaveSpZ = root["leaveSpZ"].As<float>();
-		leaveSpY = root["leaveSpY"].As<float>();
 		particleFrame = root["particleFrame"].As<uint8_t>();
 		auto& targetPosNode = root["targetPos"];
 		targetPos = {

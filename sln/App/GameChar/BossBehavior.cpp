@@ -11,6 +11,7 @@ BossBehavior::BossBehavior() :
 	LoadYml();
 	AddChild(Node(std::bind(&BossBehavior::Appear, this)));
 	AddChild(Node(std::bind(&BossBehavior::Approach, this)));
+	AddChild(Node(std::bind(&BossBehavior::Leave, this)));
 }
 
 void BossBehavior::LoadYml()
@@ -44,6 +45,13 @@ void BossBehavior::LoadYml()
 		appearEndPosNode["y"].As<float>(),
 		appearEndPosNode["z"].As<float>()
 	};
+
+	diffusionAtkInterval = root["diffusionAtkInterval"].As<uint32_t>();
+	diffusionAtkCount = diffusionAtkInterval;
+	leaveSpZ = root["leaveSpZ"].As<float>();
+	leaveSpY = root["leaveSpY"].As<float>();
+	leaveLim = root["leaveLim"].As<float>();
+	changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
 }
 
 NodeResult BossBehavior::Appear()
@@ -89,6 +97,53 @@ NodeResult BossBehavior::Approach()
 		approachCount = 0;
 		++changeVerticalCount;//縦攻撃するためのカウント進める
 		return NodeResult::Succeeded;
+	}
+
+	return NodeResult::Running;
+}
+
+NodeResult BossBehavior::Leave()
+{
+	//---後退---//
+
+	//発射カウントをデクリメント
+	diffusionAtkCount--;
+	//時が満ちたら
+	if (diffusionAtkCount == 0) {
+		//生存時のみ発射
+		if (boss->alive) {
+			if (even_odd_NumFlag)//奇数弾
+			{
+				boss->DiffusionAttack();
+			}
+			else { boss->DiffusionAttackEavenNumber(); }
+		}
+		//再びカウントできるように初期化
+		diffusionAtkCount = diffusionAtkInterval;
+	}
+
+	//---後退---//
+	XMFLOAT3 positionBack = boss->GetPosition();
+	positionBack.z += leaveSpZ;
+	positionBack.y -= leaveSpY;
+	boss->SetPosition(positionBack);
+
+	//離れる制限は自機の場所に自機と離したい距離分間を開ける
+	const int SpaceDistance = 400;
+	leaveLim = boss->shotTag->GetPosition().z + SpaceDistance;
+
+	//ある程度離れたら近づいてくる
+	if (positionBack.z > appearEndPos.z && positionBack.y < appearEndPos.y) {
+		if (even_odd_NumFlag) { even_odd_NumFlag = false; }
+		else { even_odd_NumFlag = true; }
+
+		// todo 縦攻撃
+		if (changeVerticalCount == changeVerticalNeces) {//縦攻撃カウントが一定に達したら
+		//	actionPattern = std::bind(&Boss::Vertical, this);
+		}
+		else {
+			return NodeResult::Succeeded;
+		}
 	}
 
 	return NodeResult::Running;
