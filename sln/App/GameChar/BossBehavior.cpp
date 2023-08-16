@@ -52,6 +52,7 @@ void BossBehavior::LoadYml()
 	leaveSpY = root["leaveSpY"].As<float>();
 	leaveLim = root["leaveLim"].As<float>();
 	changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
+	SpaceDistance = root["SpaceDistance"].As<uint16_t>();
 }
 
 NodeResult BossBehavior::Appear()
@@ -128,8 +129,6 @@ NodeResult BossBehavior::Leave()
 	positionBack.y -= leaveSpY;
 	boss->SetPosition(positionBack);
 
-	//離れる制限は自機の場所に自機と離したい距離分間を開ける
-	const int SpaceDistance = 400;
 	leaveLim = boss->shotTag->GetPosition().z + SpaceDistance;
 
 	//ある程度離れたら近づいてくる

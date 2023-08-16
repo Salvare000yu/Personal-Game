@@ -25,3 +25,6 @@ diffusionAtkInterval: 20
 #離れる速さ
 leaveSpZ: 3
 leaveSpY: 2
+
+#離れる制限は自機の場所に自機と離したい距離分間を開ける
+SpaceDistance: 400

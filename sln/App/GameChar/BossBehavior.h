@@ -40,9 +40,10 @@ class BossBehavior :
 	//離れる速さ
 	float leaveSpZ;
 	float leaveSpY;
-
 	//離れられる距離
 	float leaveLim;
+	//離れる制限は自機の場所に自機と離したい距離分間を開ける
+	uint16_t SpaceDistance;
 
 	int16_t changeVerticalNeces;//縦攻撃に移る為に必要カウント
 
