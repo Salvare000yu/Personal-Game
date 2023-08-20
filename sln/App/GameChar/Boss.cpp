@@ -72,7 +72,6 @@ void Boss::Initialize()
 		vertical_AtkInterval = root["vertical_AtkInterval"].As<int16_t>();
 		verticalLoopCountDef = root["verticalLoopCountDef"].As<int16_t>();
 		verticalLoopCount = verticalLoopCountDef;
-		upStartPosY = root["upStartPosY"].As<float>();
 		downStartPosY = root["downStartPosY"].As<float>();
 		nextMoveX = root["nextMoveX"].As<float>();
 		auto& upDownPosDefNode = root["upDownPosDef"];
@@ -85,8 +84,6 @@ void Boss::Initialize()
 		verticalWaitCountDef = root["verticalWaitCountDef"].As<int16_t>();
 		verticalWaitCount = verticalWaitCountDef;
 		verticalSp = root["verticalSp"].As<float>();
-		startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
-		startVerticalVal = startVerticalValDef;
 		particleFrame = root["particleFrame"].As<uint8_t>();
 		auto& targetPosNode = root["targetPos"];
 		targetPos = {
@@ -281,16 +278,16 @@ void Boss::Vertical()
 }
 void Boss::StartVertical()
 {
-	XMFLOAT3 position = obj->GetPosition();
-	//まずは上昇
-	position.y += startVerticalVal;
-	startVerticalVal--;
+	//XMFLOAT3 position = obj->GetPosition();
+	////まずは上昇
+	//position.y += startVerticalVal;
+	//startVerticalVal--;
 
-	if (position.y < upStartPosY) {//一定超えたら判定切ってから待ち
-		startVerticalVal = startVerticalValDef;//最初の上昇値戻す
-		verticalPattern = std::bind(&Boss::VerticalWait, this);
-	}
-	obj->SetPosition(position);
+	//if (position.y < upStartPosY) {//一定超えたら判定切ってから待ち
+	//	startVerticalVal = startVerticalValDef;//最初の上昇値戻す
+	//	verticalPattern = std::bind(&Boss::VerticalWait, this);
+	//}
+	//obj->SetPosition(position);
 }
 void Boss::VerticalWait()
 {
@@ -322,63 +319,63 @@ void Boss::VerticalWait()
 }
 void Boss::VerticalDown()
 {
-	XMFLOAT3 position = obj->GetPosition();
-	if (verticalStartPosFlag == false) {//最初に開始位置決める
-		upDownPos = { upDownPos.x, downStartPosY,position.z };//Yは開始位置　Zは元いた位置
-		position = upDownPos;//今の位置を下に下がる開始位置にする
-		verticalStartPosFlag = true;//最初の開始位置を決め終わった
-	}
-	position.y -= verticalSp;//移動
-	if (position.y <= upStartPosY) {//上昇開始位置のYまできたら
-		upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
-		//↓待ち時間挟んでね　Wait時は判定切る
-		verticalStartPosFlag = false;//開始位置決定フラグ戻す
-		nextUp = true;//次上昇
-		verticalLoopCount--;//Down抜けるときにデクリメント
-		verticalPattern = std::bind(&Boss::VerticalWait, this);//まってか
-	}
-	obj->SetPosition(position);
+	//XMFLOAT3 position = obj->GetPosition();
+	//if (verticalStartPosFlag == false) {//最初に開始位置決める
+	//	upDownPos = { upDownPos.x, downStartPosY,position.z };//Yは開始位置　Zは元いた位置
+	//	position = upDownPos;//今の位置を下に下がる開始位置にする
+	//	verticalStartPosFlag = true;//最初の開始位置を決め終わった
+	//}
+	//position.y -= verticalSp;//移動
+	//if (position.y <= upStartPosY) {//上昇開始位置のYまできたら
+	//	upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
+	//	//↓待ち時間挟んでね　Wait時は判定切る
+	//	verticalStartPosFlag = false;//開始位置決定フラグ戻す
+	//	nextUp = true;//次上昇
+	//	verticalLoopCount--;//Down抜けるときにデクリメント
+	//	verticalPattern = std::bind(&Boss::VerticalWait, this);//まってか
+	//}
+	//obj->SetPosition(position);
 
-	//発射カウントをデクリメント
-	atkCount--;
-	//時が満ちたら
-	if (atkCount == 0) {
-		//突撃時、生存時のみ発射
-		if (alive) { Attack(); }//追尾弾
-		//再びカウントできるように初期化
-		atkCount = vertical_AtkInterval;
-	}
+	////発射カウントをデクリメント
+	//atkCount--;
+	////時が満ちたら
+	//if (atkCount == 0) {
+	//	//突撃時、生存時のみ発射
+	//	if (alive) { Attack(); }//追尾弾
+	//	//再びカウントできるように初期化
+	//	atkCount = vertical_AtkInterval;
+	//}
 }
 void Boss::VerticalUp()
 {
-	XMFLOAT3 position = obj->GetPosition();
-	if (verticalStartPosFlag == false) {//最初に開始位置決める
-		upDownPos = { upDownPos.x, upStartPosY,position.z };//Yは開始位置　Zは元いた位置
-		position = upDownPos;//今の位置を下に下がる開始位置にする
-		verticalStartPosFlag = true;//最初の開始位置を決め終わった
-	}
-	else {
-		float rate = (float)++nowframe / TimeRequiredForVerticalUp;
-		XMFLOAT3 UpEndPos = { upDownPos.x + nextMoveX,downStartPosY,position.z };//上昇終了位置
-		obj->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, rate));//下降開始位置まで移動
+	//XMFLOAT3 position = obj->GetPosition();
+	//if (verticalStartPosFlag == false) {//最初に開始位置決める
+	//	upDownPos = { upDownPos.x, upStartPosY,position.z };//Yは開始位置　Zは元いた位置
+	//	position = upDownPos;//今の位置を下に下がる開始位置にする
+	//	verticalStartPosFlag = true;//最初の開始位置を決め終わった
+	//}
+	//else {
+	//	float rate = (float)++nowframe / TimeRequiredForVerticalUp;
+	//	XMFLOAT3 UpEndPos = { upDownPos.x + nextMoveX,downStartPosY,position.z };//上昇終了位置
+	//	obj->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, rate));//下降開始位置まで移動
 
-		if (rate == 1) {//lerp終了で
-			upDownPos.x += nextMoveX;//次の移動時はnextMoveX分Xずらす
-			//↓待ち時間挟んでね　Wait時は判定切る
-			verticalStartPosFlag = false;//開始位置決定フラグ戻す
-			nextDown = true;//次上昇
-			nowframe = nowframeDef;
-			verticalPattern = std::bind(&Boss::VerticalWait, this);
-		}
-		atkCount--;
-		//時が満ちたら
-		if (atkCount == 0) {
-			//突撃時、生存時のみ発射
-			if (alive) { StraightAttack(); }
-			//再びカウントできるように初期化
-			atkCount = vertical_AtkInterval;
-		}
-	}
+	//	if (rate == 1) {//lerp終了で
+	//		upDownPos.x += nextMoveX;//次の移動時はnextMoveX分Xずらす
+	//		//↓待ち時間挟んでね　Wait時は判定切る
+	//		verticalStartPosFlag = false;//開始位置決定フラグ戻す
+	//		nextDown = true;//次上昇
+	//		nowframe = nowframeDef;
+	//		verticalPattern = std::bind(&Boss::VerticalWait, this);
+	//	}
+	//	atkCount--;
+	//	//時が満ちたら
+	//	if (atkCount == 0) {
+	//		//突撃時、生存時のみ発射
+	//		if (alive) { StraightAttack(); }
+	//		//再びカウントできるように初期化
+	//		atkCount = vertical_AtkInterval;
+	//	}
+	//}
 }
 void Boss::VerticalReverse()
 {

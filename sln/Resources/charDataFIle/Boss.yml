@@ -1,17 +1,5 @@
 #ボスデータ
 
-initBossPos: #ボス初期位置
-    x: 0
-    y: 200
-    z: 3300
-
-afterAppearPos: #登場後座標（目指す場所）
-    x: 0
-    y: 0
-    z: 1000
-    
-appearTotalFrame: 180 #登場時に指定場所まで移動するのにかけるフレーム
-
 bossMaxHP: 1000 #最大Hp
 #弾の威力
 bulPow: 200
@@ -43,23 +31,10 @@ targetPos: #目標座標
 
 particleFrame: 39 #パーティクル出すフレ
 
-#近づく速さ
-approachSpZ: 3
-approachSpY: 2
-#離れる速さ
-leaveSpZ: 3
-leaveSpY: 2
-
-approachCountDef: 150 #この時間だけこの行動をする
-changeVerticalCountDef: 0 #デフォ0
-
 changeVerticalNeces: 3 #縦攻撃に移る為に必要カウント
-startVerticalValDef: 10 #最初の上昇値
 leaveLim: 90 #離れられる距離
 #フレームごとに発射
-atkInterval: 10
 atkInterval_LeaveFirst: 20
-diffusionAtkInterval: 20
 
 randShakeVal: 8 #シェイク値
 
@@ -69,7 +44,6 @@ upDownPosDef: #上昇下降開始座標
     x: -600
     y: 900
     z: 0
-upStartPosY: -350 #上昇開始Y座標
 downStartPosY: 400 #下降開始Y座標
 nextMoveX: 250 #UpDownの最後にXをずらす値
 TimeRequiredForVerticalUp: 80 #上移動にかかる時間

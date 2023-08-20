@@ -266,7 +266,6 @@ private:
 	int16_t verticalWaitCount;
 	XMFLOAT3 upDownPosDef;	//上昇下降開始座標
 	XMFLOAT3 upDownPos;
-	float upStartPosY;//上昇開始Y座標
 	float downStartPosY;//下降開始Y座標
 	float nextMoveX;//UpDownの最後にXをずらす値
 	//UpDown時の最初に開始位置決めるフラグ false:決める前

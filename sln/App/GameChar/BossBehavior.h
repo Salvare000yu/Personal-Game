@@ -47,6 +47,12 @@ class BossBehavior :
 
 	int16_t changeVerticalNeces;//縦攻撃に移る為に必要カウント
 
+	//最初の上昇値
+	int16_t startVerticalValDef;
+	int16_t startVerticalVal;
+
+	float upStartPosY;//上昇開始Y座標
+
 public:
 	BossBehavior();
 
@@ -59,5 +65,6 @@ private:
 	NodeResult Appear();
 	NodeResult Approach();
 	NodeResult Leave();
+	NodeResult StartVertical();
 };
 

@@ -28,3 +28,7 @@ leaveSpY: 2
 
 #離れる制限は自機の場所に自機と離したい距離分間を開ける
 SpaceDistance: 400
+
+startVerticalValDef: 10 #最初の上昇値
+
+upStartPosY: -350 #上昇開始Y座標

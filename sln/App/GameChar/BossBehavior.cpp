@@ -12,6 +12,7 @@ BossBehavior::BossBehavior() :
 	AddChild(Node(std::bind(&BossBehavior::Appear, this)));
 	AddChild(Node(std::bind(&BossBehavior::Approach, this)));
 	AddChild(Node(std::bind(&BossBehavior::Leave, this)));
+	AddChild(Node(std::bind(&BossBehavior::StartVertical, this)));
 }
 
 void BossBehavior::LoadYml()
@@ -53,6 +54,9 @@ void BossBehavior::LoadYml()
 	leaveLim = root["leaveLim"].As<float>();
 	changeVerticalNeces = root["changeVerticalNeces"].As<int16_t>();
 	SpaceDistance = root["SpaceDistance"].As<uint16_t>();
+	startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
+	startVerticalVal = startVerticalValDef;
+	upStartPosY = root["upStartPosY"].As<float>();
 }
 
 NodeResult BossBehavior::Appear()
@@ -144,6 +148,23 @@ NodeResult BossBehavior::Leave()
 			return NodeResult::Succeeded;
 		}
 	}
+
+	return NodeResult::Running;
+}
+
+NodeResult BossBehavior::StartVertical()
+{
+
+	XMFLOAT3 position = boss->GetPosition();
+	//まずは上昇
+	position.y += startVerticalVal;
+	startVerticalVal--;
+
+	if (position.y < upStartPosY) {//一定超えたら判定切ってから待ち
+		startVerticalVal = startVerticalValDef;//最初の上昇値戻す
+		return NodeResult::Succeeded;
+	}
+	boss->SetPosition(position);
 
 	return NodeResult::Running;
 }
