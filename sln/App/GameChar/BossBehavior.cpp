@@ -13,6 +13,7 @@ BossBehavior::BossBehavior() :
 	AddChild(Node(std::bind(&BossBehavior::Approach, this)));
 	AddChild(Node(std::bind(&BossBehavior::Leave, this)));
 	AddChild(Node(std::bind(&BossBehavior::StartVertical, this)));
+	AddChild(Node(std::bind(&BossBehavior::VerticalWait, this)));
 }
 
 void BossBehavior::LoadYml()
@@ -57,6 +58,10 @@ void BossBehavior::LoadYml()
 	startVerticalValDef = root["startVerticalValDef"].As<int16_t>();
 	startVerticalVal = startVerticalValDef;
 	upStartPosY = root["upStartPosY"].As<float>();
+	verticalWaitCountDef = root["verticalWaitCountDef"].As<int16_t>();
+	verticalWaitCount = verticalWaitCountDef;
+	verticalLoopCountDef = root["verticalLoopCountDef"].As<int16_t>();
+	verticalLoopCount = verticalLoopCountDef;
 }
 
 NodeResult BossBehavior::Appear()
@@ -165,6 +170,41 @@ NodeResult BossBehavior::StartVertical()
 		return NodeResult::Succeeded;
 	}
 	boss->SetPosition(position);
+
+	return NodeResult::Running;
+}
+
+NodeResult BossBehavior::VerticalWait()
+{
+	doCollision = false;//Wait時は画面外なので当たり判定取らない
+	verticalWaitCount--;//待ちカウント減らす
+
+	if (verticalWaitCount == 0) {
+		verticalWaitCount = verticalWaitCountDef / 2;//初回以降はデフォ/2にカウント戻す
+		doCollision = true;//当たり判定オンにしてから次行動
+
+		if (verticalLoopCount != 0) {//UpDownループ回数が0でなければ、継続
+			if (nextDown) {//次下降なら
+				nextDown = false;//戻してから
+				// todo 下移動
+				//verticalPattern = std::bind(&Boss::VerticalDown, this);//下移動
+			}
+			if (nextUp) {//次上昇なら
+				nextUp = false;//戻してから
+				// todo 上移動
+				return NodeResult::Succeeded;
+				//verticalPattern = std::bind(&Boss::VerticalUp, this);//上移動
+			}
+		}
+		else {//るーぷが指定数おわったら（カウント0で）
+			//次の動き戻す
+			nextUp = false;
+			nextDown = true;//最初は下降
+			verticalLoopCount = verticalLoopCountDef;
+			// todo Reverseへ
+			//verticalPattern = std::bind(&Boss::VerticalReverse, this);//戻るパターンへ
+		}
+	}
 
 	return NodeResult::Running;
 }

@@ -32,3 +32,6 @@ SpaceDistance: 400
 startVerticalValDef: 10 #最初の上昇値
 
 upStartPosY: -350 #上昇開始Y座標
+
+verticalWaitCountDef: 30 #待ち時間
+verticalLoopCountDef: 3 #UpDown何回ループさせるか

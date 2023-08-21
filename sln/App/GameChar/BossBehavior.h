@@ -53,6 +53,20 @@ class BossBehavior :
 
 	float upStartPosY;//上昇開始Y座標
 
+	//当たり判定取るか true:取る
+	bool doCollision = true;
+
+	//待ち時間
+	int16_t verticalWaitCountDef;
+	int16_t verticalWaitCount;
+
+	//UpDown何回ループさせるか
+	int16_t verticalLoopCountDef;
+	int16_t verticalLoopCount;
+	//次の動き false:これじゃない
+	bool nextUp = true;//最初
+	bool nextDown = false;
+
 public:
 	BossBehavior();
 
@@ -66,5 +80,6 @@ private:
 	NodeResult Approach();
 	NodeResult Leave();
 	NodeResult StartVertical();
+	NodeResult VerticalWait();
 };
 

@@ -39,7 +39,6 @@ atkInterval_LeaveFirst: 20
 randShakeVal: 8 #シェイク値
 
 verticalSp: 15 #上昇下降速度
-verticalWaitCountDef: 30 #待ち時間
 upDownPosDef: #上昇下降開始座標
     x: -600
     y: 900
@@ -47,7 +46,6 @@ upDownPosDef: #上昇下降開始座標
 downStartPosY: 400 #下降開始Y座標
 nextMoveX: 250 #UpDownの最後にXをずらす値
 TimeRequiredForVerticalUp: 80 #上移動にかかる時間
-verticalLoopCountDef: 3 #UpDown何回ループさせるか
 vertical_AtkInterval: 7 #縦攻撃用インターバル
 #HP Half
 necesHpHalfFrame: 100 #HP半分時このフレーム分移動まで時間かかる
