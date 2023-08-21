@@ -67,6 +67,18 @@ class BossBehavior :
 	bool nextUp = true;//最初
 	bool nextDown = false;
 
+	//UpDown時の最初に開始位置決めるフラグ false:決める前
+	bool verticalStartPosFlag = false;
+	DirectX::XMFLOAT3 upDownPosDef;	//上昇下降開始座標
+	DirectX::XMFLOAT3 upDownPos;
+	float downStartPosY;//下降開始Y座標
+
+	//上昇下降速度
+	float verticalSp;
+	float nextMoveX;//UpDownの最後にXをずらす値
+	//縦攻撃用インターバル
+	int16_t vertical_AtkInterval;
+
 public:
 	BossBehavior();
 
@@ -81,5 +93,6 @@ private:
 	NodeResult Leave();
 	NodeResult StartVertical();
 	NodeResult VerticalWait();
+	NodeResult VerticalDown();
 };
 

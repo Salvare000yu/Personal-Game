@@ -14,6 +14,7 @@ BossBehavior::BossBehavior() :
 	AddChild(Node(std::bind(&BossBehavior::Leave, this)));
 	AddChild(Node(std::bind(&BossBehavior::StartVertical, this)));
 	AddChild(Node(std::bind(&BossBehavior::VerticalWait, this)));
+	AddChild(Node(std::bind(&BossBehavior::VerticalDown, this)));
 }
 
 void BossBehavior::LoadYml()
@@ -62,6 +63,16 @@ void BossBehavior::LoadYml()
 	verticalWaitCount = verticalWaitCountDef;
 	verticalLoopCountDef = root["verticalLoopCountDef"].As<int16_t>();
 	verticalLoopCount = verticalLoopCountDef;
+	auto& upDownPosDefNode = root["upDownPosDef"];
+	upDownPosDef = {
+		upDownPosDefNode["x"].As<float>(),
+		upDownPosDefNode["y"].As<float>(),
+		upDownPosDefNode["z"].As<float>()
+	};
+	upDownPos = upDownPosDef;
+	verticalSp = root["verticalSp"].As<float>();
+	nextMoveX = root["nextMoveX"].As<float>();
+	vertical_AtkInterval = root["vertical_AtkInterval"].As<int16_t>();
 }
 
 NodeResult BossBehavior::Appear()
@@ -204,6 +215,38 @@ NodeResult BossBehavior::VerticalWait()
 			// todo Reverseへ
 			//verticalPattern = std::bind(&Boss::VerticalReverse, this);//戻るパターンへ
 		}
+	}
+
+	return NodeResult::Running;
+}
+
+NodeResult BossBehavior::VerticalDown()
+{
+	XMFLOAT3 position = boss->GetPosition();
+	if (verticalStartPosFlag == false) {//最初に開始位置決める
+		upDownPos = { upDownPos.x, downStartPosY,position.z };//Yは開始位置　Zは元いた位置
+		position = upDownPos;//今の位置を下に下がる開始位置にする
+		verticalStartPosFlag = true;//最初の開始位置を決め終わった
+	}
+	position.y -= verticalSp;//移動
+	if (position.y <= upStartPosY) {//上昇開始位置のYまできたら
+		upDownPos.x += nextMoveX;//次の移動時のためにX足しとく
+		//↓待ち時間挟んでね　Wait時は判定切る
+		verticalStartPosFlag = false;//開始位置決定フラグ戻す
+		nextUp = true;//次上昇
+		verticalLoopCount--;//Down抜けるときにデクリメント
+		return NodeResult::Succeeded;
+	}
+	boss->SetPosition(position);
+
+	//発射カウントをデクリメント
+	atkCount--;
+	//時が満ちたら
+	if (atkCount == 0) {
+		//突撃時、生存時のみ発射
+		if (boss->alive) { boss->Attack(); }//追尾弾
+		//再びカウントできるように初期化
+		atkCount = vertical_AtkInterval;
 	}
 
 	return NodeResult::Running;

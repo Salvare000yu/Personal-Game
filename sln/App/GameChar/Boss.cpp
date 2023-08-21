@@ -69,17 +69,7 @@ void Boss::Initialize()
 		};
 		necesLeaveFirstFrame = root["necesLeaveFirstFrame"].As<float>();
 		necesHpHalfFrame = root["necesHpHalfFrame"].As<float>();
-		vertical_AtkInterval = root["vertical_AtkInterval"].As<int16_t>();
 		downStartPosY = root["downStartPosY"].As<float>();
-		nextMoveX = root["nextMoveX"].As<float>();
-		auto& upDownPosDefNode = root["upDownPosDef"];
-		upDownPosDef = {
-			upDownPosDefNode["x"].As<float>(),
-			upDownPosDefNode["y"].As<float>(),
-			upDownPosDefNode["z"].As<float>()
-		};
-		upDownPos = upDownPosDef;
-		verticalSp = root["verticalSp"].As<float>();
 		particleFrame = root["particleFrame"].As<uint8_t>();
 		auto& targetPosNode = root["targetPos"];
 		targetPos = {

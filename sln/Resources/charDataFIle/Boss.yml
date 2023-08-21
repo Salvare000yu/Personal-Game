@@ -38,15 +38,7 @@ atkInterval_LeaveFirst: 20
 
 randShakeVal: 8 #シェイク値
 
-verticalSp: 15 #上昇下降速度
-upDownPosDef: #上昇下降開始座標
-    x: -600
-    y: 900
-    z: 0
-downStartPosY: 400 #下降開始Y座標
-nextMoveX: 250 #UpDownの最後にXをずらす値
 TimeRequiredForVerticalUp: 80 #上移動にかかる時間
-vertical_AtkInterval: 7 #縦攻撃用インターバル
 #HP Half
 necesHpHalfFrame: 100 #HP半分時このフレーム分移動まで時間かかる
 necesLeaveFirstFrame: 180
