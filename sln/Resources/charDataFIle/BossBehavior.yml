@@ -45,3 +45,5 @@ downStartPosY: 400 #下降開始Y座標
 verticalSp: 15 #上昇下降速度
 nextMoveX: 250 #UpDownの最後にXをずらす値
 vertical_AtkInterval: 7 #縦攻撃用インターバル
+
+TimeRequiredForVerticalUp: 80 #上移動にかかる時間

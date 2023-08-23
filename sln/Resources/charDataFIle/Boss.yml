@@ -38,7 +38,6 @@ atkInterval_LeaveFirst: 20
 
 randShakeVal: 8 #シェイク値
 
-TimeRequiredForVerticalUp: 80 #上移動にかかる時間
 #HP Half
 necesHpHalfFrame: 100 #HP半分時このフレーム分移動まで時間かかる
 necesLeaveFirstFrame: 180

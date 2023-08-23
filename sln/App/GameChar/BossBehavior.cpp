@@ -15,6 +15,7 @@ BossBehavior::BossBehavior() :
 	AddChild(Node(std::bind(&BossBehavior::StartVertical, this)));
 	AddChild(Node(std::bind(&BossBehavior::VerticalWait, this)));
 	AddChild(Node(std::bind(&BossBehavior::VerticalDown, this)));
+	AddChild(Node(std::bind(&BossBehavior::VerticalUp, this)));
 }
 
 void BossBehavior::LoadYml()
@@ -73,6 +74,7 @@ void BossBehavior::LoadYml()
 	verticalSp = root["verticalSp"].As<float>();
 	nextMoveX = root["nextMoveX"].As<float>();
 	vertical_AtkInterval = root["vertical_AtkInterval"].As<int16_t>();
+	TimeRequiredForVerticalUp = root["TimeRequiredForVerticalUp"].As<float>();
 }
 
 NodeResult BossBehavior::Appear()
@@ -158,7 +160,7 @@ NodeResult BossBehavior::Leave()
 
 		// todo 縦攻撃
 		if (changeVerticalCount == changeVerticalNeces) {//縦攻撃カウントが一定に達したら
-		//	actionPattern = std::bind(&Boss::Vertical, this);
+			//	actionPattern = std::bind(&Boss::Vertical, this);
 		}
 		else {
 			return NodeResult::Succeeded;
@@ -247,6 +249,40 @@ NodeResult BossBehavior::VerticalDown()
 		if (boss->alive) { boss->Attack(); }//追尾弾
 		//再びカウントできるように初期化
 		atkCount = vertical_AtkInterval;
+	}
+
+	return NodeResult::Running;
+}
+
+NodeResult BossBehavior::VerticalUp()
+{
+	XMFLOAT3 position = boss->GetPosition();
+	if (verticalStartPosFlag == false) {//最初に開始位置決める
+		upDownPos = { upDownPos.x, upStartPosY,position.z };//Yは開始位置　Zは元いた位置
+		position = upDownPos;//今の位置を下に下がる開始位置にする
+		verticalStartPosFlag = true;//最初の開始位置を決め終わった
+	}
+	else {
+		float rate = (float)++VerticalUpFrame / TimeRequiredForVerticalUp;
+		XMFLOAT3 UpEndPos = { upDownPos.x + nextMoveX,downStartPosY,position.z };//上昇終了位置
+		boss->SetPosition(GameUtility::UtilLerp(upDownPos, UpEndPos, rate));//下降開始位置まで移動
+
+		if (rate == 1) {//lerp終了で
+			upDownPos.x += nextMoveX;//次の移動時はnextMoveX分Xずらす
+			//↓待ち時間挟んでね　Wait時は判定切る
+			verticalStartPosFlag = false;//開始位置決定フラグ戻す
+			nextDown = true;//次上昇
+			VerticalUpFrame = 0;
+			return NodeResult::Succeeded;
+		}
+		atkCount--;
+		//時が満ちたら
+		if (atkCount == 0) {
+			//突撃時、生存時のみ発射
+			if (boss->alive) { boss->StraightAttack(); }
+			//再びカウントできるように初期化
+			atkCount = vertical_AtkInterval;
+		}
 	}
 
 	return NodeResult::Running;

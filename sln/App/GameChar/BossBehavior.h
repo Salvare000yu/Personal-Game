@@ -76,8 +76,11 @@ class BossBehavior :
 	//上昇下降速度
 	float verticalSp;
 	float nextMoveX;//UpDownの最後にXをずらす値
+	float TimeRequiredForVerticalUp;//上移動にかかる時間
 	//縦攻撃用インターバル
 	int16_t vertical_AtkInterval;
+
+	float VerticalUpFrame = 0;
 
 public:
 	BossBehavior();
@@ -94,5 +97,6 @@ private:
 	NodeResult StartVertical();
 	NodeResult VerticalWait();
 	NodeResult VerticalDown();
+	NodeResult VerticalUp();
 };
 
